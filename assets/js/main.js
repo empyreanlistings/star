@@ -394,127 +394,175 @@ function initPropertyModal() {
 
   // Use event delegation on property-grid
   if (propertyGrid) {
-    console.log("Property Grid Found, attaching listener...");
-    propertyGrid.addEventListener("click", e => {
-      console.log("Click detected in Property Grid. Target:", e.target);
-      const card = e.target.closest(".property-card:not(.no-results-card)");
-      console.log("Closest Card found:", card);
+    const grid = document.querySelector(".property-grid");
+    if (grid) {
+      grid.addEventListener("click", async (e) => {
+        const card = e.target.closest(".property-card:not(.no-results-card)");
+        if (!card) return;
 
-      if (!card || e.target.closest("a, button")) {
-        console.log("Click ignored: No card or click was on a button/link");
-        return;
-      }
-
-      console.log("Opening modal for card data:", card.dataset);
-      const image = card.querySelector(".property-image img")?.src || "";
-      img.src = image;
-      img.alt = card.querySelector("img")?.alt || "Property image";
-
-      // Use data-address specifically for the location header in modal
-      const location = card.getAttribute("data-address") || card.querySelector(".property-location")?.textContent || "";
-      locationEl.textContent = location;
-      typeEl.textContent = card.dataset.type || "";
-
-      const displayedPrice = card.querySelector(".property-price")?.textContent.trim();
-      priceEl.textContent = displayedPrice || formatPrice(+card.dataset.price);
-
-      bedsEl.textContent = card.dataset.beds || "-";
-      bathsEl.textContent = card.dataset.baths || "-";
-      sizeEl.textContent = card.dataset.size || "-";
-      descEl.textContent = card.dataset.description || "";
-
-      // Visits & Likes Display
-      const visitsEl = document.getElementById("modalVisits");
-      const likesEl = document.getElementById("modalLikes");
-      const likeBtn = document.getElementById("modalLikeBtn");
-      const propertyId = card.dataset.id;
-
-      const updateLabels = (v, l) => {
-        const vCount = parseInt(v || 0);
-        const lCount = parseInt(l || 0);
-
-        if (visitsEl) visitsEl.textContent = vCount;
-        if (likesEl) likesEl.textContent = lCount;
-
-        const vLabel = document.getElementById("modalVisitsLabel");
-        const lLabel = document.getElementById("modalLikesLabel");
-
-        if (vLabel) vLabel.textContent = vCount === 1 ? 'visit' : 'visits';
-        if (lLabel) lLabel.textContent = lCount === 1 ? 'like' : 'likes';
-      };
-
-      // Initial UI from card data
-      updateLabels(card.dataset.visits, card.dataset.likes);
-
-      // 1. Track Visit
-      if (typeof window.trackVisit === 'function' && propertyId) {
-        window.trackVisit(propertyId);
-        // Optimistic local update
-        card.dataset.visits = parseInt(card.dataset.visits || 0) + 1;
-        updateLabels(card.dataset.visits, card.dataset.likes);
-      }
-
-      // 2. Fetch Fresh Engagement from Firestore (bypassing stale cache)
-      if (typeof window.getLatestEngagement === 'function' && propertyId) {
-        window.getLatestEngagement(propertyId).then(data => {
-          if (data) {
-            console.log("🔄 Engagement Synced from DB:", data);
-            card.dataset.likes = data.likes;
-            card.dataset.visits = data.visits;
-            updateLabels(data.visits, data.likes);
-          }
-        });
-      }
-
-      // Handle Like/Unlike Toggle
-      if (likeBtn && propertyId) {
-        const updateLikeUI = (isLiked) => {
-          if (isLiked) {
-            likeBtn.classList.add('liked');
-            likeBtn.innerHTML = '<i class="fas fa-heart"></i>';
-          } else {
-            likeBtn.classList.remove('liked');
-            likeBtn.innerHTML = '<i class="far fa-heart"></i>';
-          }
-        };
-
-        const hasLiked = localStorage.getItem(`liked_${propertyId}`);
-        updateLikeUI(hasLiked);
-
-        likeBtn.onclick = async () => {
-          const currentlyLiked = localStorage.getItem(`liked_${propertyId}`);
+        // 1. Check for Grid Like Button Click
+        const gridLikeBtn = e.target.closest(".grid-like-btn");
+        if (gridLikeBtn) {
+          e.stopPropagation();
+          const pid = gridLikeBtn.dataset.id;
+          const currentlyLiked = localStorage.getItem(`liked_${pid}`);
           const isUnlike = !!currentlyLiked;
 
           if (typeof window.trackLike === 'function') {
-            const success = await window.trackLike(propertyId, isUnlike);
+            const success = await window.trackLike(pid, isUnlike);
             if (success) {
               if (isUnlike) {
-                localStorage.removeItem(`liked_${propertyId}`);
+                localStorage.removeItem(`liked_${pid}`);
+                gridLikeBtn.classList.remove('liked');
+                gridLikeBtn.querySelector('i').className = 'far fa-heart';
                 card.dataset.likes = Math.max(0, parseInt(card.dataset.likes || 0) - 1);
               } else {
-                localStorage.setItem(`liked_${propertyId}`, "true");
+                localStorage.setItem(`liked_${pid}`, "true");
+                gridLikeBtn.classList.add('liked');
+                gridLikeBtn.querySelector('i').className = 'fas fa-heart';
                 card.dataset.likes = parseInt(card.dataset.likes || 0) + 1;
               }
-              updateLikeUI(!isUnlike);
-              updateLabels(card.dataset.visits, card.dataset.likes);
             }
           }
-        };
-      }
-
-      featuresEl.innerHTML = "";
-      const features = card.dataset.features?.split("|") || [];
-      features.forEach(f => {
-        if (f.trim()) {
-          const li = document.createElement("li");
-          li.textContent = f.trim();
-          featuresEl.appendChild(li);
+          return;
         }
+
+        // 2. Otherwise Open Modal
+        if (e.target.closest("a, .grid-like-btn")) return;
+
+        console.log("Opening modal for card data:", card.dataset);
+        const propertyId = card.dataset.id;
+
+        // Track Visit Immediately
+        if (typeof window.trackVisit === 'function' && propertyId) {
+          window.trackVisit(propertyId);
+          card.dataset.visits = parseInt(card.dataset.visits || 0) + 1;
+        }
+
+        const img = modal.querySelector("#modalImage");
+        const locationEl = modal.querySelector("#modalLocation");
+        const priceEl = modal.querySelector("#modalPrice");
+        const typeEl = modal.querySelector("#modalType");
+        const bedsEl = modal.querySelector("#modalBeds");
+        const bathsEl = modal.querySelector("#modalBaths");
+        const sizeEl = modal.querySelector("#modalSize");
+        const descEl = modal.querySelector("#modalDescription");
+        const featuresEl = modal.querySelector("#modalFeatures");
+
+        const image = card.querySelector(".property-image img")?.src || "";
+        if (img) {
+          img.src = image;
+          img.alt = card.querySelector("img")?.alt || "Property image";
+        }
+
+        const location = card.getAttribute("data-address") || card.querySelector(".property-location")?.textContent || "";
+        if (locationEl) locationEl.textContent = location;
+        if (typeEl) typeEl.textContent = card.dataset.type || "";
+
+        const displayedPrice = card.querySelector(".property-price")?.textContent.trim();
+        if (priceEl) priceEl.textContent = displayedPrice || formatPrice(+card.dataset.price);
+
+        if (bedsEl) bedsEl.textContent = card.dataset.beds || "-";
+        if (bathsEl) bathsEl.textContent = card.dataset.baths || "-";
+        if (sizeEl) sizeEl.textContent = card.dataset.size || "-";
+        if (descEl) descEl.textContent = card.dataset.description || "";
+
+        // Engagement Display Prep
+        const visitsEl = modal.querySelector("#modalVisits");
+        const likesEl = modal.querySelector("#modalLikes");
+        const likeBtn = modal.querySelector("#modalLikeBtn");
+
+        const updateLabels = (v, l) => {
+          const vCount = parseInt(v || 0);
+          const lCount = parseInt(l || 0);
+          if (visitsEl) visitsEl.textContent = vCount;
+          if (likesEl) likesEl.textContent = lCount;
+
+          const vLabel = modal.querySelector("#modalVisitsLabel");
+          const lLabel = modal.querySelector("#modalLikesLabel");
+          if (vLabel) vLabel.textContent = vCount === 1 ? 'visit' : 'visits';
+          if (lLabel) lLabel.textContent = lCount === 1 ? 'like' : 'likes';
+
+          // Color heart icon pink if there are likes (user feedback)
+          const heartIconSpan = likesEl?.parentElement;
+          if (heartIconSpan) {
+            heartIconSpan.classList.toggle('liked', lCount > 0);
+          }
+        };
+
+        updateLabels(card.dataset.visits, card.dataset.likes);
+
+        if (typeof window.getLatestEngagement === 'function' && propertyId) {
+          window.getLatestEngagement(propertyId).then(data => {
+            if (data) {
+              card.dataset.likes = data.likes;
+              card.dataset.visits = data.visits;
+              updateLabels(data.visits, data.likes);
+            }
+          });
+        }
+
+        if (likeBtn && propertyId) {
+          const syncGridBtn = (isLiked) => {
+            const gBtn = card.querySelector(".grid-like-btn");
+            if (gBtn) {
+              if (isLiked) {
+                gBtn.classList.add('liked');
+                gBtn.querySelector('i').className = 'fas fa-heart';
+              } else {
+                gBtn.classList.remove('liked');
+                gBtn.querySelector('i').className = 'far fa-heart';
+              }
+            }
+          };
+
+          const updateLikeUI = (isLiked) => {
+            if (isLiked) {
+              likeBtn.classList.add('liked');
+              likeBtn.innerHTML = '<i class="fas fa-heart"></i>';
+            } else {
+              likeBtn.classList.remove('liked');
+              likeBtn.innerHTML = '<i class="far fa-heart"></i>';
+            }
+            syncGridBtn(isLiked);
+          };
+
+          updateLikeUI(localStorage.getItem(`liked_${propertyId}`));
+
+          likeBtn.onclick = async () => {
+            const currentlyLiked = localStorage.getItem(`liked_${propertyId}`);
+            const isUnlike = !!currentlyLiked;
+            if (typeof window.trackLike === 'function') {
+              const success = await window.trackLike(propertyId, isUnlike);
+              if (success) {
+                if (isUnlike) {
+                  localStorage.removeItem(`liked_${propertyId}`);
+                  card.dataset.likes = Math.max(0, parseInt(card.dataset.likes || 0) - 1);
+                } else {
+                  localStorage.setItem(`liked_${propertyId}`, "true");
+                  card.dataset.likes = parseInt(card.dataset.likes || 0) + 1;
+                }
+                updateLikeUI(!isUnlike);
+                updateLabels(card.dataset.visits, card.dataset.likes);
+              }
+            }
+          };
+        }
+
+        if (featuresEl) {
+          featuresEl.innerHTML = "";
+          const features = card.dataset.features?.split("|") || [];
+          features.forEach(f => {
+            if (f.trim()) {
+              const li = document.createElement("li");
+              li.textContent = f.trim();
+              featuresEl.appendChild(li);
+            }
+          });
+        }
+        open();
       });
-      open();
-    });
-  } else {
-    console.error("CRITICAL: .property-grid NOT FOUND in DOM");
+    }
   }
 
   closeBtn?.addEventListener("click", close);
@@ -539,24 +587,18 @@ function initPropertyModal() {
 // INITIALIZATION
 // ================================================================
 document.addEventListener("DOMContentLoaded", () => {
-  // Handle hash on load, then clear it
   if (window.location.hash) {
     const hash = window.location.hash;
     const target = document.querySelector(hash);
-
     if (target) {
-      // Scroll to target
       setTimeout(() => {
         target.scrollIntoView({ behavior: 'smooth' });
-        // Clear hash after scrolling
         history.replaceState(null, null, ' ');
       }, 100);
     } else {
-      // No target found, just clear hash
       history.replaceState(null, null, ' ');
     }
   }
-
   safeInit("applySavedTheme", applySavedTheme);
   safeInit("bindThemeToggles", bindThemeToggles);
   safeInit("initScrollbarBehavior", initScrollbarBehavior);

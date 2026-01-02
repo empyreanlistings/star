@@ -2518,6 +2518,56 @@ html[data-theme="light"] .modal-engagement {
   border-color: rgba(0, 0, 0, 0.05);
 }
 
+/* ============================== GRID LIKE BUTTON ============================== */
+.grid-like-btn {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s cubic-bezier(.175, .885, .32, 1.275);
+}
+
+.grid-like-btn:hover {
+  transform: scale(1.15);
+  background: rgba(0, 0, 0, 0.6);
+  border-color: var(--accent);
+}
+
+.grid-like-btn.liked {
+  color: #ff69b4;
+  border-color: #ff69b4;
+  background: rgba(255, 105, 180, 0.15);
+}
+
+.grid-like-btn i {
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.grid-like-btn.liked i {
+  transform: scale(1.1);
+}
+
+/* Ensure stats hearts are only pink if liked, not based on count */
+.engagement-stats i.fa-heart {
+  color: inherit;
+}
+
+.engagement-stats .liked i.fa-heart {
+  color: #ff69b4;
+}
+
 /* Modal Header */
 .modal-section h3 {
   margin-bottom: 8px;

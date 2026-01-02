@@ -205,10 +205,18 @@ function createPropertyCard(data) {
 
   const logoHTML = isFeatured ? '<div class="property-logo"><img src="images/logo2-dark.png" alt=""></div>' : '';
 
+  // Heart icon state for grid
+  const hasLiked = localStorage.getItem(`liked_${data.id}`);
+  const heartIcon = hasLiked ? 'fas fa-heart' : 'far fa-heart';
+  const likedClass = hasLiked ? 'liked' : '';
+
   card.innerHTML = `
         <div class="property-image">
           <img src="${imageSrc}" alt="${title}" loading="lazy">
           ${logoHTML}
+          <button class="grid-like-btn ${likedClass}" data-id="${data.id}" aria-label="Like Property">
+            <i class="${heartIcon}"></i>
+          </button>
         </div>
         <div class="property-info primary">
           <span class="property-location">${title}</span>
