@@ -422,6 +422,50 @@ function initPropertyModal() {
       bathsEl.textContent = card.dataset.baths || "-";
       sizeEl.textContent = card.dataset.size || "-";
       descEl.textContent = card.dataset.description || "";
+
+      // Visits & Likes Display
+      const visitsEl = document.getElementById("modalVisits");
+      const likesEl = document.getElementById("modalLikes");
+      const likeBtn = document.getElementById("modalLikeBtn");
+      const propertyId = card.dataset.id;
+
+      if (visitsEl) visitsEl.textContent = card.dataset.visits || "0";
+      if (likesEl) likesEl.textContent = card.dataset.likes || "0";
+
+      // Track Visit
+      if (typeof window.trackVisit === 'function' && propertyId) {
+        window.trackVisit(propertyId);
+      }
+
+      // Handle Like Button State
+      if (likeBtn && propertyId) {
+        const hasLiked = localStorage.getItem(`liked_${propertyId}`);
+        if (hasLiked) {
+          likeBtn.classList.add('liked');
+          likeBtn.disabled = true;
+          likeBtn.innerHTML = '<i class="fas fa-heart"></i> Liked';
+        } else {
+          likeBtn.classList.remove('liked');
+          likeBtn.disabled = false;
+          likeBtn.innerHTML = '<i class="far fa-heart"></i> Like';
+
+          // One-time listener for this modal open
+          const handleLikeClick = async () => {
+            if (typeof window.trackLike === 'function') {
+              const success = await window.trackLike(propertyId);
+              if (success) {
+                localStorage.setItem(`liked_${propertyId}`, "true");
+                likeBtn.classList.add('liked');
+                likeBtn.disabled = true;
+                likeBtn.innerHTML = '<i class="fas fa-heart"></i> Liked';
+                if (likesEl) likesEl.textContent = parseInt(likesEl.textContent) + 1;
+              }
+            }
+          };
+          likeBtn.onclick = handleLikeClick;
+        }
+      }
+
       featuresEl.innerHTML = "";
       const features = card.dataset.features?.split("|") || [];
       features.forEach(f => {

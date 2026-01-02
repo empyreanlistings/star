@@ -2,7 +2,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import {
   getFirestore,
   collection,
-  getDocs
+  getDocs,
+  doc,
+  updateDoc,
+  increment
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -163,6 +166,9 @@ function createPropertyCard(data) {
   card.dataset.size = size;
   card.dataset.address = shortDesc; // For the modal location field
   card.dataset.description = fullDesc;
+  card.dataset.id = data.id || "";
+  card.dataset.likes = data.likes || 0;
+  card.dataset.visits = data.visits || 0;
   card.dataset.features = Array.isArray(featuresList) ? featuresList.join("|") : "";
 
   // Feature icons HTML generation
@@ -217,5 +223,36 @@ function createPropertyCard(data) {
 
   return card;
 }
+
+/**
+ * Global Tracking Functions
+ */
+window.trackVisit = async (propertyId) => {
+  if (!propertyId) return;
+  try {
+    const propertyRef = doc(db, "Listings", propertyId);
+    await updateDoc(propertyRef, {
+      visits: increment(1)
+    });
+    console.log(`📈 Visit tracked for ${propertyId}`);
+  } catch (e) {
+    console.error("Error tracking visit:", e);
+  }
+};
+
+window.trackLike = async (propertyId) => {
+  if (!propertyId) return;
+  try {
+    const propertyRef = doc(db, "Listings", propertyId);
+    await updateDoc(propertyRef, {
+      likes: increment(1)
+    });
+    console.log(`❤️ Like tracked for ${propertyId}`);
+    return true;
+  } catch (e) {
+    console.error("Error tracking like:", e);
+    return false;
+  }
+};
 
 fetchListings();
