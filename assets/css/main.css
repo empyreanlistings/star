@@ -5021,10 +5021,7 @@ body.dashboard-page::before {
 
 .dashboard-content {
   margin-top: 80px;
-  padding: 2rem;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+  padding: 40px;
 }
 
 .page-header {
