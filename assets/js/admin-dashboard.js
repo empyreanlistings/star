@@ -430,3 +430,64 @@ async function handleFormSubmit(e) {
         statusDiv.textContent = "";
     }
 }
+
+// Open Property Modal with listing data
+function openPropertyModal(data) {
+    const overlay = document.getElementById("modalOverlay");
+    const modal = document.getElementById("propertyModal");
+
+    if (!overlay || !modal) return;
+
+    // Populate modal fields
+    const img = document.getElementById("modalImage");
+    const locationEl = document.getElementById("modalLocation");
+    const typeEl = document.getElementById("modalType");
+    const priceEl = document.getElementById("modalPrice");
+    const bedsEl = document.getElementById("modalBeds");
+    const bathsEl = document.getElementById("modalBaths");
+    const sizeEl = document.getElementById("modalSize");
+    const descEl = document.getElementById("modalDescription");
+    const featuresEl = document.getElementById("modalFeatures");
+    const visitsEl = document.getElementById("modalVisits");
+    const likesEl = document.getElementById("modalLikes");
+    const visitsLabel = document.getElementById("modalVisitsLabel");
+    const likesLabel = document.getElementById("modalLikesLabel");
+
+    if (img) img.src = data.media?.thumbnail || "images/coming-soon.webp";
+    if (locationEl) locationEl.textContent = data.title || "Untitled";
+    if (typeEl) typeEl.textContent = data.type || "";
+    if (priceEl) {
+        const price = data.price ? `₱${Number(data.price).toLocaleString()}` : "TBC";
+        priceEl.textContent = price;
+    }
+    if (bedsEl) bedsEl.textContent = data.specs?.beds || "-";
+    if (bathsEl) bathsEl.textContent = data.specs?.baths || "-";
+    if (sizeEl) sizeEl.textContent = data.specs?.lot_size || "-";
+    if (descEl) descEl.textContent = data.content?.full_description || data.content?.short_description || "";
+
+    // Features
+    if (featuresEl) {
+        featuresEl.innerHTML = "";
+        const features = data.content?.features || [];
+        features.forEach(f => {
+            const li = document.createElement("li");
+            li.textContent = f;
+            featuresEl.appendChild(li);
+        });
+    }
+
+    // Engagement stats
+    const visits = data.visits || 0;
+    const likes = data.likes || 0;
+    if (visitsEl) visitsEl.textContent = visits;
+    if (likesEl) likesEl.textContent = likes;
+    if (visitsLabel) visitsLabel.textContent = visits === 1 ? 'visit' : 'visits';
+    if (likesLabel) likesLabel.textContent = likes === 1 ? 'like' : 'likes';
+
+    // Open modal
+    overlay.classList.add("open");
+    modal.classList.add("open");
+    document.body.style.overflow = "hidden";
+    overlay.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483647 !important;";
+    modal.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
+}
