@@ -548,25 +548,23 @@ function initPropertyModal() {
     }
     open();
   });
-}
-  }
 
-closeBtn?.addEventListener("click", close);
+  closeBtn?.addEventListener("click", close);
 
-overlay.addEventListener("click", e => {
-  if (e.target === overlay) close();
-});
+  overlay.addEventListener("click", e => {
+    if (e.target === overlay) close();
+  });
 
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape" && overlay.classList.contains("open")) close();
-});
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && overlay.classList.contains("open")) close();
+  });
 
-overlay.addEventListener("click", e => {
-  const link = e.target.closest("a[href^='#']");
-  if (link && overlay.classList.contains("open")) {
-    close();
-  }
-});
+  overlay.addEventListener("click", e => {
+    const link = e.target.closest("a[href^='#']");
+    if (link && overlay.classList.contains("open")) {
+      close();
+    }
+  });
 }
 
 // ================================================================
