@@ -46,7 +46,7 @@ async function handleLogout() {
 function initAuth() {
     onAuthStateChanged(auth, (user) => {
         const path = window.location.pathname.toLowerCase();
-        const isDashboard = path.includes("dashboard") || path.endsWith("/");
+        const isDashboard = path.includes("dashboard");
         const isLogin = path.includes("login");
 
         // Force body hide for dashboard until state is known
