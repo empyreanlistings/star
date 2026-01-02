@@ -78,9 +78,15 @@ async function fetchAdminListings() {
     if (cachedData) {
         try {
             const { listings } = JSON.parse(cachedData);
-            console.log("Loading Dashboard listings from PERSISTENT CACHE");
-            renderAdminTable(listings);
-            return;
+            // Force refresh if the first listing is missing visits/likes (stale cache structure)
+            if (listings.length > 0 && !('visits' in listings[0])) {
+                console.log("Stale cache detected, forcing fetch...");
+                localStorage.removeItem(CACHE_KEY);
+            } else {
+                console.log("Loading Dashboard listings from PERSISTENT CACHE");
+                renderAdminTable(listings);
+                return;
+            }
         } catch (e) {
             console.error("Error parsing cache", e);
         }

@@ -440,15 +440,15 @@ function initPropertyModal() {
           // Instead we wait for getLatestEngagement if the dataset is 0.
         }
 
-        const img = modal.querySelector("#modalImage");
-        const locationEl = modal.querySelector("#modalLocation");
-        const priceEl = modal.querySelector("#modalPrice");
-        const typeEl = modal.querySelector("#modalType");
-        const bedsEl = modal.querySelector("#modalBeds");
-        const bathsEl = modal.querySelector("#modalBaths");
-        const sizeEl = modal.querySelector("#modalSize");
-        const descEl = modal.querySelector("#modalDescription");
-        const featuresEl = modal.querySelector("#modalFeatures");
+        const img = modal.querySelector("#modalImage") || document.getElementById("modalImage");
+        const locationEl = modal.querySelector("#modalLocation") || document.getElementById("modalLocation");
+        const priceEl = modal.querySelector("#modalPrice") || document.getElementById("modalPrice");
+        const typeEl = modal.querySelector("#modalType") || document.getElementById("modalType");
+        const bedsEl = modal.querySelector("#modalBeds") || document.getElementById("modalBeds");
+        const bathsEl = modal.querySelector("#modalBaths") || document.getElementById("modalBaths");
+        const sizeEl = modal.querySelector("#modalSize") || document.getElementById("modalSize");
+        const descEl = modal.querySelector("#modalDescription") || document.getElementById("modalDescription");
+        const featuresEl = modal.querySelector("#modalFeatures") || document.getElementById("modalFeatures");
 
         const image = card.querySelector(".property-image img")?.src || "";
         if (img) {
@@ -469,9 +469,9 @@ function initPropertyModal() {
         if (descEl) descEl.textContent = card.dataset.description || "";
 
         // Engagement Display Prep
-        const visitsEl = modal.querySelector("#modalVisits");
-        const likesEl = modal.querySelector("#modalLikes");
-        const likeBtn = modal.querySelector("#modalLikeBtn");
+        const visitsEl = document.getElementById("modalVisits");
+        const likesEl = document.getElementById("modalLikes");
+        const likeBtn = document.getElementById("modalLikeBtn");
 
         const updateLabels = (v, l) => {
           const vCount = parseInt(v || 0);
@@ -479,8 +479,8 @@ function initPropertyModal() {
           if (visitsEl) visitsEl.textContent = vCount;
           if (likesEl) likesEl.textContent = lCount;
 
-          const vLabel = modal.querySelector("#modalVisitsLabel");
-          const lLabel = modal.querySelector("#modalLikesLabel");
+          const vLabel = document.getElementById("modalVisitsLabel");
+          const lLabel = document.getElementById("modalLikesLabel");
           if (vLabel) vLabel.textContent = vCount === 1 ? 'visit' : 'visits';
           if (lLabel) lLabel.textContent = lCount === 1 ? 'like' : 'likes';
 
