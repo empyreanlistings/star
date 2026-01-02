@@ -339,7 +339,6 @@ function initPropertyModal() {
   const overlay = document.getElementById("modalOverlay");
   const modal = document.getElementById("propertyModal");
   const closeBtn = document.getElementById("modalClose");
-  const propertyGrid = document.querySelector(".property-grid");
 
   if (!overlay || !modal || overlay.dataset.modalInit) return;
   overlay.dataset.modalInit = "true";
@@ -392,202 +391,182 @@ function initPropertyModal() {
     return `₱${v.toLocaleString()}`;
   };
 
-  // Use event delegation on property-grid
-  if (propertyGrid) {
-    const grid = document.querySelector(".property-grid");
-    if (grid) {
-      grid.addEventListener("click", async (e) => {
-        const card = e.target.closest(".property-card:not(.no-results-card)");
-        if (!card) return;
+  // Use DOCUMENT-level delegation to catch clicks even if grid loads late
+  document.addEventListener("click", async (e) => {
+    const card = e.target.closest(".property-card:not(.no-results-card)");
+    if (!card) return;
 
-        // 1. Check for Grid Like Button Click
-        const gridLikeBtn = e.target.closest(".grid-like-btn");
-        if (gridLikeBtn) {
-          e.stopPropagation();
-          const pid = gridLikeBtn.dataset.id;
-          const currentlyLiked = localStorage.getItem(`liked_${pid}`);
-          const isUnlike = !!currentlyLiked;
+    // 1. Check for Grid Like Button Click
+    const gridLikeBtn = e.target.closest(".grid-like-btn");
+    if (gridLikeBtn) {
+      e.stopPropagation();
+      const pid = gridLikeBtn.dataset.id;
+      const currentlyLiked = localStorage.getItem(`liked_${pid}`);
+      const isUnlike = !!currentlyLiked;
 
-          if (typeof window.trackLike === 'function') {
-            const success = await window.trackLike(pid, isUnlike);
-            if (success) {
-              if (isUnlike) {
-                localStorage.removeItem(`liked_${pid}`);
-                gridLikeBtn.classList.remove('liked');
-                gridLikeBtn.querySelector('i').className = 'far fa-heart';
-                card.dataset.likes = Math.max(0, parseInt(card.dataset.likes || 0) - 1);
-              } else {
-                localStorage.setItem(`liked_${pid}`, "true");
-                gridLikeBtn.classList.add('liked');
-                gridLikeBtn.querySelector('i').className = 'fas fa-heart';
-                card.dataset.likes = parseInt(card.dataset.likes || 0) + 1;
-              }
-            }
+      if (typeof window.trackLike === 'function') {
+        const success = await window.trackLike(pid, isUnlike);
+        if (success) {
+          if (isUnlike) {
+            localStorage.removeItem(`liked_${pid}`);
+            gridLikeBtn.classList.remove('liked');
+            gridLikeBtn.querySelector('i').className = 'far fa-heart';
+            card.dataset.likes = Math.max(0, parseInt(card.dataset.likes || 0) - 1);
+          } else {
+            localStorage.setItem(`liked_${pid}`, "true");
+            gridLikeBtn.classList.add('liked');
+            gridLikeBtn.querySelector('i').className = 'fas fa-heart';
+            card.dataset.likes = parseInt(card.dataset.likes || 0) + 1;
           }
-          return;
         }
+      }
+      return;
+    }
 
-        // 2. Otherwise Open Modal
-        if (e.target.closest("a, .grid-like-btn")) return;
+    // 2. Otherwise Open Modal
+    if (e.target.closest("a, .grid-like-btn")) return;
 
-        console.log("Opening modal for card data:", card.dataset);
-        const propertyId = card.dataset.id;
+    console.log("Opening modal for card data:", card.dataset);
+    const propertyId = card.dataset.id;
 
-        // Track Visit Immediately (Silent DB update)
-        if (typeof window.trackVisit === 'function' && propertyId) {
-          window.trackVisit(propertyId);
-          // We NO LONGER increment locally here to avoid "1" showing up if cache is 0.
-          // Instead we wait for getLatestEngagement if the dataset is 0.
-        }
+    // Track Visit Immediately (Silent DB update)
+    if (typeof window.trackVisit === 'function' && propertyId) {
+      window.trackVisit(propertyId);
+    }
 
-        const img = modal.querySelector("#modalImage") || document.getElementById("modalImage");
-        const locationEl = modal.querySelector("#modalLocation") || document.getElementById("modalLocation");
-        const priceEl = modal.querySelector("#modalPrice") || document.getElementById("modalPrice");
-        const typeEl = modal.querySelector("#modalType") || document.getElementById("modalType");
-        const bedsEl = modal.querySelector("#modalBeds") || document.getElementById("modalBeds");
-        const bathsEl = modal.querySelector("#modalBaths") || document.getElementById("modalBaths");
-        const sizeEl = modal.querySelector("#modalSize") || document.getElementById("modalSize");
-        const descEl = modal.querySelector("#modalDescription") || document.getElementById("modalDescription");
-        const featuresEl = modal.querySelector("#modalFeatures") || document.getElementById("modalFeatures");
+    const image = card.querySelector(".property-image img")?.src || "";
+    if (img) {
+      img.src = image;
+      img.alt = card.querySelector("img")?.alt || "Property image";
+    }
 
-        const image = card.querySelector(".property-image img")?.src || "";
-        if (img) {
-          img.src = image;
-          img.alt = card.querySelector("img")?.alt || "Property image";
-        }
+    const location = card.getAttribute("data-address") || card.querySelector(".property-location")?.textContent || "";
+    if (locationEl) locationEl.textContent = location;
+    if (typeEl) typeEl.textContent = card.dataset.type || "";
 
-        const location = card.getAttribute("data-address") || card.querySelector(".property-location")?.textContent || "";
-        if (locationEl) locationEl.textContent = location;
-        if (typeEl) typeEl.textContent = card.dataset.type || "";
+    const displayedPrice = card.querySelector(".property-price")?.textContent.trim();
+    if (priceEl) priceEl.textContent = displayedPrice || formatPrice(+card.dataset.price);
 
-        const displayedPrice = card.querySelector(".property-price")?.textContent.trim();
-        if (priceEl) priceEl.textContent = displayedPrice || formatPrice(+card.dataset.price);
+    if (bedsEl) bedsEl.textContent = card.dataset.beds || "-";
+    if (bathsEl) bathsEl.textContent = card.dataset.baths || "-";
+    if (sizeEl) sizeEl.textContent = card.dataset.size || "-";
+    if (descEl) descEl.textContent = card.dataset.description || "";
 
-        if (bedsEl) bedsEl.textContent = card.dataset.beds || "-";
-        if (bathsEl) bathsEl.textContent = card.dataset.baths || "-";
-        if (sizeEl) sizeEl.textContent = card.dataset.size || "-";
-        if (descEl) descEl.textContent = card.dataset.description || "";
+    // Engagement Display Prep
+    const visitsEl = document.getElementById("modalVisits");
+    const likesEl = document.getElementById("modalLikes");
+    const likeBtn = document.getElementById("modalLikeBtn");
 
-        // Engagement Display Prep
-        const visitsEl = document.getElementById("modalVisits");
-        const likesEl = document.getElementById("modalLikes");
-        const likeBtn = document.getElementById("modalLikeBtn");
+    const updateLabels = (v, l) => {
+      const vCount = parseInt(v || 0);
+      const lCount = parseInt(l || 0);
+      if (visitsEl) visitsEl.textContent = vCount;
+      if (likesEl) likesEl.textContent = lCount;
 
-        const updateLabels = (v, l) => {
-          const vCount = parseInt(v || 0);
-          const lCount = parseInt(l || 0);
-          if (visitsEl) visitsEl.textContent = vCount;
-          if (likesEl) likesEl.textContent = lCount;
+      const vLabel = document.getElementById("modalVisitsLabel");
+      const lLabel = document.getElementById("modalLikesLabel");
+      if (vLabel) vLabel.textContent = vCount === 1 ? 'visit' : 'visits';
+      if (lLabel) lLabel.textContent = lCount === 1 ? 'like' : 'likes';
 
-          const vLabel = document.getElementById("modalVisitsLabel");
-          const lLabel = document.getElementById("modalLikesLabel");
-          if (vLabel) vLabel.textContent = vCount === 1 ? 'visit' : 'visits';
-          if (lLabel) lLabel.textContent = lCount === 1 ? 'like' : 'likes';
+      // Color heart icon pink if there are likes (user feedback)
+      const heartIconSpan = likesEl?.parentElement;
+      if (heartIconSpan) {
+        heartIconSpan.classList.toggle('liked', lCount > 0);
+      }
+    };
 
-          // Color heart icon pink if there are likes (user feedback)
-          const heartIconSpan = likesEl?.parentElement;
-          if (heartIconSpan) {
-            heartIconSpan.classList.toggle('liked', lCount > 0);
+    // ALWAYS fetch live data first to prevent stale "1" from showing
+    if (typeof window.getLatestEngagement === 'function' && propertyId) {
+      const data = await window.getLatestEngagement(propertyId);
+      if (data) {
+        card.dataset.likes = data.likes;
+        card.dataset.visits = data.visits;
+        updateLabels(data.visits, data.likes);
+      }
+    } else {
+      // Fallback to card data if function not available
+      updateLabels(card.dataset.visits, card.dataset.likes);
+    }
+
+    if (likeBtn && propertyId) {
+      const syncGridBtn = (isLiked) => {
+        const gBtn = card.querySelector(".grid-like-btn");
+        if (gBtn) {
+          if (isLiked) {
+            gBtn.classList.add('liked');
+            gBtn.querySelector('i').className = 'fas fa-heart';
+          } else {
+            gBtn.classList.remove('liked');
+            gBtn.querySelector('i').className = 'far fa-heart';
           }
-        };
-
-        // Sync UI from (optimistic) card data first
-        updateLabels(card.dataset.visits, card.dataset.likes);
-
-        // If data is obviously missing or 0, show a loading hint or just wait for DB
-        if (!card.dataset.visits || card.dataset.visits === "0") {
-          if (visitsEl) visitsEl.textContent = "...";
         }
+      };
 
-        if (typeof window.getLatestEngagement === 'function' && propertyId) {
-          window.getLatestEngagement(propertyId).then(data => {
-            if (data) {
-              card.dataset.likes = data.likes;
-              card.dataset.visits = data.visits;
-              updateLabels(data.visits, data.likes);
-            }
-          });
+      const updateLikeUI = (isLiked) => {
+        if (isLiked) {
+          likeBtn.classList.add('liked');
+          likeBtn.innerHTML = '<i class="fas fa-heart"></i>';
+        } else {
+          likeBtn.classList.remove('liked');
+          likeBtn.innerHTML = '<i class="far fa-heart"></i>';
         }
+        syncGridBtn(isLiked);
+      };
 
-        if (likeBtn && propertyId) {
-          const syncGridBtn = (isLiked) => {
-            const gBtn = card.querySelector(".grid-like-btn");
-            if (gBtn) {
-              if (isLiked) {
-                gBtn.classList.add('liked');
-                gBtn.querySelector('i').className = 'fas fa-heart';
-              } else {
-                gBtn.classList.remove('liked');
-                gBtn.querySelector('i').className = 'far fa-heart';
-              }
-            }
-          };
+      updateLikeUI(localStorage.getItem(`liked_${propertyId}`));
 
-          const updateLikeUI = (isLiked) => {
-            if (isLiked) {
-              likeBtn.classList.add('liked');
-              likeBtn.innerHTML = '<i class="fas fa-heart"></i>';
+      likeBtn.onclick = async () => {
+        const currentlyLiked = localStorage.getItem(`liked_${propertyId}`);
+        const isUnlike = !!currentlyLiked;
+        if (typeof window.trackLike === 'function') {
+          const success = await window.trackLike(propertyId, isUnlike);
+          if (success) {
+            if (isUnlike) {
+              localStorage.removeItem(`liked_${propertyId}`);
+              card.dataset.likes = Math.max(0, parseInt(card.dataset.likes || 0) - 1);
             } else {
-              likeBtn.classList.remove('liked');
-              likeBtn.innerHTML = '<i class="far fa-heart"></i>';
+              localStorage.setItem(`liked_${propertyId}`, "true");
+              card.dataset.likes = parseInt(card.dataset.likes || 0) + 1;
             }
-            syncGridBtn(isLiked);
-          };
-
-          updateLikeUI(localStorage.getItem(`liked_${propertyId}`));
-
-          likeBtn.onclick = async () => {
-            const currentlyLiked = localStorage.getItem(`liked_${propertyId}`);
-            const isUnlike = !!currentlyLiked;
-            if (typeof window.trackLike === 'function') {
-              const success = await window.trackLike(propertyId, isUnlike);
-              if (success) {
-                if (isUnlike) {
-                  localStorage.removeItem(`liked_${propertyId}`);
-                  card.dataset.likes = Math.max(0, parseInt(card.dataset.likes || 0) - 1);
-                } else {
-                  localStorage.setItem(`liked_${propertyId}`, "true");
-                  card.dataset.likes = parseInt(card.dataset.likes || 0) + 1;
-                }
-                updateLikeUI(!isUnlike);
-                updateLabels(card.dataset.visits, card.dataset.likes);
-              }
-            }
-          };
+            updateLikeUI(!isUnlike);
+            updateLabels(card.dataset.visits, card.dataset.likes);
+          }
         }
+      };
+    }
 
-        if (featuresEl) {
-          featuresEl.innerHTML = "";
-          const features = card.dataset.features?.split("|") || [];
-          features.forEach(f => {
-            if (f.trim()) {
-              const li = document.createElement("li");
-              li.textContent = f.trim();
-              featuresEl.appendChild(li);
-            }
-          });
+    if (featuresEl) {
+      featuresEl.innerHTML = "";
+      const features = card.dataset.features?.split("|") || [];
+      features.forEach(f => {
+        if (f.trim()) {
+          const li = document.createElement("li");
+          li.textContent = f.trim();
+          featuresEl.appendChild(li);
         }
-        open();
       });
     }
+    open();
+  });
+}
   }
 
-  closeBtn?.addEventListener("click", close);
+closeBtn?.addEventListener("click", close);
 
-  overlay.addEventListener("click", e => {
-    if (e.target === overlay) close();
-  });
+overlay.addEventListener("click", e => {
+  if (e.target === overlay) close();
+});
 
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape" && overlay.classList.contains("open")) close();
-  });
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && overlay.classList.contains("open")) close();
+});
 
-  overlay.addEventListener("click", e => {
-    const link = e.target.closest("a[href^='#']");
-    if (link && overlay.classList.contains("open")) {
-      close();
-    }
-  });
+overlay.addEventListener("click", e => {
+  const link = e.target.closest("a[href^='#']");
+  if (link && overlay.classList.contains("open")) {
+    close();
+  }
+});
 }
 
 // ================================================================
