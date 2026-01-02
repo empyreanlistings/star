@@ -100,6 +100,14 @@ function renderListings(listings) {
   // Apply limit if specified
   const displayList = !isNaN(limit) ? sorted.slice(0, limit) : sorted;
 
+  grid.innerHTML = ""; // Clear grid
+  const fragment = document.createDocumentFragment();
+
+  displayList.forEach(data => {
+    const card = createPropertyCard(data);
+    fragment.appendChild(card);
+  });
+
   grid.appendChild(fragment);
 
   // Add the "No Results" card back (it's hidden by CSS or filter script usually)
