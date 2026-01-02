@@ -4,6 +4,7 @@ import {
   collection,
   getDocs,
   doc,
+  getDoc,
   updateDoc,
   increment
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -253,6 +254,27 @@ window.trackLike = async (propertyId, isUnlike = false) => {
     console.error("Error tracking like/unlike:", e);
     return false;
   }
+};
+
+/**
+ * Real-time Engagement Sync
+ */
+window.getLatestEngagement = async (propertyId) => {
+  if (!propertyId) return null;
+  try {
+    const propertyRef = doc(db, "Listings", propertyId);
+    const snap = await getDoc(propertyRef);
+    if (snap.exists()) {
+      const data = snap.data();
+      return {
+        likes: data.likes || 0,
+        visits: data.visits || 0
+      };
+    }
+  } catch (e) {
+    console.error("Error fetching latest engagement:", e);
+  }
+  return null;
 };
 
 fetchListings();

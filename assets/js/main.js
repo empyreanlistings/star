@@ -429,10 +429,9 @@ function initPropertyModal() {
       const likeBtn = document.getElementById("modalLikeBtn");
       const propertyId = card.dataset.id;
 
-      // Ensure counts are visible from dataset initially
-      const updateLabels = () => {
-        const vCount = parseInt(card.dataset.visits || 0);
-        const lCount = parseInt(card.dataset.likes || 0);
+      const updateLabels = (v, l) => {
+        const vCount = parseInt(v || 0);
+        const lCount = parseInt(l || 0);
 
         if (visitsEl) visitsEl.textContent = vCount;
         if (likesEl) likesEl.textContent = lCount;
@@ -444,14 +443,27 @@ function initPropertyModal() {
         if (lLabel) lLabel.textContent = lCount === 1 ? 'like' : 'likes';
       };
 
-      updateLabels();
+      // Initial UI from card data
+      updateLabels(card.dataset.visits, card.dataset.likes);
 
-      // Track Visit (using a small delay to ensure it's not accidental)
+      // 1. Track Visit
       if (typeof window.trackVisit === 'function' && propertyId) {
         window.trackVisit(propertyId);
-        // Increment local dataset for immediate UI consistency if reopened without refresh
+        // Optimistic local update
         card.dataset.visits = parseInt(card.dataset.visits || 0) + 1;
-        updateLabels();
+        updateLabels(card.dataset.visits, card.dataset.likes);
+      }
+
+      // 2. Fetch Fresh Engagement from Firestore (bypassing stale cache)
+      if (typeof window.getLatestEngagement === 'function' && propertyId) {
+        window.getLatestEngagement(propertyId).then(data => {
+          if (data) {
+            console.log("🔄 Engagement Synced from DB:", data);
+            card.dataset.likes = data.likes;
+            card.dataset.visits = data.visits;
+            updateLabels(data.visits, data.likes);
+          }
+        });
       }
 
       // Handle Like/Unlike Toggle
@@ -484,7 +496,7 @@ function initPropertyModal() {
                 card.dataset.likes = parseInt(card.dataset.likes || 0) + 1;
               }
               updateLikeUI(!isUnlike);
-              updateLabels();
+              updateLabels(card.dataset.visits, card.dataset.likes);
             }
           }
         };
