@@ -46,8 +46,8 @@ async function handleLogout() {
 function initAuth() {
     onAuthStateChanged(auth, (user) => {
         const path = window.location.pathname.toLowerCase();
-        const isDashboard = path.includes("dashboard");
-        const isLogin = path.includes("login");
+        const isDashboard = document.body.classList.contains('dashboard-page');
+        const isLogin = document.body.classList.contains('login-page') || path.includes("login");
 
         // Force body hide for dashboard until state is known
         if (isDashboard && !document.body.classList.contains('auth-verified')) {
