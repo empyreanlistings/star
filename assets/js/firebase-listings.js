@@ -203,7 +203,10 @@ function createPropertyCard(data) {
     featuresHTML += `<div class="feature"><i class="fa-solid fa-sun"></i></div>`;
   }
 
-  const logoHTML = isFeatured ? '<div class="property-logo"><img src="images/logo2-dark.png" alt=""></div>' : '';
+  // Conditionally render logo if featured
+  const logoHTML = isFeatured
+    ? `<img src="images/small_homebuyer.png" alt="Featured Property" class="property-logo">`
+    : '';
 
   // Heart icon state for grid
   const hasLiked = localStorage.getItem(`liked_${data.id}`);
