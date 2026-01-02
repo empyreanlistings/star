@@ -4242,7 +4242,7 @@ html[data-theme="light"] .mixed-gallery .gallery-item:hover img {
 .mixed-gallery {
   position: relative;
   contain: layout style;
-  min-height: 400px;
+  min-height: 300px;
 }
 
 
