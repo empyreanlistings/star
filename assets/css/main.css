@@ -2030,6 +2030,26 @@ html[data-theme="light"] .properties {
 }
 
 /* ============================== PROPERTY CARD ============================== */
+.no-results-card {
+  grid-column: 1 / -1;
+  max-width: 450px;
+  margin: 2rem auto !important;
+  pointer-events: none;
+  border-style: dashed !important;
+  opacity: 0.8;
+}
+
+.no-results-card .property-image {
+  background: var(--glass-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 240px !important;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 12px;
+}
+
 .property-card {
   background: rgba(25, 25, 25, 0.85);
   /* deep glass dark */

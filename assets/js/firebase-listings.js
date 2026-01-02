@@ -100,15 +100,20 @@ function renderListings(listings) {
   // Apply limit if specified
   const displayList = !isNaN(limit) ? sorted.slice(0, limit) : sorted;
 
-  grid.innerHTML = ""; // Clear grid
-  const fragment = document.createDocumentFragment();
-
-  displayList.forEach(data => {
-    const card = createPropertyCard(data);
-    fragment.appendChild(card);
-  });
-
   grid.appendChild(fragment);
+
+  // Add the "No Results" card back (it's hidden by CSS or filter script usually)
+  const noResults = document.createElement("div");
+  noResults.id = "noResults";
+  noResults.className = "property-card no-results-card";
+  noResults.style.display = "none";
+  noResults.innerHTML = `
+    <div class="property-image" style="background:var(--glass-bg);display:flex;align-items:center;justify-content:center;height:220px;flex-direction:column;gap:16px;">
+        <i class="fas fa-search" style="font-size:48px;color:var(--text);opacity:0.3;"></i>
+        <h4 style="margin:0; opacity:0.8;">No results, try adjusting your filters</h4>
+    </div>
+  `;
+  grid.appendChild(noResults);
 
   // Dispatch event for other scripts (like filters) to re-init or update
   window.dispatchEvent(new Event("listingsLoaded"));
