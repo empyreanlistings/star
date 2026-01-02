@@ -491,3 +491,116 @@ function openPropertyModal(data) {
     overlay.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483647 !important;";
     modal.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
 }
+
+// Dashboard Table Filters
+function initDashboardFilters() {
+    const filterBtns = document.querySelectorAll('.property-gallery-filters .filter');
+    const priceMin = document.getElementById('dashPriceMin');
+    const priceMax = document.getElementById('dashPriceMax');
+    const priceRangeValue = document.getElementById('dashPriceRangeValue');
+    const tbody = document.getElementById('listingsTableBody');
+
+    if (!filterBtns.length || !priceMin || !priceMax || !tbody) return;
+
+    let activeCategory = 'all';
+    let minPrice = 0;
+    let maxPrice = 50000000;
+
+    const formatPrice = (val) => {
+        const num = parseInt(val);
+        if (num >= 1000000) return `₱${(num / 1000000).toFixed(1)}M`;
+        if (num >= 1000) return `₱${(num / 1000).toFixed(0)}K`;
+        return `₱${num}`;
+    };
+
+    const updatePriceDisplay = () => {
+        if (minPrice === 0 && maxPrice === 50000000) {
+            priceRangeValue.textContent = 'Any Price';
+        } else if (minPrice === 0) {
+            priceRangeValue.textContent = `Up to ${formatPrice(maxPrice)}`;
+        } else if (maxPrice === 50000000) {
+            priceRangeValue.textContent = `${formatPrice(minPrice)}+`;
+        } else {
+            priceRangeValue.textContent = `${formatPrice(minPrice)} - ${formatPrice(maxPrice)}`;
+        }
+    };
+
+    const filterTable = () => {
+        const rows = tbody.querySelectorAll('tr');
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const categoryCell = row.querySelector('td:nth-child(5)');
+            const priceCell = row.querySelector('td:nth-child(4)');
+
+            if (!categoryCell || !priceCell) return;
+
+            const category = categoryCell.textContent.trim().toLowerCase();
+            const priceText = priceCell.textContent.replace(/[₱,]/g, '');
+            const price = parseInt(priceText) || 0;
+
+            const categoryMatch = activeCategory === 'all' || category === activeCategory;
+            const priceMatch = price >= minPrice && price <= maxPrice;
+
+            if (categoryMatch && priceMatch) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        console.log(`Dashboard filter: ${visibleCount} listings visible`);
+    };
+
+    // Category filter buttons
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeCategory = btn.dataset.filter;
+            filterTable();
+        });
+    });
+
+    // Price sliders
+    const updateSlider = () => {
+        const min = parseInt(priceMin.value);
+        const max = parseInt(priceMax.value);
+
+        if (min > max - 1000000) {
+            if (priceMin === document.activeElement) {
+                priceMin.value = max - 1000000;
+            } else {
+                priceMax.value = min + 1000000;
+            }
+        }
+
+        minPrice = parseInt(priceMin.value);
+        maxPrice = parseInt(priceMax.value);
+
+        const percentMin = (minPrice / 50000000) * 100;
+        const percentMax = (maxPrice / 50000000) * 100;
+
+        const sliderRange = document.querySelector('.slider-range-inline');
+        if (sliderRange) {
+            sliderRange.style.left = percentMin + '%';
+            sliderRange.style.width = (percentMax - percentMin) + '%';
+        }
+
+        updatePriceDisplay();
+        filterTable();
+    };
+
+    priceMin.addEventListener('input', updateSlider);
+    priceMax.addEventListener('input', updateSlider);
+
+    updateSlider();
+}
+
+// Initialize filters when table is rendered
+const originalRenderAdminTable = renderAdminTable;
+renderAdminTable = function (listings) {
+    originalRenderAdminTable(listings);
+    setTimeout(() => initDashboardFilters(), 100);
+};
