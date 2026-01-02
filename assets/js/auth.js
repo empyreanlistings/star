@@ -81,9 +81,15 @@ function initAuth() {
                 window.location.href = "login.html";
             }
 
-            // Hide avatar on public site
+            // Show dashboard icon, hide avatar on public site
             const avatarLink = document.getElementById("navAvatarLink");
-            if (avatarLink) avatarLink.style.display = "none";
+            const avatarImg = document.getElementById("navAvatarImg");
+            const dashboardIcon = document.getElementById("navDashboardIcon");
+            if (avatarLink) {
+                avatarLink.style.display = "inline-flex";
+                if (avatarImg) avatarImg.style.display = "none";
+                if (dashboardIcon) dashboardIcon.style.display = "block";
+            }
         }
     });
 
