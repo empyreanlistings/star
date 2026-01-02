@@ -178,6 +178,11 @@ function renderAdminTable(listings) {
             }
         });
     });
+
+    // Initialize filters after table is rendered
+    if (typeof window.initDashboardFilters === 'function') {
+        setTimeout(() => window.initDashboardFilters(), 100);
+    }
 }
 
 // Duplicate
@@ -598,9 +603,5 @@ function initDashboardFilters() {
     updateSlider();
 }
 
-// Initialize filters when table is rendered
-const originalRenderAdminTable = renderAdminTable;
-renderAdminTable = function (listings) {
-    originalRenderAdminTable(listings);
-    setTimeout(() => initDashboardFilters(), 100);
-};
+// Call this at the end of renderAdminTable
+window.initDashboardFilters = initDashboardFilters;
