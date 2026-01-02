@@ -433,10 +433,11 @@ function initPropertyModal() {
         console.log("Opening modal for card data:", card.dataset);
         const propertyId = card.dataset.id;
 
-        // Track Visit Immediately
+        // Track Visit Immediately (Silent DB update)
         if (typeof window.trackVisit === 'function' && propertyId) {
           window.trackVisit(propertyId);
-          card.dataset.visits = parseInt(card.dataset.visits || 0) + 1;
+          // We NO LONGER increment locally here to avoid "1" showing up if cache is 0.
+          // Instead we wait for getLatestEngagement if the dataset is 0.
         }
 
         const img = modal.querySelector("#modalImage");
@@ -490,7 +491,13 @@ function initPropertyModal() {
           }
         };
 
+        // Sync UI from (optimistic) card data first
         updateLabels(card.dataset.visits, card.dataset.likes);
+
+        // If data is obviously missing or 0, show a loading hint or just wait for DB
+        if (!card.dataset.visits || card.dataset.visits === "0") {
+          if (visitsEl) visitsEl.textContent = "...";
+        }
 
         if (typeof window.getLatestEngagement === 'function' && propertyId) {
           window.getLatestEngagement(propertyId).then(data => {

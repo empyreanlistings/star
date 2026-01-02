@@ -92,7 +92,7 @@ async function fetchAdminListings() {
         const snapshot = await getDocs(collection(db, "Listings"));
 
         if (snapshot.empty) {
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;">No listings found.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;">No listings found.</td></tr>`;
             return;
         }
 
@@ -111,7 +111,7 @@ async function fetchAdminListings() {
 
     } catch (error) {
         console.error("Error fetching listings:", error);
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:red;">Error loading listings.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:red;">Error loading listings.</td></tr>`;
     }
 }
 
@@ -142,6 +142,8 @@ function renderAdminTable(listings) {
             <td>${price}</td>
             <td><span class="status-badge status-active">${category.toUpperCase()}</span></td>
             <td style="text-align:center;">${data.featured ? '<i class="fas fa-star" style="color:var(--accent);"></i>' : '-'}</td>
+            <td style="text-align:center;">${data.visits || 0}</td>
+            <td style="text-align:center;">${data.likes || 0}</td>
             <td>
                 <button class="action-btn edit" data-id="${id}" title="Edit"><i class="fas fa-pen"></i></button>
                 <button class="action-btn duplicate" data-id="${id}" title="Duplicate / Copy"><i class="fas fa-copy"></i></button>
