@@ -1824,6 +1824,10 @@ html[data-theme="light"] .hero-slide:hover .slide-image {
     padding: 1px;
   }
 
+  .hero-learn-more {
+    display: none !important;
+  }
+
   .hero-slide {
     flex-direction: column;
   }
