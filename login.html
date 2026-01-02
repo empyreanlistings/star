@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Admin Login - Kai & Isla</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript>
+        <link rel="stylesheet" href="assets/css/noscript.css" />
+    </noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .login-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #2e3842;
+            background-image: linear-gradient(to top, rgba(46, 56, 66, 0.9), rgba(46, 56, 66, 0.9)), url('images/banner.webp');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-logo {
+            width: 80px;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-card h2 {
+            color: #2e3842;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            color: #555;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fff;
+            color: #333;
+            font-family: inherit;
+        }
+
+        .btn-login {
+            width: 100%;
+            background-color: #ed786a;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            transition: background 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-login:hover {
+            background-color: #d65c4e;
+        }
+
+        .error-message {
+            color: #d32f2f;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #777;
+            font-size: 0.9rem;
+            text-decoration: none;
+            border-bottom: 1px dotted transparent;
+        }
+
+        .back-link:hover {
+            color: #ed786a;
+            border-bottom-color: #ed786a;
+        }
+    </style>
+</head>
+
+<body class="is-preload">
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            <img src="images/logo2-dark.png" alt="Kai & Isla" class="login-logo">
+            <h2>ADMIN ACCESS</h2>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" class="form-control" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" required placeholder="••••••••">
+                </div>
+
+                <button type="submit" class="btn-login">SIGN IN</button>
+
+                <div id="loginError" class="error-message"></div>
+            </form>
+
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Website</a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <!-- Auth Logic -->
+    <script type="module" src="assets/js/auth.js"></script>
+
+</body>
+
+</html>

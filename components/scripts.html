@@ -1,0 +1,79 @@
+<script>
+// ==== THEME TOGGLE =========================================================
+function toggleTheme() {
+  const body = document.body;
+  const cur = body.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  body.setAttribute('data-theme', next);
+
+  const logo = document.querySelector('.logo-container img');
+  logo.src = next === 'light' ? 'images/logo2-dark.png' : 'images/logo2-light.png';
+  logo.alt = next === 'light' ? 'Kai & Isla Logo (Dark)' : 'Kai & Isla Logo (Light)';
+
+  const icon = document.querySelector('.theme-toggle i');
+  icon.classList.toggle('fa-sun', next === 'dark');
+  icon.classList.toggle('fa-moon', next === 'light');
+}
+
+// ==== MOBILE MENU ===========================================================
+const toggleBtn = document.getElementById('menu-toggle');
+const menu      = document.querySelector('.mobile-menu');
+const backdrop  = document.querySelector('.mobile-menu-backdrop');
+
+toggleBtn.addEventListener('click', () => {
+  toggleBtn.classList.toggle('active');
+  menu.classList.toggle('open');
+  backdrop.classList.toggle('open');
+});
+
+function closeMobileMenu() {
+  toggleBtn.classList.remove('active');
+  menu.classList.remove('open');
+  backdrop.classList.remove('open');
+  menu.setAttribute('aria-hidden', 'true');
+  backdrop.setAttribute('aria-hidden', 'true');
+}
+
+// ==== SCROLL-HIDE TOP BAR ===================================================
+let lastScroll = 0;
+const topBar = document.getElementById('topBar');
+const navBar = document.querySelector('nav');
+
+window.addEventListener('scroll', () => {
+  const cur = window.pageYOffset;
+  if (cur > lastScroll && cur > 50) {          // down
+    topBar.classList.add('hidden');
+    navBar.style.top = '0';
+  } else {                                     // up
+    topBar.classList.remove('hidden');
+    navBar.style.top = '30px';
+  }
+  lastScroll = cur;
+});
+
+// ==== INTERSECTION OBSERVER (animate-on-scroll) ============================
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => e.target.classList.toggle('in-view', e.isIntersecting));
+}, { threshold: 0.15 });
+document.querySelectorAll('.animate-on-scroll').forEach(el => io.observe(el));
+
+// ==== HERO CAROUSEL (fade, pause on hover/focus) ===========================
+(function () {
+  const slides = document.querySelectorAll('.hero-slide');
+  let cur = 0, timer = null, delay = 5000;
+
+  const show = i => slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+  const next = () => { cur = (cur + 1) % slides.length; show(cur); };
+  const start = () => { if (!timer) timer = setInterval(next, delay); };
+  const stop  = () => { clearInterval(timer); timer = null; };
+
+  start();
+  const carousel = document.querySelector('.hero-carousel');
+  ['mouseenter','focusin','touchstart'].forEach(ev => carousel.addEventListener(ev, stop));
+  ['mouseleave','focusout','touchend'].forEach(ev => carousel.addEventListener(ev, start));
+
+  document.addEventListener('visibilitychange', () => document.visibilityState === 'hidden' ? stop() : start());
+  window.addEventListener('blur', stop);
+  window.addEventListener('focus', start);
+})();
+</script>

@@ -1,0 +1,152 @@
+<!-- ============================== OUR WORK GALLERY – MIXED GRID ============================== -->
+<div id="gallery" class="container-glass" style="margin-top: 60px;">
+  <div class="section-title">
+    <h1>OUR WORK</h1>
+    <h2 class="gallery-subtitle">COMPLETED HOMES & PROJECTS ACROSS PALAWAN</h2>
+  </div>
+
+  <!-- FILTER CHIPS -->
+  <div class="filters-container">
+    <div class="gallery-filters">
+      <button class="filter active" data-filter="all">ALL</button>
+      <button class="filter" data-filter="structural">STRUCTURAL</button>
+      <button class="filter" data-filter="exterior">EXTERIOR</button>
+      <button class="filter" data-filter="interior">INTERIOR</button>
+      <button class="filter" data-filter="pool">SWIMMING POOLS</button>
+    </div>
+  </div>
+
+  <!-- MIXED GRID GALLERY -->
+  <div class="mixed-gallery">
+    <div class="gallery-item" data-category="exterior">
+      <div class="img-wrap">
+        <img src="images/gallery/bucana_drone.webp" alt="Solar Installation Drone shot" loading="lazy">
+      </div>
+      <div class="gallery-overlay">
+        <h3>Solar-Power install</h3>
+        <p>30kw Battery • Hybrid • Inverter</p>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="exterior">
+      <div class="img-wrap">
+        <img src="images/gallery/bucana_pool_house.webp" alt="Completed home in Duli, El Nido" loading="lazy">
+      </div>
+      <div class="gallery-overlay">
+        <h3>Spacious Pool House</h3>
+        <p>AAC Blockwork • Custom Bi-fold Doors • Pool</p>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="structural">
+      <div class="img-wrap">
+        <img src="images/gallery/bucana1.webp" alt="Oceanfront home" loading="lazy">
+      </div>
+      <div class="gallery-overlay">
+        <h3>Planning & Design</h3>
+        <p>El Nido • 110sqm</p>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="pool">
+      <div class="img-wrap">
+        <img src="images/gallery/bucana2.webp" alt="Oceanfront home" loading="lazy">
+      </div>
+      <div class="gallery-overlay">
+        <h3>32sqm Pool</h3>
+        <p>Baja Shelf • LED Lighting</p>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="pool">
+      <div class="img-wrap">
+        <img src="images/gallery/bucana3.webp" alt="Oceanfront home" loading="lazy">
+      </div>
+      <div class="gallery-overlay">
+        <h3>Equipment installation</h3>
+        <p>Skimmer • Vac • IDE Filtration • Variable Speed Pump</p>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="pool">
+      <div class="img-wrap">
+        <img src="images/gallery/bucana4.webp" alt="Oceanfront home" loading="lazy">
+      </div>
+      <div class="gallery-overlay">
+        <h3>Pool Building</h3>
+        <p>Crystaline Water Proofing • Multiple Tests</p>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="pool">
+      <div class="img-wrap">
+        <img src="images/gallery/bucana5.webp" alt="Oceanfront home" loading="lazy">
+      </div>
+      <div class="gallery-overlay">
+        <h3>Pool Building</h3>
+        <p>Outer Support Wall (pre-formworks) • 1.4m depth</p>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="pool">
+      <div class="img-wrap">
+        <img src="images/gallery/bucana6.webp" alt="Oceanfront home" loading="lazy">
+      </div>
+      <div class="gallery-overlay">
+        <h3>Pool Tiling</h3>
+        <p>Mosaico Tiles • Finishing</p>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="structural">
+      <div class="img-wrap">
+        <img src="images/gallery/bucana7.webp" alt="Roof Structural" loading="lazy">
+      </div>
+      <div class="gallery-overlay">
+        <h3>Concrete Roof</h3>
+        <p>Single Pour • Conduit Installation</p>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="structural">
+      <div class="img-wrap">
+        <img src="images/gallery/bucana8.webp" alt="Roof Structural" loading="lazy">
+      </div>
+      <div class="gallery-overlay">
+        <h3>Concrete Roof</h3>
+        <p>Single Pour • Conduit Installation</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <a href="gallery.html" class="btn">View All</a>
+  </div>
+
+  <!-- Liquid lens SVG filter -->
+  <svg width="0" height="0" style="position:absolute; pointer-events:none;">
+    <filter id="liquidLens">
+      <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" seed="8" result="turb">
+        <animate attributeName="baseFrequency" dur="6s" values="0.01;0.03;0.01" repeatCount="indefinite" />
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="turb" scale="18">
+        <animate attributeName="scale" dur="6s" values="12;22;12" repeatCount="indefinite" />
+      </feDisplacementMap>
+    </filter>
+  </svg>
+</div>
+<!-- ============================== END GALLERY ============================== -->
+
+<!-- ========================= WORKS GALLERY LIGHTBOX ========================= -->
+<div
+  id="works-lightbox"
+  class="lightbox"
+  role="dialog"
+  aria-hidden="true"
+  tabindex="-1"
+>
+  <div class="lightbox-arrow lightbox-prev">&#10094;</div>
+  <img id="works-lightbox-img" src="" alt="">
+  <div class="lightbox-arrow lightbox-next">&#10095;</div>
+  <div class="lightbox-caption"></div>
+</div>

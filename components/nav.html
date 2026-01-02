@@ -1,0 +1,39 @@
+<!-- NAVIGATION -->
+<nav>
+  <a href="#" class="logo-container">
+    <img src="images/logo2-light.png" alt="Kai & Isla Logo (Light)">
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#listings">PROPERTY FOR SALE</a></li>
+    <li><a href="#how-it-works">PARADISE LIFE HOME BUYER</a></li>
+    <li><a href="#palawan">MOVE TO PALAWAN</a></li>
+    <li><a href="#about">ABOUT</a></li>
+    <li><a href="#palawan">PALAWAN</a></li>
+    <li><a href="#contact">CONTACT</a></li>
+    <li><a href="https://kaiandisla.com" target="_blank">CLIENT PORTAL</a></li>
+  </ul>
+
+  <div class="nav-right-icons">
+    <button class="theme-toggle" aria-label="Toggle theme" onclick="toggleTheme()">
+      <i class="fas fa-sun"></i>
+    </button>
+    <div class="menu-toggle" id="menu-toggle">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU DRAWER -->
+<div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+  <a href="#listings"          onclick="closeMobileMenu()">PROPERTY FOR SALE</a>
+  <a href="#how-it-works"     onclick="closeMobileMenu()">PARADISE LIFE HOME BUYER</a>
+  <a href="#palawan"          onclick="closeMobileMenu()">MOVE TO PALAWAN</a>
+  <a href="#about"            onclick="closeMobileMenu()">ABOUT</a>
+  <a href="#palawan"          onclick="closeMobileMenu()">PALAWAN</a>
+  <a href="#contact"          onclick="closeMobileMenu()">CONTACT</a>
+  <a href="https://kaiandisla.com" target="_blank" onclick="closeMobileMenu()">CLIENT PORTAL</a>
+</div>
+
+<!-- optional backdrop (add CSS if you want it) -->
+<div class="mobile-menu-backdrop" id="mobileMenuBackdrop" aria-hidden="true"></div>

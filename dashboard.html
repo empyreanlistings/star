@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <title>Admin Dashboard - Kai & Isla</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <style>
+        /* Styles moved to assets/css/main.css */
+    </style>
+    <script>
+        // Init theme immediately to prevent flash
+        const theme = localStorage.getItem('theme');
+        if (theme) document.documentElement.setAttribute('data-theme', theme);
+    </script>
+</head>
+
+<body class="is-preload dashboard-page">
+
+    <!-- Protection & Auth Logic -->
+    <script type="module" src="assets/js/auth.js"></script>
+
+    <header class="dashboard-header">
+        <div class="dashboard-logo">
+            <a href="index.html">
+                <img src="images/logo2-dark.png" alt="Kai & Isla" id="dashLogo">
+            </a>
+            <!-- Script to swap logo based on theme later if needed, but dark logo works on white header. 
+                     In dark mode, header is dark, so dark logo might be lost. 
+                     Let's handle logo swap in JS or Filter -->
+        </div>
+        <div class="user-info">
+            <button id="themeToggleDash" class="theme-toggle" aria-label="Toggle Theme">
+                <i class="theme-icon fas fa-moon"></i>
+            </button>
+            <span id="userEmail" style="color:var(--dash-text);font-size:0.9rem;"></span>
+            <button id="logoutBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </header>
+
+    <main class="dashboard-content">
+        <div class="page-header">
+            <h1>Manage Listings</h1>
+            <button id="addListingBtn" class="btn-add"><i class="fas fa-plus"></i> Add New Listing</button>
+        </div>
+
+        <div class="listings-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Featured</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="listingsTableBody">
+                    <tr>
+                        <td colspan="7" style="text-align:center;padding:2rem;opacity:0.6;">Loading listings...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Listing Modal -->
+    <div id="listingModal" class="modal-overlay">
+        <div class="modal-content">
+            <span id="closeModal">&times;</span>
+            <h3 id="modalTitle" style="margin-bottom:1.5rem;">Add New Property</h3>
+            <form id="listingForm">
+                <input type="hidden" id="listingId">
+                <div class="form-group">
+                    <label>Property Title</label>
+                    <input type="text" id="propTitle" class="form-control" required>
+                </div>
+
+                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div>
+                        <label>Price (PHP)</label>
+                        <input type="number" id="propPrice" class="form-control" required>
+                    </div>
+                    <div>
+                        <label>Type (e.g. Villa, Land)</label>
+                        <input type="text" id="propType" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div>
+                        <label>Category</label>
+                        <select id="propCategory" class="form-control">
+                            <option value="residential">Residential</option>
+                            <option value="land">Land</option>
+                            <option value="commercial">Commercial</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Status</label>
+                        <select id="propStatus" class="form-control">
+                            <option value="for_sale">For Sale</option>
+                            <option value="sold">Sold</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;margin-top:-0.5rem;">
+                    <input type="checkbox" id="propFeatured" style="width:auto;margin:0;">
+                    <label for="propFeatured" style="margin:0;cursor:pointer;font-size:0.9rem;">Featured Property (Logo
+                        overlay & priority sorting)</label>
+                </div>
+
+                <div class="form-group">
+                    <label>Thumbnail Image</label>
+                    <input type="file" id="propImage" class="form-control" accept="image/*" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Short Description (Card)</label>
+                    <input type="text" id="propShortDesc" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Full Description (Modal)</label>
+                    <textarea id="propFullDesc" class="form-control" rows="4"></textarea>
+                </div>
+
+                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;">
+                    <input type="number" id="propBeds" class="form-control" placeholder="Beds">
+                    <input type="number" id="propBaths" class="form-control" placeholder="Baths">
+                    <input type="number" id="propSize" class="form-control" placeholder="Size (sqm)">
+                </div>
+
+                <div class="form-group">
+                    <label>Features (comma separated)</label>
+                    <input type="text" id="propFeatures" class="form-control" placeholder="Pool, Solar, View...">
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-add" style="width:100%;margin-top:1rem;">Create
+                    Listing</button>
+                <div id="uploadStatus" style="margin-top:0.5rem;text-align:center;font-size:0.9rem;opacity:0.8;"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script type="module" src="assets/js/admin-dashboard.js"></script>
+
+</body>
+
+</html>

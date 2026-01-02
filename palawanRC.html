@@ -1,0 +1,111 @@
+<div id="palawan" class="container-glass">
+  <div class="section-title">
+    <h1 style="color: var(--white);">PALAWAN</h1>
+    <h2 class="gallery-subtitle">THE WORLD'S BEST ISLAND</h2>
+  </div>
+
+  <div class="palawan-content">
+    <!-- Text + Accordion Column -->
+    <div class="palawan-text">
+      <h3>Palawan isn’t just beautiful—it’s consistently ranked as one of the World’s Best Islands.</h3><br>
+      <p>El Nido, Palawan boasts towering limestone karst cliffs rising dramatically from turquoise waters, hidden emerald lagoons, secret white-sand beaches in Bacuit Bay, and some of the Philippines' most vibrant marine life—including colorful coral reefs, sea turtles, and tropical fish—while maintaining a relaxed, small-town charm that perfectly blends thrilling island-hopping adventures with serene tropical escapism.</p>
+      <p>Whether you’re looking for investment opportunities, a holiday home, or a permanent move, Palawan delivers a lifestyle that’s healthier, calmer, and closer to nature.</p>
+
+      <div class="palawan-accordion" role="region" aria-labelledby="palawan-accordion-title">
+        <h4 id="palawan-accordion-title" class="accordion-heading">More About Living in Palawan</h4>
+
+        <details class="accordion-item">
+          <summary class="accordion-trigger"><span>How to Get to Palawan</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="accordion-panel">
+            <p>Direct international flights to Puerto Princesa International Airport (PPS) are not currently available, with the airport primarily handling domestic routes; travelers from abroad typically connect through major Philippine hubs like Manila. Daily flights from Manila (about 75 minutes), Cebu (about 80 minutes), and Clark (about 85 minutes) provide convenient access. El Nido Airport (ENI), also known as Lio Airport, is fully operational with expanded services, including new direct flights from Cebu (launched October 26, 2025) and Clark (launched March 30, 2025), drastically cutting travel time to northern Palawan to as little as 70-90 minutes from those cities. San Vicente Airport has been open since 2018 and now features regular flights, such as Cebu Pacific's route from Cebu (launched October 2024), further improving connectivity to central Palawan beaches and attractions</p>
+          </div>
+        </details>
+
+        <details class="accordion-item">
+          <summary class="accordion-trigger"><span>Local Amenities & Infrastructure</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="accordion-panel">
+            <p>Modern hospitals, international schools, high-speed fiber internet (up to 500 Mbps), malls, organic markets, yoga studios, dive centers, and a growing number of co-working spaces.</p>
+          </div>
+        </details>
+
+        <details class="accordion-item">
+          <summary class="accordion-trigger"><span>Events & Lifestyle</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="accordion-panel">
+            <p>Baragatan Festival, Underground River tours, full-moon parties in Nacpan, international kiteboarding competitions, farm-to-table dinners, wellness retreats, and a vibrant expat community.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- Gallery -->
+    <div class="palawan-gallery">
+      <div class="gallery-item large">
+        <img src="images/palawan1.webp" alt="El Nido Bay" loading="lazy">
+        <div class="gallery-overlay">
+          <h3>El Nido Bay</h3>
+          <p>El Nido, Palawan</p>
+        </div>
+      </div>
+      <div class="gallery-item small">
+        <img src="images/palawan2.webp" alt="Town Square" loading="lazy">
+        <div class="gallery-overlay">
+          <h3>Town Square</h3>
+          <p>El Nido, Palawan</p>
+        </div>
+      </div>
+      <div class="gallery-item small">
+        <img src="images/palawan3.webp" alt="Entalula Island" loading="lazy">
+        <div class="gallery-overlay">
+          <h3>Entalula Island</h3>
+          <p>El Nido, Palawan</p>
+        </div>
+      </div>
+      <div class="gallery-item small">
+        <img src="images/palawan4.webp" alt="Sips Sunset Lounge" loading="lazy">
+        <div class="gallery-overlay">
+          <h3>Sips Sunset Lounge</h3>
+          <p>El Nido, Palawan</p>
+        </div>
+      </div>
+      <div class="gallery-item small">
+        <img src="images/palawan4.webp" alt="Sips Sunset Lounge" loading="lazy">
+        <div class="gallery-overlay">
+          <h3>Sips Sunset Lounge</h3>
+          <p>El Nido, Palawan</p>
+        </div>
+      </div>
+    </div>
+  </div> <!-- palawan-content -->
+
+  <!-- Liquid lens SVG filter -->
+  <svg width="0" height="0" style="position:absolute; pointer-events:none;">
+    <filter id="liquidLens">
+      <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" seed="8" result="turb">
+        <animate attributeName="baseFrequency" dur="6s" values="0.01;0.03;0.01" repeatCount="indefinite" />
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="turb" scale="18">
+        <animate attributeName="scale" dur="6s" values="12;22;12" repeatCount="indefinite" />
+      </feDisplacementMap>
+    </filter>
+  </svg>
+</div> <!-- #palawan -->
+
+<!-- ========================= PALAWAN LIGHTBOX ========================= -->
+<div id="palawan-lightbox" class="lightbox">
+  <div class="lightbox-arrow lightbox-prev">&#10094;</div> <!-- left arrow -->
+  <img id="palawan-lightbox-img" src="" alt="">
+  <div class="lightbox-arrow lightbox-next">&#10095;</div> <!-- right arrow -->
+  <div class="lightbox-caption"></div>
+</div>
