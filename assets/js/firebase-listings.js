@@ -19,7 +19,7 @@ const db = getFirestore(app);
 
 // Caching Constants
 const CACHE_KEY = "kai_isla_listings";
-const CACHE_EXPIRY = 30 * 60 * 1000; // 30 minutes in ms
+// Persistent Caching: No expiry. Cache is manually cleared by admin actions.
 
 /**
  * Public function to clear cache (used by admin dashboard)
@@ -37,15 +37,10 @@ async function fetchListings() {
   const cachedData = localStorage.getItem(CACHE_KEY);
   if (cachedData) {
     try {
-      const { listings, timestamp } = JSON.parse(cachedData);
-      const isExpired = Date.now() - timestamp > CACHE_EXPIRY;
-
-      if (!isExpired) {
-        console.log("Loading listings from CACHE");
-        renderListings(listings);
-        return;
-      }
-      console.log("Cache expired, fetching fresh data...");
+      const { listings } = JSON.parse(cachedData);
+      console.log("Loading listings from PERSISTENT CACHE");
+      renderListings(listings);
+      return;
     } catch (e) {
       console.error("Error parsing cache", e);
     }

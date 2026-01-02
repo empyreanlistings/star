@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Caching Constants (matched with firebase-listings.js)
 const CACHE_KEY = "kai_isla_listings";
-const CACHE_EXPIRY = 30 * 60 * 1000; // 30 minutes
+// Persistent Caching: No expiry. Cache is manually cleared by admin actions.
 
 // Fetch Listings
 async function fetchAdminListings() {
@@ -49,15 +49,10 @@ async function fetchAdminListings() {
     const cachedData = localStorage.getItem(CACHE_KEY);
     if (cachedData) {
         try {
-            const { listings, timestamp } = JSON.parse(cachedData);
-            const isExpired = Date.now() - timestamp > CACHE_EXPIRY;
-
-            if (!isExpired) {
-                console.log("Loading Dashboard listings from CACHE");
-                renderAdminTable(listings);
-                return;
-            }
-            console.log("Dashboard Cache expired, fetching fresh data...");
+            const { listings } = JSON.parse(cachedData);
+            console.log("Loading Dashboard listings from PERSISTENT CACHE");
+            renderAdminTable(listings);
+            return;
         } catch (e) {
             console.error("Error parsing cache", e);
         }
