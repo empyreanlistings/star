@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, deleteDoc, doc, addDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, deleteDoc, doc, addDoc, getDoc, updateDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyArViUzMduVitt8FJDrSVPC_IQTeQrDFX4",
@@ -14,6 +15,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
+const auth = getAuth(app);
 
 console.log("Admin Dashboard Script Loaded");
 // alert("Admin Script Loaded"); // Uncomment if needed for visible check
@@ -22,6 +24,8 @@ console.log("Admin Dashboard Script Loaded");
 let isEditMode = false;
 let isInitialized = false;
 let modal;
+let currentUserCompany = null; // Store user's company reference
+let currentUserId = null; // Store current user's UID
 
 // Init
 document.addEventListener("DOMContentLoaded", () => {
@@ -31,36 +35,40 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Admin Dashboard Initializing...");
     modal = document.getElementById("listingModal");
 
-    // Check Auth State before fetching
-    const auth = (window.firebase && window.firebase.auth) ? window.firebase.auth() : null;
-    // Since we use ES modules, we should wait for onAuthStateChanged in auth.js
-    // Alternatively, we can export the auth check or just check currentUser after a short delay
-    // Best practice: auth.js handles the redirect, admin-dashboard.js should just fetch if possible.
+    // Use Firebase Auth to check user and fetch company
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            currentUserId = user.uid;
+            console.log("User authenticated:", user.email);
 
-    // To be safe, we'll fetch only if we see the auth-verified class on body
-    const checkAuthAndFetch = () => {
-        if (document.body.classList.contains('auth-verified')) {
+            // Fetch user's company first
+            await getUserCompany(user.uid);
+
+            // Then fetch listings filtered by company
             fetchAdminListings();
             initModalEvents();
         } else {
-            // Wait up to 2 seconds for auth.js to verify
-            let attempts = 0;
-            const interval = setInterval(() => {
-                attempts++;
-                if (document.body.classList.contains('auth-verified')) {
-                    clearInterval(interval);
-                    fetchAdminListings();
-                    initModalEvents();
-                } else if (attempts > 20) {
-                    clearInterval(interval);
-                    console.warn("Auth verification timed out.");
-                }
-            }, 100);
+            console.log("No user authenticated, redirecting...");
+            window.location.href = "login.html";
         }
-    };
-
-    checkAuthAndFetch();
+    });
 });
+
+// Fetch User's Company Reference
+async function getUserCompany(uid) {
+    try {
+        const userDoc = await getDoc(doc(db, "Users", uid));
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            currentUserCompany = userData.company_id;
+            console.log("User company loaded:", currentUserCompany?.id || "No company");
+        } else {
+            console.error("User document not found");
+        }
+    } catch (error) {
+        console.error("Error fetching user company:", error);
+    }
+}
 
 
 
@@ -92,13 +100,27 @@ async function fetchAdminListings() {
         }
     }
 
-    // 2. Fetch from Firebase
+    // 2. Fetch from Firebase with company filter
     try {
         console.log("Fetching Dashboard listings from FIREBASE");
-        const snapshot = await getDocs(collection(db, "Listings"));
+
+        let snapshot;
+        if (currentUserCompany) {
+            // Filter by company
+            const q = query(
+                collection(db, "Listings"),
+                where("company", "==", currentUserCompany)
+            );
+            snapshot = await getDocs(q);
+            console.log(`Filtered listings by company: ${currentUserCompany.id}`);
+        } else {
+            // Fallback: fetch all (for users without company)
+            console.warn("No company filter applied - fetching all listings");
+            snapshot = await getDocs(collection(db, "Listings"));
+        }
 
         if (snapshot.empty) {
-            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;">No listings found.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;">No listings found for your company.</td></tr>`;
             return;
         }
 
@@ -400,6 +422,13 @@ async function handleFormSubmit(e) {
         if (isEditMode && id) {
             // UPDATE
             const docRef = doc(db, "Listings", id);
+
+            // Add editor metadata
+            if (currentUserId) {
+                docData.editor = doc(db, "Users", currentUserId);
+            }
+            docData.edited_date = serverTimestamp();
+
             await updateDoc(docRef, docData);
             // Invalidate cache
             localStorage.removeItem("kai_isla_listings");
@@ -409,7 +438,16 @@ async function handleFormSubmit(e) {
             if (!docData.media) {
                 throw new Error("Image is required for new listings.");
             }
-            docData.created_at = new Date().toISOString();
+
+            // Add company and creator metadata
+            if (currentUserCompany) {
+                docData.company = currentUserCompany;
+            }
+            if (currentUserId) {
+                docData.creator = doc(db, "Users", currentUserId);
+            }
+            docData.created_date = serverTimestamp();
+
             await addDoc(collection(db, "Listings"), docData);
             // Invalidate cache
             localStorage.removeItem("kai_isla_listings");
