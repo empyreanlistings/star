@@ -113,7 +113,7 @@ function renderAdminTable(listings) {
             <td>${type}</td>
             <td>${price}</td>
             <td><span class="status-badge status-active">${category.toUpperCase()}</span></td>
-            <td style="text-align:center;">${data.featured ? '<i class="fas fa-star" style="color:#ed786a;"></i>' : '-'}</td>
+            <td style="text-align:center;">${data.featured ? '<i class="fas fa-star" style="color:var(--accent);"></i>' : '-'}</td>
             <td>
                 <button class="action-btn edit" data-id="${id}" title="Edit"><i class="fas fa-pen"></i></button>
                 <button class="action-btn duplicate" data-id="${id}" title="Duplicate / Copy"><i class="fas fa-copy"></i></button>
