@@ -4940,7 +4940,26 @@ html[data-theme="light"] .messenger-fab:hover {
 
 .nav-avatar:hover {
   border-color: var(--accent);
+  color: var(--accent);
   transform: scale(1.05);
+}
+
+.nav-avatar i {
+  font-size: 18px;
+  color: var(--text);
+  transition: color 0.3s ease;
+}
+
+.nav-avatar:hover i {
+  color: var(--accent);
+}
+
+html[data-theme="light"] .nav-avatar i {
+  color: #222;
+}
+
+html[data-theme="light"] .nav-avatar:hover i {
+  color: var(--accent);
 }
 
 /* ============================== DASHBOARD STYLES ============================== */

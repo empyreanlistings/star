@@ -61,14 +61,17 @@ function initAuth() {
             // Update UI for public site (index.html)
             const avatarLink = document.getElementById("navAvatarLink");
             const avatarImg = document.getElementById("navAvatarImg");
-            if (avatarLink && avatarImg) {
-                avatarLink.style.display = "inline-flex";
-                // Use photoURL or fallback
+            const dashboardIcon = document.getElementById("navDashboardIcon");
+            if (avatarLink) {
                 if (user.photoURL) {
-                    avatarImg.src = user.photoURL;
+                    if (avatarImg) {
+                        avatarImg.src = user.photoURL;
+                        avatarImg.style.display = "block";
+                    }
+                    if (dashboardIcon) dashboardIcon.style.display = "none";
                 } else {
-                    // Fallback to a default
-                    avatarImg.src = "images/logo.png";
+                    if (avatarImg) avatarImg.style.display = "none";
+                    if (dashboardIcon) dashboardIcon.style.display = "block";
                 }
             }
 
