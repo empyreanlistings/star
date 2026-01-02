@@ -996,17 +996,6 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
-.property-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  gap: 20px;
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 8px 8px 0 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
 nav {
   position: fixed;
   top: 30px;
@@ -2212,7 +2201,7 @@ html[data-theme="light"] .property-logo {
   font-weight: 500;
   color: #e5e5e5;
   background: transparent;
-  gap: 10px;
+  gap: 20px;
 }
 
 .property-info.primary {
