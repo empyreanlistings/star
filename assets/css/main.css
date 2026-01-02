@@ -2269,6 +2269,7 @@ html[data-theme="light"] .modal-overlay {
 /* ============================== MODAL PANEL ============================== */
 .modal-content {
   width: min(92vw, 600px);
+  margin: 0 auto;
   max-height: 90vh;
   /* Reduced from 95vh */
   overflow-y: auto;

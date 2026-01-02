@@ -824,16 +824,9 @@ function initAnimations() {
       }
     });
 
-    heroVideo.addEventListener('timeupdate', () => {
-      const timeRemaining = heroVideo.duration - heroVideo.currentTime;
-      const elapsedTime = (Date.now() - videoStartTime) / 1000;
+    // Start carousel fade-in at 0.8s remaining
+    // heroVideo.addEventListener('timeupdate', () => { ... }); // REMOVED to avoid premature reveal
 
-      // Start carousel fade-in at 0.8s remaining
-      if (!carouselRevealed && timeRemaining <= 0.8 && timeRemaining > 0) {
-        console.log(`⏱️ Carousel reveal triggered (${timeRemaining.toFixed(2)}s remaining, ${elapsedTime.toFixed(2)}s elapsed)`);
-        revealCarousel();
-      }
-    });
 
     heroVideo.addEventListener('loadedmetadata', () => {
       console.log(`📹 Video loaded: ${heroVideo.duration}s duration`);
