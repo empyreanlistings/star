@@ -460,35 +460,65 @@ function initPropertyModal() {
       const likesEl = document.getElementById("modalLikes");
       const likeBtn = document.getElementById("modalLikeBtn");
 
-      const updateLabels = (v, l) => {
+      const updateLabels = (v, l, isLoading = false) => {
         const vCount = parseInt(v || 0);
         const lCount = parseInt(l || 0);
-        if (visitsEl) visitsEl.textContent = vCount;
-        if (likesEl) likesEl.textContent = lCount;
 
-        const vLabel = document.getElementById("modalVisitsLabel");
-        const lLabel = document.getElementById("modalLikesLabel");
-        if (vLabel) vLabel.textContent = vCount === 1 ? 'visit' : 'visits';
-        if (lLabel) lLabel.textContent = lCount === 1 ? 'like' : 'likes';
+        if (visitsEl) {
+          if (isLoading) {
+            visitsEl.textContent = "...";
+            visitsEl.classList.add('skeleton');
+          } else {
+            visitsEl.textContent = vCount;
+            visitsEl.classList.remove('skeleton');
+          }
+        }
 
-        // Color heart icon pink if there are likes (user feedback)
-        const heartIconSpan = likesEl?.parentElement;
-        if (heartIconSpan) {
-          heartIconSpan.classList.toggle('liked', lCount > 0);
+        if (likesEl) {
+          if (isLoading) {
+            likesEl.textContent = "...";
+            likesEl.classList.add('skeleton');
+          } else {
+            likesEl.textContent = lCount;
+            likesEl.classList.remove('skeleton');
+          }
+        }
+
+        if (!isLoading) {
+          const vLabel = document.getElementById("modalVisitsLabel");
+          const lLabel = document.getElementById("modalLikesLabel");
+          if (vLabel) vLabel.textContent = vCount === 1 ? 'visit' : 'visits';
+          if (lLabel) lLabel.textContent = lCount === 1 ? 'like' : 'likes';
+
+          // Color heart icon pink if there are likes (user feedback)
+          const heartIconSpan = likesEl?.parentElement;
+          if (heartIconSpan) {
+            heartIconSpan.classList.toggle('liked', lCount > 0);
+          }
         }
       };
 
-      // ALWAYS fetch live data first to prevent stale "1" from showing
+      // Show skeleton loaders immediately
+      updateLabels(0, 0, true);
+
+      // Open modal immediately (don't wait for data)
+      open();
+
+      // Fetch live data in background
       if (typeof window.getLatestEngagement === 'function' && propertyId) {
-        const data = await window.getLatestEngagement(propertyId);
-        if (data) {
-          card.dataset.likes = data.likes;
-          card.dataset.visits = data.visits;
-          updateLabels(data.visits, data.likes);
-        }
+        window.getLatestEngagement(propertyId).then(data => {
+          if (data) {
+            card.dataset.likes = data.likes;
+            card.dataset.visits = data.visits;
+            updateLabels(data.visits, data.likes, false);
+          } else {
+            // Fallback to card data
+            updateLabels(card.dataset.visits, card.dataset.likes, false);
+          }
+        });
       } else {
         // Fallback to card data if function not available
-        updateLabels(card.dataset.visits, card.dataset.likes);
+        updateLabels(card.dataset.visits, card.dataset.likes, false);
       }
 
       if (likeBtn && propertyId) {

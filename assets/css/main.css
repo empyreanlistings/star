@@ -541,6 +541,30 @@ html[data-theme="light"] .glass-panel::after {
   }
 }
 
+/* Skeleton Loader */
+.skeleton {
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0.05) 25%,
+      rgba(255, 255, 255, 0.15) 50%,
+      rgba(255, 255, 255, 0.05) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  display: inline-block;
+  min-width: 20px;
+  min-height: 1em;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 /* Interactive hover state - subtle lift */
 .container-glass:hover {
   border-color: rgba(255, 255, 255, 0.25);
