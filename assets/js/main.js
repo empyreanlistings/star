@@ -429,41 +429,52 @@ function initPropertyModal() {
       const likeBtn = document.getElementById("modalLikeBtn");
       const propertyId = card.dataset.id;
 
+      // Ensure counts are visible from dataset initially
       if (visitsEl) visitsEl.textContent = card.dataset.visits || "0";
       if (likesEl) likesEl.textContent = card.dataset.likes || "0";
 
-      // Track Visit
+      // Track Visit (using a small delay to ensure it's not accidental)
       if (typeof window.trackVisit === 'function' && propertyId) {
         window.trackVisit(propertyId);
+        // Increment local dataset for immediate UI consistency if reopened without refresh
+        card.dataset.visits = parseInt(card.dataset.visits || 0) + 1;
+        if (visitsEl) visitsEl.textContent = card.dataset.visits;
       }
 
-      // Handle Like Button State
+      // Handle Like/Unlike Toggle
       if (likeBtn && propertyId) {
-        const hasLiked = localStorage.getItem(`liked_${propertyId}`);
-        if (hasLiked) {
-          likeBtn.classList.add('liked');
-          likeBtn.disabled = true;
-          likeBtn.innerHTML = '<i class="fas fa-heart" style="color: #ff69b4;"></i>';
-        } else {
-          likeBtn.classList.remove('liked');
-          likeBtn.disabled = false;
-          likeBtn.innerHTML = '<i class="far fa-heart"></i>';
+        const updateLikeUI = (isLiked) => {
+          if (isLiked) {
+            likeBtn.classList.add('liked');
+            likeBtn.innerHTML = '<i class="fas fa-heart"></i>';
+          } else {
+            likeBtn.classList.remove('liked');
+            likeBtn.innerHTML = '<i class="far fa-heart"></i>';
+          }
+        };
 
-          // One-time listener for this modal open
-          const handleLikeClick = async () => {
-            if (typeof window.trackLike === 'function') {
-              const success = await window.trackLike(propertyId);
-              if (success) {
+        const hasLiked = localStorage.getItem(`liked_${propertyId}`);
+        updateLikeUI(hasLiked);
+
+        likeBtn.onclick = async () => {
+          const currentlyLiked = localStorage.getItem(`liked_${propertyId}`);
+          const isUnlike = !!currentlyLiked;
+
+          if (typeof window.trackLike === 'function') {
+            const success = await window.trackLike(propertyId, isUnlike);
+            if (success) {
+              if (isUnlike) {
+                localStorage.removeItem(`liked_${propertyId}`);
+                card.dataset.likes = Math.max(0, parseInt(card.dataset.likes || 0) - 1);
+              } else {
                 localStorage.setItem(`liked_${propertyId}`, "true");
-                likeBtn.classList.add('liked');
-                likeBtn.disabled = true;
-                likeBtn.innerHTML = '<i class="fas fa-heart" style="color: #ff69b4;"></i>';
-                if (likesEl) likesEl.textContent = parseInt(likesEl.textContent) + 1;
+                card.dataset.likes = parseInt(card.dataset.likes || 0) + 1;
               }
+              updateLikeUI(!isUnlike);
+              if (likesEl) likesEl.textContent = card.dataset.likes;
             }
-          };
-          likeBtn.onclick = handleLikeClick;
-        }
+          }
+        };
       }
 
       featuresEl.innerHTML = "";

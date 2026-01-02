@@ -2493,13 +2493,24 @@ html[data-theme="light"] .modal-price {
 
 .btn-like.liked {
   background: transparent;
-  cursor: default;
+  cursor: pointer;
+  /* Allow unliking */
   border-color: #ff69b4;
   color: #ff69b4;
 }
 
 .btn-like.liked i {
   color: #ff69b4 !important;
+}
+
+.engagement-stats {
+  display: flex;
+  gap: 20px;
+  color: var(--text);
+  font-size: 1rem;
+  /* Slightly larger for visibility */
+  opacity: 0.9;
+  /* More solid for clarity */
 }
 
 html[data-theme="light"] .modal-engagement {

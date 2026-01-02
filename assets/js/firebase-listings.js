@@ -240,17 +240,17 @@ window.trackVisit = async (propertyId) => {
   }
 };
 
-window.trackLike = async (propertyId) => {
+window.trackLike = async (propertyId, isUnlike = false) => {
   if (!propertyId) return;
   try {
     const propertyRef = doc(db, "Listings", propertyId);
     await updateDoc(propertyRef, {
-      likes: increment(1)
+      likes: increment(isUnlike ? -1 : 1)
     });
-    console.log(`❤️ Like tracked for ${propertyId}`);
+    console.log(`${isUnlike ? '💔 Unlike' : '❤️ Like'} tracked for ${propertyId}`);
     return true;
   } catch (e) {
-    console.error("Error tracking like:", e);
+    console.error("Error tracking like/unlike:", e);
     return false;
   }
 };
