@@ -443,11 +443,11 @@ function initPropertyModal() {
         if (hasLiked) {
           likeBtn.classList.add('liked');
           likeBtn.disabled = true;
-          likeBtn.innerHTML = '<i class="fas fa-heart"></i> Liked';
+          likeBtn.innerHTML = '<i class="fas fa-heart" style="color: #ff69b4;"></i>';
         } else {
           likeBtn.classList.remove('liked');
           likeBtn.disabled = false;
-          likeBtn.innerHTML = '<i class="far fa-heart"></i> Like';
+          likeBtn.innerHTML = '<i class="far fa-heart"></i>';
 
           // One-time listener for this modal open
           const handleLikeClick = async () => {
@@ -457,7 +457,7 @@ function initPropertyModal() {
                 localStorage.setItem(`liked_${propertyId}`, "true");
                 likeBtn.classList.add('liked');
                 likeBtn.disabled = true;
-                likeBtn.innerHTML = '<i class="fas fa-heart"></i> Liked';
+                likeBtn.innerHTML = '<i class="fas fa-heart" style="color: #ff69b4;"></i>';
                 if (likesEl) likesEl.textContent = parseInt(likesEl.textContent) + 1;
               }
             }

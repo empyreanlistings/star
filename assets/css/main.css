@@ -9,6 +9,7 @@
   --feature-primary: #45403b;
   --feature-secondary: #d3cac2;
   --accent: #12a7b8;
+  --accent-rgb: 18, 167, 184;
   --black: #000000;
   --white: #ffffff;
   --text: #f5f5f5;
@@ -2474,26 +2475,31 @@ html[data-theme="light"] .modal-price {
   background: transparent;
   border: 1px solid var(--accent);
   color: var(--accent);
-  padding: 8px 16px;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
 }
 
 .btn-like:hover {
-  background: var(--accent);
-  color: #000;
+  background: rgba(var(--accent-rgb), 0.1);
+  transform: scale(1.1);
 }
 
 .btn-like.liked {
-  background: var(--accent);
-  color: #000;
+  background: transparent;
   cursor: default;
-  border-color: var(--accent);
+  border-color: #ff69b4;
+  color: #ff69b4;
+}
+
+.btn-like.liked i {
+  color: #ff69b4 !important;
 }
 
 html[data-theme="light"] .modal-engagement {
