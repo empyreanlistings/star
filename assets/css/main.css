@@ -2121,6 +2121,7 @@ html[data-theme="light"] .property-logo {
   font-weight: 500;
   color: #e5e5e5;
   background: transparent;
+  gap: 10px;
 }
 
 .property-info.primary {
