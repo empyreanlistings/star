@@ -205,7 +205,7 @@ function createPropertyCard(data) {
 
   // Conditionally render logo if featured
   const logoHTML = isFeatured
-    ? `<img src="images/small_homebuyer.png" alt="Featured Property" class="property-logo">`
+    ? `<div class="property-logo"><img src="images/small_homebuyer.png" alt="Featured Property"></div>`
     : '';
 
   // Heart icon state for grid
