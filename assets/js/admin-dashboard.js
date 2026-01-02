@@ -30,8 +30,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("Admin Dashboard Initializing...");
     modal = document.getElementById("listingModal");
-    fetchAdminListings();
-    initModalEvents();
+
+    // Check Auth State before fetching
+    const auth = (window.firebase && window.firebase.auth) ? window.firebase.auth() : null;
+    // Since we use ES modules, we should wait for onAuthStateChanged in auth.js
+    // Alternatively, we can export the auth check or just check currentUser after a short delay
+    // Best practice: auth.js handles the redirect, admin-dashboard.js should just fetch if possible.
+
+    // To be safe, we'll fetch only if we see the auth-verified class on body
+    const checkAuthAndFetch = () => {
+        if (document.body.classList.contains('auth-verified')) {
+            fetchAdminListings();
+            initModalEvents();
+        } else {
+            // Wait up to 2 seconds for auth.js to verify
+            let attempts = 0;
+            const interval = setInterval(() => {
+                attempts++;
+                if (document.body.classList.contains('auth-verified')) {
+                    clearInterval(interval);
+                    fetchAdminListings();
+                    initModalEvents();
+                } else if (attempts > 20) {
+                    clearInterval(interval);
+                    console.warn("Auth verification timed out.");
+                }
+            }, 100);
+        }
+    };
+
+    checkAuthAndFetch();
 });
 
 

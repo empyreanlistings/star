@@ -45,9 +45,15 @@ async function handleLogout() {
 // Monitor Auth State
 function initAuth() {
     onAuthStateChanged(auth, (user) => {
-        const path = window.location.pathname;
-        const isDashboard = path.includes("dashboard.html");
-        const isLogin = path.includes("login.html");
+        const path = window.location.pathname.toLowerCase();
+        const isDashboard = path.includes("dashboard") || path.endsWith("/");
+        const isLogin = path.includes("login");
+
+        // Force body hide for dashboard until state is known
+        if (isDashboard && !document.body.classList.contains('auth-verified')) {
+            document.body.style.opacity = '0';
+            document.body.style.pointerEvents = 'none';
+        }
 
         if (user) {
             console.log("User logged in:", user.email);
@@ -58,11 +64,18 @@ function initAuth() {
             const userEmailEl = document.getElementById("userEmail");
             if (userEmailEl) userEmailEl.textContent = user.email;
 
+            if (isDashboard) {
+                document.body.classList.add('auth-verified');
+                document.body.style.opacity = '1';
+                document.body.style.pointerEvents = 'auto';
+            }
+
             // Update UI for public site (index.html)
             const avatarLink = document.getElementById("navAvatarLink");
             const avatarImg = document.getElementById("navAvatarImg");
             const dashboardIcon = document.getElementById("navDashboardIcon");
             if (avatarLink) {
+                avatarLink.style.display = "inline-flex";
                 if (user.photoURL) {
                     if (avatarImg) {
                         avatarImg.src = user.photoURL;
@@ -78,7 +91,8 @@ function initAuth() {
         } else {
             console.log("User logged out");
             if (isDashboard) {
-                window.location.href = "login.html";
+                window.location.replace("login.html");
+                return;
             }
 
             // Show dashboard icon, hide avatar on public site
@@ -98,10 +112,12 @@ function initAuth() {
         loginForm.addEventListener("submit", handleLogin);
     }
 
-    const logoutBtn = document.getElementById("logoutBtn");
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", handleLogout);
-    }
+    // Use delegation or specific IDs for multiple logout buttons if they exist
+    document.addEventListener('click', e => {
+        if (e.target.closest('#logoutBtn') || e.target.closest('.btn-logout')) {
+            handleLogout();
+        }
+    });
 }
 
 initAuth();

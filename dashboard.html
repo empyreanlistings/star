@@ -22,6 +22,16 @@
 <body class="is-preload dashboard-page">
 
     <!-- Protection & Auth Logic -->
+    <style>
+        body.dashboard-page {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        body.auth-verified {
+            opacity: 1 !important;
+        }
+    </style>
     <script type="module" src="assets/js/auth.js"></script>
 
     <header class="dashboard-header">
