@@ -53,35 +53,39 @@
     </header>
 
     <main class="dashboard-content">
-        <div class="page-header">
-            <h1>Manage Listings</h1>
-            <button id="addListingBtn" class="btn-add"><i class="fas fa-plus"></i> Add New Listing</button>
-        </div>
-
-        <!-- Property Filters -->
-        <div class="property-filters-container" style="margin-bottom: 2rem;">
-            <div class="property-gallery-filters" role="group" aria-label="Property type filters">
-                <button class="filter active" data-filter="all" type="button">ALL</button>
-                <button class="filter" data-filter="land" type="button">LAND</button>
-                <button class="filter" data-filter="residential" type="button">RESIDENTIAL</button>
-                <button class="filter" data-filter="commercial" type="button">COMMERCIAL</button>
-            </div>
-
-            <div class="price-filter-inline">
-                <div class="price-header-row">
-                    <span class="price-label">Price:</span>
-                    <span id="dashPriceRangeValue">Any Price</span>
-                </div>
-                <div class="slider-container-inline">
-                    <input type="range" min="0" max="50000000" value="0" class="slider-inline" id="dashPriceMin">
-                    <input type="range" min="0" max="50000000" value="50000000" class="slider-inline" id="dashPriceMax">
-                    <div class="slider-track-inline"></div>
-                    <div class="slider-range-inline"></div>
-                </div>
-            </div>
-        </div>
-
         <div class="listings-table-container">
+            <!-- Centered Title -->
+            <h1 style="text-align: center; margin-bottom: 1.5rem;">Manage Listings</h1>
+
+            <!-- Filters with Add Button -->
+            <div class="property-filters-container" style="margin-bottom: 2rem; position: relative;">
+                <div class="property-gallery-filters" role="group" aria-label="Property type filters">
+                    <button class="filter active" data-filter="all" type="button">ALL</button>
+                    <button class="filter" data-filter="land" type="button">LAND</button>
+                    <button class="filter" data-filter="residential" type="button">RESIDENTIAL</button>
+                    <button class="filter" data-filter="commercial" type="button">COMMERCIAL</button>
+                </div>
+
+                <div class="price-filter-inline">
+                    <div class="price-header-row">
+                        <span class="price-label">Price:</span>
+                        <span id="dashPriceRangeValue">Any Price</span>
+                    </div>
+                    <div class="slider-container-inline">
+                        <input type="range" min="0" max="50000000" value="0" class="slider-inline" id="dashPriceMin">
+                        <input type="range" min="0" max="50000000" value="50000000" class="slider-inline"
+                            id="dashPriceMax">
+                        <div class="slider-track-inline"></div>
+                        <div class="slider-range-inline"></div>
+                    </div>
+                </div>
+
+                <!-- Icon Button positioned to the right -->
+                <button id="addListingBtn" class="btn-add-icon" aria-label="Add New Listing">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+
             <table>
                 <thead>
                     <tr>
