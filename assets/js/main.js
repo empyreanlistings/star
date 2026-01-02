@@ -430,15 +430,28 @@ function initPropertyModal() {
       const propertyId = card.dataset.id;
 
       // Ensure counts are visible from dataset initially
-      if (visitsEl) visitsEl.textContent = card.dataset.visits || "0";
-      if (likesEl) likesEl.textContent = card.dataset.likes || "0";
+      const updateLabels = () => {
+        const vCount = parseInt(card.dataset.visits || 0);
+        const lCount = parseInt(card.dataset.likes || 0);
+
+        if (visitsEl) visitsEl.textContent = vCount;
+        if (likesEl) likesEl.textContent = lCount;
+
+        const vLabel = document.getElementById("modalVisitsLabel");
+        const lLabel = document.getElementById("modalLikesLabel");
+
+        if (vLabel) vLabel.textContent = vCount === 1 ? 'visit' : 'visits';
+        if (lLabel) lLabel.textContent = lCount === 1 ? 'like' : 'likes';
+      };
+
+      updateLabels();
 
       // Track Visit (using a small delay to ensure it's not accidental)
       if (typeof window.trackVisit === 'function' && propertyId) {
         window.trackVisit(propertyId);
         // Increment local dataset for immediate UI consistency if reopened without refresh
         card.dataset.visits = parseInt(card.dataset.visits || 0) + 1;
-        if (visitsEl) visitsEl.textContent = card.dataset.visits;
+        updateLabels();
       }
 
       // Handle Like/Unlike Toggle
@@ -471,7 +484,7 @@ function initPropertyModal() {
                 card.dataset.likes = parseInt(card.dataset.likes || 0) + 1;
               }
               updateLikeUI(!isUnlike);
-              if (likesEl) likesEl.textContent = card.dataset.likes;
+              updateLabels();
             }
           }
         };
