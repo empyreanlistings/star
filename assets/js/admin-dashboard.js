@@ -163,6 +163,21 @@ function renderAdminTable(listings) {
     document.querySelectorAll(".action-btn.delete").forEach(btn => btn.addEventListener("click", handleDelete));
     document.querySelectorAll(".action-btn.edit").forEach(btn => btn.addEventListener("click", handleEdit));
     document.querySelectorAll(".action-btn.duplicate").forEach(btn => btn.addEventListener("click", handleDuplicate));
+
+    // Add row click to view property details
+    tbody.querySelectorAll("tr").forEach(tr => {
+        tr.style.cursor = "pointer";
+        tr.addEventListener("click", (e) => {
+            // Don't trigger if clicking action buttons
+            if (e.target.closest(".action-btn")) return;
+
+            const id = tr.querySelector(".action-btn")?.dataset.id;
+            if (id) {
+                const listing = listings.find(l => l.id === id);
+                if (listing) openPropertyModal(listing);
+            }
+        });
+    });
 }
 
 // Duplicate

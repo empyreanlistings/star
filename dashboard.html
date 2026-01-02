@@ -162,6 +162,47 @@
         </div>
     </div>
 
+    <!-- Property Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <button id="modalClose" class="modal-close" aria-label="Close modal">×</button>
+        <div class="property-modal" id="propertyModal">
+            <div class="modal-content">
+                <img id="modalImage" class="modal-image" src="" alt="">
+                <div class="modal-glass">
+                    <div class="modal-header">
+                        <div>
+                            <h2 id="modalLocation"></h2><span id="modalType" class="modal-subtext"></span>
+                        </div>
+                        <h2 id="modalPrice" class="modal-price"></h2>
+                    </div>
+                    <div class="modal-stats">
+                        <div><strong id="modalBeds"></strong><span>Beds</span></div>
+                        <div><strong id="modalBaths"></strong><span>Baths</span></div>
+                        <div><strong id="modalSize"></strong><span>sqm</span></div>
+                    </div>
+                    <div>
+                        <h3>OVERVIEW</h3>
+                        <p id="modalDescription"></p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>KEY FEATURES</h3>
+                        <ul class="modal-features" id="modalFeatures"></ul>
+                    </div>
+                    <div class="modal-engagement">
+                        <div class="engagement-stats">
+                            <span><i class="far fa-eye"></i> <span id="modalVisits">0</span> <span
+                                    id="modalVisitsLabel">visits</span></span>
+                            <span><i class="far fa-heart"></i> <span id="modalLikes">0</span> <span
+                                    id="modalLikesLabel">likes</span></span>
+                        </div>
+                        <button id="modalLikeBtn" class="btn-like" aria-label="Like Property"><i
+                                class="far fa-heart"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="assets/js/main.js"></script>
     <script type="module" src="assets/js/admin-dashboard.js"></script>
