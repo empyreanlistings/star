@@ -77,34 +77,57 @@ function withFlip(cb) {
 }
 
 // ================================================================
-// RESPONSIVE VIDEO LOADER
+// RESPONSIVE VIDEO LOADER + CACHING
 // ================================================================
-function initResponsiveVideo() {
+async function initResponsiveVideo() {
   const video = document.getElementById('heroVideo');
   if (!video) return;
 
-  const loadAppropriateVideo = () => {
-    const isMobile = window.innerWidth <= 768;
-    const videoSrc = isMobile ? 'images/mobile-video.mp4' : 'images/web-video.mp4';
-    const currentSrc = video.currentSrc || video.src;
-    const targetSrc = window.location.origin + '/' + videoSrc;
+  const cacheName = 'hero-video-cache';
 
-    // Only reload if source actually changed
-    if (!currentSrc.includes(videoSrc)) {
-      console.log(`📱 Loading ${isMobile ? 'mobile' : 'desktop'} video: ${videoSrc}`);
-      video.src = videoSrc;
+  const loadAndCacheVideo = async (src) => {
+    try {
+      const cache = await caches.open(cacheName);
+      const cachedResponse = await cache.match(src);
+
+      if (cachedResponse) {
+        console.log(`📦 Video from cache: ${src}`);
+        const blob = await cachedResponse.blob();
+        video.src = URL.createObjectURL(blob);
+      } else {
+        console.log(`📡 Fetching and caching video: ${src}`);
+        video.src = src; // Set source to fetch it
+        // We don't block the UI, but we'll cache it once loaded or on next visit
+        fetch(src).then(response => {
+          if (response.ok) cache.put(src, response);
+        });
+      }
+      video.load();
+    } catch (e) {
+      console.warn("Cache API not supported or error:", e);
+      video.src = src;
       video.load();
     }
   };
 
-  // Load appropriate video on init
-  loadAppropriateVideo();
+  const updateVideoSource = () => {
+    const isMobile = window.innerWidth <= 768;
+    const videoSrc = isMobile ? 'images/mobile-video.mp4' : 'images/web-video.mp4';
+    const currentSrc = video.getAttribute('data-last-src');
 
-  // Handle resize with debounce
+    if (currentSrc !== videoSrc) {
+      console.log(`📱 Switching to ${isMobile ? 'mobile' : 'desktop'} video`);
+      video.setAttribute('data-last-src', videoSrc);
+      loadAndCacheVideo(videoSrc);
+    }
+  };
+
+  updateVideoSource();
+
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(loadAppropriateVideo, 300);
+    resizeTimer = setTimeout(updateVideoSource, 300);
   });
 }
 

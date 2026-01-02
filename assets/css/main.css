@@ -2381,7 +2381,7 @@ html[data-theme="dark"] .modal-glass {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 16px;
+  gap: 20px;
   margin-bottom: 20px;
 }
 
