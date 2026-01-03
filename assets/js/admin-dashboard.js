@@ -289,6 +289,9 @@ async function handleEdit(e) {
             document.getElementById("propBeds").value = data.specs?.beds || "";
             document.getElementById("propBaths").value = data.specs?.baths || "";
             document.getElementById("propSize").value = data.specs?.lot_size || "";
+            document.getElementById("propSize").value = data.specs?.size || "";
+            document.getElementById("propLotSize").value = data.specs?.lot_size || "";
+            document.getElementById("propFloorArea").value = data.specs?.floor_area || "";
 
             const features = data.content?.features || [];
             document.getElementById("propFeatures").value = Array.isArray(features) ? features.join(", ") : "";
@@ -399,7 +402,9 @@ async function handleFormSubmit(e) {
             specs: {
                 beds: document.getElementById("propBeds").value,
                 baths: document.getElementById("propBaths").value,
-                lot_size: document.getElementById("propSize").value
+                size: document.getElementById("propSize").value,
+                lot_size: document.getElementById("propLotSize").value,
+                floor_area: document.getElementById("propFloorArea").value
             },
             updated_at: new Date().toISOString()
         };
