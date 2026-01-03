@@ -631,6 +631,18 @@ function initPropertyModal() {
         }
       };
     }
+
+    // FORCE MAILTO LINKS TO OPEN
+    document.addEventListener("click", (e) => {
+      const mailto = e.target.closest('a[href^="mailto:"]');
+      if (mailto) {
+        // Allow default behavior (opening email client)
+        // If there was a preventDefault somewhere else, this might not override it unless we stop propagation
+        // mostly we just want to ensure we don't accidentally block it.
+        e.stopPropagation();
+        return;
+      }
+    }, true); // Capture phase to intervene early if needed
   }
 }
 

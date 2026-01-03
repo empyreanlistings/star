@@ -1419,7 +1419,7 @@ html[data-theme="light"] .menu-overlay {
   font-size: 13px;
   line-height: 1;
   padding: 8px 0;
-  z-index: 1000;
+  z-index: 10001;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3469,6 +3469,7 @@ html[data-theme="light"] .final-cta__sub {
   pointer-events: none;
   transition: transform 0.3s ease;
   z-index: 3;
+  cursor: pointer;
 }
 
 /* Reveal only on card hover (does NOT affect image hover effects) */
