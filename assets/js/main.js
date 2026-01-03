@@ -697,7 +697,7 @@ function initPropertyModal() {
     };
 
     // 2. Gmail Web (New Tab)
-    gmailBtn.onclick = () => {
+    emailGmailBtn.onclick = () => {
       if (!currentMailto) return;
 
       const parts = currentMailto.split('?');
@@ -711,20 +711,20 @@ function initPropertyModal() {
       const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&cc=${encodeURIComponent(cc)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
       window.open(gmailUrl, '_blank');
-      closeModal();
+      closeEmailModal();
     };
 
     // 3. Copy Email
-    copyBtn.onclick = async () => {
+    emailCopyBtn.onclick = async () => {
       if (!currentMailto) return;
       // Extract just the email address (ignore subject/cc for clipboard)
       const email = currentMailto.split('?')[0].replace("mailto:", "");
 
       try {
         await navigator.clipboard.writeText(email);
-        copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        emailCopyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
         setTimeout(() => {
-          closeModal();
+          closeEmailModal();
         }, 1200);
       } catch (err) {
         console.error('Failed to copy', err);
