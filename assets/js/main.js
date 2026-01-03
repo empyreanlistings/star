@@ -656,23 +656,23 @@ function initPropertyModal() {
     `;
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-    const emailModal = document.getElementById("emailModalOverlay");
-    const closeBtn = emailModal.querySelector(".email-modal-close");
-    const defaultBtn = document.getElementById("btnDefaultMail");
-    const gmailBtn = document.getElementById("btnGmail");
-    const copyBtn = document.getElementById("btnCopyEmail");
+    const emailModalEl = document.getElementById("emailModalOverlay");
+    const emailCloseBtn = emailModalEl.querySelector(".email-modal-close");
+    const emailDefaultBtn = document.getElementById("btnDefaultMail");
+    const emailGmailBtn = document.getElementById("btnGmail");
+    const emailCopyBtn = document.getElementById("btnCopyEmail");
 
     let currentMailto = "";
 
-    const closeModal = () => {
-      emailModal.classList.remove("open");
-      copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy Email Address';
+    const closeEmailModal = () => {
+      emailModalEl.classList.remove("open");
+      emailCopyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy Email Address';
     };
 
     // Close listeners
-    closeBtn.onclick = closeModal;
-    emailModal.onclick = (e) => {
-      if (e.target === emailModal) closeModal();
+    emailCloseBtn.onclick = closeEmailModal;
+    emailModalEl.onclick = (e) => {
+      if (e.target === emailModalEl) closeEmailModal();
     };
 
     // INTERCEPT MAILTO CLICKS
@@ -682,7 +682,7 @@ function initPropertyModal() {
         e.preventDefault();
         e.stopPropagation();
         currentMailto = mailto.getAttribute('href');
-        emailModal.classList.add("open");
+        emailModalEl.classList.add("open");
       }
     }, true);
 
