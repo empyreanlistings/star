@@ -87,6 +87,14 @@ function formatPriceAbbreviated(v) {
   return num.toString();
 }
 
+function formatNumber(val) {
+  if (!val) return "0";
+  // Remove existing commas if any, then parse
+  const num = Number(String(val).replace(/,/g, ''));
+  if (isNaN(num)) return val;
+  return num.toLocaleString();
+}
+
 function renderListings(listings) {
   const grid = document.querySelector(".property-grid");
   if (!grid) return;
@@ -178,12 +186,12 @@ function createPropertyCard(data) {
 
   // Lot size icon
   if (specs.lot_size) {
-    featuresHTML += `<div class="feature" data-tooltip="Lot Size"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
+    featuresHTML += `<div class="feature" data-tooltip="Lot Size"><i class="fa-solid fa-ruler-combined"></i> ${formatNumber(specs.lot_size)}sqm</div>`;
   }
 
   // Floor area icon
   if (specs.floor_area) {
-    featuresHTML += `<div class="feature" data-tooltip="Floor Area"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
+    featuresHTML += `<div class="feature" data-tooltip="Floor Area"><i class="fa-solid fa-house"></i> ${formatNumber(specs.floor_area)}sqm</div>`;
   }
 
   // Beds icon
