@@ -4596,8 +4596,8 @@ html[data-theme="light"] .newsletter-card .ml-form-embedContent h2 {
 
 /* Match MailerLite button to .btn style */
 .newsletter-card .ml-form-embedSubmit button.btn,
-.newsletter-card .ml-form-embedSubmit button,
-#mlb2-34337454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button {
+.newsletter-card .ml-form-embedSubmit button.primary,
+#mlb2-34337454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.primary {
   background: var(--accent) !important;
   padding: 0.9rem 2.2rem !important;
   border-radius: 10px !important;
@@ -4614,6 +4614,11 @@ html[data-theme="light"] .newsletter-card .ml-form-embedContent h2 {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+}
+
+/* Ensure loading button is only visible when active */
+.newsletter-card .ml-form-embedSubmit button.loading {
+  display: none !important;
 }
 
 .newsletter-card .ml-form-embedSubmit button:hover {
