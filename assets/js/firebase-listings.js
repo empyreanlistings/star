@@ -178,30 +178,30 @@ function createPropertyCard(data) {
 
   // Lot size icon
   if (specs.lot_size) {
-    featuresHTML += `<div class="feature" title="Lot Size"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
+    featuresHTML += `<div class="feature" data-tooltip="Lot Size"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
   }
 
   // Floor area icon
   if (specs.floor_area) {
-    featuresHTML += `<div class="feature" title="Floor Area"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
+    featuresHTML += `<div class="feature" data-tooltip="Floor Area"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
   }
 
   // Beds icon
   if (beds) {
-    featuresHTML += `<div class="feature" title="Bedrooms"><i class="fa-solid fa-bed"></i> ${beds}</div>`;
+    featuresHTML += `<div class="feature" data-tooltip="Bedrooms"><i class="fa-solid fa-bed"></i> ${beds}</div>`;
   }
 
   // Baths icon
   if (baths) {
-    featuresHTML += `<div class="feature" title="Bathrooms"><i class="fa-solid fa-bath"></i> ${baths}</div>`;
+    featuresHTML += `<div class="feature" data-tooltip="Bathrooms"><i class="fa-solid fa-bath"></i> ${baths}</div>`;
   }
 
   // Add first few custom features as chips if space allows, or just icons.
   if (featuresList.some(f => f.toLowerCase().includes("pool"))) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-person-swimming"></i></div>`;
+    featuresHTML += `<div class="feature" data-tooltip="Swimming Pool"><i class="fa-solid fa-person-swimming"></i></div>`;
   }
   if (featuresList.some(f => f.toLowerCase().includes("solar"))) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-sun"></i></div>`;
+    featuresHTML += `<div class="feature" data-tooltip="Solar Power"><i class="fa-solid fa-sun"></i></div>`;
   }
 
   // Conditionally render logo if featured
