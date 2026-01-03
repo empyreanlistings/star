@@ -632,17 +632,37 @@ function initPropertyModal() {
       };
     }
 
-    // FORCE MAILTO LINKS TO OPEN
+    // SMART MAILTO HANDLER (With Gmail Fallback)
     document.addEventListener("click", (e) => {
       const mailto = e.target.closest('a[href^="mailto:"]');
       if (mailto) {
-        // Allow default behavior (opening email client)
-        // If there was a preventDefault somewhere else, this might not override it unless we stop propagation
-        // mostly we just want to ensure we don't accidentally block it.
-        e.stopPropagation();
-        return;
+        // 1. Let default happen (try opening system mail)
+        // We use a small timeout to check if the window lost focus (meaning app opened)
+
+        const href = mailto.getAttribute('href');
+        const clickTime = Date.now();
+
+        setTimeout(() => {
+          // If 500ms passed and we still have focus, assume nothing opened
+          if (document.hasFocus()) {
+            console.log("System mail didn't open? Trying Gmail fallback...");
+
+            // Parse mailto
+            const url = new URL(href.replace("mailto:", "http://dummy/"));
+            const email = href.split('?')[0].replace("mailto:", "");
+            const subject = url.searchParams.get("subject") || "";
+            const cc = url.searchParams.get("cc") || "";
+            const body = url.searchParams.get("body") || "";
+
+            // Construct Gmail Link
+            // https://mail.google.com/mail/?view=cm&fs=1&to=...
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&cc=${encodeURIComponent(cc)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+            window.open(gmailUrl, '_blank');
+          }
+        }, 800);
       }
-    }, true); // Capture phase to intervene early if needed
+    }, true);
   }
 }
 
