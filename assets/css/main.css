@@ -4577,6 +4577,29 @@ html[data-theme="light"] .contact-newsletter-container::after {
   font-family: inherit !important;
 }
 
+/* Match MailerLite button to .btn style */
+.newsletter-card .ml-form-embedSubmit button {
+  background: var(--accent) !important;
+  padding: 0.9rem 2.2rem !important;
+  border-radius: 10px !important;
+  text-transform: uppercase !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  transition: transform 0.25s ease, background 0.35s ease, box-shadow 0.35s ease !important;
+  width: 100% !important;
+  height: auto !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+.newsletter-card .ml-form-embedSubmit button:hover {
+  transform: translateY(-2px) !important;
+  background: var(--accent-hover, #ffae00) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
 html[data-theme="light"] .contact-card {
   background: rgba(255, 255, 255, 0.42);
   border: 1px solid rgba(244, 196, 48, 0.28);
