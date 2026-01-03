@@ -689,10 +689,10 @@ function initPropertyModal() {
     // ACTION HANDLERS
 
     // 1. Defaut Mail App
-    defaultBtn.onclick = () => {
+    emailDefaultBtn.onclick = () => {
       if (currentMailto) {
         window.location.href = currentMailto;
-        setTimeout(closeModal, 500);
+        setTimeout(closeEmailModal, 500);
       }
     };
 
