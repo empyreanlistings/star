@@ -4572,12 +4572,30 @@ html[data-theme="light"] .contact-newsletter-container::after {
   font-weight: 600 !important;
 }
 
-.newsletter-card .ml-form-embedContent p {
-  color: rgba(255, 255, 255, 0.7) !important;
+/* Success Message Styling */
+.newsletter-card .ml-form-successContent h2 {
+  color: var(--accent) !important;
   font-family: inherit !important;
+  font-size: 1.8rem !important;
+  margin-bottom: 10px !important;
+  font-weight: 700 !important;
+}
+
+.newsletter-card .ml-form-successContent h3 {
+  color: #fff !important;
+  font-family: inherit !important;
+  font-size: 1.2rem !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+}
+
+html[data-theme="light"] .newsletter-card .ml-form-successContent h3,
+html[data-theme="light"] .newsletter-card .ml-form-embedContent h2 {
+  color: #1e293b !important;
 }
 
 /* Match MailerLite button to .btn style */
+.newsletter-card .ml-form-embedSubmit button.btn,
 .newsletter-card .ml-form-embedSubmit button {
   background: var(--accent) !important;
   padding: 0.9rem 2.2rem !important;
@@ -4592,12 +4610,22 @@ html[data-theme="light"] .contact-newsletter-container::after {
   width: 100% !important;
   height: auto !important;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .newsletter-card .ml-form-embedSubmit button:hover {
   transform: translateY(-2px) !important;
   background: var(--accent-hover, #ffae00) !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Theme Awareness for Newsletter Text */
+html[data-theme="light"] .newsletter-card .ml-form-successContent h3,
+html[data-theme="light"] .newsletter-card .ml-form-embedContent h2,
+html[data-theme="light"] .newsletter-card .ml-form-embedContent p {
+  color: #1e293b !important;
 }
 
 html[data-theme="light"] .contact-card {
