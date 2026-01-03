@@ -4533,6 +4533,10 @@ html[data-theme="light"] .contact-newsletter-container::after {
   flex-direction: column;
 }
 
+.newsletter-card {
+  padding: 0 !important;
+}
+
 /* MailerLite Blend Overrides */
 .newsletter-card .ml-form-embedWrapper {
   background: transparent !important;
@@ -4550,16 +4554,22 @@ html[data-theme="light"] .contact-newsletter-container::after {
   width: 100% !important;
   height: auto !important;
   display: block !important;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 .newsletter-card .ml-form-embedBody,
 .newsletter-card .ml-form-successBody {
-  padding: 20px !important;
+  padding: 24px 30px !important;
 }
 
-.newsletter-card .ml-form-embedContent h4 {
+.newsletter-card .ml-form-embedContent h2 {
   color: #fff !important;
   font-family: inherit !important;
+  font-size: 1.5rem !important;
+  margin-bottom: 15px !important;
+  line-height: 1.3 !important;
+  font-weight: 600 !important;
 }
 
 .newsletter-card .ml-form-embedContent p {
