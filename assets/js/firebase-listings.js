@@ -175,12 +175,85 @@ function createPropertyCard(data) {
   // Feature icons HTML generation
   let featuresHTML = "";
 
-  // Size icon
-  if (size) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${size}sqm</div>`;
+
+  // Lot size icon
+  if (specs.lot_size) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
   }
 
-  // Floor area icon (optional from schema)
+  // Floor area icon
+  if (specs.floor_area) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
+  }
+  // Lot size icon
+  if (specs.lot_size) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
+  }
+
+  // Floor area icon
+  if (specs.floor_area) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
+  }
+  // Lot size icon
+  if (specs.lot_size) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
+  }
+
+  // Floor area icon
+  if (specs.floor_area) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
+  }
+  // Lot size icon
+  if (specs.lot_size) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
+  }
+
+  // Floor area icon
+  if (specs.floor_area) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
+  }
+  // Lot size icon
+  if (specs.lot_size) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
+  }
+
+  // Floor area icon
+  if (specs.floor_area) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
+  }
+  // Lot size icon
+  if (specs.lot_size) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
+  }
+
+  // Floor area icon
+  if (specs.floor_area) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
+  }
+  // Lot size icon
+  if (specs.lot_size) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
+  }
+
+  // Floor area icon
+  if (specs.floor_area) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
+  }
+  // Lot size icon
+  if (specs.lot_size) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
+  }
+
+  // Floor area icon
+  if (specs.floor_area) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
+  }
+  // Lot size icon
+  if (specs.lot_size) {
+    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
+  }
+
+  // Floor area icon
   if (specs.floor_area) {
     featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
   }
