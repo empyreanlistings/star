@@ -178,55 +178,25 @@ function createPropertyCard(data) {
 
   // Lot size icon
   if (specs.lot_size) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
+    featuresHTML += `<div class="feature" title="Lot Size"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
   }
 
   // Floor area icon
   if (specs.floor_area) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
-  }
-  // Floor area icon
-  if (specs.floor_area) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
-  }
-  // Lot size icon
-  if (specs.lot_size) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
+    featuresHTML += `<div class="feature" title="Floor Area"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
   }
 
-  // Floor area icon
-  if (specs.floor_area) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
-  }
-  // Lot size icon
-  if (specs.lot_size) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
+  // Beds icon
+  if (beds) {
+    featuresHTML += `<div class="feature" title="Bedrooms"><i class="fa-solid fa-bed"></i> ${beds}</div>`;
   }
 
-  // Floor area icon
-  if (specs.floor_area) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
-  }
-  // Lot size icon
-  if (specs.lot_size) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
+  // Baths icon
+  if (baths) {
+    featuresHTML += `<div class="feature" title="Bathrooms"><i class="fa-solid fa-bath"></i> ${baths}</div>`;
   }
 
-  // Floor area icon
-  if (specs.floor_area) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
-  }
-  // Lot size icon
-  if (specs.lot_size) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
-  }
-
-  // Floor area icon
-  if (specs.floor_area) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
-  }
-  // Lot size icon
-  if (specs.lot_size) {
+  // Add first few custom features as chips if space allows, or just icons.
     featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
   }
 
