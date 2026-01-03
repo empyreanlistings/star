@@ -151,7 +151,7 @@ function createPropertyCard(data) {
   const specs = data.specs || {};
   const beds = specs.beds || "";
   const baths = specs.baths || "";
-  const size = specs.lot_size || "";
+  const size = specs.size || "";
 
   const type = data.type || "";
 
@@ -185,29 +185,6 @@ function createPropertyCard(data) {
   if (specs.floor_area) {
     featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
   }
-  // Lot size icon
-  if (specs.lot_size) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
-  }
-
-  // Floor area icon
-  if (specs.floor_area) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
-  }
-  // Lot size icon
-  if (specs.lot_size) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
-  }
-
-  // Floor area icon
-  if (specs.floor_area) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
-  }
-  // Lot size icon
-  if (specs.lot_size) {
-    featuresHTML += `<div class="feature"><i class="fa-solid fa-ruler-combined"></i> ${specs.lot_size}sqm</div>`;
-  }
-
   // Floor area icon
   if (specs.floor_area) {
     featuresHTML += `<div class="feature"><i class="fa-solid fa-house"></i> ${specs.floor_area}sqm</div>`;
