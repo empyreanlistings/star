@@ -12,6 +12,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+let isLoggingOut = false;
 
 // Login Function
 async function handleLogin(e) {
@@ -35,10 +36,12 @@ async function handleLogin(e) {
 // Logout Function
 async function handleLogout() {
     try {
+        isLoggingOut = true;
         await signOut(auth);
-        window.location.href = "login.html";
+        // Redirect handled in onAuthStateChanged
     } catch (error) {
         console.error("Logout Failed", error);
+        isLoggingOut = false;
     }
 }
 
@@ -90,6 +93,13 @@ function initAuth() {
 
         } else {
             console.log("User logged out");
+
+            if (isLoggingOut) {
+                window.location.assign("index.html");
+                isLoggingOut = false;
+                return;
+            }
+
             if (isDashboard) {
                 window.location.replace("login.html");
                 return;

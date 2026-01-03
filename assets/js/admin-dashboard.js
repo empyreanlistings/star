@@ -47,10 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
             // Then fetch listings filtered by company
             fetchAdminListings();
             initModalEvents();
-        } else {
-            console.log("No user authenticated, redirecting...");
-            window.location.href = "login.html";
         }
+        // No else needed here, auth.js handles strict redirect for unauth users
     });
 });
 
