@@ -89,8 +89,9 @@ function formatPriceAbbreviated(v) {
 
 function formatNumber(val) {
   if (!val) return "0";
-  // Remove existing commas if any, then parse
-  const num = Number(String(val).replace(/,/g, ''));
+  // Strip everything that isn't a digit or a decimal point
+  const cleanVal = String(val).replace(/[^0-9.]/g, '');
+  const num = Number(cleanVal);
   if (isNaN(num)) return val;
   return num.toLocaleString();
 }
