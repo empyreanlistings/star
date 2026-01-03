@@ -445,6 +445,13 @@ function initPropertyModal() {
 
       const location = card.getAttribute("data-address") || card.querySelector(".property-location")?.textContent || "";
       if (locationEl) locationEl.textContent = location;
+
+      // CAPTURE ACTUAL TITLE FOR CALENDLY
+      // The card has two .property-location elements. The first one inside .property-info.primary is the title.
+      // The second one is the short description (location).
+      const realTitle = card.querySelector(".property-info.primary .property-location")?.textContent || location;
+      modal.dataset.currentTitle = realTitle;
+
       if (typeEl) typeEl.textContent = card.dataset.type || "";
 
       const displayedPrice = card.querySelector(".property-price")?.textContent.trim();
@@ -603,7 +610,7 @@ function initPropertyModal() {
     if (scheduleBtn) {
       scheduleBtn.onclick = () => {
         close();
-        const title = locationEl ? locationEl.textContent : "Property";
+        const title = modal.dataset.currentTitle || (locationEl ? locationEl.textContent : "Property");
         const widget = document.querySelector(".calendly-inline-widget");
         if (widget) {
           const baseUrl = "https://calendly.com/kaiandisla-com/30min?text_color=000000&primary_color=12a7b8&embed_domain=kaiandisla.com&embed_type=Inline";
