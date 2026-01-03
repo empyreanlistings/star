@@ -986,45 +986,77 @@
         </div>
       </div>
 
-      <div class="contact-card newsletter-card">
-        <div class="newsletter-header">
-          <img src="https://storage.mlcdn.com/account_image/1969000/IXQvrwdatByuAoQh3ilaLqruv2RrQpUemlWBAEST.jpg"
-            alt="Early Bird Offer" />
-        </div>
-        <div class="newsletter-body">
-          <div class="newsletter-content">
-            <h2>EARLY BIRD DISCOUNT!</h2>
-            <p>Save up to 5% off your next home!</p>
-          </div>
-          <form id="newsletterForm" class="newsletter-form" novalidate>
-            <div class="form-row">
-              <input type="email" name="email" class="form-control full-width-input" placeholder="Your Email"
-                autocomplete="email" required />
-            </div>
-            <div class="btn-row">
-              <button type="submit" class="btn submit-btn">
-                Register Now
-              </button>
-            </div>
-          </form>
-          <div class="form-message success" hidden>
-            <h2>Thank you!</h2>
-            <p>You've joined our Early Bird list.</p>
-          </div>
-          <div class="form-message error" hidden>
-            <p>Something went wrong. Please try again.</p>
-          </div>
-        </div>
-      </div>
+      <div class="contact-card newsletter-card"
+        style="padding:0; background:transparent; border:none; box-shadow:none;">
+        <link rel="stylesheet" href="assets/css/mailerlite.css">
+        <div id="mlb2-34337454" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-34337454">
+          <div class="ml-form-align-center ">
+            <div class="ml-form-embedWrapper embedForm">
+              <div class="ml-form-embedHeader">
+                <img src="https://storage.mlcdn.com/account_image/1969000/IXQvrwdatByuAoQh3ilaLqruv2RrQpUemlWBAEST.jpg"
+                  border="0" style="display: block;">
+                <style>
+                  @media only screen and (max-width: 400px) {
+                    .ml-form-embedHeader {
+                      display: none !important;
+                    }
+                  }
+                </style>
+              </div>
 
-      <div class="contact-card contact-map">
-        <iframe src="https://www.google.com/maps?q=El%20Nido%20Town%20Square,%20Palawan&z=15&output=embed" width="100%"
-          height="100%" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+              <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
+                <div class="ml-form-embedContent" style=" ">
+                  <h4>Early Bird Discounts!</h4>
+                  <p><span style="font-size: 16px;">Signup to get up to 5% off your next home</span></p>
+                </div>
+
+                <form class="ml-block-form"
+                  action="https://assets.mailerlite.com/jsonp/1969000/forms/173166188080137253/subscribe" data-code=""
+                  method="post" target="_blank">
+                  <div class="ml-form-formContent">
+                    <div class="ml-form-fieldRow ml-last-item">
+                      <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
+                        <input aria-label="email" aria-required="true" type="email" class="form-control"
+                          data-inputmask="" name="fields[email]" placeholder="Email" autocomplete="email">
+                      </div>
+                    </div>
+                  </div>
+
+                  <input type="hidden" name="ml-submit" value="1">
+
+                  <div class="ml-form-embedSubmit">
+                    <button type="submit" class="primary">Subscribe</button>
+                    <button disabled="disabled" style="display: none;" type="button" class="loading">
+                      <div class="ml-form-embedSubmitLoad"></div>
+                      <span class="sr-only">Loading...</span>
+                    </button>
+                  </div>
+                  <input type="hidden" name="anticsrf" value="true">
+                </form>
+              </div>
+
+              <div class="ml-form-successBody row-success" style="display: none">
+                <div class="ml-form-successContent">
+                  <h4>Thank you!</h4>
+                  <p>You have successfully joined our subscriber list.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
-    <!-- END WRAPPER -->
+  </div>
+
+  <div class="contact-card contact-map">
+    <iframe src="https://www.google.com/maps?q=El%20Nido%20Town%20Square,%20Palawan&z=15&output=embed" width="100%"
+      height="100%" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+
+  </div>
+  <!-- END WRAPPER -->
   </div>
 
   <!-- ============================== FOOTER ============================== -->
@@ -1077,7 +1109,21 @@
 
   <script src="assets/js/firebase-listings.js?v=4" type="module"></script>
   <script src="assets/js/auth.js" type="module"></script>
+  <script src="assets/js/main.js" defer></script>
 
+  <!-- MailerLite Universal -->
+  <script>
+    function ml_webform_success_34337454() {
+      var $ = ml_jQuery || jQuery;
+      $('.ml-subscribe-form-34337454 .row-success').show();
+      $('.ml-subscribe-form-34337454 .row-form').hide();
+    }
+  </script>
+  <script src="https://groot.mailerlite.com/js/w/webforms.min.js?v176e10baa5e7ed80d35ae235be3d5024"
+    type="text/javascript"></script>
+  <script>
+    fetch("https://assets.mailerlite.com/jsonp/1969000/forms/173166188080137253/takel")
+  </script>
 </body>
 
 </html>
