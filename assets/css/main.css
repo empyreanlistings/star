@@ -5485,4 +5485,173 @@ td img {
   font-size: 1.5rem;
   cursor: pointer;
   color: var(--dash-text);
+}/* ============================== EMAIL CHOICE MODAL ============================== */
+#emailModalOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10002;
+    /* Above top-bar (10001) */
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    /* Flex instead of grid for centering */
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+#emailModalOverlay.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.email-modal-card {
+    background: rgba(30, 30, 30, 0.85);
+    /* Dark Glass */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 32px;
+    border-radius: 24px;
+    width: min(90vw, 400px);
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+#emailModalOverlay.open .email-modal-card {
+    transform: scale(1) translateY(0);
+}
+
+.email-modal-card h3 {
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.email-modal-card p {
+    margin-bottom: 24px;
+    opacity: 0.7;
+    font-size: 0.95rem;
+    color: #ddd;
+}
+
+.email-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.email-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    font-family: var(--font-base, sans-serif);
+}
+
+/* Default App Button */
+.btn-default-mail {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.btn-default-mail:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Gmail Button */
+.btn-gmail {
+    background: #EA4335;
+    color: #fff;
+}
+
+.btn-gmail:hover {
+    background: #d33828;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(234, 67, 53, 0.3);
+}
+
+/* Copy Button */
+.btn-copy {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    font-size: 0.9rem;
+    padding: 10px;
+}
+
+.btn-copy:hover {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Light Theme Overrides */
+html[data-theme="light"] .email-modal-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+html[data-theme="light"] .email-modal-card h3 {
+    color: #111;
+}
+
+html[data-theme="light"] .email-modal-card p {
+    color: #555;
+}
+
+html[data-theme="light"] .btn-default-mail {
+    background: rgba(0, 0, 0, 0.05);
+    color: #111;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+html[data-theme="light"] .btn-default-mail:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme="light"] .btn-copy {
+    color: rgba(0, 0, 0, 0.5);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme="light"] .btn-copy:hover {
+    color: #111;
+    border-color: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.03);
+}
+
+/* Close Button (X) */
+.email-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.5;
+    padding: 4px;
+}
+
+.email-modal-close:hover {
+    opacity: 1;
 }

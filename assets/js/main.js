@@ -632,37 +632,105 @@ function initPropertyModal() {
       };
     }
 
-    // SMART MAILTO HANDLER (With Gmail Fallback)
+    // EMAIL CHOICE MODAL
+    // Inject Modal HTML
+    const modalHTML = `
+      <div id="emailModalOverlay">
+        <div class="email-modal-card">
+          <button class="email-modal-close" aria-label="Close">&times;</button>
+          <h3>Contact Us</h3>
+          <p>Choose how you'd like to send your email.</p>
+          <div class="email-options">
+            <button id="btnDefaultMail" class="email-btn btn-default-mail">
+              <i class="fas fa-envelope"></i> Default Mail App
+            </button>
+            <button id="btnGmail" class="email-btn btn-gmail">
+              <i class="fab fa-google"></i> Gmail (Web)
+            </button>
+            <button id="btnCopyEmail" class="email-btn btn-copy">
+              <i class="fas fa-copy"></i> Copy Email Address
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    const emailModal = document.getElementById("emailModalOverlay");
+    const closeBtn = emailModal.querySelector(".email-modal-close");
+    const defaultBtn = document.getElementById("btnDefaultMail");
+    const gmailBtn = document.getElementById("btnGmail");
+    const copyBtn = document.getElementById("btnCopyEmail");
+
+    let currentMailto = "";
+
+    const closeModal = () => {
+      emailModal.classList.remove("open");
+      copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy Email Address';
+    };
+
+    // Close listeners
+    closeBtn.onclick = closeModal;
+    emailModal.onclick = (e) => {
+      if (e.target === emailModal) closeModal();
+    };
+
+    // INTERCEPT MAILTO CLICKS
     document.addEventListener("click", (e) => {
       const mailto = e.target.closest('a[href^="mailto:"]');
       if (mailto) {
-        // 1. Let default happen (try opening system mail)
-        // We use a small timeout to check if the window lost focus (meaning app opened)
-
-        const href = mailto.getAttribute('href');
-        const clickTime = Date.now();
-
-        setTimeout(() => {
-          // If 500ms passed and we still have focus, assume nothing opened
-          if (document.hasFocus()) {
-            console.log("System mail didn't open? Trying Gmail fallback...");
-
-            // Parse mailto
-            const url = new URL(href.replace("mailto:", "http://dummy/"));
-            const email = href.split('?')[0].replace("mailto:", "");
-            const subject = url.searchParams.get("subject") || "";
-            const cc = url.searchParams.get("cc") || "";
-            const body = url.searchParams.get("body") || "";
-
-            // Construct Gmail Link
-            // https://mail.google.com/mail/?view=cm&fs=1&to=...
-            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&cc=${encodeURIComponent(cc)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-            window.open(gmailUrl, '_blank');
-          }
-        }, 800);
+        e.preventDefault();
+        e.stopPropagation();
+        currentMailto = mailto.getAttribute('href');
+        emailModal.classList.add("open");
       }
     }, true);
+
+    // ACTION HANDLERS
+
+    // 1. Defaut Mail App
+    defaultBtn.onclick = () => {
+      if (currentMailto) {
+        window.location.href = currentMailto;
+        setTimeout(closeModal, 500);
+      }
+    };
+
+    // 2. Gmail Web (New Tab)
+    gmailBtn.onclick = () => {
+      if (!currentMailto) return;
+
+      const parts = currentMailto.split('?');
+      const email = parts[0].replace("mailto:", "");
+      const params = new URLSearchParams(parts[1] || "");
+
+      const subject = params.get("subject") || "";
+      const cc = params.get("cc") || "";
+      const body = params.get("body") || "";
+
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&cc=${encodeURIComponent(cc)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+      window.open(gmailUrl, '_blank');
+      closeModal();
+    };
+
+    // 3. Copy Email
+    copyBtn.onclick = async () => {
+      if (!currentMailto) return;
+      // Extract just the email address (ignore subject/cc for clipboard)
+      const email = currentMailto.split('?')[0].replace("mailto:", "");
+
+      try {
+        await navigator.clipboard.writeText(email);
+        copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        setTimeout(() => {
+          closeModal();
+        }, 1200);
+      } catch (err) {
+        console.error('Failed to copy', err);
+        prompt("Copy email manually:", email);
+      }
+    };
   }
 }
 
