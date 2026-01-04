@@ -2742,7 +2742,7 @@ html[data-theme="light"] .modal-stats div {
 .steps-details {
   display: grid;
   gap: 10px !important;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   margin-top: 40px;
   margin-bottom: 20px;
   align-items: start;
@@ -2757,77 +2757,56 @@ html[data-theme="light"] .modal-stats div {
 
 /* ============================== CARD BASE ============================== */
 .card {
-  padding: 20px;
-  border-radius: 10px;
-
-  text-align: center;
-  color: var(--text);
-  cursor: pointer;
   position: relative;
   display: flex;
-  flex-direction: column;
-  min-height: 200px;
+  flex-direction: row;
+  /* Horizontal layout */
+  border-radius: 16px;
   overflow: hidden;
-  transition: box-shadow 0.35s ease, transform 0.35s ease;
+  background: var(--glass-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  text-align: left;
+  /* Align text left for horizontal layout */
+  color: var(--text);
+  cursor: pointer;
+  min-height: 220px;
+  transition: transform 0.45s cubic-bezier(.2, .8, .2, 1), box-shadow 0.45s cubic-bezier(.2, .8, .2, 1), border-color 0.45s ease;
+}
+
+/* Elevated Button Feel on Hover (Option B) */
+.card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 25px 60px rgba(20, 184, 166, 0.25), 0 0 0 1px rgba(20, 184, 166, 0.3);
+  border-color: rgba(20, 184, 166, 0.4);
 }
 
 /* ============================== MOBILE - EXPANDED CARDS DEFAULT ============================== */
 @media (max-width: 768px) {
-
-  /* Hide regular grid cards on mobile */
-  #how-it-works .grid .card:not(.full-width),
-  #services .grid .card:not(.full-width) {
-    display: none !important;
+  .card:not(.full-width) {
+    flex-direction: column;
+    min-height: auto;
   }
 
-  /* Show expanded card by default on mobile */
-  #how-it-works .card.full-width,
-  #services .card.full-width {
-    display: grid !important;
-    opacity: 1 !important;
+  .card-image {
+    flex: 0 0 200px;
+    width: 100%;
   }
 
-  .contact-newsletter-container {
-    padding: 40px 24px;
-  }
-
-  .contact-row {
-    padding: 18px;
-    gap: 20px;
-  }
-
-  .icon-box {
-    width: 56px;
-    height: 56px;
-    font-size: 24px;
-  }
-
-  .contact-text .value {
-    font-size: 1.05rem;
+  .card-content {
+    padding: 20px;
   }
 }
 
 /* Gradient overlay for non-expanded cards - DARK THEME */
+/* Gradient overlay for cards - Option B Glass Tint */
 .card:not(.full-width)::before {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(120% 120% at 20% 10%,
-      rgba(255, 182, 193, 0.28),
-      transparent 60%),
-    radial-gradient(140% 140% at 90% 90%,
-      rgba(109, 130, 255, 0.25),
-      transparent 65%),
-    radial-gradient(120% 120% at 50% 100%,
-      rgba(255, 210, 180, 0.18),
-      transparent 70%),
-    linear-gradient(145deg,
-      rgba(0, 0, 0, 0.75) 0%,
-      rgba(0, 0, 0, 0.55) 50%,
-      rgba(0, 0, 0, 0.40) 100%);
+  background: rgba(20, 184, 166, 0.03);
+  /* Subtle teal tint */
   z-index: 1;
-  border-radius: 10px;
   pointer-events: none;
 }
 
@@ -2849,10 +2828,7 @@ html[data-theme="light"] .card:not(.full-width)::before {
       rgba(255, 255, 255, 0.40) 100%);
 }
 
-.card:hover {
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
-  transform: translateY(-4px);
-}
+/* Vertical alignment helper removed as we are now flex-row by default */
 
 .card:not(.full-width) {
   align-self: start;
@@ -2860,13 +2836,22 @@ html[data-theme="light"] .card:not(.full-width)::before {
 
 /* ============================== IMAGE ============================== */
 .card-image {
-  width: 100%;
+  flex: 0 0 42%;
   height: 100%;
   object-fit: cover;
-  position: absolute;
-  inset: 0;
-  border-radius: 10px;
+  position: relative;
+  /* Remove absolute to allow flex flow */
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  /* Flush edges */
   z-index: 0;
+  transition: transform 0.6s cubic-bezier(.2, .8, .2, 1), filter 0.6s ease;
+}
+
+.card:hover .card-image {
+  transform: scale(1.06);
+  filter: brightness(1.1);
 }
 
 /* Hide image in non-expanded cards if not present */
@@ -2876,8 +2861,18 @@ html[data-theme="light"] .card:not(.full-width)::before {
 
 /* ============================== CARD CONTENT ============================== */
 .card-content {
+  flex: 1;
+  padding: 30px;
   position: relative;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .card-content {
+  transform: translateX(8px);
 }
 
 /* ============================== CARD FULL-WIDTH EXPANSION ============================== */
@@ -4302,17 +4297,12 @@ html[data-theme="dark"] #works-lightbox .lightbox-arrow {
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.5s cubic-bezier(.2, .8, .2, 1), filter 0.5s ease;
-}
-
-/* Hover effect isolated to wrapper */
-.mixed-gallery .gallery-item:hover .img-wrap {
-  transform: none;
+  transition: transform 0.6s cubic-bezier(.2, .8, .2, 1), filter 0.6s ease;
 }
 
 .mixed-gallery .gallery-item:hover .img-wrap img {
-  transform: scale(1.06);
-  filter: brightness(1.08) saturate(1.1);
+  transform: scale(1.08);
+  filter: brightness(1.1);
 }
 
 
