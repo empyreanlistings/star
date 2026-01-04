@@ -7,21 +7,22 @@ function initKaiAndIslaGallery() {
     "(prefers-reduced-motion: reduce)"
   ).matches;
 
+  // Shared state for lightbox navigation
+  let currentItems = [];
+  let currentIndex = -1;
+
   galleries.forEach(gallery => {
-    // 2. Setup filter state
     let activeFilter = "all";
     let isAnimating = false;
+    const limit = parseInt(gallery.dataset.limit) || Infinity;
 
-    // 3. Prevent duplicate button listeners
+    // 1. Filter Initialization
     const filterContainer = gallery.closest(".container-glass")?.querySelector(".gallery-filters");
     if (filterContainer && !filterContainer.dataset.initialized) {
-      console.log("   🛠️ Initializing gallery filters...");
       filterContainer.dataset.initialized = "true";
       const filterButtons = filterContainer.querySelectorAll(".filter");
-
       filterButtons.forEach(button => {
         button.addEventListener("click", () => {
-          console.log(`   🎯 Filter clicked: ${button.dataset.filter}`);
           if (button.classList.contains("active") || isAnimating) return;
           filterButtons.forEach(b => b.classList.remove("active"));
           button.classList.add("active");
@@ -29,162 +30,145 @@ function initKaiAndIslaGallery() {
           runGalleryFilter();
         });
       });
-    } else if (filterContainer) {
-      // If already initialized, sync activeFilter with current active button
-      activeFilter = filterContainer.querySelector(".filter.active")?.dataset.filter || "all";
-      console.log(`   🔄 Synced filter: ${activeFilter}`);
     }
 
-    // 4. Sequential Filter Animation
+    // 2. Filter Logic
     function runGalleryFilter() {
-      // Re-query items every time to ensure we have the ones rendered by Firebase
       const allItems = Array.from(gallery.querySelectorAll(".gallery-item"));
-      console.log(`   🎬 Running filter for: "${activeFilter}" (${allItems.length} items total)`);
-
-      if (typeof gsap === "undefined") {
-        console.warn("   ⚠️ GSAP not found, using fallbacks");
-        allItems.forEach(item => {
-          const category = item.dataset.category || "all";
-          const shouldShow = activeFilter === "all" || category === activeFilter;
-          item.style.display = shouldShow ? "" : "none";
-        });
-        return;
-      }
-
       isAnimating = true;
+
       const toHide = [];
       const toShow = [];
+      let visibleCount = 0;
 
       allItems.forEach(item => {
         const category = item.dataset.category || "all";
-        const shouldShow = activeFilter === "all" || category === activeFilter;
-        const isCurrentlyVisible = getComputedStyle(item).display !== "none";
+        const matchesFilter = activeFilter === "all" || category === activeFilter;
 
-        if (shouldShow && !isCurrentlyVisible) {
-          toShow.push(item);
-        } else if (!shouldShow && isCurrentlyVisible) {
-          toHide.push(item);
+        let shouldShow = false;
+        if (matchesFilter) {
+          if (visibleCount < limit) {
+            shouldShow = true;
+            visibleCount++;
+          }
         }
+
+        const isCurrentlyVisible = getComputedStyle(item).display !== "none";
+        if (shouldShow && !isCurrentlyVisible) toShow.push(item);
+        else if (!shouldShow && isCurrentlyVisible) toHide.push(item);
       });
-
-      console.log(`   📊 Filter plan: Show ${toShow.length}, Hide ${toHide.length}`);
-
-      if (prefersReducedMotion) {
-        toHide.forEach(el => el.style.display = "none");
-        toShow.forEach(el => el.style.display = "");
-        isAnimating = false;
-        return;
-      }
-
-      const hideDuration = toHide.length ? 0.2 : 0;
 
       if (toHide.length) {
         gsap.to(toHide, {
-          opacity: 0,
-          scale: 0.95,
-          duration: 0.2,
-          ease: "power2.in",
+          opacity: 0, scale: 0.95, duration: 0.2, ease: "power2.in",
           onComplete: () => {
             toHide.forEach(el => el.style.display = "none");
             showItems();
           }
         });
-      } else {
-        showItems();
-      }
+      } else showItems();
 
       function showItems() {
         toShow.forEach(el => {
           el.style.display = "";
           gsap.set(el, { opacity: 0, scale: 0.95, y: 15 });
         });
-
         if (toShow.length) {
           gsap.to(toShow, {
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            duration: 0.4,
-            stagger: 0.08,
-            ease: "power2.out",
-            onComplete: () => {
-              isAnimating = false;
-            }
+            opacity: 1, scale: 1, y: 0, duration: 0.4, stagger: 0.08, ease: "power2.out",
+            onComplete: () => { isAnimating = false; updateCurrentItems(); }
           });
-        } else {
-          isAnimating = false;
-        }
+        } else { isAnimating = false; updateCurrentItems(); }
       }
     }
 
-    // 5. Lightbox (Delegated - Only add once)
+    function updateCurrentItems() {
+      currentItems = Array.from(gallery.querySelectorAll(".gallery-item")).filter(el => getComputedStyle(el).display !== "none");
+    }
+
+    // 3. Lightbox Logic
     if (!gallery.dataset.initialized) {
-      console.log("   🔦 Initializing lightbox listeners");
       gallery.dataset.initialized = "true";
       gallery.addEventListener("click", e => {
         const item = e.target.closest(".gallery-item");
         if (!item || getComputedStyle(item).display === "none") return;
 
-        console.log("   ✨ Gallery item clicked, opening lightbox");
-        const img = item.querySelector("img");
-        if (!img) return;
-
-        // Try both common IDs
-        const lightbox = document.getElementById("works-lightbox") || document.getElementById("lightbox");
-        const lightboxImg = document.getElementById("works-lightbox-img") || document.getElementById("lightbox-img");
-        const caption = lightbox?.querySelector(".lightbox-caption");
-
-        if (!lightbox || !lightboxImg) {
-          console.error("   ❌ Lightbox elements not found");
-          return;
-        }
-
-        lightboxImg.src = img.src;
-        lightboxImg.alt = img.alt || "";
-
-        // Sync caption if available
-        const overlay = item.querySelector(".gallery-overlay");
-        if (caption && overlay) {
-          caption.innerHTML = overlay.innerHTML;
-        }
-
-        lightbox.classList.add("open");
-        lightbox.removeAttribute("inert");
-        lightbox.removeAttribute("aria-hidden");
-        document.body.style.overflow = "hidden";
+        updateCurrentItems();
+        currentIndex = currentItems.indexOf(item);
+        openLightbox(item);
       });
     }
 
-    // Run filter immediately to sync initial state
     runGalleryFilter();
   });
 
-  // Global Lightbox Close (Only add once)
-  const lbItems = [
-    document.getElementById("works-lightbox"),
-    document.getElementById("lightbox")
-  ];
+  function openLightbox(item) {
+    const img = item.querySelector("img");
+    if (!img) return;
 
+    const lightbox = document.getElementById("works-lightbox") || document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("works-lightbox-img") || document.getElementById("lightbox-img");
+    const caption = lightbox?.querySelector(".lightbox-caption");
+
+    if (!lightbox || !lightboxImg) return;
+
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt || "";
+
+    const overlay = item.querySelector(".gallery-overlay");
+    if (caption && overlay) caption.innerHTML = overlay.innerHTML;
+
+    lightbox.classList.add("open");
+    lightbox.removeAttribute("inert");
+    document.body.style.overflow = "hidden";
+  }
+
+  // 4. Global Lightbox Controls
+  const lbItems = [document.getElementById("works-lightbox"), document.getElementById("lightbox")];
   lbItems.forEach(lightbox => {
-    if (lightbox && !lightbox.dataset.initialized) {
-      lightbox.dataset.initialized = "true";
-      lightbox.addEventListener("click", e => {
-        // Close if clicked overlay or the image itself (if UX prefers)
-        if (e.target === lightbox || e.target.id.includes("-img")) {
-          lightbox.classList.remove("open");
-          lightbox.setAttribute("inert", "");
-          lightbox.setAttribute("aria-hidden", "true");
-          document.body.style.overflow = "";
+    if (!lightbox || lightbox.dataset.initializedNav) return;
+    lightbox.dataset.initializedNav = "true";
+
+    lightbox.addEventListener("click", e => {
+      if (e.target.classList.contains("lightbox-prev")) navigateLightbox(-1);
+      else if (e.target.classList.contains("lightbox-next")) navigateLightbox(1);
+      else if (e.target === lightbox || e.target.id.includes("-img")) {
+        lightbox.classList.remove("open");
+        lightbox.setAttribute("inert", "");
+        document.body.style.overflow = "";
+      }
+    });
+  });
+
+  function navigateLightbox(dir) {
+    if (currentItems.length <= 1) return;
+    currentIndex = (currentIndex + dir + currentItems.length) % currentItems.length;
+
+    const nextItem = currentItems[currentIndex];
+    const lightboxImg = document.getElementById("works-lightbox-img") || document.getElementById("lightbox-img");
+    const caption = document.querySelector(".lightbox-caption");
+
+    if (window.gsap) {
+      gsap.to(lightboxImg, {
+        opacity: 0, duration: 0.2, onComplete: () => {
+          const img = nextItem.querySelector("img");
+          lightboxImg.src = img.src;
+          lightboxImg.alt = img.alt || "";
+          const overlay = nextItem.querySelector(".gallery-overlay");
+          if (caption && overlay) caption.innerHTML = overlay.innerHTML;
+          gsap.to(lightboxImg, { opacity: 1, duration: 0.2 });
         }
       });
+    } else {
+      const img = nextItem.querySelector("img");
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt || "";
+      const overlay = nextItem.querySelector(".gallery-overlay");
+      if (caption && overlay) caption.innerHTML = overlay.innerHTML;
     }
-  });
+  }
 }
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initKaiAndIslaGallery);
-} else {
-  initKaiAndIslaGallery();
-}
-
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initKaiAndIslaGallery);
+else initKaiAndIslaGallery();
 window.initGallery = initKaiAndIslaGallery;

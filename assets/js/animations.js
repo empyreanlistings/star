@@ -112,19 +112,20 @@ function initHeroSequence() {
   }
 
   // Handle Carousel Inner Logic (Slides, Swipe, Timer)
-  initCarouselLogic(heroCarousel);
+  initCarouselLogic(heroCarousel, revealCarousel);
 }
 
 /**
  * Handles slides, auto-play, and mobile swipe for the hero carousel
  */
-function initCarouselLogic(heroCarousel) {
+function initCarouselLogic(heroCarousel, revealCarouselFn) {
   const slides = heroCarousel.querySelectorAll(".hero-slide");
   if (!slides.length) return;
 
   let currentSlide = 0;
   const SLIDE_INTERVAL = 6000;
   let autoSlideTimer = null;
+  let hasStarted = false;
 
   // Set initial state
   slides.forEach((s, i) => s.classList.toggle("active", i === 0));
@@ -142,7 +143,7 @@ function initCarouselLogic(heroCarousel) {
   }
 
   function startAutoSlide() {
-    if (!autoSlideTimer && slides.length > 1) {
+    if (!autoSlideTimer && slides.length > 1 && hasStarted) {
       autoSlideTimer = setInterval(nextSlide, SLIDE_INTERVAL);
     }
   }
@@ -151,6 +152,19 @@ function initCarouselLogic(heroCarousel) {
     clearInterval(autoSlideTimer);
     autoSlideTimer = null;
   }
+
+  // Hook into the reveal sequence
+  const originalReveal = window.revealHeroCarousel; // Not used but good pattern
+
+  // We'll use an observer or just check is-visible class
+  const checkVisibility = setInterval(() => {
+    if (heroCarousel.classList.contains('is-visible')) {
+      clearInterval(checkVisibility);
+      console.log("🚀 Hero Carousel is visible, starting auto-play");
+      hasStarted = true;
+      startAutoSlide();
+    }
+  }, 500);
 
   // --- Mobile Swipe ---
   let isSwiping = false;
