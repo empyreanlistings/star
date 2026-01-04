@@ -3434,7 +3434,7 @@ html[data-theme="light"] .final-cta__sub {
 /* ============================== TEAM SECTION ============================== */
 .team-grid {
   display: grid;
-  gap: 40px;
+  gap: 10px;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   max-width: 1300px;
   margin: 40px auto 20px;
