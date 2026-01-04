@@ -48,7 +48,7 @@
       rgba(22, 22, 22, 0.35) 40%,
       rgba(0, 0, 0, 0.90) 100%);
 
-  /* Light glass overlay */
+  /* Light  overlay */
   --site-bg-overlay-light:
     linear-gradient(140deg,
       rgba(255, 255, 255, 0.08) 0%,
@@ -254,7 +254,7 @@ img {
 }
 
 :root {
-  /* Parent container glass (deep ambient) */
+  /* Parent container  (deep ambient) */
   --parent-bg-dark: rgba(12, 12, 12, 0.40);
   --parent-border-dark: rgba(255, 255, 255, 0.06);
   --parent-glow-dark: rgba(255, 255, 255, 0.10);
@@ -272,14 +272,14 @@ img {
 }
 
 /* ===========================================================
-   GLOBAL GLASS COMPONENT — VISIONOS LIQUID GLASS EDITION
+   GLOBAL  COMPONENT — VISIONOS LIQUID  EDITION
    =========================================================== */
-.glass-panel {
+.-panel {
   position: relative;
   padding: 32px;
   display: flex;
   flex-direction: column;
-  border-radius: var(--glass-radius, 10px);
+  border-radius: var(---radius, 10px);
   align-items: center;
   text-align: center;
   background:
@@ -297,7 +297,7 @@ img {
       /* warm peach */
       transparent 70%),
 
-    /* glass surface */
+    /*  surface */
     linear-gradient(145deg,
       rgba(255, 255, 255, 0.22) 0%,
       rgba(255, 255, 255, 0.08) 35%,
@@ -313,14 +313,14 @@ img {
   mask-composite: intersect;
   -webkit-mask-composite: source-in;
 
-  /* Soft ambient glass shadow */
+  /* Soft ambient  shadow */
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.15),
     0 25px 55px rgba(0, 0, 0, 0.45),
     inset 0 2px 8px rgba(255, 255, 255, 0.10);
 
-  backdrop-filter: blur(calc(var(--glass-blur) * 1.25)) saturate(2);
-  -webkit-backdrop-filter: blur(calc(var(--glass-blur) * 1.25)) saturate(2);
+  backdrop-filter: blur(calc(var(---blur) * 1.25)) saturate(2);
+  -webkit-backdrop-filter: blur(calc(var(---blur) * 1.25)) saturate(2);
 
   overflow: hidden;
   transition:
@@ -330,7 +330,7 @@ img {
 }
 
 /* VisionOS soft specular highlight */
-.glass-panel::before {
+.-panel::before {
   content: "";
   position: absolute;
   top: -28%;
@@ -349,7 +349,7 @@ img {
 }
 
 /* Subsurface scattering + micro-texture shimmer */
-.glass-panel::after {
+.-panel::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -369,25 +369,25 @@ img {
 /* ===========================================================
    HOVER (movement removed)
    =========================================================== */
-.glass-panel:hover {
+.-panel:hover {
   box-shadow:
     0 30px 65px rgba(0, 0, 0, 0.50),
     inset 0 3px 12px rgba(255, 255, 255, 0.14);
 }
 
 /* Highlight brightens without shifting */
-.glass-panel:hover::before {
+.-panel:hover::before {
   /* Removed movement; only brighten */
   opacity: 0.78;
 }
 
 /* Micro texture intensifies slightly */
-.glass-panel:hover::after {
+.-panel:hover::after {
   opacity: 0.60;
 }
 
 /* Liquid Lens distortion overlay */
-.glass-panel .liquid-lens {
+.-panel .liquid-lens {
   position: absolute;
   inset: 0;
   border-radius: inherit;
@@ -401,7 +401,7 @@ img {
 }
 
 /* On hover, reveal distortion — no movement */
-.glass-panel:hover .liquid-lens {
+.-panel:hover .liquid-lens {
   opacity: 0.55;
 }
 
@@ -425,7 +425,7 @@ section {
   }
 }
 
-.section-glass {
+.section- {
   overflow: hidden;
   text-align: center;
   position: relative;
@@ -443,20 +443,20 @@ section {
   }
 }
 
-/* ===== LIGHT THEME GLASS OVERRIDE ===== */
+/* ===== LIGHT THEME  OVERRIDE ===== */
 
 
-html[data-theme="light"] .glass-panel {
-  border: 1px solid var(--glass-border-light);
-  box-shadow: var(--glass-shadow-light);
+html[data-theme="light"] .-panel {
+  border: 1px solid var(---border-light);
+  box-shadow: var(---shadow-light);
 }
 
-html[data-theme="light"] .glass-panel::before {
-  background: var(--glass-gloss-light);
+html[data-theme="light"] .-panel::before {
+  background: var(---gloss-light);
 }
 
-html[data-theme="light"] .glass-panel::after {
-  background: var(--glass-sheen-light);
+html[data-theme="light"] .-panel::after {
+  background: var(---sheen-light);
 }
 
 
@@ -473,6 +473,7 @@ html[data-theme="light"] .glass-panel::after {
   z-index: 1;
   padding: 40px;
   margin: 40px;
+  max-width: 1400px;
   border-radius: var(--parent-radius);
   /* Multi-layer frosted glass with depth */
   background:
@@ -480,7 +481,7 @@ html[data-theme="light"] .glass-panel::after {
       rgba(255, 255, 255, 0.08) 0%,
       rgba(255, 255, 255, 0.02) 100%),
     var(--parent-bg-dark);
-
+  
   border: 1px solid rgba(255, 255, 255, 0.18);
 
   /* Enhanced glass blur with multiple layers */
