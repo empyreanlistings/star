@@ -107,6 +107,45 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="listings-table-container" style="margin-top: 4rem;">
+            <!-- Centered Title -->
+            <h1 style="text-align: center; margin-bottom: 1.5rem;">Manage Gallery</h1>
+
+            <!-- Filters with Add Button -->
+            <div class="property-filters-container" style="margin-bottom: 2rem; position: relative;">
+                <div class="gallery-type-filters" role="group" aria-label="Gallery category filters">
+                    <button class="filter active" data-filter="all" type="button">ALL</button>
+                    <button class="filter" data-filter="structural" type="button">STRUCTURAL</button>
+                    <button class="filter" data-filter="exterior" type="button">EXTERIOR</button>
+                    <button class="filter" data-filter="interior" type="button">INTERIOR</button>
+                    <button class="filter" data-filter="pool" type="button">SWIMMING POOLS</button>
+                </div>
+
+                <!-- Icon Button positioned to the right -->
+                <button id="addGalleryBtn" class="btn-add-icon" aria-label="Add New Gallery Item">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Headline</th>
+                        <th>Sub-header</th>
+                        <th>Category</th>
+                        <th>Display</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="galleryTableBody">
+                    <tr>
+                        <td colspan="6" style="text-align:center;padding:2rem;opacity:0.6;">Loading gallery...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </main>
 
     <!-- Listing Modal -->
@@ -190,6 +229,55 @@
                 <button type="submit" id="submitBtn" class="btn-add" style="width:100%;margin-top:1rem;">Create
                     Listing</button>
                 <div id="uploadStatus" style="margin-top:0.5rem;text-align:center;font-size:0.9rem;opacity:0.8;"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Gallery Modal -->
+    <div id="galleryModal" class="modal-overlay">
+        <div class="modal-content">
+            <span id="closeGalleryModal" class="close-modal"
+                style="position:absolute;top:15px;right:20px;font-size:28px;cursor:pointer;">&times;</span>
+            <h3 id="galleryModalTitle" style="margin-bottom:1.5rem;">Add New Gallery Item</h3>
+            <form id="galleryForm">
+                <input type="hidden" id="galleryItemId">
+                <div class="form-group">
+                    <label>Headline (Title)</label>
+                    <input type="text" id="galleryHeadline" class="form-control" required
+                        placeholder="e.g. Spacious Pool House">
+                </div>
+
+                <div class="form-group">
+                    <label>Sub-header (Description)</label>
+                    <input type="text" id="gallerySubHeader" class="form-control"
+                        placeholder="e.g. AAC Blockwork • Pool">
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="galleryCategory" class="form-control">
+                        <option value="structural">Structural</option>
+                        <option value="exterior">Exterior</option>
+                        <option value="interior">Interior</option>
+                        <option value="pool">Swimming Pools</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+                    <input type="checkbox" id="galleryDisplay" style="width:auto;margin:0;" checked>
+                    <label for="galleryDisplay" style="margin:0;cursor:pointer;font-size:0.9rem;">Display in
+                        Portfolio</label>
+                </div>
+
+                <div class="form-group">
+                    <label>Image (Max width 1000px on upload)</label>
+                    <input type="file" id="galleryImage" class="form-control" accept="image/*" required>
+                </div>
+
+                <button type="submit" id="gallerySubmitBtn" class="btn-add" style="width:100%;margin-top:1rem;">Upload
+                    Gallery Item</button>
+                <div id="galleryUploadStatus" style="margin-top:0.5rem;text-align:center;font-size:0.9rem;opacity:0.8;">
+                </div>
             </form>
         </div>
     </div>

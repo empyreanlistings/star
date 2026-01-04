@@ -1,7 +1,3 @@
-// ================================================================
-// gallery.js — Unified gallery + filters + lightbox (Apple-grade)
-// ================================================================
-
 function initGallery() {
   const galleries = document.querySelectorAll(".mixed-gallery");
   if (!galleries.length) return;
@@ -11,39 +7,37 @@ function initGallery() {
   ).matches;
 
   galleries.forEach(gallery => {
+    // 1. Re-query items every time (crucial for dynamic updates)
     const items = Array.from(gallery.querySelectorAll(".gallery-item"));
     if (!items.length) return;
 
-    const filterContainer =
-      gallery.closest(".container-glass")?.querySelector(".gallery-filters");
-    if (!filterContainer) return;
-
-    const filterButtons = filterContainer.querySelectorAll(".filter");
+    // 2. Setup filter state
     let activeFilter = "all";
-
     let isAnimating = false;
 
-    // ------------------------------------------------
-    // FILTER BUTTON HANDLERS
-    // ------------------------------------------------
-    filterButtons.forEach(button => {
-      button.addEventListener("click", () => {
-        if (button.classList.contains("active") || isAnimating) return;
+    // 3. Prevent duplicate button listeners
+    const filterContainer = gallery.closest(".container-glass")?.querySelector(".gallery-filters");
+    if (filterContainer && !filterContainer.dataset.initialized) {
+      filterContainer.dataset.initialized = "true";
+      const filterButtons = filterContainer.querySelectorAll(".filter");
 
-        filterButtons.forEach(b => b.classList.remove("active"));
-        button.classList.add("active");
-
-        activeFilter = button.dataset.filter || "all";
-        runGalleryFilter();
+      filterButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          if (button.classList.contains("active") || isAnimating) return;
+          filterButtons.forEach(b => b.classList.remove("active"));
+          button.classList.add("active");
+          activeFilter = button.dataset.filter || "all";
+          runGalleryFilter();
+        });
       });
-    });
+    } else if (filterContainer) {
+      // If already initialized, sync activeFilter with current active button
+      activeFilter = filterContainer.querySelector(".filter.active")?.dataset.filter || "all";
+    }
 
-    // ------------------------------------------------
-    // SEQUENTIAL FILTER ANIMATION (CLEAN & STABLE)
-    // ------------------------------------------------
+    // 4. Sequential Filter Animation
     function runGalleryFilter() {
       if (typeof gsap === "undefined") {
-        // Fallback for no GSAP
         items.forEach(item => {
           const category = item.dataset.category || "all";
           const shouldShow = activeFilter === "all" || category === activeFilter;
@@ -53,7 +47,6 @@ function initGallery() {
       }
 
       isAnimating = true;
-
       const toHide = [];
       const toShow = [];
 
@@ -69,7 +62,6 @@ function initGallery() {
         }
       });
 
-      // Reduced motion fallback
       if (prefersReducedMotion) {
         toHide.forEach(el => el.style.display = "none");
         toShow.forEach(el => el.style.display = "");
@@ -77,7 +69,6 @@ function initGallery() {
         return;
       }
 
-      // Phase 1: Fade out hidden items
       if (toHide.length) {
         gsap.to(toHide, {
           opacity: 0,
@@ -94,13 +85,11 @@ function initGallery() {
       }
 
       function showItems() {
-        // Prepare toShow items
         toShow.forEach(el => {
           el.style.display = "";
           gsap.set(el, { opacity: 0, scale: 0.95, y: 15 });
         });
 
-        // Phase 2: Staggered fade in
         if (toShow.length) {
           gsap.to(toShow, {
             opacity: 1,
@@ -119,40 +108,37 @@ function initGallery() {
       }
     }
 
-    // ------------------------------------------------
-    // LIGHTBOX (DELEGATED)
-    // ------------------------------------------------
-    gallery.addEventListener("click", e => {
-      const item = e.target.closest(".gallery-item");
-      if (!item || getComputedStyle(item).display === "none") return;
+    // 5. Lightbox (Delegated - Only add once)
+    if (!gallery.dataset.initialized) {
+      gallery.dataset.initialized = "true";
+      gallery.addEventListener("click", e => {
+        const item = e.target.closest(".gallery-item");
+        if (!item || getComputedStyle(item).display === "none") return;
 
-      const img = item.querySelector("img");
-      if (!img) return;
+        const img = item.querySelector("img");
+        if (!img) return;
 
-      const lightbox = document.getElementById("lightbox");
-      const lightboxImg = document.getElementById("lightbox-img");
-      if (!lightbox || !lightboxImg) return;
+        const lightbox = document.getElementById("lightbox");
+        const lightboxImg = document.getElementById("lightbox-img");
+        if (!lightbox || !lightboxImg) return;
 
-      lightboxImg.src = img.src;
-      lightboxImg.alt = img.alt || "";
-      lightbox.classList.add("open");
-      document.body.style.overflow = "hidden";
-    });
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt || "";
+        lightbox.classList.add("open");
+        document.body.style.overflow = "hidden";
+      });
+    }
 
-    // Initial layout
+    // Run filter immediately for new items
     runGalleryFilter();
   });
 
-  // ------------------------------------------------
-  // GLOBAL LIGHTBOX CLOSE
-  // ------------------------------------------------
+  // Global Lightbox Close (Only add once)
   const lightbox = document.getElementById("lightbox");
-  if (lightbox) {
+  if (lightbox && !lightbox.dataset.initialized) {
+    lightbox.dataset.initialized = "true";
     lightbox.addEventListener("click", e => {
-      if (
-        e.target === lightbox &&
-        !lightbox.classList.contains("palawan-lightbox")
-      ) {
+      if (e.target === lightbox && !lightbox.classList.contains("palawan-lightbox")) {
         lightbox.classList.remove("open");
         document.body.style.overflow = "";
       }
@@ -160,9 +146,6 @@ function initGallery() {
   }
 }
 
-// ------------------------------------------------
-// AUTO INIT
-// ------------------------------------------------
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initGallery);
 } else {

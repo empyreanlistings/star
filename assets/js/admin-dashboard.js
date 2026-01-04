@@ -26,6 +26,8 @@ let isInitialized = false;
 let modal;
 let currentUserCompany = null; // Store user's company reference
 let currentUserId = null; // Store current user's UID
+let galleryModal;
+let isGalleryEditMode = false;
 
 // Init
 document.addEventListener("DOMContentLoaded", () => {
@@ -34,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("Admin Dashboard Initializing...");
     modal = document.getElementById("listingModal");
+    galleryModal = document.getElementById("galleryModal");
 
     // Use Firebase Auth to check user and fetch company
     auth.onAuthStateChanged(async (user) => {
@@ -45,6 +48,8 @@ document.addEventListener("DOMContentLoaded", () => {
             initAdminListingsSync();
             initDashboardFilters();
             initModalEvents();
+            initGallerySync();
+            initGalleryModalEvents();
 
             // 2. Fetch user's company and RE-INIT sync with filter
             await getUserCompany(user.uid);
@@ -74,8 +79,10 @@ async function getUserCompany(uid) {
 
 // Caching Constants (matched with firebase-listings.js)
 const CACHE_KEY = "kai_isla_listings";
+const GALLERY_CACHE_KEY = "kai_isla_gallery";
 
 let activeListingsListener = null;
+let activeGalleryListener = null;
 
 /**
  * Initialize Admin Listings with Real-time Sync and Cache
@@ -655,3 +662,191 @@ function initDashboardFilters() {
 
 // Call this at the end of renderAdminTable
 window.initDashboardFilters = initDashboardFilters;
+
+
+// =============================================================================
+// GALLERY MANAGEMENT
+// =============================================================================
+
+function initGallerySync() {
+    const tbody = document.getElementById("galleryTableBody");
+    if (!tbody) return;
+
+    if (activeGalleryListener) {
+        activeGalleryListener();
+        activeGalleryListener = null;
+    }
+
+    // 1. Load from Cache
+    const cachedData = localStorage.getItem(GALLERY_CACHE_KEY);
+    if (cachedData) {
+        try {
+            const { gallery } = JSON.parse(cachedData);
+            renderGalleryTable(gallery);
+        } catch (e) {
+            console.error("Gallery cache error", e);
+        }
+    }
+
+    // 2. Listener
+    activeGalleryListener = onSnapshot(collection(db, "Gallery"), (snapshot) => {
+        const gallery = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+        localStorage.setItem(GALLERY_CACHE_KEY, JSON.stringify({
+            gallery,
+            timestamp: Date.now()
+        }));
+        renderGalleryTable(gallery);
+    });
+}
+
+function renderGalleryTable(gallery) {
+    const tbody = document.getElementById("galleryTableBody");
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+    gallery.sort((a, b) => (b.added_at?.seconds || 0) - (a.added_at?.seconds || 0));
+
+    gallery.forEach(item => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><img src="${item.image}" alt="gallery" style="width:60px; height:40px; object-fit:cover; border-radius:4px;"></td>
+            <td><strong>${item.headline || "-"}</strong></td>
+            <td><small>${item.sub_header || "-"}</small></td>
+            <td><span class="status-badge" style="background:rgba(255,255,255,0.05);">${item.category?.toUpperCase()}</span></td>
+            <td style="text-align:center;">${item.display ? '<i class="fas fa-check" style="color:var(--accent);"></i>' : '<i class="fas fa-times" style="opacity:0.3;"></i>'}</td>
+            <td>
+                <button class="action-btn edit-gallery" data-id="${item.id}"><i class="fas fa-pen"></i></button>
+                <button class="action-btn delete-gallery" data-id="${item.id}"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    document.querySelectorAll(".edit-gallery").forEach(btn => btn.onclick = handleGalleryEdit);
+    document.querySelectorAll(".delete-gallery").forEach(btn => btn.onclick = handleGalleryDelete);
+}
+
+async function handleGalleryDelete(e) {
+    const id = e.target.closest("button").dataset.id;
+    if (!confirm("Delete this gallery item?")) return;
+    try {
+        await deleteDoc(doc(db, "Gallery", id));
+        localStorage.removeItem(GALLERY_CACHE_KEY);
+    } catch (err) {
+        alert("Delete failed: " + err.message);
+    }
+}
+
+async function handleGalleryEdit(e) {
+    const id = e.target.closest("button").dataset.id;
+    isGalleryEditMode = true;
+    openGalleryModal(true);
+    document.getElementById("galleryItemId").value = id;
+
+    const docSnap = await getDoc(doc(db, "Gallery", id));
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById("galleryHeadline").value = data.headline || "";
+        document.getElementById("gallerySubHeader").value = data.sub_header || "";
+        document.getElementById("galleryCategory").value = data.category || "structural";
+        document.getElementById("galleryDisplay").checked = !!data.display;
+    }
+}
+
+function initGalleryModalEvents() {
+    document.getElementById("addGalleryBtn").onclick = () => openGalleryModal(false);
+    document.getElementById("closeGalleryModal").onclick = closeGalleryModal;
+    document.getElementById("galleryForm").onsubmit = handleGalleryFormSubmit;
+}
+
+function openGalleryModal(edit = false) {
+    isGalleryEditMode = edit;
+    galleryModal.classList.add("active");
+    galleryModal.style.display = "flex";
+    document.getElementById("galleryForm").reset();
+    document.getElementById("galleryModalTitle").textContent = edit ? "Edit Gallery Item" : "Add New Gallery Item";
+    document.getElementById("gallerySubmitBtn").textContent = edit ? "Save Changes" : "Upload Gallery Item";
+    document.getElementById("galleryImage").required = !edit;
+}
+
+function closeGalleryModal() {
+    galleryModal.classList.remove("active");
+    galleryModal.style.display = "none";
+}
+
+async function handleGalleryFormSubmit(e) {
+    e.preventDefault();
+    const submitBtn = document.getElementById("gallerySubmitBtn");
+    const status = document.getElementById("galleryUploadStatus");
+    const id = document.getElementById("galleryItemId").value;
+
+    submitBtn.disabled = true;
+    status.textContent = "Processing image...";
+
+    try {
+        let imageUrl = null;
+        const fileInput = document.getElementById("galleryImage");
+
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const resizedBlob = await resizeImage(file, 1000);
+            status.textContent = "Uploading optimized image...";
+            const storageRef = ref(storage, `gallery/${Date.now()}_${file.name}`);
+            await uploadBytes(storageRef, resizedBlob);
+            imageUrl = await getDownloadURL(storageRef);
+        }
+
+        const docData = {
+            headline: document.getElementById("galleryHeadline").value,
+            sub_header: document.getElementById("gallerySubHeader").value,
+            category: document.getElementById("galleryCategory").value,
+            display: document.getElementById("galleryDisplay").checked,
+            added_at: serverTimestamp(),
+            added_by: doc(db, "Users", currentUserId)
+        };
+
+        if (imageUrl) docData.image = imageUrl;
+
+        if (isGalleryEditMode) {
+            await updateDoc(doc(db, "Gallery", id), docData);
+        } else {
+            await addDoc(collection(db, "Gallery"), docData);
+        }
+
+        localStorage.removeItem(GALLERY_CACHE_KEY);
+        closeGalleryModal();
+    } catch (err) {
+        alert("Upload failed: " + err.message);
+    } finally {
+        submitBtn.disabled = false;
+        status.textContent = "";
+    }
+}
+
+function resizeImage(file, maxWidth) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement("canvas");
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxWidth) {
+                    height = (maxWidth / width) * height;
+                    width = maxWidth;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob((blob) => resolve(blob), file.type, 0.85);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
