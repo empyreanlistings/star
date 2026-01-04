@@ -369,13 +369,12 @@ function openModal(edit = false) {
 
     form.reset();
 
-    // Set display first, then trigger transition
+    // Set display first, then trigger transition with small delay
     modal.style.display = "flex";
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            modal.classList.add("active");
-        });
-    });
+    setTimeout(() => {
+        modal.classList.add("active");
+    }, 10);
+
 
     // console.log("--- NUCLEAR FORCE APPLIED ---");
 
@@ -851,13 +850,6 @@ function setSelectedCategory(value) {
 
 function openGalleryModal(edit = false) {
     isGalleryEditMode = edit;
-    // Set display first, then trigger transition
-    galleryModal.style.display = "flex";
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            galleryModal.classList.add("active");
-        });
-    });
     document.getElementById("galleryForm").reset();
     document.getElementById("galleryModalTitle").textContent = edit ? "Edit Gallery Item" : "Add New Gallery Item";
     document.getElementById("gallerySubmitBtn").textContent = edit ? "Save Changes" : "Upload Gallery Item";
@@ -866,6 +858,12 @@ function openGalleryModal(edit = false) {
     if (!edit) {
         setSelectedCategory("structural");
     }
+
+    // Set display first, then trigger transition with small delay
+    galleryModal.style.display = "flex";
+    setTimeout(() => {
+        galleryModal.classList.add("active");
+    }, 10);
 }
 
 function closeGalleryModal() {
