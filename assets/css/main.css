@@ -4261,12 +4261,12 @@ html[data-theme="dark"] #works-lightbox .lightbox-arrow {
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
   will-change: transform, opacity;
   cursor: pointer;
-  transition: box-shadow 0.4s ease;
+  transition: transform 0.45s cubic-bezier(.2, .8, .2, 1), box-shadow 0.45s cubic-bezier(.2, .8, .2, 1);
 }
 
 .mixed-gallery .gallery-item:hover {
   box-shadow: 0 35px 80px rgba(0, 0, 0, 0.7);
-  transform: translateY(-4px);
+  transform: none;
 }
 
 /* Image */
@@ -4278,7 +4278,8 @@ html[data-theme="dark"] #works-lightbox .lightbox-arrow {
 }
 
 .mixed-gallery .gallery-item:hover img {
-  transform: scale(1.12);
+  transform: scale(1.06);
+  filter: brightness(1.08) saturate(1.1);
 }
 
 /* ------------------------------------------------
@@ -4301,19 +4302,17 @@ html[data-theme="dark"] #works-lightbox .lightbox-arrow {
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.8s ease;
-  /* preserve smooth hover scale */
+  transition: transform 0.5s cubic-bezier(.2, .8, .2, 1), filter 0.5s ease;
 }
 
 /* Hover effect isolated to wrapper */
 .mixed-gallery .gallery-item:hover .img-wrap {
-  transform: scale(1.04) translateY(-4px);
-  /* subtle hover */
+  transform: none;
 }
 
 .mixed-gallery .gallery-item:hover .img-wrap img {
-  transform: scale(1.12);
-  /* image zoom independently */
+  transform: scale(1.06);
+  filter: brightness(1.08) saturate(1.1);
 }
 
 
@@ -4334,18 +4333,20 @@ html[data-theme="dark"] #works-lightbox .lightbox-arrow {
   inset: 0;
   pointer-events: none;
   /* ← THIS IS THE FIX – clicks go through to .gallery-item */
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.85) 0%, transparent 50%);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, transparent 60%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 40px;
+  padding: 20px;
   color: white;
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  transform: translateY(10px);
 }
 
 .mixed-gallery .gallery-item:hover .gallery-overlay {
   opacity: 1;
+  transform: translateY(0);
 }
 
 
@@ -4361,7 +4362,7 @@ html[data-theme="dark"] #works-lightbox .lightbox-arrow {
   .gallery-overlay {
     opacity: 1;
     padding: 20px;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.75) 0%, transparent 60%);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, transparent 70%);
   }
 
   .mixed-gallery .gallery-item:hover img,
@@ -4404,8 +4405,8 @@ html[data-theme="light"] .mixed-gallery img {
 }
 
 html[data-theme="light"] .mixed-gallery .gallery-item:hover img {
-  transform: scale(1.08);
-  filter: brightness(1.12) contrast(1.1) saturate(1.2);
+  transform: scale(1.06);
+  filter: brightness(1.08) saturate(1.1);
 }
 
 /* ============================== LIGHTBOX ============================== */
