@@ -59,14 +59,14 @@ function initHeroSequence() {
     console.log(`🎬 Revealing carousel (${isImmediate ? 'Immediate' : 'Sequence'})`);
 
     if (window.gsap) {
-      // Reset state just in case
-      gsap.set(heroCarousel, { opacity: 0, y: 20, scale: 0.99 });
+      // Ensure it's hidden before starting animation to avoid jumps
+      gsap.set(heroCarousel, { opacity: 0, y: 30, scale: 0.98 });
 
       gsap.to(heroCarousel, {
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: isImmediate ? 1.2 : 1.8,
+        duration: isImmediate ? 1.2 : 1.5,
         ease: "power2.out",
         onComplete: () => {
           heroCarousel.classList.add("is-visible");
@@ -87,11 +87,19 @@ function initHeroSequence() {
     heroVideo.addEventListener('ended', () => {
       console.log('🎬 Hero Video ended');
 
-      // Fade out video
+      // Fade out video and reveal carousel simultaneously
       if (window.gsap) {
-        gsap.to(heroVideo, { opacity: 0, duration: 1.5, ease: "power2.inOut" });
+        gsap.to(heroVideo, {
+          opacity: 0,
+          duration: 1.5,
+          ease: "power2.inOut",
+          onComplete: () => {
+            heroVideo.style.display = "none";
+          }
+        });
       } else {
         heroVideo.style.opacity = "0";
+        heroVideo.style.display = "none";
       }
 
       revealCarousel();
