@@ -474,6 +474,7 @@ html[data-theme="light"] .-panel::after {
   z-index: 1;
   padding: 40px;
   margin: 40px;
+  width: 100%;
   max-width: 1400px;
   border-radius: var(--parent-radius);
   /* Multi-layer frosted glass with depth */
