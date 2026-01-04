@@ -74,13 +74,15 @@ function initHeader() {
     if (navLogo) navLogo.src = theme === "light" ? dark : light;
     if (mobileLogo) mobileLogo.src = theme === "light" ? dark : light;
 
-    // Conditionally render logo if featured
-    const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
-    const hbLogoImg = currentTheme === "light" ? "images/homebuyer_light2.png" : "images/homebuyer_dark2.png";
+    // Paradise Life Homebuyer Logo Sync (Main + Ribbons)
+    const hbLogoImg = theme === "light" ? "images/homebuyer_light2.png" : "images/homebuyer_dark2.png";
     const hbLogo = document.getElementById("homebuyerLogoMain");
-    if (hbLogo) {
-      hbLogo.src = hbLogoImg;
-    }
+    if (hbLogo) hbLogo.src = hbLogoImg;
+
+    const hbRibbons = document.querySelectorAll(".property-logo img");
+    hbRibbons.forEach(img => {
+      img.src = hbLogoImg;
+    });
   }
 
   function updateBodyBackground(theme) {
