@@ -2,11 +2,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import {
   getFirestore,
   collection,
-  getDocs,
+  onSnapshot,
   doc,
   getDoc,
   updateDoc,
-  increment
+  increment,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -23,7 +25,6 @@ const db = getFirestore(app);
 
 // Caching Constants
 const CACHE_KEY = "kai_isla_listings";
-// Persistent Caching: No expiry. Cache is manually cleared by admin actions.
 
 /**
  * Public function to clear cache (used by admin dashboard)
@@ -33,39 +34,43 @@ window.clearListingCache = function () {
   localStorage.removeItem(CACHE_KEY);
 };
 
-async function fetchListings() {
+/**
+ * Initialize Listings with Real-time Sync and Cache
+ */
+function initListingsSync() {
+  if (window.listingsSyncActive) return;
+  window.listingsSyncActive = true;
+
   const grid = document.querySelector(".property-grid");
   if (!grid) return;
 
-  // 1. Try Cache First
+  // 1. Instant Load from Cache
   const cachedData = localStorage.getItem(CACHE_KEY);
   if (cachedData) {
     try {
       const { listings } = JSON.parse(cachedData);
-      console.log("Loading listings from PERSISTENT CACHE");
+      console.log("🚀 [Cache] Loading initial listings...");
       renderListings(listings);
-      return;
     } catch (e) {
       console.error("Error parsing cache", e);
     }
   }
 
-  // 2. Fetch from Firebase
-  try {
-    console.log("Fetching listings from FIREBASE");
-    const snapshot = await getDocs(collection(db, "Listings"));
+  // 2. Establish Real-time Listener
+  console.log("📡 [Firebase] Connecting to real-time sync...");
+  const q = query(collection(db, "Listings"));
 
+  onSnapshot(q, (snapshot) => {
     if (snapshot.empty) {
       console.warn("No listings found in Firebase.");
+      renderListings([]); // Clear UI if empty
       return;
     }
 
-    const listings = [];
-    snapshot.forEach(doc => {
-      listings.push({ id: doc.id, ...doc.data() });
-    });
+    const listings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    console.log(`🔥 [Firebase] Sync received: ${listings.length} listings`);
 
-    // 3. Save to Cache
+    // 3. Update Cache & Render
     localStorage.setItem(CACHE_KEY, JSON.stringify({
       listings,
       timestamp: Date.now()
@@ -73,9 +78,31 @@ async function fetchListings() {
 
     renderListings(listings);
 
-  } catch (error) {
-    console.error("Error fetching listings:", error);
-  }
+    // Check if we need to update active modal engagement (if open)
+    const overlay = document.getElementById("modalOverlay");
+    if (overlay && (overlay.classList.contains("open") || overlay.style.display === "flex")) {
+      const modal = document.getElementById("propertyModal");
+      const currentId = modal?.dataset?.currentId; // We should set this when opening modal
+      if (currentId) {
+        const updated = listings.find(l => l.id === currentId);
+        if (updated) updateModalEngagement(updated);
+      }
+    }
+  }, (error) => {
+    console.error("Error in real-time sync:", error);
+  });
+}
+
+function updateModalEngagement(data) {
+  const visitsEl = document.getElementById("modalVisits");
+  const likesEl = document.getElementById("modalLikes");
+  const visitsLabel = document.getElementById("modalVisitsLabel");
+  const likesLabel = document.getElementById("modalLikesLabel");
+
+  if (visitsEl) visitsEl.textContent = data.visits || 0;
+  if (likesEl) likesEl.textContent = data.likes || 0;
+  if (visitsLabel) visitsLabel.textContent = (data.visits || 0) === 1 ? 'visit' : 'visits';
+  if (likesLabel) likesLabel.textContent = (data.likes || 0) === 1 ? 'like' : 'likes';
 }
 
 function formatPriceAbbreviated(v) {
@@ -298,4 +325,4 @@ window.getLatestEngagement = async (propertyId) => {
   return null;
 };
 
-fetchListings();
+initListingsSync();

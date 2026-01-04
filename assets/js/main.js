@@ -431,6 +431,7 @@ function initPropertyModal() {
 
       console.log("Opening modal for card data:", card.dataset);
       const propertyId = card.dataset.id;
+      modal.dataset.currentId = propertyId;
 
       // Track Visit Immediately (Silent DB update)
       if (typeof window.trackVisit === 'function' && propertyId) {
@@ -784,7 +785,7 @@ async function loadComponent(selector, url) {
     const html = await response.text();
     container.innerHTML = html;
     console.info(`✅ Component loaded: ${url}`);
-    
+
     // Dispatch event to re-init scripts that might need to target new elements
     window.dispatchEvent(new Event("componentLoaded"));
   } catch (err) {

@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, deleteDoc, doc, addDoc, getDoc, updateDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, deleteDoc, doc, addDoc, getDoc, updateDoc, query, where, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
             await getUserCompany(user.uid);
 
             // Then fetch listings filtered by company
-            fetchAdminListings();
+            initAdminListingsSync();
             initModalEvents();
         }
         // No else needed here, auth.js handles strict redirect for unauth users
@@ -72,73 +72,77 @@ async function getUserCompany(uid) {
 
 // Caching Constants (matched with firebase-listings.js)
 const CACHE_KEY = "kai_isla_listings";
-// Persistent Caching: No expiry. Cache is manually cleared by admin actions.
 
-// Fetch Listings
-async function fetchAdminListings() {
+let activeListingsListener = null;
+
+/**
+ * Initialize Admin Listings with Real-time Sync and Cache
+ */
+function initAdminListingsSync() {
     const tbody = document.getElementById("listingsTableBody");
     if (!tbody) return;
 
-    // 1. Try Cache First
+    if (activeListingsListener) {
+        console.log("🔄 [Firebase] Unsubscribing previous admin listener...");
+        activeListingsListener();
+        activeListingsListener = null;
+    }
+
+    // 1. Instant Load from Cache
     const cachedData = localStorage.getItem(CACHE_KEY);
     if (cachedData) {
         try {
             const { listings } = JSON.parse(cachedData);
-            // Force refresh if the first listing is missing visits/likes (stale cache structure)
-            if (listings.length > 0 && !('visits' in listings[0])) {
-                console.log("Stale cache detected, forcing fetch...");
-                localStorage.removeItem(CACHE_KEY);
-            } else {
-                console.log("Loading Dashboard listings from PERSISTENT CACHE");
-                renderAdminTable(listings);
-                return;
-            }
+            console.log("🚀 [Cache] Loading initial admin listings...");
+            renderAdminTable(listings);
         } catch (e) {
             console.error("Error parsing cache", e);
         }
     }
 
-    // 2. Fetch from Firebase with company filter
-    try {
-        console.log("Fetching Dashboard listings from FIREBASE");
+    // 2. Establish Real-time Listener
+    console.log("📡 [Firebase] Connecting to real-time admin sync...");
 
-        let snapshot;
-        if (currentUserCompany) {
-            // Filter by company
-            const q = query(
-                collection(db, "Listings"),
-                where("company", "==", currentUserCompany)
-            );
-            snapshot = await getDocs(q);
-            console.log(`Filtered listings by company: ${currentUserCompany.id}`);
-        } else {
-            // Fallback: fetch all (for users without company)
-            console.warn("No company filter applied - fetching all listings");
-            snapshot = await getDocs(collection(db, "Listings"));
-        }
+    // Apply company filter if it exists
+    if (currentUserCompany) {
+        console.log(`🔍 [Filter] Applying company sync: ${currentUserCompany.id}`);
+        const companyQuery = query(collection(db, "Listings"), where("company", "==", currentUserCompany));
 
-        if (snapshot.empty) {
-            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;">No listings found for your company.</td></tr>`;
-            return;
-        }
-
-        const listings = [];
-        snapshot.forEach(docSnap => {
-            listings.push({ id: docSnap.id, ...docSnap.data() });
+        activeListingsListener = onSnapshot(companyQuery, (snapshot) => {
+            handleAdminSnapshot(snapshot);
+        }, (error) => {
+            console.error("Error in admin filtered sync:", error);
         });
-
-        // 3. Save to Cache
-        localStorage.setItem(CACHE_KEY, JSON.stringify({
-            listings,
-            timestamp: Date.now()
-        }));
-
-        renderAdminTable(listings);
-
-    } catch (error) {
-        console.error("Error fetching listings:", error);
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:red;">Error loading listings.</td></tr>`;
+    } else {
+        // Fallback or wait for company to load
+        activeListingsListener = onSnapshot(collection(db, "Listings"), (snapshot) => {
+            handleAdminSnapshot(snapshot);
+        }, (error) => {
+            console.error("Error in admin sync:", error);
+        });
     }
+}
+
+function handleAdminSnapshot(snapshot) {
+    const tbody = document.getElementById("listingsTableBody");
+    if (!tbody) return;
+
+    if (snapshot.empty) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;">No listings found for your company.</td></tr>`;
+        localStorage.removeItem(CACHE_KEY); // Clear cache if empty report
+        return;
+    }
+
+    const listings = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+    console.log(`🔥 [Firebase] Admin sync received: ${listings.length} listings`);
+
+    // 3. Update Cache & Render
+    localStorage.setItem(CACHE_KEY, JSON.stringify({
+        listings,
+        timestamp: Date.now()
+    }));
+
+    renderAdminTable(listings);
 }
 
 function renderAdminTable(listings) {
