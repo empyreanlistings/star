@@ -241,8 +241,11 @@ function createPropertyCard(data) {
   }
 
   // Conditionally render logo if featured
+  const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
+  const hbLogoImg = currentTheme === "light" ? "images/homebuyer_light.png" : "images/homebuyer_dark.png";
+
   const logoHTML = isFeatured
-    ? `<div class="property-logo"><img src="images/homebuyer-removebg.png" alt="Paradise Life Homebuyer"></div>`
+    ? `<div class="property-logo"><img src="${hbLogoImg}" alt="Paradise Life Homebuyer"></div>`
     : '';
 
   // Heart icon state for grid
