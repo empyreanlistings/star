@@ -8,10 +8,6 @@ function initKaiAndIslaGallery() {
   ).matches;
 
   galleries.forEach(gallery => {
-    // 1. Re-query items every time (crucial for dynamic updates)
-    const items = Array.from(gallery.querySelectorAll(".gallery-item"));
-    // console.log(`   📦 Found ${items.length} items in gallery`);
-
     // 2. Setup filter state
     let activeFilter = "all";
     let isAnimating = false;
@@ -41,10 +37,13 @@ function initKaiAndIslaGallery() {
 
     // 4. Sequential Filter Animation
     function runGalleryFilter() {
-      console.log(`   🎬 Running filter for: ${activeFilter}`);
+      // Re-query items every time to ensure we have the ones rendered by Firebase
+      const allItems = Array.from(gallery.querySelectorAll(".gallery-item"));
+      console.log(`   🎬 Running filter for: "${activeFilter}" (${allItems.length} items total)`);
+
       if (typeof gsap === "undefined") {
         console.warn("   ⚠️ GSAP not found, using fallbacks");
-        items.forEach(item => {
+        allItems.forEach(item => {
           const category = item.dataset.category || "all";
           const shouldShow = activeFilter === "all" || category === activeFilter;
           item.style.display = shouldShow ? "" : "none";
@@ -56,7 +55,7 @@ function initKaiAndIslaGallery() {
       const toHide = [];
       const toShow = [];
 
-      items.forEach(item => {
+      allItems.forEach(item => {
         const category = item.dataset.category || "all";
         const shouldShow = activeFilter === "all" || category === activeFilter;
         const isCurrentlyVisible = getComputedStyle(item).display !== "none";
@@ -68,12 +67,16 @@ function initKaiAndIslaGallery() {
         }
       });
 
+      console.log(`   📊 Filter plan: Show ${toShow.length}, Hide ${toHide.length}`);
+
       if (prefersReducedMotion) {
         toHide.forEach(el => el.style.display = "none");
         toShow.forEach(el => el.style.display = "");
         isAnimating = false;
         return;
       }
+
+      const hideDuration = toHide.length ? 0.2 : 0;
 
       if (toHide.length) {
         gsap.to(toHide, {

@@ -58,6 +58,8 @@ function renderGalleryItems(gallery) {
     const container = document.querySelector(".mixed-gallery");
     if (!container) return;
 
+    console.log(`🚀 [Gallery] Rendering ${gallery.length} dynamic items`);
+
     // Sort by added_at descending
     gallery.sort((a, b) => (b.added_at?.seconds || 0) - (a.added_at?.seconds || 0));
 
