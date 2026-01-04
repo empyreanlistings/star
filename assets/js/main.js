@@ -909,7 +909,7 @@ function initScrollbarBehavior() {
 // ================================================================
 // NAV + HEADER + SCROLL PROGRESS + MOBILE MENU (FIXED)
 
-function initAnimations() {
+function deprecatedInitAnimations() {
   console.log('🎯 initAnimations() started');
 
   const observer = new IntersectionObserver(entries =>

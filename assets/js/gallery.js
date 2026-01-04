@@ -1,10 +1,7 @@
 function initKaiAndIslaGallery() {
   console.log("🎨 [Gallery] initGallery called");
   const galleries = document.querySelectorAll(".mixed-gallery");
-  if (!galleries.length) {
-    console.warn("   ⚠️ No .mixed-gallery containers found");
-    return;
-  }
+  if (!galleries.length) return;
 
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"

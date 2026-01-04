@@ -1,127 +1,132 @@
 // ================================================================
 // ANIMATIONS — GSAP FLIP, HERO CAROUSEL, ON-SCROLL
 // ================================================================
-function initAnimations() {
 
-  // ================================================================
-  // ON-SCROLL ANIMATIONS (CSS-DRIVEN)
-  // ================================================================
+/**
+ * Main entrance for all site-wide animations.
+ * Consolidates logic from main.js and animations.js to avoid conflicts.
+ */
+function initAnimations() {
+  console.log("🎯 initAnimations() started");
+
+  // 1. On-Scroll Reveal (Basic CSS-driven)
+  initScrollAnimations();
+
+  // 2. Hero Carousel & Video Sequence (Index Page Only)
+  initHeroSequence();
+}
+
+/**
+ * Initializes IntersectionObserver for elements with .animate-on-scroll
+ */
+function initScrollAnimations() {
   const observer = new IntersectionObserver(
     entries => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add("in-view");
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+        }
       });
     },
     { threshold: 0.1 }
   );
 
-  document
-    .querySelectorAll(".animate-on-scroll")
-    .forEach(el => observer.observe(el));
+  document.querySelectorAll(".animate-on-scroll").forEach(el => observer.observe(el));
+}
 
-  // ================================================================
-  // HERO CAROUSEL — ENTRANCE ANIMATION (NON-BLOCKING, ONCE)
-  // ================================================================
+/**
+ * Handles the delicate timing between Hero Video and Hero Carousel
+ */
+function initHeroSequence() {
   const heroCarousel = document.querySelector(".hero-carousel");
+  const heroVideo = document.getElementById("heroVideo");
 
-  if (heroCarousel && typeof gsap !== "undefined") {
-    let hasAnimated = false;
-
-    const heroObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting || hasAnimated) return;
-
-        hasAnimated = true;
-        heroObserver.disconnect();
-
-        gsap.to(heroCarousel, {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 1.1,
-          ease: "power3.out",
-          delay: 0.25,
-          overwrite: "auto"
-        });
-
-        heroCarousel.classList.add("is-visible");
-      },
-      { threshold: 0.35 }
-    );
-
-    heroObserver.observe(heroCarousel);
+  if (!heroCarousel) {
+    // Only warn if we're on a page that usually has one (index)
+    const isIndex = window.location.pathname.includes('index.html') ||
+      window.location.pathname === '/' ||
+      window.location.pathname === '';
+    if (isIndex) console.warn("   ⚠️ Hero carousel element not found on index page");
+    return;
   }
 
-  // ================================================================
-  // GSAP FLIP — MIXED GALLERIES
-  // ================================================================
-  if (typeof gsap !== "undefined") gsap.registerPlugin(Flip);
+  let carouselRevealed = false;
 
-  document.querySelectorAll(".mixed-gallery").forEach(gallery => {
-    const items = Array.from(gallery.querySelectorAll(".gallery-item"));
-    const filterButtons =
-      gallery.previousElementSibling?.querySelectorAll(".filter") || [];
+  const revealCarousel = (isImmediate = false) => {
+    if (carouselRevealed) return;
+    carouselRevealed = true;
 
-    const lockHeight = () =>
-      (gallery.style.height = gallery.offsetHeight + "px");
-    const unlockHeight = () => (gallery.style.height = "");
+    console.log(`🎬 Revealing carousel (${isImmediate ? 'Immediate' : 'Sequence'})`);
 
-    filterButtons.forEach(button => {
-      button.addEventListener("click", e => {
-        e.preventDefault();
+    if (window.gsap) {
+      // Reset state just in case
+      gsap.set(heroCarousel, { opacity: 0, y: 20, scale: 0.99 });
 
-        filterButtons.forEach(b => b.classList.remove("active"));
-        button.classList.add("active");
-
-        const filter = button.dataset.filter;
-
-        lockHeight();
-        const state = Flip.getState(items);
-
-        items.forEach(item => {
-          const match =
-            filter === "all" || item.dataset.category === filter;
-          item.classList.toggle("is-hidden", !match);
-          item.style.position = match ? "relative" : "absolute";
-          item.style.pointerEvents = match ? "auto" : "none";
-        });
-
-        Flip.from(state, {
-          duration: 0.7,
-          ease: "power2.out",
-          stagger: 0.05,
-          absolute: true,
-          onEnter: els =>
-            gsap.fromTo(
-              els,
-              { opacity: 0, scale: 0.96 },
-              { opacity: 1, scale: 1, duration: 0.35 }
-            ),
-          onLeave: els =>
-            gsap.to(els, {
-              opacity: 0,
-              scale: 0.96,
-              duration: 0.25
-            }),
-          onComplete: unlockHeight
-        });
+      gsap.to(heroCarousel, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: isImmediate ? 1.2 : 1.8,
+        ease: "power2.out",
+        onComplete: () => {
+          heroCarousel.classList.add("is-visible");
+        }
       });
+    } else {
+      heroCarousel.style.opacity = "1";
+      heroCarousel.style.transform = "none";
+      heroCarousel.classList.add("is-visible");
+    }
+  };
+
+  // If there's no video, reveal immediately
+  if (!heroVideo) {
+    revealCarousel(true);
+  } else {
+    // Video exists: wait for it to end or error
+    heroVideo.addEventListener('ended', () => {
+      console.log('🎬 Hero Video ended');
+
+      // Fade out video
+      if (window.gsap) {
+        gsap.to(heroVideo, { opacity: 0, duration: 1.5, ease: "power2.inOut" });
+      } else {
+        heroVideo.style.opacity = "0";
+      }
+
+      revealCarousel();
     });
 
-    gallery
-      .previousElementSibling
-      ?.querySelector(".filter.active")
-      ?.click();
-  });
+    heroVideo.addEventListener('error', () => {
+      console.warn('⚠️ Hero Video error, skipping to carousel');
+      revealCarousel(true);
+    });
 
-  // ================================================================
-  // HERO CAROUSEL — AUTO + SWIPE (UNCHANGED LOGIC)
-  // ================================================================
-  const slides = heroCarousel?.querySelectorAll(".hero-slide") || [];
+    // Safety timeout: if video doesn't play/load in 10s, show carousel
+    setTimeout(() => {
+      if (!carouselRevealed) {
+        console.log('⏱️ Hero Video timeout, revealing carousel');
+        revealCarousel(true);
+      }
+    }, 10000);
+  }
+
+  // Handle Carousel Inner Logic (Slides, Swipe, Timer)
+  initCarouselLogic(heroCarousel);
+}
+
+/**
+ * Handles slides, auto-play, and mobile swipe for the hero carousel
+ */
+function initCarouselLogic(heroCarousel) {
+  const slides = heroCarousel.querySelectorAll(".hero-slide");
+  if (!slides.length) return;
+
   let currentSlide = 0;
   const SLIDE_INTERVAL = 6000;
   let autoSlideTimer = null;
 
+  // Set initial state
   slides.forEach((s, i) => s.classList.toggle("active", i === 0));
 
   function nextSlide() {
@@ -132,14 +137,14 @@ function initAnimations() {
 
   function prevSlide() {
     slides[currentSlide].classList.remove("active");
-    currentSlide =
-      (currentSlide - 1 + slides.length) % slides.length;
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
     slides[currentSlide].classList.add("active");
   }
 
   function startAutoSlide() {
-    if (!autoSlideTimer && slides.length > 1)
+    if (!autoSlideTimer && slides.length > 1) {
       autoSlideTimer = setInterval(nextSlide, SLIDE_INTERVAL);
+    }
   }
 
   function stopAutoSlide() {
@@ -147,6 +152,7 @@ function initAnimations() {
     autoSlideTimer = null;
   }
 
+  // --- Mobile Swipe ---
   let isSwiping = false;
   let startX = 0;
   let currentTranslate = 0;
@@ -155,19 +161,16 @@ function initAnimations() {
     startX = e.touches ? e.touches[0].clientX : e.pageX;
     isSwiping = true;
     stopAutoSlide();
-    slides.forEach(s => (s.style.transition = "none"));
   }
 
   function handleTouchMove(e) {
     if (!isSwiping) return;
     const x = e.touches ? e.touches[0].clientX : e.pageX;
     currentTranslate = x - startX;
-    slides.forEach(
-      s =>
-        (s.style.transform = `translateX(${(currentTranslate /
-          heroCarousel.offsetWidth) *
-          100}%)`)
-    );
+
+    // Subtly move the slider container for haptic feel
+    const offset = (currentTranslate / heroCarousel.offsetWidth) * 100;
+    slides[currentSlide].style.transform = `translateX(${offset}%)`;
   }
 
   function handleTouchEnd() {
@@ -175,19 +178,16 @@ function initAnimations() {
     isSwiping = false;
 
     if (Math.abs(currentTranslate) > 50) {
-      currentTranslate < 0 ? nextSlide() : prevSlide();
+      if (currentTranslate < 0) nextSlide();
+      else prevSlide();
     }
 
-    slides.forEach(s => {
-      s.style.transition = "";
-      s.style.transform = "";
-    });
-
+    slides.forEach(s => s.style.transform = "");
     currentTranslate = 0;
     setTimeout(startAutoSlide, 1000);
   }
 
-  if (heroCarousel && slides.length > 1) {
+  if (slides.length > 1) {
     startAutoSlide();
     heroCarousel.addEventListener("mouseenter", stopAutoSlide);
     heroCarousel.addEventListener("mouseleave", startAutoSlide);
@@ -198,13 +198,20 @@ function initAnimations() {
     heroCarousel.addEventListener("mousemove", handleTouchMove);
     heroCarousel.addEventListener("mouseup", handleTouchEnd);
     heroCarousel.addEventListener("mouseleave", handleTouchEnd);
-    document.addEventListener("visibilitychange", () =>
-      document.hidden ? stopAutoSlide() : startAutoSlide()
-    );
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stopAutoSlide();
+      else startAutoSlide();
+    });
   }
 }
 
-// ================================================================
-// EXPOSE
-// ================================================================
+// Global Expose
 window.initAnimations = initAnimations;
+
+// Auto-init fallback
+if (document.readyState === 'complete') {
+  initAnimations();
+} else {
+  window.addEventListener('load', initAnimations);
+}
