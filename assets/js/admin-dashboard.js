@@ -371,8 +371,10 @@ function openModal(edit = false) {
 
     // Set display first, then trigger transition with small delay
     modal.style.display = "flex";
+    console.log("Modal display set to flex");
     setTimeout(() => {
         modal.classList.add("active");
+        console.log("Modal active class added. Classes:", modal.className);
     }, 10);
 
 
@@ -861,9 +863,10 @@ function openGalleryModal(edit = false) {
 
     // Set display first, then trigger transition with small delay
     galleryModal.style.display = "flex";
-    setTimeout(() => {
+        console.log("Gallery modal display set to flex");
         galleryModal.classList.add("active");
     }, 10);
+        console.log("Gallery modal active class added. Classes:", galleryModal.className);
 }
 
 function closeGalleryModal() {
