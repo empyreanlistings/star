@@ -558,9 +558,9 @@ function openPropertyModal(data) {
 
 // Dashboard Table Filters
 function initDashboardFilters() {
-    const section = document.querySelector('.listings-table-container'); // Corrected from .admin-dashboard-section
+    const section = document.querySelector('.admin-dashboard-section'); // Assuming a parent section for filters
     if (!section) {
-        console.error("Listings table container not found for filters.");
+        console.error("Admin dashboard section not found for filters.");
         return;
     }
 
