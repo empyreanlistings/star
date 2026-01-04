@@ -1,4 +1,4 @@
-function initGallery() {
+function initKaiAndIslaGallery() {
   console.log("🎨 [Gallery] initGallery called");
   const galleries = document.querySelectorAll(".mixed-gallery");
   if (!galleries.length) {
@@ -13,8 +13,7 @@ function initGallery() {
   galleries.forEach(gallery => {
     // 1. Re-query items every time (crucial for dynamic updates)
     const items = Array.from(gallery.querySelectorAll(".gallery-item"));
-    console.log(`   📦 Found ${items.length} items in gallery`);
-    if (!items.length) return;
+    // console.log(`   📦 Found ${items.length} items in gallery`);
 
     // 2. Setup filter state
     let activeFilter = "all";
@@ -183,9 +182,9 @@ function initGallery() {
 }
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initGallery);
+  document.addEventListener("DOMContentLoaded", initKaiAndIslaGallery);
 } else {
-  initGallery();
+  initKaiAndIslaGallery();
 }
 
-window.initGallery = initGallery;
+window.initGallery = initKaiAndIslaGallery;
