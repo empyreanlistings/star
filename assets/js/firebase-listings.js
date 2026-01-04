@@ -242,7 +242,7 @@ function createPropertyCard(data) {
 
   // Conditionally render logo if featured
   const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
-  const hbLogoImg = currentTheme === "light" ? "images/homebuyer_light.png" : "images/homebuyer_dark.png";
+  const hbLogoImg = currentTheme === "light" ? "images/homebuyer_light2.png" : "images/homebuyer_dark2.png";
 
   const logoHTML = isFeatured
     ? `<div class="property-logo"><img src="${hbLogoImg}" alt="Paradise Life Homebuyer"></div>`

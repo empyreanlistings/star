@@ -2184,24 +2184,8 @@ html[data-theme="light"] .property-card:hover {
   transition: opacity 0.3s ease;
 }
 
-html[data-theme="dark"] .property-logo img {
-  mix-blend-mode: screen;
-}
-
-html[data-theme="light"] .property-logo img {
-  mix-blend-mode: multiply;
-}
-
 #homebuyerLogoMain {
   transition: opacity 0.3s ease;
-}
-
-html[data-theme="dark"] #homebuyerLogoMain {
-  mix-blend-mode: screen;
-}
-
-html[data-theme="light"] #homebuyerLogoMain {
-  mix-blend-mode: multiply;
 }
 
 .property-card:hover .property-logo {
