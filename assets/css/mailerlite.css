@@ -651,20 +651,31 @@
 }
 
 #mlb2-34337454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button {
-    background-color: #000000 !important;
-    border: none !important;
-    border-radius: 4px !important;
-    box-shadow: none !important;
-    color: #ffffff !important;
     cursor: pointer;
-    font-family: 'Open Sans', Arial, Helvetica, sans-serif !important;
-    font-size: 14px !important;
-    font-weight: 700 !important;
-    line-height: 21px !important;
-    height: auto;
-    padding: 10px !important;
     width: 100% !important;
     box-sizing: border-box !important;
+}
+
+#mlb2-34337454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.loading {
+    display: none !important;
+}
+
+/* Success Message Styling */
+.ml-subscribe-form-34337454 .row-success .ml-form-successContent h2 {
+    color: var(--accent) !important;
+    font-size: 2rem !important;
+    margin-bottom: 10px !important;
+    font-family: 'Figtree', sans-serif !important;
+}
+
+.ml-subscribe-form-34337454 .row-success .ml-form-successContent h3 {
+    color: var(--white) !important;
+    font-size: 1.2rem !important;
+    font-weight: 400 !important;
+}
+
+html[data-theme="light"] .ml-subscribe-form-34337454 .row-success .ml-form-successContent h3 {
+    color: var(--slate-dark) !important;
 }
 
 #mlb2-34337454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.loading {
@@ -672,7 +683,7 @@
 }
 
 #mlb2-34337454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button:hover {
-    background-color: #333333 !important;
+    opacity: 0.9;
 }
 
 .ml-subscribe-close {

@@ -768,6 +768,28 @@ function initializeApp() {
   safeInit("Palawan Gallery", initPalawanGallery);
   safeInit("Works Gallery Lightbox", initWorksGalleryLightbox);
   safeInit("Calendly", initCalendly);
+  loadComponent("#contact-row-placeholder", "contactRC.html");
+}
+
+/**
+ * Helper to fetch and inject HTML components
+ */
+async function loadComponent(selector, url) {
+  const container = document.querySelector(selector);
+  if (!container) return;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const html = await response.text();
+    container.innerHTML = html;
+    console.info(`✅ Component loaded: ${url}`);
+    
+    // Dispatch event to re-init scripts that might need to target new elements
+    window.dispatchEvent(new Event("componentLoaded"));
+  } catch (err) {
+    console.error(`❌ Failed to load component: ${url}`, err);
+  }
 }
 
 // ================================================================

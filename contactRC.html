@@ -3,9 +3,9 @@
   <div class="section-title">
     <h1>CONTACT</h1>
   </div>
-  <div class="contact-row-layout">
 
-    <!-- Contact Info Card -->
+  <div class="contact-cards-grid">
+
     <div class="contact-card contact-card-premium">
       <div class="contact-details" style="text-align: left;">
         <div class="contact-row">
@@ -42,64 +42,56 @@
       </div>
     </div>
 
-    <!-- Newsletter Form Card (MailerLite removed, layout preserved) -->
-<div class="contact-card newsletter-card">
-
-  <!-- Header Image (kept for layout parity) -->
-  <div class="newsletter-header">
-    <img
-      src="https://storage.mlcdn.com/account_image/1969000/IXQvrwdatByuAoQh3ilaLqruv2RrQpUemlWBAEST.jpg"
-      alt="Early Bird Offer"
-    />
-  </div>
-
-  <div class="newsletter-body">
-    <div class="newsletter-content">
-      <h2>EARLY BIRD DISCOUNT!</h2>
-      <p>Save up to 5% off your next home!</p>
-    </div>
-
-    <form id="newsletterForm" class="newsletter-form" novalidate>
-      <div class="form-row">
-        <input
-          type="email"
-          name="email"
-          class="form-control full-width-input"
-          placeholder="Your Email"
-          autocomplete="email"
-          required
-        />
+    <div class="contact-card newsletter-card">
+      <img src="images/early.webp" alt="Early Bird"
+        style="width: 100%; height: auto; display: block; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+      <div class="newsletter-content-outside" style="padding: 24px 30px 0 30px;">
+        <h2>Subscribe now to save up to 5% off your next home!!!</h2>
       </div>
+      <div id="mlb2-34337454" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-34337454">
+        <div class="ml-form-align-center ">
+          <div class="ml-form-embedWrapper embedForm">
+            <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
+              <form class="ml-block-form"
+                action="https://assets.mailerlite.com/jsonp/1969000/forms/173166188080137253/subscribe" data-code=""
+                method="post" target="_blank">
+                <div class="ml-form-formContent">
+                  <div class="ml-form-fieldRow ml-last-item">
+                    <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
+                      <input aria-label="email" aria-required="true" type="email" class="form-control"
+                        data-inputmask="" name="fields[email]" placeholder="Email" autocomplete="email">
+                    </div>
+                  </div>
+                </div>
 
-      <div class="btn-row">
-        <button type="submit" class="btn submit-btn">
-          Register Now
-        </button>
+                <input type="hidden" name="ml-submit" value="1">
+
+                <div class="ml-form-embedSubmit">
+                  <button type="submit" class="primary btn">Subscribe</button>
+                  <button disabled="disabled" style="display: none;" type="button" class="loading">
+                    <div class="ml-form-embedSubmitLoad"></div>
+                    <span class="sr-only">Loading...</span>
+                  </button>
+                </div>
+                <input type="hidden" name="anticsrf" value="true">
+              </form>
+            </div>
+
+            <div class="ml-form-successBody row-success" style="display: none">
+              <div class="ml-form-successContent">
+                <h2>Thank you!</h2>
+                <h3>You have successfully joined our subscriber list.</h3>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </form>
-
-    <!-- Success / error placeholders (optional, styled later) -->
-    <div class="form-message success" hidden>
-      <h2>Thank you!</h2>
-      <p>You’ve joined our Early Bird list.</p>
     </div>
 
-    <div class="form-message error" hidden>
-      <p>Something went wrong. Please try again.</p>
-    </div>
-  </div>
-
-</div>
-
-
-    <!-- Map Card -->
     <div class="contact-card contact-map">
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d978.819415146162!2d119.388867829304!3d11.178398398214!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33b6b6c1d8f8e4a5%3A0x8f8e8f8e8f8e8f8e!2sEl%20Nido%20Town%20Proper!5e0!3m2!1sen!2sph!4v1700000000000!5m2!1sen!2sph" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <iframe src="https://www.google.com/maps?q=El%20Nido%20Town%20Square,%20Palawan&z=15&output=embed" width="100%"
+        height="100%" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
     </div>
-
+  </div> <!-- End contact-cards-grid -->
 </div>
-
-  </div>
-  
-</div>
-
