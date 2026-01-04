@@ -319,8 +319,13 @@ async function handleEdit(e) {
 function closeModal() {
     if (!modal) return;
     modal.classList.remove("active");
-    modal.style.cssText = "";
-    modal.style.display = "none";
+    // Wait for transition before hiding completely if needed, 
+    // but the CSS active class handles visibility/opacity.
+    setTimeout(() => {
+        if (!modal.classList.contains("active")) {
+            modal.style.display = "none";
+        }
+    }, 400);
 }
 
 function initModalEvents() {
@@ -367,7 +372,7 @@ function openModal(edit = false) {
     // Force direct style manipulation + Class
     // Force direct style manipulation + Class
     modal.classList.add("active");
-    modal.style.cssText = "display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; z-index: 2147483647 !important; opacity: 1 !important; visibility: visible !important; background-color: rgba(0,0,0,0.5) !important;";
+    modal.style.display = "flex";
 
     // console.log("--- NUCLEAR FORCE APPLIED ---");
 
@@ -550,9 +555,9 @@ function openPropertyModal(data) {
 
 // Dashboard Table Filters
 function initDashboardFilters() {
-    const section = document.querySelector('.admin-dashboard-section'); // Assuming a parent section for filters
+    const section = document.querySelector('.listings-table-container'); // Corrected from .admin-dashboard-section
     if (!section) {
-        console.error("Admin dashboard section not found for filters.");
+        console.error("Listings table container not found for filters.");
         return;
     }
 
@@ -724,6 +729,47 @@ function renderGalleryTable(gallery) {
 
     document.querySelectorAll(".edit-gallery").forEach(btn => btn.onclick = handleGalleryEdit);
     document.querySelectorAll(".delete-gallery").forEach(btn => btn.onclick = handleGalleryDelete);
+
+    // Re-init gallery filters if items changed
+    initGalleryFilters();
+}
+
+/**
+ * GALLERY FILTERING LOGIC
+ */
+function initGalleryFilters() {
+    const filterContainer = document.querySelector('.gallery-type-filters');
+    if (!filterContainer) return;
+
+    const filterBtns = filterContainer.querySelectorAll('.filter');
+    const tbody = document.getElementById('galleryTableBody');
+    if (!filterBtns.length || !tbody) return;
+
+    let activeFilter = filterContainer.querySelector('.filter.active')?.dataset.filter || 'all';
+
+    const filterTable = () => {
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            const categoryCell = row.querySelector('td:nth-child(4)');
+            if (!categoryCell) return;
+
+            const category = categoryCell.textContent.trim().toLowerCase();
+            const match = activeFilter === 'all' || category === activeFilter;
+            row.style.display = match ? '' : 'none';
+        });
+    };
+
+    filterBtns.forEach(btn => {
+        btn.onclick = () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeFilter = btn.dataset.filter;
+            filterTable();
+        };
+    });
+
+    // Run initial filter
+    filterTable();
 }
 
 async function handleGalleryDelete(e) {
@@ -748,7 +794,7 @@ async function handleGalleryEdit(e) {
         const data = docSnap.data();
         document.getElementById("galleryHeadline").value = data.headline || "";
         document.getElementById("gallerySubHeader").value = data.sub_header || "";
-        document.getElementById("galleryCategory").value = data.category || "structural";
+        setSelectedCategory(data.category || "structural");
         document.getElementById("galleryDisplay").checked = !!data.display;
     }
 }
@@ -757,6 +803,35 @@ function initGalleryModalEvents() {
     document.getElementById("addGalleryBtn").onclick = () => openGalleryModal(false);
     document.getElementById("closeGalleryModal").onclick = closeGalleryModal;
     document.getElementById("galleryForm").onsubmit = handleGalleryFormSubmit;
+
+    // Init category chips
+    initCategoryChips();
+}
+
+function initCategoryChips() {
+    const chips = document.querySelectorAll("#galleryCategoryChips .chip");
+    chips.forEach(chip => {
+        chip.onclick = () => {
+            chips.forEach(c => c.classList.remove("active"));
+            chip.classList.add("active");
+        };
+    });
+}
+
+function getSelectedCategory() {
+    const activeChip = document.querySelector("#galleryCategoryChips .chip.active");
+    return activeChip ? activeChip.dataset.value : "structural";
+}
+
+function setSelectedCategory(value) {
+    const chips = document.querySelectorAll("#galleryCategoryChips .chip");
+    chips.forEach(c => {
+        if (c.dataset.value === value) {
+            c.classList.add("active");
+        } else {
+            c.classList.remove("active");
+        }
+    });
 }
 
 function openGalleryModal(edit = false) {
@@ -767,11 +842,19 @@ function openGalleryModal(edit = false) {
     document.getElementById("galleryModalTitle").textContent = edit ? "Edit Gallery Item" : "Add New Gallery Item";
     document.getElementById("gallerySubmitBtn").textContent = edit ? "Save Changes" : "Upload Gallery Item";
     document.getElementById("galleryImage").required = !edit;
+
+    if (!edit) {
+        setSelectedCategory("structural");
+    }
 }
 
 function closeGalleryModal() {
     galleryModal.classList.remove("active");
-    galleryModal.style.display = "none";
+    setTimeout(() => {
+        if (!galleryModal.classList.contains("active")) {
+            galleryModal.style.display = "none";
+        }
+    }, 400);
 }
 
 async function handleGalleryFormSubmit(e) {
@@ -799,7 +882,7 @@ async function handleGalleryFormSubmit(e) {
         const docData = {
             headline: document.getElementById("galleryHeadline").value,
             sub_header: document.getElementById("gallerySubHeader").value,
-            category: document.getElementById("galleryCategory").value,
+            category: getSelectedCategory(),
             display: document.getElementById("galleryDisplay").checked,
             added_at: serverTimestamp(),
             added_by: doc(db, "Users", currentUserId)
