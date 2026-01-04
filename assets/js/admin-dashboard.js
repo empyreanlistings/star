@@ -369,10 +369,13 @@ function openModal(edit = false) {
 
     form.reset();
 
-    // Force direct style manipulation + Class
-    // Force direct style manipulation + Class
-    modal.classList.add("active");
+    // Set display first, then trigger transition
     modal.style.display = "flex";
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            modal.classList.add("active");
+        });
+    });
 
     // console.log("--- NUCLEAR FORCE APPLIED ---");
 
@@ -836,8 +839,13 @@ function setSelectedCategory(value) {
 
 function openGalleryModal(edit = false) {
     isGalleryEditMode = edit;
-    galleryModal.classList.add("active");
+    // Set display first, then trigger transition
     galleryModal.style.display = "flex";
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            galleryModal.classList.add("active");
+        });
+    });
     document.getElementById("galleryForm").reset();
     document.getElementById("galleryModalTitle").textContent = edit ? "Edit Gallery Item" : "Add New Gallery Item";
     document.getElementById("gallerySubmitBtn").textContent = edit ? "Save Changes" : "Upload Gallery Item";
