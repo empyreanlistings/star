@@ -803,9 +803,21 @@ async function handleGalleryEdit(e) {
 }
 
 function initGalleryModalEvents() {
-    document.getElementById("addGalleryBtn").onclick = () => openGalleryModal(false);
-    document.getElementById("closeGalleryModal").onclick = closeGalleryModal;
-    document.getElementById("galleryForm").onsubmit = handleGalleryFormSubmit;
+    console.log("Initializing Gallery Modal Events...");
+    const addBtn = document.getElementById("addGalleryBtn");
+    const closeBtn = document.getElementById("closeGalleryModal");
+    const form = document.getElementById("galleryForm");
+
+    if (!galleryModal) {
+        console.error("Gallery Modal NOT FOUND");
+        return;
+    }
+
+    console.log("Gallery Modal Elements Found:", { galleryModal, addBtn, closeBtn, form });
+
+    if (addBtn) addBtn.onclick = () => openGalleryModal(false);
+    if (closeBtn) closeBtn.onclick = closeGalleryModal;
+    if (form) form.onsubmit = handleGalleryFormSubmit;
 
     // Init category chips
     initCategoryChips();
