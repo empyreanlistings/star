@@ -791,7 +791,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function initializeApp() {
   if (typeof initHeader !== 'undefined') safeInit("Header", initHeader);
   if (typeof initAnimations !== 'undefined') safeInit("Animations", initAnimations);
-  if (typeof initCarousel !== 'undefined') safeInit("Carousel", initCarousel);
+  // Carousel logic moved to animations.js to sync with hero sequence
   // Gallery initialization moved to gallery.js
   if (typeof window.initGallery !== 'undefined') safeInit("Gallery", window.initGallery);
   if (typeof initPropertyFilters !== 'undefined') safeInit("Property Filters", initPropertyFilters);
@@ -1028,161 +1028,9 @@ function deprecatedInitAnimations() {
 // ================================================================
 // CAROUSEL SWIPE & AUTO-ROTATE
 // ================================================================
+// Redundant Carousel initializing removed (moved to animations.js)
 function initCarousel() {
-  const carousel = document.querySelector(".hero-carousel");
-  const slides = document.querySelectorAll(".hero-slide");
-
-  if (!carousel || slides.length === 0 || carousel.dataset.carouselInit) return;
-  carousel.dataset.carouselInit = "true";
-
-  let currentSlide = 0;
-  let autoplayInterval;
-  let startX = 0;
-  let currentX = 0;
-  let isDragging = false;
-  let startTime = 0;
-
-  slides[0].classList.add("active");
-
-  function goToSlide(index) {
-    slides.forEach(slide => {
-      slide.classList.remove("active");
-      slide.style.transform = "";
-      slide.style.opacity = "";
-    });
-
-    if (index >= slides.length) index = 0;
-    if (index < 0) index = slides.length - 1;
-
-    currentSlide = index;
-    slides[currentSlide].classList.add("active");
-
-    resetAutoplay();
-  }
-
-  function nextSlide() {
-    goToSlide(currentSlide + 1);
-  }
-
-  function prevSlide() {
-    goToSlide(currentSlide - 1);
-  }
-
-  function startAutoplay() {
-    if (isPaused) return;
-    stopAutoplay();
-    autoplayInterval = setInterval(nextSlide, 5000);
-  }
-
-  function stopAutoplay() {
-    clearInterval(autoplayInterval);
-  }
-
-  function resetAutoplay() {
-    if (isPaused) return;
-    stopAutoplay();
-    startAutoplay();
-  }
-
-  let isPaused = false;
-
-  function handleStart(e) {
-    isDragging = true;
-    startTime = Date.now();
-    startX = e.type.includes("mouse") ? e.clientX : e.touches[0].clientX;
-    currentX = startX;
-
-    stopAutoplay();
-    carousel.style.cursor = "grabbing";
-  }
-
-  function handleMove(e) {
-    if (!isDragging) return;
-
-    currentX = e.type.includes("mouse") ? e.clientX : e.touches[0].clientX;
-    const diff = currentX - startX;
-
-    // Only prevent default for horizontal swipes
-    if (Math.abs(diff) > 10) {
-      e.preventDefault();
-    }
-
-    const opacity = Math.max(0.3, 1 - Math.abs(diff) / 400);
-
-    slides[currentSlide].style.opacity = opacity;
-    slides[currentSlide].style.transform = `translateX(${diff * 0.1}px)`;
-  }
-
-  function handleEnd(e) {
-    if (!isDragging) return;
-
-    isDragging = false;
-    carousel.style.cursor = "grab";
-
-    const diff = currentX - startX;
-    const duration = Date.now() - startTime;
-    const velocity = Math.abs(diff) / duration;
-
-    const threshold = 50;
-    const isSwipe = Math.abs(diff) > threshold || velocity > 0.5;
-
-    slides[currentSlide].style.transform = "";
-    slides[currentSlide].style.opacity = "";
-
-    if (isSwipe) {
-      isPaused = false;
-      if (diff > 0) {
-        nextSlide();
-      } else {
-        prevSlide();
-      }
-    } else {
-      if (e.type.includes("touch")) {
-        isPaused = !isPaused;
-        if (isPaused) {
-          stopAutoplay();
-        } else {
-          startAutoplay();
-        }
-      } else {
-        if (!isPaused) {
-          resetAutoplay();
-        }
-      }
-    }
-  }
-
-  carousel.addEventListener("touchstart", handleStart, { passive: true });
-  carousel.addEventListener("touchmove", handleMove, { passive: true });
-  carousel.addEventListener("touchend", handleEnd, { passive: true });
-
-  carousel.addEventListener("mousedown", handleStart);
-  carousel.addEventListener("mousemove", handleMove);
-  carousel.addEventListener("mouseup", handleEnd);
-  carousel.addEventListener("mouseleave", handleEnd);
-
-  carousel.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") prevSlide();
-    if (e.key === "ArrowRight") nextSlide();
-  });
-
-  slides.forEach(slide => {
-    const buttons = slide.querySelectorAll("a, button, .btn");
-
-    buttons.forEach(btn => {
-      btn.addEventListener("mouseenter", stopAutoplay);
-      btn.addEventListener("mouseleave", () => {
-        if (!isDragging && !isPaused) {
-          startAutoplay();
-        }
-      });
-    });
-  });
-
-  carousel.style.cursor = "grab";
-  carousel.setAttribute("tabindex", "0");
-
-  startAutoplay();
+  console.log("Carousel logic moved to animations.js");
 }
 
 // ================================================================
