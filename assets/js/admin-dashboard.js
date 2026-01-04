@@ -352,7 +352,7 @@ function initModalEvents() {
 }
 
 function openModal(edit = false) {
-    console.log("openModal called. Edit Mode:", edit);
+    console.log("🚀 [Modal] openModal triggered. Edit Mode:", edit);
     isEditMode = edit;
     const form = document.getElementById("listingForm");
     const title = document.getElementById("modalTitle");
@@ -821,7 +821,13 @@ function initGalleryModalEvents() {
     const closeBtn = document.getElementById("closeGalleryModal");
     const form = document.getElementById("galleryForm");
 
-    if (addBtn) addBtn.onclick = () => openGalleryModal(false);
+    console.log("🛠️ [Gallery] Initializing Gallery Modal Events...");
+    if (addBtn) {
+        console.log("   ✅ addGalleryBtn found");
+        addBtn.onclick = () => openGalleryModal(false);
+    } else {
+        console.warn("   ❌ addGalleryBtn NOT FOUND");
+    }
     if (closeBtn) closeBtn.onclick = closeGalleryModal;
     if (form) form.onsubmit = handleGalleryFormSubmit;
 
@@ -829,6 +835,7 @@ function initGalleryModalEvents() {
 }
 
 function openGalleryModal(edit = false) {
+    console.log("🚀 [GalleryModal] openGalleryModal triggered. Edit Mode:", edit);
     isGalleryEditMode = edit;
     const form = document.getElementById("galleryForm");
     if (form) form.reset();
