@@ -2286,39 +2286,60 @@ html[data-theme="light"] .property-features {
 }
 
 /* ============================== TOOLTIP ============================== */
-.property-features .feature:hover::after {
+.property-features .feature::after {
   content: attr(data-tooltip);
   position: absolute;
   bottom: -34px;
   left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.9);
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(0, 0, 0, 0.95);
   color: #fff;
   padding: 6px 10px;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 11px;
   white-space: nowrap;
-  opacity: 1;
+  opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   z-index: 9999;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  transition-delay: 0s;
 }
 
-.property-features .feature:hover::before {
+.property-features .feature::before {
   content: "";
   position: absolute;
-  bottom: -12px;
+  bottom: -15px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(4px);
   border-width: 6px;
   border-style: solid;
-  border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
+  border-color: rgba(0, 0, 0, 0.95) transparent transparent transparent;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
   z-index: 9998;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  transition-delay: 0s;
+}
+
+.property-features .feature:hover::after,
+.property-features .feature:hover::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  transition-delay: 0.5s;
+  /* 500ms delay for "purposeful" hover */
 }
 
 /* LIGHT MODE — TOOLTIP */
-html[data-theme="light"] .property-features .feature:hover::after {
-  background: rgba(0, 0, 0, 0.85);
+html[data-theme="light"] .property-features .feature::after {
+  background: rgba(0, 0, 0, 0.9);
   color: #fff;
+}
+
+html[data-theme="light"] .property-features .feature::before {
+  border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
 }
 
 /* ============================== FULL SCREEN OVERLAY ============================== */
