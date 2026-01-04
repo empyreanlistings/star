@@ -41,12 +41,14 @@ document.addEventListener("DOMContentLoaded", () => {
             currentUserId = user.uid;
             console.log("User authenticated:", user.email);
 
-            // Fetch user's company first
-            await getUserCompany(user.uid);
-
-            // Then fetch listings filtered by company
+            // 1. Load listings immediately (uses cache first)
             initAdminListingsSync();
+            initDashboardFilters();
             initModalEvents();
+
+            // 2. Fetch user's company and RE-INIT sync with filter
+            await getUserCompany(user.uid);
+            initAdminListingsSync();
         }
         // No else needed here, auth.js handles strict redirect for unauth users
     });
@@ -104,23 +106,23 @@ function initAdminListingsSync() {
     console.log("📡 [Firebase] Connecting to real-time admin sync...");
 
     // Apply company filter if it exists
+    // The listener is established immediately. If currentUserCompany is not yet available,
+    // it fetches all listings. Once currentUserCompany is set (after getUserCompany),
+    // initAdminListingsSync is called again, unsubscribing the old listener and
+    // establishing a new, filtered one.
+    let listingsQuery = collection(db, "Listings");
     if (currentUserCompany) {
         console.log(`🔍 [Filter] Applying company sync: ${currentUserCompany.id}`);
-        const companyQuery = query(collection(db, "Listings"), where("company", "==", currentUserCompany));
-
-        activeListingsListener = onSnapshot(companyQuery, (snapshot) => {
-            handleAdminSnapshot(snapshot);
-        }, (error) => {
-            console.error("Error in admin filtered sync:", error);
-        });
+        listingsQuery = query(listingsQuery, where("company", "==", currentUserCompany));
     } else {
-        // Fallback or wait for company to load
-        activeListingsListener = onSnapshot(collection(db, "Listings"), (snapshot) => {
-            handleAdminSnapshot(snapshot);
-        }, (error) => {
-            console.error("Error in admin sync:", error);
-        });
+        console.log("🔍 [Filter] No company filter applied yet. Fetching all listings.");
     }
+
+    activeListingsListener = onSnapshot(listingsQuery, (snapshot) => {
+        handleAdminSnapshot(snapshot);
+    }, (error) => {
+        console.error("Error in admin sync:", error);
+    });
 }
 
 function handleAdminSnapshot(snapshot) {
@@ -128,8 +130,7 @@ function handleAdminSnapshot(snapshot) {
     if (!tbody) return;
 
     if (snapshot.empty) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;">No listings found for your company.</td></tr>`;
-        localStorage.removeItem(CACHE_KEY); // Clear cache if empty report
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;">No listings found.</td></tr>`;
         return;
     }
 
@@ -230,7 +231,7 @@ async function handleDuplicate(e) {
             await addDoc(collection(db, "Listings"), newData);
             // Invalidate cache
             localStorage.removeItem("kai_isla_listings");
-            fetchAdminListings();
+            // No need to call fetchAdminListings, the real-time listener will update
             alert("Listing duplicated.");
         }
     } catch (error) {
@@ -249,7 +250,7 @@ async function handleDelete(e) {
         await deleteDoc(doc(db, "Listings", id));
         // Invalidate cache
         localStorage.removeItem("kai_isla_listings");
-        fetchAdminListings();
+        // No need to call fetchAdminListings, the real-time listener will update
         alert("Deleted.");
     } catch (error) {
         console.error(error);
@@ -290,7 +291,6 @@ async function handleEdit(e) {
 
             document.getElementById("propBeds").value = data.specs?.beds || "";
             document.getElementById("propBaths").value = data.specs?.baths || "";
-            document.getElementById("propSize").value = data.specs?.lot_size || "";
             document.getElementById("propSize").value = data.specs?.size || "";
             document.getElementById("propLotSize").value = data.specs?.lot_size || "";
             document.getElementById("propFloorArea").value = data.specs?.floor_area || "";
@@ -470,8 +470,7 @@ async function handleFormSubmit(e) {
             modal.style.cssText = "";
             modal.style.display = "none";
         }
-        fetchAdminListings();
-
+        // No need to call fetchAdminListings, the real-time listener will update
     } catch (error) {
         console.error("Error saving listing:", error);
         alert("Error: " + error.message);
@@ -544,7 +543,13 @@ function openPropertyModal(data) {
 
 // Dashboard Table Filters
 function initDashboardFilters() {
-    const filterBtns = document.querySelectorAll('.property-gallery-filters .filter');
+    const section = document.querySelector('.admin-dashboard-section'); // Assuming a parent section for filters
+    if (!section) {
+        console.error("Admin dashboard section not found for filters.");
+        return;
+    }
+
+    const filterBtns = section.querySelectorAll('.property-gallery-filters .filter');
     const priceMin = document.getElementById('dashPriceMin');
     const priceMax = document.getElementById('dashPriceMax');
     const priceRangeValue = document.getElementById('dashPriceRangeValue');
@@ -576,7 +581,7 @@ function initDashboardFilters() {
     };
 
     const filterTable = () => {
-        const rows = tbody.querySelectorAll('tr');
+        const rows = tbody.querySelectorAll('tr'); // Re-query cards to ensure latest DOM
         let visibleCount = 0;
 
         rows.forEach(row => {
