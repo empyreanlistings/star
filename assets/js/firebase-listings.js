@@ -240,9 +240,8 @@ function createPropertyCard(data) {
     featuresHTML += `<div class="feature" data-tooltip="Solar Power"><i class="fa-solid fa-sun"></i></div>`;
   }
 
-  // Conditionally render logo if featured
-  const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
-  const hbLogoImg = currentTheme === "light" ? "images/homebuyer_light2.png" : "images/homebuyer_dark2.png";
+  // Conditionally render logo if featured (Hardcoded to dark for ribbons)
+  const hbLogoImg = "images/homebuyer_dark2.png";
 
   const logoHTML = isFeatured
     ? `<div class="property-logo"><img src="${hbLogoImg}" alt="Paradise Life Homebuyer"></div>`
