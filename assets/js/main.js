@@ -136,8 +136,16 @@ async function initResponsiveVideo() {
 // ================================================================
 function initPropertyFilters() {
   const section = document.getElementById("listings");
-  if (!section || section.dataset.filtersInit) return;
-  section.dataset.filtersInit = "true";
+  if (!section) return;
+
+  // Global listener for dynamic content updates
+  if (!window.filtersEventBound) {
+    window.filtersEventBound = true;
+    window.addEventListener("listingsLoaded", () => {
+      console.log("🔄 Listings updated, re-initializing filters...");
+      initPropertyFilters();
+    });
+  }
 
   const buttons = section.querySelectorAll(".property-gallery-filters .filter");
   const cards = [...section.querySelectorAll(".property-card:not(.no-results-card)")];
@@ -407,21 +415,22 @@ function initPropertyModal() {
         const currentlyLiked = localStorage.getItem(`liked_${pid}`);
         const isUnlike = !!currentlyLiked;
 
+        // OPTIMISTIC UI: Update immediately for smoothness
+        if (isUnlike) {
+          localStorage.removeItem(`liked_${pid}`);
+          gridLikeBtn.classList.remove('liked');
+          gridLikeBtn.querySelector('i').className = 'far fa-heart';
+          card.dataset.likes = Math.max(0, parseInt(card.dataset.likes || 0) - 1);
+        } else {
+          localStorage.setItem(`liked_${pid}`, "true");
+          gridLikeBtn.classList.add('liked');
+          gridLikeBtn.querySelector('i').className = 'fas fa-heart';
+          card.dataset.likes = parseInt(card.dataset.likes || 0) + 1;
+        }
+
         if (typeof window.trackLike === 'function') {
-          const success = await window.trackLike(pid, isUnlike);
-          if (success) {
-            if (isUnlike) {
-              localStorage.removeItem(`liked_${pid}`);
-              gridLikeBtn.classList.remove('liked');
-              gridLikeBtn.querySelector('i').className = 'far fa-heart';
-              card.dataset.likes = Math.max(0, parseInt(card.dataset.likes || 0) - 1);
-            } else {
-              localStorage.setItem(`liked_${pid}`, "true");
-              gridLikeBtn.classList.add('liked');
-              gridLikeBtn.querySelector('i').className = 'fas fa-heart';
-              card.dataset.likes = parseInt(card.dataset.likes || 0) + 1;
-            }
-          }
+          // Fire and forget (sync will update eventually)
+          window.trackLike(pid, isUnlike);
         }
         return;
       }
@@ -556,22 +565,24 @@ function initPropertyModal() {
 
         updateLikeUI(localStorage.getItem(`liked_${propertyId}`));
 
-        likeBtn.onclick = async () => {
+        likeBtn.onclick = () => {
           const currentlyLiked = localStorage.getItem(`liked_${propertyId}`);
           const isUnlike = !!currentlyLiked;
+
+          // OPTIMISTIC UI: Update immediately
+          if (isUnlike) {
+            localStorage.removeItem(`liked_${propertyId}`);
+            card.dataset.likes = Math.max(0, parseInt(card.dataset.likes || 0) - 1);
+          } else {
+            localStorage.setItem(`liked_${propertyId}`, "true");
+            card.dataset.likes = parseInt(card.dataset.likes || 0) + 1;
+          }
+
+          updateLikeUI(!isUnlike);
+          updateLabels(card.dataset.visits, card.dataset.likes);
+
           if (typeof window.trackLike === 'function') {
-            const success = await window.trackLike(propertyId, isUnlike);
-            if (success) {
-              if (isUnlike) {
-                localStorage.removeItem(`liked_${propertyId}`);
-                card.dataset.likes = Math.max(0, parseInt(card.dataset.likes || 0) - 1);
-              } else {
-                localStorage.setItem(`liked_${propertyId}`, "true");
-                card.dataset.likes = parseInt(card.dataset.likes || 0) + 1;
-              }
-              updateLikeUI(!isUnlike);
-              updateLabels(card.dataset.visits, card.dataset.likes);
-            }
+            window.trackLike(propertyId, isUnlike);
           }
         };
       }
@@ -878,7 +889,10 @@ function initScrollbarBehavior() {
 // ================================================================
 // NAV + HEADER + SCROLL PROGRESS + MOBILE MENU (FIXED)
 // ================================================================
-const scrollState = { last: 0, ticking: false };
+if (!window.scrollState) {
+  window.scrollState = { last: 0, ticking: false };
+}
+const scrollState = window.scrollState;
 
 function initHeader() {
   const nav = document.querySelector("nav");
