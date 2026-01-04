@@ -242,7 +242,7 @@ function createPropertyCard(data) {
 
   // Conditionally render logo if featured
   const logoHTML = isFeatured
-    ? `<div class="property-logo"><img src="images/small_homebuyer.png" alt="Paradise Life Homebuyer"></div>`
+    ? `<div class="property-logo"><img src="images/homebuyer-removebg.png" alt="Paradise Life Homebuyer"></div>`
     : '';
 
   // Heart icon state for grid
