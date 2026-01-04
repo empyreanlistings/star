@@ -53,7 +53,7 @@
     </header>
 
     <main class="dashboard-content">
-        <div class="listings-table-container">
+        <div id="listingsSection" class="listings-table-container">
             <!-- Centered Title -->
             <h1 style="text-align: center; margin-bottom: 1.5rem;">Manage Listings</h1>
 
@@ -108,7 +108,7 @@
             </table>
         </div>
 
-        <div class="listings-table-container" style="margin-top: 4rem;">
+        <div id="gallerySection" class="listings-table-container" style="margin-top: 4rem;">
             <!-- Centered Title -->
             <h1 style="text-align: center; margin-bottom: 1.5rem;">Manage Gallery</h1>
 
@@ -149,10 +149,10 @@
     </main>
 
     <!-- Listing Modal -->
-    <div id="listingModal" class="modal-overlay">
+    <div id="listingModal" class="modal-overlay premium-modal">
         <div class="modal-content">
-            <span id="closeModal">&times;</span>
-            <h3 id="modalTitle" style="margin-bottom:1.5rem;">Add New Property</h3>
+            <span id="closeModal" class="close-modal">&times;</span>
+            <h3 id="modalTitle" class="modal-title">Add New Property</h3>
             <form id="listingForm">
                 <input type="hidden" id="listingId">
                 <div class="form-group">
@@ -234,11 +234,10 @@
     </div>
 
     <!-- Gallery Modal -->
-    <div id="galleryModal" class="modal-overlay">
+    <div id="galleryModal" class="modal-overlay premium-modal">
         <div class="modal-content">
-            <span id="closeGalleryModal" class="close-modal"
-                style="position:absolute;top:15px;right:20px;font-size:28px;cursor:pointer;">&times;</span>
-            <h3 id="galleryModalTitle" style="margin-bottom:1.5rem;">Add New Gallery Item</h3>
+            <span id="closeGalleryModal" class="close-modal">&times;</span>
+            <h3 id="galleryModalTitle" class="modal-title">Add New Gallery Item</h3>
             <form id="galleryForm">
                 <input type="hidden" id="galleryItemId">
                 <div class="form-group">
@@ -255,12 +254,12 @@
 
                 <div class="form-group">
                     <label>Category</label>
-                    <select id="galleryCategory" class="form-control">
-                        <option value="structural">Structural</option>
-                        <option value="exterior">Exterior</option>
-                        <option value="interior">Interior</option>
-                        <option value="pool">Swimming Pools</option>
-                    </select>
+                    <div id="galleryCategoryChips" class="category-chips">
+                        <div class="chip active" data-value="structural">Structural</div>
+                        <div class="chip" data-value="exterior">Exterior</div>
+                        <div class="chip" data-value="interior">Interior</div>
+                        <div class="chip" data-value="pool">Swimming Pools</div>
+                    </div>
                 </div>
 
                 <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">

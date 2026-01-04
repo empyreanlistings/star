@@ -319,8 +319,11 @@ async function handleEdit(e) {
 function closeModal() {
     if (!modal) return;
     modal.classList.remove("active");
-    modal.style.cssText = "";
-    modal.style.display = "none";
+    setTimeout(() => {
+        if (!modal.classList.contains("active")) {
+            modal.style.display = "none";
+        }
+    }, 400);
 }
 
 function initModalEvents() {
@@ -364,12 +367,11 @@ function openModal(edit = false) {
 
     form.reset();
 
-    // Force direct style manipulation + Class
-    // Force direct style manipulation + Class
-    modal.classList.add("active");
-    modal.style.cssText = "display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; z-index: 2147483647 !important; opacity: 1 !important; visibility: visible !important; background-color: rgba(0,0,0,0.5) !important;";
-
-    // console.log("--- NUCLEAR FORCE APPLIED ---");
+    // Safer transition trigger: display then active class with delay
+    modal.style.display = "flex";
+    setTimeout(() => {
+        modal.classList.add("active");
+    }, 10);
 
     if (edit) {
         title.textContent = "Edit Property";
@@ -469,14 +471,7 @@ async function handleFormSubmit(e) {
         }
 
         // Close modal on success
-        if (typeof closeModal === "function") {
-            closeModal();
-        } else {
-            // Fallback if closeModal reference is lost
-            modal.classList.remove("active");
-            modal.style.cssText = "";
-            modal.style.display = "none";
-        }
+        closeModal();
         // No need to call fetchAdminListings, the real-time listener will update
     } catch (error) {
         console.error("Error saving listing:", error);
@@ -550,9 +545,9 @@ function openPropertyModal(data) {
 
 // Dashboard Table Filters
 function initDashboardFilters() {
-    const section = document.querySelector('.admin-dashboard-section'); // Assuming a parent section for filters
+    const section = document.getElementById('listingsSection');
     if (!section) {
-        console.error("Admin dashboard section not found for filters.");
+        console.error("Listings section not found for filters.");
         return;
     }
 
@@ -724,6 +719,9 @@ function renderGalleryTable(gallery) {
 
     document.querySelectorAll(".edit-gallery").forEach(btn => btn.onclick = handleGalleryEdit);
     document.querySelectorAll(".delete-gallery").forEach(btn => btn.onclick = handleGalleryDelete);
+
+    // Initial filter run
+    if (typeof initGalleryFilters === 'function') initGalleryFilters();
 }
 
 async function handleGalleryDelete(e) {
@@ -748,30 +746,119 @@ async function handleGalleryEdit(e) {
         const data = docSnap.data();
         document.getElementById("galleryHeadline").value = data.headline || "";
         document.getElementById("gallerySubHeader").value = data.sub_header || "";
-        document.getElementById("galleryCategory").value = data.category || "structural";
+        setSelectedCategory(data.category || "structural"); // Use helper for chips
         document.getElementById("galleryDisplay").checked = !!data.display;
     }
 }
 
+/**
+ * GALLERY FILTERING & CHIP LOGIC
+ */
+function initGalleryFilters() {
+    const filterContainer = document.querySelector('.gallery-type-filters');
+    if (!filterContainer) return;
+
+    const filterBtns = filterContainer.querySelectorAll('.filter');
+    const tbody = document.getElementById('galleryTableBody');
+    if (!filterBtns.length || !tbody) return;
+
+    // Use current active filter or default to 'all'
+    let activeFilter = filterContainer.querySelector('.filter.active')?.dataset.filter || 'all';
+
+    const filterTable = () => {
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            const categoryCell = row.querySelector('td:nth-child(4)');
+            if (!categoryCell) return;
+
+            const category = categoryCell.textContent.trim().toLowerCase();
+            const match = activeFilter === 'all' || category === activeFilter;
+            row.style.display = match ? '' : 'none';
+        });
+    };
+
+    filterBtns.forEach(btn => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeFilter = btn.dataset.filter;
+            filterTable();
+        };
+    });
+
+    filterTable(); // Run immediately
+}
+
+function initCategoryChips() {
+    const chips = document.querySelectorAll("#galleryCategoryChips .chip");
+    chips.forEach(chip => {
+        chip.onclick = () => {
+            chips.forEach(c => c.classList.remove("active"));
+            chip.classList.add("active");
+        };
+    });
+}
+
+function getSelectedCategory() {
+    const activeChip = document.querySelector("#galleryCategoryChips .chip.active");
+    return activeChip ? activeChip.dataset.value : "structural";
+}
+
+function setSelectedCategory(value) {
+    const chips = document.querySelectorAll("#galleryCategoryChips .chip");
+    chips.forEach(c => {
+        if (c.dataset.value === value) {
+            c.classList.add("active");
+        } else {
+            c.classList.remove("active");
+        }
+    });
+}
+
 function initGalleryModalEvents() {
-    document.getElementById("addGalleryBtn").onclick = () => openGalleryModal(false);
-    document.getElementById("closeGalleryModal").onclick = closeGalleryModal;
-    document.getElementById("galleryForm").onsubmit = handleGalleryFormSubmit;
+    const addBtn = document.getElementById("addGalleryBtn");
+    const closeBtn = document.getElementById("closeGalleryModal");
+    const form = document.getElementById("galleryForm");
+
+    if (addBtn) addBtn.onclick = () => openGalleryModal(false);
+    if (closeBtn) closeBtn.onclick = closeGalleryModal;
+    if (form) form.onsubmit = handleGalleryFormSubmit;
+
+    initCategoryChips();
 }
 
 function openGalleryModal(edit = false) {
     isGalleryEditMode = edit;
-    galleryModal.classList.add("active");
+    const form = document.getElementById("galleryForm");
+    if (form) form.reset();
+
+    const titleEl = document.getElementById("galleryModalTitle");
+    const submitBtn = document.getElementById("gallerySubmitBtn");
+    const imgInput = document.getElementById("galleryImage");
+
+    if (titleEl) titleEl.textContent = edit ? "Edit Gallery Item" : "Add New Gallery Item";
+    if (submitBtn) submitBtn.textContent = edit ? "Save Changes" : "Upload Gallery Item";
+    if (imgInput) imgInput.required = !edit;
+
+    if (!edit) {
+        setSelectedCategory("structural");
+    }
+
+    // Safer transition trigger: display then active class with delay
     galleryModal.style.display = "flex";
-    document.getElementById("galleryForm").reset();
-    document.getElementById("galleryModalTitle").textContent = edit ? "Edit Gallery Item" : "Add New Gallery Item";
-    document.getElementById("gallerySubmitBtn").textContent = edit ? "Save Changes" : "Upload Gallery Item";
-    document.getElementById("galleryImage").required = !edit;
+    setTimeout(() => {
+        galleryModal.classList.add("active");
+    }, 10);
 }
 
 function closeGalleryModal() {
     galleryModal.classList.remove("active");
-    galleryModal.style.display = "none";
+    setTimeout(() => {
+        if (!galleryModal.classList.contains("active")) {
+            galleryModal.style.display = "none";
+        }
+    }, 400);
 }
 
 async function handleGalleryFormSubmit(e) {
@@ -799,7 +886,7 @@ async function handleGalleryFormSubmit(e) {
         const docData = {
             headline: document.getElementById("galleryHeadline").value,
             sub_header: document.getElementById("gallerySubHeader").value,
-            category: document.getElementById("galleryCategory").value,
+            category: getSelectedCategory(), // Use helper for chips
             display: document.getElementById("galleryDisplay").checked,
             added_at: serverTimestamp(),
             added_by: doc(db, "Users", currentUserId)
