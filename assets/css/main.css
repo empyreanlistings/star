@@ -3445,6 +3445,7 @@ html[data-theme="light"] .final-cta__sub {
   transition: box-shadow 0.4s ease, transform 0.4s ease;
 }
 
+
 .team-card:hover .team-image {
   box-shadow: 0 0 35px rgba(78, 205, 196, 0.6);
   transform: scale(1.03);
@@ -4223,15 +4224,7 @@ html[data-theme="dark"] #works-lightbox .lightbox-arrow {
   justify-content: start;
 }
 
-.gallery-item.flip-hidden {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
 
-/* ------------------------------------------------
-   GALLERY ITEM – NOW FULLY CLICKABLE
------------------------------------------------- */
 .mixed-gallery .gallery-item {
   position: relative;
   border-radius: 10px;
@@ -4239,8 +4232,7 @@ html[data-theme="dark"] #works-lightbox .lightbox-arrow {
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
   will-change: transform, opacity;
   cursor: pointer;
-  /* ← NEW: Shows it's clickable */
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  transition: box-shadow 0.4s ease;
 }
 
 .mixed-gallery .gallery-item:hover {

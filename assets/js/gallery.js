@@ -1,9 +1,6 @@
 // ================================================================
 // gallery.js — Unified gallery + filters + lightbox (Apple-grade)
 // ================================================================
-if (typeof gsap !== "undefined") {
-  gsap.registerPlugin(Flip);
-}
 
 function initGallery() {
   const galleries = document.querySelectorAll(".mixed-gallery");
@@ -24,65 +21,102 @@ function initGallery() {
     const filterButtons = filterContainer.querySelectorAll(".filter");
     let activeFilter = "all";
 
+    let isAnimating = false;
+
     // ------------------------------------------------
     // FILTER BUTTON HANDLERS
     // ------------------------------------------------
     filterButtons.forEach(button => {
       button.addEventListener("click", () => {
-        if (button.classList.contains("active")) return;
+        if (button.classList.contains("active") || isAnimating) return;
 
         filterButtons.forEach(b => b.classList.remove("active"));
         button.classList.add("active");
 
         activeFilter = button.dataset.filter || "all";
-        runFlip();
+        runGalleryFilter();
       });
     });
 
     // ------------------------------------------------
-    // CORE FLIP (CALM, PROFESSIONAL)
+    // SEQUENTIAL FILTER ANIMATION (CLEAN & STABLE)
     // ------------------------------------------------
-    function runFlip() {
-      // Capture pre-change layout
-      const state = Flip.getState(items, { props: "opacity" });
-
-      // Apply filter
-      items.forEach(item => {
-        const category = item.dataset.category || "all";
-        const shouldShow =
-          activeFilter === "all" || category === activeFilter;
-
-        item.classList.toggle("flip-hidden", !shouldShow);
-        item.style.pointerEvents = shouldShow ? "auto" : "none";
-      });
-
-      // Reduced motion = instant
-      if (prefersReducedMotion) {
-        Flip.from(state, { duration: 0 });
+    function runGalleryFilter() {
+      if (typeof gsap === "undefined") {
+        // Fallback for no GSAP
+        items.forEach(item => {
+          const category = item.dataset.category || "all";
+          const shouldShow = activeFilter === "all" || category === activeFilter;
+          item.style.display = shouldShow ? "" : "none";
+        });
         return;
       }
 
-      // Animate layout change
-      Flip.from(state, {
-        duration: 0.45,
-        ease: "cubic-bezier(0.22, 1, 0.36, 1)", // Apple-like easing
-        absolute: false,
-        scale: false,
-        fade: true,
-        stagger: 0,
-        onEnter: elements =>
-          gsap.fromTo(
-            elements,
-            { opacity: 0 },
-            { opacity: 1, duration: 0.25, ease: "power1.out" }
-          ),
-        onLeave: elements =>
-          gsap.to(elements, {
-            opacity: 0,
-            duration: 0.2,
-            ease: "power1.in"
-          })
+      isAnimating = true;
+
+      const toHide = [];
+      const toShow = [];
+
+      items.forEach(item => {
+        const category = item.dataset.category || "all";
+        const shouldShow = activeFilter === "all" || category === activeFilter;
+        const isCurrentlyVisible = getComputedStyle(item).display !== "none";
+
+        if (shouldShow && !isCurrentlyVisible) {
+          toShow.push(item);
+        } else if (!shouldShow && isCurrentlyVisible) {
+          toHide.push(item);
+        }
       });
+
+      // Reduced motion fallback
+      if (prefersReducedMotion) {
+        toHide.forEach(el => el.style.display = "none");
+        toShow.forEach(el => el.style.display = "");
+        isAnimating = false;
+        return;
+      }
+
+      // Phase 1: Fade out hidden items
+      if (toHide.length) {
+        gsap.to(toHide, {
+          opacity: 0,
+          scale: 0.95,
+          duration: 0.2,
+          ease: "power2.in",
+          onComplete: () => {
+            toHide.forEach(el => el.style.display = "none");
+            showItems();
+          }
+        });
+      } else {
+        showItems();
+      }
+
+      function showItems() {
+        // Prepare toShow items
+        toShow.forEach(el => {
+          el.style.display = "";
+          gsap.set(el, { opacity: 0, scale: 0.95, y: 15 });
+        });
+
+        // Phase 2: Staggered fade in
+        if (toShow.length) {
+          gsap.to(toShow, {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 0.4,
+            stagger: 0.08,
+            ease: "power2.out",
+            onComplete: () => {
+              isAnimating = false;
+            }
+          });
+        } else {
+          isAnimating = false;
+        }
+      }
     }
 
     // ------------------------------------------------
@@ -90,7 +124,7 @@ function initGallery() {
     // ------------------------------------------------
     gallery.addEventListener("click", e => {
       const item = e.target.closest(".gallery-item");
-      if (!item || item.classList.contains("flip-hidden")) return;
+      if (!item || getComputedStyle(item).display === "none") return;
 
       const img = item.querySelector("img");
       if (!img) return;
@@ -106,7 +140,7 @@ function initGallery() {
     });
 
     // Initial layout
-    runFlip();
+    runGalleryFilter();
   });
 
   // ------------------------------------------------
