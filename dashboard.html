@@ -151,8 +151,8 @@
     <!-- Listing Modal -->
     <div id="listingModal" class="modal-overlay">
         <div class="modal-content">
-            <span id="closeModal" class="close-modal">&times;</span>
-            <h3 id="modalTitle" class="modal-title">Add New Property</h3>
+            <span id="closeModal">&times;</span>
+            <h3 id="modalTitle" style="margin-bottom:1.5rem;">Add New Property</h3>
             <form id="listingForm">
                 <input type="hidden" id="listingId">
                 <div class="form-group">
@@ -236,8 +236,9 @@
     <!-- Gallery Modal -->
     <div id="galleryModal" class="modal-overlay">
         <div class="modal-content">
-            <span id="closeGalleryModal" class="close-modal">&times;</span>
-            <h3 id="galleryModalTitle" class="modal-title">Add New Gallery Item</h3>
+            <span id="closeGalleryModal" class="close-modal"
+                style="position:absolute;top:15px;right:20px;font-size:28px;cursor:pointer;">&times;</span>
+            <h3 id="galleryModalTitle" style="margin-bottom:1.5rem;">Add New Gallery Item</h3>
             <form id="galleryForm">
                 <input type="hidden" id="galleryItemId">
                 <div class="form-group">
@@ -254,12 +255,12 @@
 
                 <div class="form-group">
                     <label>Category</label>
-                    <div id="galleryCategoryChips" class="category-chips">
-                        <div class="chip active" data-value="structural">Structural</div>
-                        <div class="chip" data-value="exterior">Exterior</div>
-                        <div class="chip" data-value="interior">Interior</div>
-                        <div class="chip" data-value="pool">Swimming Pools</div>
-                    </div>
+                    <select id="galleryCategory" class="form-control">
+                        <option value="structural">Structural</option>
+                        <option value="exterior">Exterior</option>
+                        <option value="interior">Interior</option>
+                        <option value="pool">Swimming Pools</option>
+                    </select>
                 </div>
 
                 <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
