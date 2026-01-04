@@ -685,8 +685,9 @@ html[data-theme="light"] .container-glass:hover {
   margin: 40px auto;
 }
 
-/* ============================== PROPERTY FILTER CHIPS — BASE ============================== */
-.property-gallery-filters {
+/* ============================== PROPERTY & GALLERY FILTER CHIPS — BASE ============================== */
+.property-gallery-filters,
+.gallery-type-filters {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -694,7 +695,8 @@ html[data-theme="light"] .container-glass:hover {
   order: 0;
 }
 
-.property-gallery-filters>* {
+.property-gallery-filters>*,
+.gallery-type-filters>* {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -747,7 +749,8 @@ html[data-theme="light"] .container-glass:hover {
 
 /* ============================== FILTER CHIPS — DARK MODE ============================== */
 [data-theme="dark"] .gallery-filters>*,
-[data-theme="dark"] .property-gallery-filters>* {
+[data-theme="dark"] .property-gallery-filters>*,
+[data-theme="dark"] .gallery-type-filters>* {
   border: 1px solid var(--text);
   color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(8px);
@@ -755,8 +758,10 @@ html[data-theme="light"] .container-glass:hover {
 
 [data-theme="dark"] .gallery-filters>*:hover,
 [data-theme="dark"] .property-gallery-filters>*:hover,
+[data-theme="dark"] .gallery-type-filters>*:hover,
 [data-theme="dark"] .gallery-filters .filter.active,
-[data-theme="dark"] .property-gallery-filters .filter.active {
+[data-theme="dark"] .property-gallery-filters .filter.active,
+[data-theme="dark"] .gallery-type-filters .filter.active {
   background: #ffffff;
   border-color: #ffffff;
   color: #0f172a;
@@ -764,15 +769,18 @@ html[data-theme="light"] .container-glass:hover {
 
 /* ============================== FILTER CHIPS — LIGHT MODE ============================== */
 [data-theme="light"] .gallery-filters>*,
-[data-theme="light"] .property-gallery-filters>* {
+[data-theme="light"] .property-gallery-filters>*,
+[data-theme="light"] .gallery-type-filters>* {
   border: 1px solid rgba(15, 23, 42, 0.18);
   color: #0b0f1a;
 }
 
 [data-theme="light"] .gallery-filters>*:hover,
 [data-theme="light"] .property-gallery-filters>*:hover,
+[data-theme="light"] .gallery-type-filters>*:hover,
 [data-theme="light"] .gallery-filters .filter.active,
-[data-theme="light"] .property-gallery-filters .filter.active {
+[data-theme="light"] .property-gallery-filters .filter.active,
+[data-theme="light"] .gallery-type-filters .filter.active {
   background: #0f172a;
   border-color: #0f172a;
   color: #ffffff;
