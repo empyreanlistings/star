@@ -66,6 +66,26 @@
 
 }
 
+
+/* ============================== VISIBILITY UTILITIES ============================== */
+.desktop-only {
+  display: block !important;
+}
+
+.mobile-only {
+  display: none !important;
+}
+
+@media (max-width: 991px) {
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: block !important;
+  }
+}
+
 /* ============================== GLOBAL STYLES ============================== */
 body {
   margin: 0;
@@ -3681,7 +3701,8 @@ html[data-theme="light"] .team-email-overlay:hover .icon-box {
 @media (min-width: 992px) {
   .palawan-content {
     grid-template-columns: 1fr 1fr;
-    align-items: start;
+    align-items: stretch;
+    /* Equal height columns */
   }
 }
 
