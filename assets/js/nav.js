@@ -78,6 +78,17 @@ function initHeader() {
     const hbLogoImg = theme === "light" ? "images/homebuyer_light2.png" : "images/homebuyer_dark2.png";
     const hbLogo = document.getElementById("homebuyerLogoMain");
     if (hbLogo) hbLogo.src = hbLogoImg;
+    const hbRibbons = document.querySelectorAll(".property-logo img");
+    hbRibbons.forEach(img => {
+      img.src = "images/homebuyer_dark2.png"; // Per user: always dark for ribbons
+    });
+
+    // Team Card Logos Sync
+    document.querySelectorAll(".team-card .team-image img").forEach(img => {
+      if (img.src.includes("logo2-")) {
+        img.src = theme === "light" ? dark : light;
+      }
+    });
   }
 
   function updateBodyBackground(theme) {
