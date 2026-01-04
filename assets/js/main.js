@@ -789,16 +789,16 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initializeApp() {
-  safeInit("Header", initHeader);
-  safeInit("Animations", initAnimations);
-  safeInit("Carousel", initCarousel);
-  safeInit("Gallery", initGallery);
-  safeInit("Property Filters", initPropertyFilters);
-  safeInit("Property Modal", initPropertyModal);
-  safeInit("Cards", initCards);
-  safeInit("Palawan Gallery", initPalawanGallery);
-  safeInit("Works Gallery Lightbox", initWorksGalleryLightbox);
-  safeInit("Calendly", initCalendly);
+  if (typeof initHeader !== 'undefined') safeInit("Header", initHeader);
+  if (typeof initAnimations !== 'undefined') safeInit("Animations", initAnimations);
+  if (typeof initCarousel !== 'undefined') safeInit("Carousel", initCarousel);
+  if (typeof initGallery !== 'undefined') safeInit("Gallery", initGallery);
+  if (typeof initPropertyFilters !== 'undefined') safeInit("Property Filters", initPropertyFilters);
+  if (typeof initPropertyModal !== 'undefined') safeInit("Property Modal", initPropertyModal);
+  if (typeof initCards !== 'undefined') safeInit("Cards", initCards);
+  if (typeof initPalawanGallery !== 'undefined') safeInit("Palawan Gallery", initPalawanGallery);
+  if (typeof initWorksGalleryLightbox !== 'undefined') safeInit("Works Gallery Lightbox", initWorksGalleryLightbox);
+  if (typeof initCalendly !== 'undefined') safeInit("Calendly", initCalendly);
   loadComponent("#contact-row-placeholder", "contactRC.html");
 }
 
