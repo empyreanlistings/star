@@ -2820,7 +2820,7 @@ html[data-theme="light"] .modal-stats div {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 120px;
+  min-height: 160px;
   overflow: hidden;
   transition: box-shadow 0.35s ease, transform 0.35s ease;
 }
@@ -2914,6 +2914,7 @@ html[data-theme="light"] .card:not(.full-width)::before {
 
 .card:not(.full-width) {
   align-self: start;
+  justify-content: center;
 }
 
 /* ============================== IMAGE ============================== */
@@ -3038,8 +3039,8 @@ html[data-theme="light"] .card:not(.full-width)::before {
 
 /* Highlight active card in grid */
 .card.card-active {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent);
+  border-color: #ffffff;
+  box-shadow: 0 0 0 2px #ffffff;
   transform: scale(0.98);
   transition: all 0.3s ease;
 }
