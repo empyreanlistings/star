@@ -1209,15 +1209,27 @@ function initCards() {
       const title = card.querySelector('h2')?.textContent || '';
       const subtitle = card.querySelector('.card-content > p')?.textContent || '';
       const description = card.querySelector('.card-expand-text')?.innerHTML || '';
-      const imgSrc = card.querySelector('.card-image')?.src || '';
-      const imgAlt = card.querySelector('.card-image')?.alt || '';
+      const cardImg = card.querySelector('.card-image');
+      const imgSrc = cardImg?.getAttribute('src') || cardImg?.src || '';
+      const imgAlt = cardImg?.alt || '';
 
       // Populate expanded card
       expandedTitle.textContent = title;
       expandedSubtitle.textContent = subtitle;
       expandedDescription.innerHTML = description;
-      expandedImage.src = imgSrc;
-      expandedImage.alt = imgAlt;
+
+      if (imgSrc) {
+        expandedImage.style.display = 'block';
+        expandedImage.src = imgSrc;
+        expandedImage.alt = imgAlt;
+
+        // Hide if loading fails to avoid broken icon
+        expandedImage.onerror = () => {
+          expandedImage.style.display = 'none';
+        };
+      } else {
+        expandedImage.style.display = 'none';
+      }
 
       // Mark all cards as inactive
       cards.forEach(c => c.classList.remove('card-active'));
@@ -1343,7 +1355,10 @@ function initCards() {
 
     // Initialize first card on mobile
     if (isMobile && cards.length > 0) {
-      expandCardAtIndex(0);
+      // Small timeout to ensure DOM and images are ready for processing
+      setTimeout(() => {
+        expandCardAtIndex(0);
+      }, 150);
     }
   });
 }

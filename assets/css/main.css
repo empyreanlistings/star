@@ -447,17 +447,17 @@ section {
 /* ===== LIGHT THEME  OVERRIDE ===== */
 
 
-html[data-theme="light"] .-panel {
-  border: 1px solid var(---border-light);
-  box-shadow: var(---shadow-light);
+html[data-theme="light"] .glass-panel {
+  border: 1px solid var(--glass-border-light);
+  box-shadow: var(--glass-shadow-light);
 }
 
-html[data-theme="light"] .-panel::before {
-  background: var(---gloss-light);
+html[data-theme="light"] .glass-panel::before {
+  background: var(--glass-gloss-light);
 }
 
-html[data-theme="light"] .-panel::after {
-  background: var(---sheen-light);
+html[data-theme="light"] .glass-panel::after {
+  background: var(--glass-sheen-light);
 }
 
 
@@ -3671,11 +3671,41 @@ html[data-theme="light"] .team-email-overlay:hover .icon-box {
 }
 
 /* Rest of your styles (about-cta etc.) remain unchanged */
+/* Glass Panel - Standardized CTA or Content Block */
+.glass-panel {
+  text-align: center;
+  padding: 60px 40px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(18px) saturate(1.8);
+  -webkit-backdrop-filter: blur(18px) saturate(1.8);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  margin: 60px auto;
+  max-width: 1000px;
+}
+
+.glass-panel h2 {
+  font-size: 2.2rem;
+  margin-bottom: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.glass-panel p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-bottom: 36px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
 .about-cta {
   margin-top: 100px;
   padding: 70px 40px;
   background: rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
+  border-radius: 20px;
   max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
