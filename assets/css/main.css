@@ -194,7 +194,6 @@ h6 {
 }
 
 p {
-  margin-top: 4px;
   font-size: var(--p-size);
   line-height: var(--p-line);
   color: var(--text);
