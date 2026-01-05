@@ -2492,11 +2492,18 @@ html[data-theme="light"] .modal-close {
 }
 
 /* ============================== IMAGE ============================== */
-.modal-image {
+.modal-image-container {
+  position: relative;
   width: 100%;
   height: 42vh;
-  object-fit: cover;
   margin-bottom: 20px;
+}
+
+.modal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 /* ============================== GLASS PANEL ============================== */

@@ -518,7 +518,8 @@ function initPropertyModal() {
         logoImg.alt = "Paradise Life Homebuyer";
 
         logoDiv.appendChild(logoImg);
-        modal.querySelector(".modal-content").appendChild(logoDiv);
+        const imgContainer = modal.querySelector(".modal-image-container");
+        if (imgContainer) imgContainer.appendChild(logoDiv);
       }
 
       if (typeEl) typeEl.textContent = card.dataset.type || "";
