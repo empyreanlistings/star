@@ -503,16 +503,22 @@ function initPropertyModal() {
       modal.dataset.currentTitle = realTitle;
 
       // Handle Featured Ribbon
+      // Handle Featured Logo
       const isFeatured = card.dataset.featured === "true";
-      const existingRibbon = modal.querySelector(".modal-ribbon");
-      if (existingRibbon) existingRibbon.remove();
+      const existingLogo = modal.querySelector(".property-logo-modal");
+      if (existingLogo) existingLogo.remove();
 
       if (isFeatured) {
-        const ribbon = document.createElement("div");
-        ribbon.className = "modal-ribbon";
-        ribbon.textContent = "Featured";
-        // Append to modal content so it sits over the image (assuming modal-content is relative)
-        modal.querySelector(".modal-content").appendChild(ribbon);
+        const logoDiv = document.createElement("div");
+        logoDiv.className = "property-logo property-logo-modal"; // Re-use property-logo styles
+        // Ensure z-index is higher if needed, but property-logo has z-index: 20 which is fine relative to modal-content
+
+        const logoImg = document.createElement("img");
+        logoImg.src = "images/homebuyer_dark2.png";
+        logoImg.alt = "Paradise Life Homebuyer";
+
+        logoDiv.appendChild(logoImg);
+        modal.querySelector(".modal-content").appendChild(logoDiv);
       }
 
       if (typeEl) typeEl.textContent = card.dataset.type || "";
