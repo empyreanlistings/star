@@ -3096,29 +3096,9 @@ html[data-theme="light"] .card:not(.full-width)::before {
 }
 
 /* ============================== CARD CTA ============================== */
+/* ============================== CARD CTA (HIDDEN) ============================== */
 .card-cta {
-  display: inline-block;
-  margin-top: 14px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  cursor: pointer;
-  user-select: none;
-  transition: opacity 0.25s ease, transform 0.25s ease, color 0.2s ease;
-
-  opacity: 0;
-  transform: translateY(6px);
-}
-
-.grid .card:not(.full-width):hover .card-cta {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Hide CTA in expanded state */
-.card.full-width .card-cta {
-  display: none;
+  display: none !important;
 }
 
 /* ============================== EXPANDED TEXT ============================== */
@@ -3957,9 +3937,10 @@ details {
   overflow-x: auto;
   /* Horizontal scroll */
   overflow-y: hidden;
+  overflow-y: hidden;
   gap: var(--gap);
-  padding: 40px calc(50vw - 600px) 60px calc(50vw - 600px);
-  /* Smart centering padding */
+  padding: 40px 20px 60px 20px;
+  /* Left aligned with 20px padding */
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   /* Firefox */
