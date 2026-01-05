@@ -476,7 +476,7 @@ html[data-theme="light"] .glass-panel::after {
   position: relative;
   z-index: 1;
   width: calc(100% - 80px);
-  max-width: 1200px;
+  max-width: 1400px;
   padding: 40px;
   margin: 40px auto;
   box-sizing: border-box;
@@ -2779,7 +2779,7 @@ html[data-theme="light"] .modal-stats div {
 
 @media (min-width: 992px) {
   .steps-details {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto 40px;
   }
 }
@@ -3683,7 +3683,7 @@ html[data-theme="light"] .team-email-overlay:hover .icon-box {
   -webkit-backdrop-filter: blur(18px) saturate(1.8);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
-  max-width: 1200px;
+  max-width: 1400px;
 }
 
 .glass-panel h2 {
@@ -3705,7 +3705,7 @@ html[data-theme="light"] .team-email-overlay:hover .icon-box {
   padding: 20px 20px;
   background: rgba(255, 255, 255, 0.06);
   border-radius: 20px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -3733,7 +3733,7 @@ html[data-theme="light"] .team-email-overlay:hover .icon-box {
 /* ============================== ABOUT PALAWAN ============================== */
 .about-palawan {
   padding: 120px 20px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
