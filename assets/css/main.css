@@ -1363,14 +1363,11 @@ html[data-theme="dark"] .menu-toggle:hover i {
   position: relative;
   padding: 16px 18px 16px 20px;
   color: #fff;
-  font-weight: 600;
-  font-size: 15.5px;
   border-radius: 10px;
   margin: 4px 0;
   display: flex;
   align-items: center;
   transition: all 0.35s ease;
-  background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(4px);
 }
