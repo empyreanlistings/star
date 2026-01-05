@@ -3677,13 +3677,12 @@ html[data-theme="light"] .team-email-overlay:hover .icon-box {
 /* Glass Panel - Standardized CTA or Content Block */
 .glass-panel {
   text-align: center;
-  padding: 60px 40px;
+  padding: 20px 20px;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(18px) saturate(1.8);
   -webkit-backdrop-filter: blur(18px) saturate(1.8);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
-  margin: 60px auto;
   max-width: 1200px;
 }
 
@@ -3701,7 +3700,6 @@ html[data-theme="light"] .team-email-overlay:hover .icon-box {
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  line-height: 1.6;
 }
 
 .about-cta {
