@@ -502,6 +502,19 @@ function initPropertyModal() {
       const realTitle = card.querySelector(".property-info.primary .property-location")?.textContent || location;
       modal.dataset.currentTitle = realTitle;
 
+      // Handle Featured Ribbon
+      const isFeatured = card.dataset.featured === "true";
+      const existingRibbon = modal.querySelector(".modal-ribbon");
+      if (existingRibbon) existingRibbon.remove();
+
+      if (isFeatured) {
+        const ribbon = document.createElement("div");
+        ribbon.className = "modal-ribbon";
+        ribbon.textContent = "Featured";
+        // Append to modal content so it sits over the image (assuming modal-content is relative)
+        modal.querySelector(".modal-content").appendChild(ribbon);
+      }
+
       if (typeEl) typeEl.textContent = card.dataset.type || "";
 
       const displayedPrice = card.querySelector(".property-price")?.textContent.trim();
