@@ -473,7 +473,7 @@ html[data-theme="light"] .glass-panel::after {
   position: relative;
   z-index: 1;
   width: calc(100% - 80px);
-  max-width: 1400px;
+  max-width: 1200px;
   padding: 40px;
   margin: 40px auto;
   box-sizing: border-box;
@@ -3681,7 +3681,7 @@ html[data-theme="light"] .team-email-overlay:hover .icon-box {
   border: 1px solid var(--glass-border);
   border-radius: 20px;
   margin: 60px auto;
-  max-width: 1000px;
+  max-width: 1200px;
 }
 
 .glass-panel h2 {
@@ -3702,11 +3702,11 @@ html[data-theme="light"] .team-email-overlay:hover .icon-box {
 }
 
 .about-cta {
-  margin-top: 100px;
-  padding: 70px 40px;
+  margin-top: 40px;
+  padding: 40px 20px;
   background: rgba(255, 255, 255, 0.06);
   border-radius: 20px;
-  max-width: 1000px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -3734,7 +3734,7 @@ html[data-theme="light"] .team-email-overlay:hover .icon-box {
 /* ============================== ABOUT PALAWAN ============================== */
 .about-palawan {
   padding: 120px 20px;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -3911,7 +3911,7 @@ details {
   grid-template-columns: repeat(2, 1fr);
   grid-auto-rows: 220px;
   gap: 10px;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
