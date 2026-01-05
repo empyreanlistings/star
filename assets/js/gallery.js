@@ -7,100 +7,107 @@ function initKaiAndIslaGallery() {
     "(prefers-reduced-motion: reduce)"
   ).matches;
 
-  // Shared state for lightbox navigation
-  let currentItems = [];
-  let currentIndex = -1;
+  // Global State for Lightbox (attached to window for cross-module access if needed)
+  if (!window.KaiGalleryState) {
+    window.KaiGalleryState = {
+      items: [],
+      index: -1
+    };
+  }
 
   galleries.forEach(gallery => {
-    let activeFilter = "all";
-    let isAnimating = false;
-    const limit = parseInt(gallery.dataset.limit) || Infinity;
-
-    // 1. Filter Initialization
+    // Determine filter container
     const filterContainer = gallery.closest(".container-glass")?.querySelector(".gallery-filters");
+
+    // Store active filter on the gallery element to persist across re-renders if needed
+    if (!gallery.dataset.activeFilter) {
+      gallery.dataset.activeFilter = "all";
+    }
+
+    // 1. Filter Initialization (Bind only once)
     if (filterContainer && !filterContainer.dataset.initialized) {
       filterContainer.dataset.initialized = "true";
       const filterButtons = filterContainer.querySelectorAll(".filter");
       filterButtons.forEach(button => {
         button.addEventListener("click", () => {
-          if (button.classList.contains("active") || isAnimating) return;
+          if (button.classList.contains("active")) return;
           filterButtons.forEach(b => b.classList.remove("active"));
           button.classList.add("active");
-          activeFilter = button.dataset.filter || "all";
-          runGalleryFilter();
+
+          gallery.dataset.activeFilter = button.dataset.filter || "all";
+          runGalleryFilter(gallery);
         });
       });
     }
 
-    // 2. Filter Logic
-    function runGalleryFilter() {
-      const allItems = Array.from(gallery.querySelectorAll(".gallery-item"));
-      isAnimating = true;
-
-      const toHide = [];
-      const toShow = [];
-      let visibleCount = 0;
-
-      allItems.forEach(item => {
-        const category = item.dataset.category || "all";
-        const matchesFilter = activeFilter === "all" || category === activeFilter;
-
-        let shouldShow = false;
-        if (matchesFilter) {
-          if (visibleCount < limit) {
-            shouldShow = true;
-            visibleCount++;
-          }
-        }
-
-        const isCurrentlyVisible = getComputedStyle(item).display !== "none";
-        if (shouldShow && !isCurrentlyVisible) toShow.push(item);
-        else if (!shouldShow && isCurrentlyVisible) toHide.push(item);
-      });
-
-      if (toHide.length) {
-        gsap.to(toHide, {
-          opacity: 0, scale: 0.95, duration: 0.2, ease: "power2.in",
-          onComplete: () => {
-            toHide.forEach(el => el.style.display = "none");
-            showItems();
-          }
-        });
-      } else showItems();
-
-      function showItems() {
-        toShow.forEach(el => {
-          el.style.display = "";
-          gsap.set(el, { opacity: 0, scale: 0.95, y: 15 });
-        });
-        if (toShow.length) {
-          gsap.to(toShow, {
-            opacity: 1, scale: 1, y: 0, duration: 0.4, stagger: 0.08, ease: "power2.out",
-            onComplete: () => { isAnimating = false; updateCurrentItems(); }
-          });
-        } else { isAnimating = false; updateCurrentItems(); }
-      }
-    }
-
-    function updateCurrentItems() {
-      currentItems = Array.from(gallery.querySelectorAll(".gallery-item")).filter(el => getComputedStyle(el).display !== "none");
-    }
-
-    // 3. Lightbox Logic
-    if (!gallery.dataset.initialized) {
-      gallery.dataset.initialized = "true";
+    // 2. Lightbox Initialization (Bind only once)
+    if (!gallery.dataset.initializedLightbox) {
+      gallery.dataset.initializedLightbox = "true";
       gallery.addEventListener("click", e => {
         const item = e.target.closest(".gallery-item");
         if (!item || getComputedStyle(item).display === "none") return;
 
-        updateCurrentItems();
-        currentIndex = currentItems.indexOf(item);
+        // Update global state with CURRENT visible items
+        const visibleItems = Array.from(gallery.querySelectorAll(".gallery-item")).filter(el => getComputedStyle(el).display !== "none");
+        window.KaiGalleryState.items = visibleItems;
+        window.KaiGalleryState.index = visibleItems.indexOf(item);
+
         openLightbox(item);
       });
     }
 
-    runGalleryFilter();
+    // 3. Run Filter Logic (ALWAYS run this to handle new items)
+    runGalleryFilter(gallery);
   });
+
+  function runGalleryFilter(gallery) {
+    const activeFilter = gallery.dataset.activeFilter || "all";
+    const limit = parseInt(gallery.dataset.limit) || Infinity;
+    const allItems = Array.from(gallery.querySelectorAll(".gallery-item"));
+
+    const toHide = [];
+    const toShow = [];
+    let visibleCount = 0;
+
+    allItems.forEach(item => {
+      const category = item.dataset.category || "all";
+      const matchesFilter = activeFilter === "all" || category === activeFilter;
+
+      let shouldShow = false;
+      if (matchesFilter) {
+        if (visibleCount < limit) {
+          shouldShow = true;
+          visibleCount++;
+        }
+      }
+
+      const isCurrentlyVisible = getComputedStyle(item).display !== "none";
+      if (shouldShow && !isCurrentlyVisible) toShow.push(item);
+      else if (!shouldShow && isCurrentlyVisible) toHide.push(item);
+    });
+
+    if (toHide.length) {
+      gsap.to(toHide, {
+        opacity: 0, scale: 0.95, duration: 0.2, ease: "power2.in",
+        onComplete: () => {
+          toHide.forEach(el => el.style.display = "none");
+          showItems(toShow);
+        }
+      });
+    } else showItems(toShow);
+  }
+
+  function showItems(items) {
+    items.forEach(el => {
+      el.style.display = "";
+      gsap.set(el, { opacity: 0, scale: 0.95, y: 15 });
+    });
+    if (items.length) {
+      gsap.to(items, {
+        opacity: 1, scale: 1, y: 0, duration: 0.4, stagger: 0.08, ease: "power2.out"
+      });
+    }
+  }
 
   function openLightbox(item) {
     const img = item.querySelector("img");
@@ -123,7 +130,7 @@ function initKaiAndIslaGallery() {
     document.body.style.overflow = "hidden";
   }
 
-  // 4. Global Lightbox Controls
+  // 4. Global Lightbox Controls (Bind only once)
   const lbItems = [document.getElementById("works-lightbox"), document.getElementById("lightbox")];
   lbItems.forEach(lightbox => {
     if (!lightbox || lightbox.dataset.initializedNav) return;
@@ -141,31 +148,35 @@ function initKaiAndIslaGallery() {
   });
 
   function navigateLightbox(dir) {
-    if (currentItems.length <= 1) return;
-    currentIndex = (currentIndex + dir + currentItems.length) % currentItems.length;
+    const state = window.KaiGalleryState;
+    if (!state || state.items.length <= 1) return;
 
-    const nextItem = currentItems[currentIndex];
+    state.index = (state.index + dir + state.items.length) % state.items.length;
+    const nextItem = state.items[state.index];
+
     const lightboxImg = document.getElementById("works-lightbox-img") || document.getElementById("lightbox-img");
     const caption = document.querySelector(".lightbox-caption");
 
     if (window.gsap) {
       gsap.to(lightboxImg, {
         opacity: 0, duration: 0.2, onComplete: () => {
-          const img = nextItem.querySelector("img");
-          lightboxImg.src = img.src;
-          lightboxImg.alt = img.alt || "";
-          const overlay = nextItem.querySelector(".gallery-overlay");
-          if (caption && overlay) caption.innerHTML = overlay.innerHTML;
+          updateLightboxContent(nextItem, lightboxImg, caption);
           gsap.to(lightboxImg, { opacity: 1, duration: 0.2 });
         }
       });
     } else {
-      const img = nextItem.querySelector("img");
-      lightboxImg.src = img.src;
-      lightboxImg.alt = img.alt || "";
-      const overlay = nextItem.querySelector(".gallery-overlay");
-      if (caption && overlay) caption.innerHTML = overlay.innerHTML;
+      updateLightboxContent(nextItem, lightboxImg, caption);
     }
+  }
+
+  function updateLightboxContent(item, imgElem, captionElem) {
+    const img = item.querySelector("img");
+    if (img) {
+      imgElem.src = img.src;
+      imgElem.alt = img.alt || "";
+    }
+    const overlay = item.querySelector(".gallery-overlay");
+    if (captionElem && overlay) captionElem.innerHTML = overlay.innerHTML;
   }
 }
 
@@ -220,7 +231,7 @@ if (scrollContainer && prevBtn && nextBtn) {
   setTimeout(updateArrows, 100);
   window.addEventListener("resize", updateArrows);
 }
-}
+
 
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initKaiAndIslaGallery);
 else initKaiAndIslaGallery();
