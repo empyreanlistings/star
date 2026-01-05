@@ -54,6 +54,27 @@ function safeInit(name, fn) {
   }
 }
 
+/**
+ * Utility to prevent background scroll jumping when modals open.
+ * Uses padding compensation for browsers that don't fully support scrollbar-gutter.
+ */
+function toggleScrollLock(lock) {
+  const isMobile = window.innerWidth <= 768;
+  if (lock) {
+    // Only apply padding compensation on desktop where scrollbars occupy space
+    if (!isMobile) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      }
+    }
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+    document.body.style.paddingRight = "";
+  }
+}
+
 // ================================================================
 // SAFE GSAP / FLIP HELPERS
 // ================================================================
@@ -386,7 +407,7 @@ function initPropertyModal() {
     const open = () => {
       overlay.classList.add("open");
       modal.classList.add("open");
-      document.body.style.overflow = "hidden";
+      toggleScrollLock(true);
 
       // NUCLEAR FORCE VISIBILITY
       overlay.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483647 !important;";
@@ -408,7 +429,7 @@ function initPropertyModal() {
     const close = () => {
       overlay.classList.remove("open");
       modal.classList.remove("open");
-      document.body.style.overflow = "";
+      toggleScrollLock(false);
 
       // RESET NUCLEAR STYLES
       overlay.style.cssText = "";
@@ -1074,13 +1095,13 @@ function initPalawanGallery() {
     lightbox.removeAttribute("aria-hidden");
     lightbox.classList.add("open");
     document.body.classList.add("lightbox-open");
-    document.body.style.overflow = "hidden";
+    toggleScrollLock(true);
   };
 
   const close = () => {
     lightbox.classList.remove("open");
     document.body.classList.remove("lightbox-open");
-    document.body.style.overflow = "";
+    toggleScrollLock(false);
 
     // Add inert and aria-hidden AFTER removing open class
     setTimeout(() => {
