@@ -965,39 +965,38 @@ body {
   gap: 20px;
   padding: 0 14px;
   height: 30px;
-  border: 1px solid var(--text);
+  border: none;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
+  background: transparent;
   flex-shrink: 0;
   order: 0;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: border-color 0.25s ease, background 0.25s ease;
+  letter-spacing: 0.8px;
+  transition: all 0.25s ease;
 }
 
 [data-theme="light"] .price-filter-inline {
-  border: 1px solid rgba(15, 23, 42, 0.18);
+  border: none;
   color: #0b0f1a;
 }
 
-/* Light mode hover — border only */
+/* Light mode hover */
 [data-theme="light"] .price-filter-inline:hover {
-  border: 1px solid rgba(15, 23, 42, 0.18);
+  border: none;
 }
 
 .price-filter-inline:hover {
-  background: rgba(78, 205, 196, 0.1);
-  border-color: var(--text);
+  background: transparent;
 }
 
 .price-label,
 #priceRangeValue,
 #dashPriceRangeValue {
   font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 1px;
+  font-weight: 400;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
   color: var(--text);
 }
