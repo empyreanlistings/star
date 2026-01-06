@@ -1241,7 +1241,6 @@ function initCards() {
           <h2 class="expanded-title"></h2>
           <p class="expanded-subtitle"></p>
           <div class="card-expand-text expanded-description"></div>
-          <button class="expanded-close-btn">CLOSE</button>
         </div>
         <button class="card-nav card-nav-right" aria-label="Next card"></button>
       `;
@@ -1443,13 +1442,15 @@ function initCards() {
 
     document.addEventListener('keydown', handleKeydown);
 
-    // Initialize first card on mobile
-    if (isMobile && cards.length > 0) {
-      // Small timeout to ensure DOM and images are ready for processing
-      setTimeout(() => {
+    document.addEventListener('keydown', handleKeydown);
+
+    // Initialize first card on load for both desktop and mobile
+    // Small timeout to ensure DOM and images are ready for processing
+    setTimeout(() => {
+      if (cards.length > 0) {
         expandCardAtIndex(0);
-      }, 150);
-    }
+      }
+    }, 150);
   });
 }
 
