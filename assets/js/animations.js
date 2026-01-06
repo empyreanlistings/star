@@ -232,8 +232,9 @@ function initCarouselLogic(heroCarousel, revealCarouselFn) {
 window.initAnimations = initAnimations;
 
 // Auto-init fallback
-if (document.readyState === 'complete') {
-  initAnimations();
-} else {
-  window.addEventListener('load', initAnimations);
-}
+// Auto-init fallback REMOVED to prevent duplicate calls
+// if (document.readyState === 'complete') {
+//   initAnimations();
+// } else {
+//   window.addEventListener('load', initAnimations);
+// }

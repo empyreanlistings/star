@@ -233,6 +233,7 @@ if (scrollContainer && prevBtn && nextBtn) {
 }
 
 
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initKaiAndIslaGallery);
-else initKaiAndIslaGallery();
+// Auto-init REMOVED to prevent duplicate calls
+// if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initKaiAndIslaGallery);
+// else initKaiAndIslaGallery();
 window.initGallery = initKaiAndIslaGallery;

@@ -85,4 +85,8 @@ function renderPalawanGallery(gallery) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", initPalawanGallery);
+// Expose globally for main.js
+window.initPalawanGalleryFirebase = initPalawanGallery;
+
+// Auto-init REMOVED
+// document.addEventListener("DOMContentLoaded", initPalawanGallery);

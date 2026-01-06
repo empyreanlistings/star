@@ -92,4 +92,8 @@ function renderGalleryItems(gallery) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", initDynamicGallery);
+// Expose globally for main.js
+window.initDynamicGallery = initDynamicGallery;
+
+// Auto-init REMOVED
+// document.addEventListener("DOMContentLoaded", initDynamicGallery);

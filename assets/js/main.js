@@ -841,7 +841,12 @@ function initializeApp() {
   if (typeof initPropertyModal !== 'undefined') safeInit("Property Modal", initPropertyModal);
   if (typeof initHowItWorks !== 'undefined') safeInit("How It Works", initHowItWorks);
   if (typeof initServices !== 'undefined') safeInit("Services", initServices);
-  if (typeof initPalawanGallery !== 'undefined') safeInit("Palawan Gallery", initPalawanGallery);
+  // Initialize Firebase Galleries (Data Sync)
+  if (typeof window.initDynamicGallery !== 'undefined') safeInit("Dynamic Gallery (Firebase)", window.initDynamicGallery);
+  if (typeof window.initPalawanGalleryFirebase !== 'undefined') safeInit("Palawan Gallery (Firebase)", window.initPalawanGalleryFirebase);
+
+  // Initialize Scroll/Lightbox Logic
+  if (typeof initPalawanGallery !== 'undefined') safeInit("Palawan Gallery (Scroll/Lightbox)", initPalawanGallery);
   // Lightbox handled in gallery.js
   if (typeof initCalendly !== 'undefined') safeInit("Calendly", initCalendly);
   loadComponent("#contact-row-placeholder", "contactRC.html");
