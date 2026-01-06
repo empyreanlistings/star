@@ -144,6 +144,7 @@ function initHeader() {
   function closeMenu() {
     mobileMenu?.classList.remove("open");
     menuOverlay?.classList.remove("active");
+    menuToggle?.classList.remove("active");
     body.classList.remove("menu-open");
     showTopBar();
     nav.style.top = `${topBar.offsetHeight}px`;

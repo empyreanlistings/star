@@ -1237,9 +1237,26 @@ html[data-theme="light"] .menu-toggle i {
   color: #222;
 }
 
-/* When menu is open */
+/* When menu is open - Toggle to X */
+.menu-toggle.active i::before {
+  content: "\f00d";
+  /* FontAwesome 'times' (X) icon */
+}
+
 .menu-toggle.active i {
   transform: rotate(90deg);
+  /* Keep same color as non-active state unless hovered */
+  color: inherit;
+}
+
+/* Ensure light mode inherits correctly when active */
+html[data-theme="light"] .menu-toggle.active i {
+  color: #222;
+}
+
+/* Hover state remains accent for both open/closed */
+.menu-toggle:hover i,
+.menu-toggle.active:hover i {
   color: var(--accent);
 }
 
