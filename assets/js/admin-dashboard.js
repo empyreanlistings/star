@@ -567,22 +567,17 @@ function initDashboardFilters() {
     let minPrice = 0;
     let maxPrice = 50000000;
 
-    const formatPrice = (val) => {
-        const num = parseInt(val);
-        if (num >= 1000000) return `₱${(num / 1000000).toFixed(1)}M`;
-        if (num >= 1000) return `₱${(num / 1000).toFixed(0)}K`;
-        return `₱${num}`;
+    const formatPrice = v => {
+        if (v >= 1_000_000) return `₱${(v / 1_000_000).toFixed(v % 1_000_000 ? 1 : 0)}m`;
+        if (v >= 1_000) return `₱${(v / 1_000).toFixed(0)}k`;
+        return `₱${v}`;
     };
 
     const updatePriceDisplay = () => {
         if (minPrice === 0 && maxPrice === 50000000) {
             priceRangeValue.textContent = 'Any Price';
-        } else if (minPrice === 0) {
-            priceRangeValue.textContent = `Up to ${formatPrice(maxPrice)}`;
-        } else if (maxPrice === 50000000) {
-            priceRangeValue.textContent = `${formatPrice(minPrice)}+`;
         } else {
-            priceRangeValue.textContent = `${formatPrice(minPrice)} - ${formatPrice(maxPrice)}`;
+            priceRangeValue.textContent = `${formatPrice(minPrice)} – ${formatPrice(maxPrice)}`;
         }
     };
 
@@ -610,6 +605,25 @@ function initDashboardFilters() {
                 row.style.display = 'none';
             }
         });
+
+        // Show empty state if no results
+        let noResultsRow = tbody.querySelector('.no-results-row');
+        if (visibleCount === 0) {
+            if (!noResultsRow) {
+                noResultsRow = document.createElement('tr');
+                noResultsRow.className = 'no-results-row';
+                noResultsRow.innerHTML = `
+                    <td colspan="9" style="text-align:center; padding:3rem; opacity:0.6;">
+                        <i class="fas fa-search" style="font-size:2rem; margin-bottom:1rem; display:block;"></i>
+                        <strong>Nothing here. Try updating your filters</strong>
+                    </td>
+                `;
+                tbody.appendChild(noResultsRow);
+            }
+            noResultsRow.style.display = '';
+        } else if (noResultsRow) {
+            noResultsRow.style.display = 'none';
+        }
 
         console.log(`Dashboard filter: ${visibleCount} listings visible`);
     };

@@ -979,7 +979,8 @@ body {
 }
 
 .price-label,
-#priceRangeValue {
+#priceRangeValue,
+#dashPriceRangeValue {
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 1px;
@@ -987,7 +988,8 @@ body {
   color: var(--text);
 }
 
-#priceRangeValue {
+#priceRangeValue,
+#dashPriceRangeValue {
   min-width: 110px;
   text-align: right;
 }
