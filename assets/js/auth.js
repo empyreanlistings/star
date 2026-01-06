@@ -37,6 +37,13 @@ async function handleLogin(e) {
 async function handleLogout() {
     try {
         isLoggingOut = true;
+
+        // Clear sensitive admin caches
+        localStorage.removeItem("kai_isla_listings");
+        localStorage.removeItem("kai_isla_gallery");
+        localStorage.removeItem("kai_isla_palawan_gallery");
+        // Let's keep theme but definitely clear the data.
+
         await signOut(auth);
         // Redirect handled in onAuthStateChanged
     } catch (error) {
