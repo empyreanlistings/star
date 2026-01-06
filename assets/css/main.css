@@ -2244,8 +2244,8 @@ html[data-theme="light"] .property-logo {
 .property-logo-modal {
   top: 20px;
   right: 20px;
-  width: 80px;
-  height: 80px;
+  width: 150px;
+  height: 150px;
   /* Slightly larger for modal context if needed, or keep standard */
   z-index: 50;
   /* Ensure it sits above everything */
