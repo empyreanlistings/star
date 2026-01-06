@@ -703,7 +703,127 @@ html[data-theme="light"] .container-glass:hover {
   order: 0;
 }
 
-.property-gallery-filters>*,
+.property-gallery-filters>* {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  color: var(--text);
+  background: var(--glass-bg);
+}
+
+/* HOW IT WORKS NAV */
+.how-it-works-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  list-style: none;
+  padding: 0;
+  margin: 30px 0 40px;
+}
+
+.how-it-works-nav li {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Vertical Divider (30px) */
+.how-it-works-nav li:not(:last-child)::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 30px;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 0 5px;
+}
+
+/* Light mode divider override */
+html[data-theme="light"] .how-it-works-nav li:not(:last-child)::after {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.how-it-works-nav .nav-btn {
+  background: transparent;
+  border: none;
+  font-family: 'Figtree', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  color: var(--white);
+  padding: 8px 16px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s ease;
+  text-transform: uppercase;
+}
+
+.how-it-works-nav .nav-btn::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  /* Center the underline animation */
+  background-color: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.how-it-works-nav .nav-btn:hover,
+.how-it-works-nav .nav-btn.active {
+  color: var(--accent);
+}
+
+.how-it-works-nav .nav-btn:hover::after,
+.how-it-works-nav .nav-btn.active::after {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .how-it-works-nav {
+    gap: 10px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Hide dividers on mobile since it's scrollable */
+  .how-it-works-nav li:not(:last-child)::after {
+    display: none;
+  }
+
+  .how-it-works-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .how-it-works-nav .nav-btn {
+    white-space: nowrap;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
+
 .gallery-type-filters>* {
   display: flex;
   align-items: center;
