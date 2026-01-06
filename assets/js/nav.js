@@ -151,6 +151,7 @@ function initHeader() {
 
   menuToggle?.addEventListener("click", () => {
     const open = mobileMenu.classList.toggle("open");
+    menuToggle.classList.toggle("active", open);
     menuOverlay.classList.toggle("active", open);
     body.classList.toggle("menu-open", open);
     open ? showTopBar() : handleScroll();

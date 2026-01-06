@@ -1368,15 +1368,16 @@ html[data-theme="dark"] .menu-toggle:hover i {
   display: flex;
   align-items: center;
   transition: all 0.35s ease;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(4px);
+  border: none;
+  background: transparent;
+  backdrop-filter: none;
 }
 
 .mobile-menu a:hover {
   color: var(--accent);
-  background: rgba(244, 196, 48, 0.12);
-  transform: translateX(4px);
-  box-shadow: 0 8px 20px rgba(244, 196, 48, 0.18);
+  background: transparent;
+  transform: none;
+  box-shadow: none;
 }
 
 body.menu-open {
@@ -1397,7 +1398,7 @@ html[data-theme="light"] .mobile-menu a {
 
 html[data-theme="light"] .mobile-menu a:hover {
   color: var(--accent);
-  background: rgba(244, 196, 48, 0.12);
+  background: transparent;
 }
 
 html[data-theme="light"] .mobile-menu a i {
