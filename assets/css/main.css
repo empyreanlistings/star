@@ -6142,7 +6142,7 @@ html[data-theme="light"] .btn-copy:hover {
   box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   text-align: center;
   transition: var(--transition);
