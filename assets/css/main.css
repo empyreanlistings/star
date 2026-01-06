@@ -1275,7 +1275,7 @@ html[data-theme="dark"] .menu-toggle:hover i {
 /* ================= MOBILE MENU ================= */
 .mobile-menu {
   position: fixed;
-  top: 0;
+  top: 40px;
   right: 0;
   height: 100vh;
   background: rgba(0, 0, 0, 0.95);
@@ -1391,8 +1391,8 @@ html[data-theme="light"] .mobile-menu {
 
 html[data-theme="light"] .mobile-menu a {
   color: #000;
-  background: rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: transparent;
+  border: none;
 }
 
 html[data-theme="light"] .mobile-menu a:hover {
