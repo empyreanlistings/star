@@ -28,6 +28,8 @@ let currentUserCompany = null; // Store user's company reference
 let currentUserId = null; // Store current user's UID
 let galleryModal;
 let isGalleryEditMode = false;
+let palawanGalleryModal;
+let isPalawanGalleryEditMode = false;
 
 // Init
 document.addEventListener("DOMContentLoaded", () => {
@@ -834,6 +836,7 @@ function initGalleryModalEvents() {
     if (form) form.onsubmit = handleGalleryFormSubmit;
 
     initCategoryChips();
+    console.log("   ✅ Gallery Modal Events initialized");
 }
 
 function openGalleryModal(edit = false) {
@@ -920,10 +923,18 @@ async function handleGalleryFormSubmit(e) {
 }
 
 function resizeImage(file, maxWidth) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const reader = new FileReader();
+        reader.onerror = (err) => {
+            console.error("FileReader error:", err);
+            reject(new Error("Failed to read file"));
+        };
         reader.onload = (e) => {
             const img = new Image();
+            img.onerror = (err) => {
+                console.error("Image load error:", err);
+                reject(new Error("Failed to load image"));
+            };
             img.onload = () => {
                 const canvas = document.createElement("canvas");
                 let width = img.width;
@@ -939,10 +950,14 @@ function resizeImage(file, maxWidth) {
                 const ctx = canvas.getContext("2d");
                 ctx.drawImage(img, 0, 0, width, height);
 
-                canvas.toBlob((blob) => resolve(blob), file.type, 0.85);
+                canvas.toBlob((blob) => {
+                    if (blob) resolve(blob);
+                    else reject(new Error("Canvas toBlob failed"));
+                }, file.type, 0.85);
             };
             img.src = e.target.result;
         };
+        reader.readAsDataURL(file);
     });
 }
 
@@ -952,12 +967,14 @@ function resizeImage(file, maxWidth) {
 
 const PALAWAN_GALLERY_CACHE_KEY = "kai_isla_palawan_gallery";
 let activePalawanGalleryListener = null;
-let palawanGalleryModal;
-let isPalawanGalleryEditMode = false;
 
 function initPalawanGallerySync() {
+    console.log("🛠️ [Palawan] Initializing Palawan Gallery Sync...");
     const tbody = document.getElementById("palawanGalleryTableBody");
-    if (!tbody) return;
+    if (!tbody) {
+        console.warn("   ❌ palawanGalleryTableBody NOT FOUND");
+        return;
+    }
 
     if (activePalawanGalleryListener) {
         activePalawanGalleryListener();
@@ -1039,16 +1056,21 @@ async function handlePalawanGalleryEdit(e) {
 }
 
 function initPalawanGalleryModalEvents() {
+    console.log("🛠️ [Palawan] Initializing Palawan Gallery Modal Events...");
     palawanGalleryModal = document.getElementById("palawanGalleryModal");
     const addBtn = document.getElementById("addPalawanGalleryBtn");
     const closeBtn = document.getElementById("closePalawanGalleryModal");
 
+    console.log("   🔍 Palawan Elements:", { palawanGalleryModal, addBtn, closeBtn });
+
     if (!palawanGalleryModal) {
-        console.error("Palawan Gallery Modal NOT FOUND");
+        console.error("   ❌ Palawan Gallery Modal NOT FOUND");
         return;
     }
 
-    if (addBtn) addBtn.onclick = () => openPalawanGalleryModal(false);
+    if (addBtn) {
+        addBtn.onclick = () => openPalawanGalleryModal(false);
+    }
     if (closeBtn) closeBtn.onclick = closePalawanGalleryModal;
 
     window.addEventListener("click", (e) => {
@@ -1111,16 +1133,24 @@ async function handlePalawanGalleryFormSubmit(e) {
     status.textContent = "Processing image...";
 
     try {
+        console.log("Palawan Gallery Form Submission Started");
         let imageUrl = null;
         const fileInput = document.getElementById("palawanGalleryImage");
 
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
+            console.log("Resizing image:", file.name);
             const resizedBlob = await resizeImage(file, 1000);
+            console.log("Image resized, uploading to storage...");
             status.textContent = "Uploading optimized image...";
             const storageRef = ref(storage, `palawan-gallery/${Date.now()}_${file.name}`);
             await uploadBytes(storageRef, resizedBlob);
             imageUrl = await getDownloadURL(storageRef);
+            console.log("Image uploaded, URL:", imageUrl);
+        }
+
+        if (!currentUserId) {
+            throw new Error("User session not found. Please refresh page.");
         }
 
         const docData = {
@@ -1133,15 +1163,18 @@ async function handlePalawanGalleryFormSubmit(e) {
 
         if (imageUrl) docData.image = imageUrl;
 
+        console.log("Saving document to Firestore:", docData);
         if (isPalawanGalleryEditMode) {
             await updateDoc(doc(db, "PalawanGallery", id), docData);
         } else {
             await addDoc(collection(db, "PalawanGallery"), docData);
         }
+        console.log("Document saved successfully");
 
         localStorage.removeItem(PALAWAN_GALLERY_CACHE_KEY);
         closePalawanGalleryModal();
     } catch (err) {
+        console.error("Palawan Gallery Upload Error:", err);
         alert("Upload failed: " + err.message);
     } finally {
         submitBtn.disabled = false;

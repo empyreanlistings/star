@@ -1878,8 +1878,15 @@ html[data-theme="light"] .hero-welcome-text h1 {
   transition: transform 0.3s ease, opacity 0.4s ease;
 }
 
-.slide-content h1 {
-  margin-bottom: 0.25em;
+.slide-text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  align-items: center;
+}
+
+.slide-content h2 {
   line-height: 1;
 }
 
@@ -1928,9 +1935,12 @@ html[data-theme="light"] .hero-slide:hover .slide-image {
   }
 
   .slide-content {
-    flex: 1;
     padding: 24px 26px 30px;
     border-radius: 0 0 10px 10px;
+  }
+
+  .slide-text {
+    gap: 8px;
   }
 }
 
