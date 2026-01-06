@@ -58,14 +58,18 @@ function renderGalleryItems(gallery) {
     const container = document.querySelector(".mixed-gallery");
     if (!container) return;
 
-    console.log(`🚀 [Gallery] Rendering ${gallery.length} dynamic items`);
+    // Check if we're on index.html - limit to 12 images
+    const isIndexPage = window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
+    const displayGallery = isIndexPage ? gallery.slice(0, 12) : gallery;
+
+    console.log(`🚀 [Gallery] Rendering ${displayGallery.length} dynamic items${isIndexPage ? ' (limited to 12 for index)' : ''}`);
 
     // Sort by added_at descending
-    gallery.sort((a, b) => (b.added_at?.seconds || 0) - (a.added_at?.seconds || 0));
+    displayGallery.sort((a, b) => (b.added_at?.seconds || 0) - (a.added_at?.seconds || 0));
 
     container.innerHTML = "";
 
-    gallery.forEach(item => {
+    displayGallery.forEach(item => {
         const div = document.createElement("div");
         div.className = "gallery-item";
         div.dataset.category = item.category || "all";

@@ -266,8 +266,8 @@ img {
   --parent-border-light: rgba(255, 255, 255, 0.50);
   --parent-glow-light: rgba(255, 255, 255, 0.45);
 
-  --parent-blur: 40px;
-  --parent-saturation: 180%;
+  --parent-blur: 10px;
+  --parent-saturation: 300%;
   --parent-radius: 24px;
 
   /* Ambient grain layer */
