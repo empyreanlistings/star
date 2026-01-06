@@ -709,19 +709,20 @@ html[data-theme="light"] .container-glass:hover {
   justify-content: center;
   gap: 8px;
   height: 30px;
-  padding: 0 18px;
+  padding: 0 10px;
   border-radius: 10px;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.8px;
   white-space: nowrap;
   cursor: pointer;
-  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
   color: var(--text);
-  background: var(--glass-bg);
+  background: transparent;
+  border: none;
 }
 
 /* HOW IT WORKS NAV */
@@ -894,9 +895,7 @@ body {
 [data-theme="dark"] .gallery-filters>*,
 [data-theme="dark"] .property-gallery-filters>*,
 [data-theme="dark"] .gallery-type-filters>* {
-  border: 1px solid var(--text);
   color: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(8px);
 }
 
 [data-theme="dark"] .gallery-filters>*:hover,
@@ -905,16 +904,16 @@ body {
 [data-theme="dark"] .gallery-filters .filter.active,
 [data-theme="dark"] .property-gallery-filters .filter.active,
 [data-theme="dark"] .gallery-type-filters .filter.active {
-  background: #ffffff;
-  border-color: #ffffff;
-  color: #0f172a;
+  background: transparent;
+  border-color: transparent;
+  color: #ffffff;
+  font-weight: 800;
 }
 
 /* ============================== FILTER CHIPS — LIGHT MODE ============================== */
 [data-theme="light"] .gallery-filters>*,
 [data-theme="light"] .property-gallery-filters>*,
 [data-theme="light"] .gallery-type-filters>* {
-  border: 1px solid rgba(15, 23, 42, 0.18);
   color: #0b0f1a;
 }
 
@@ -924,16 +923,16 @@ body {
 [data-theme="light"] .gallery-filters .filter.active,
 [data-theme="light"] .property-gallery-filters .filter.active,
 [data-theme="light"] .gallery-type-filters .filter.active {
-  background: #0f172a;
-  border-color: #0f172a;
-  color: #ffffff;
+  background: transparent;
+  border-color: transparent;
+  color: #0b0f1a;
+  font-weight: 800;
 }
 
 /* ===== Active Shine ===== */
 .gallery-filters .filter.active::before,
 .property-gallery-filters .filter.active::before {
-  content: '';
-  position: absolute;
+  display: none;
   inset: 0;
   border-radius: 50px;
   background: linear-gradient(120deg,
