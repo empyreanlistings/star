@@ -50,6 +50,8 @@ document.addEventListener("DOMContentLoaded", () => {
             initModalEvents();
             initGallerySync();
             initGalleryModalEvents();
+            initPalawanGallerySync();
+            initPalawanGalleryModalEvents();
 
             // 2. Fetch user's company and RE-INIT sync with filter
             await getUserCompany(user.uid);
@@ -941,6 +943,208 @@ function resizeImage(file, maxWidth) {
             };
             img.src = e.target.result;
         };
-        reader.readAsDataURL(file);
     });
+}
+
+// =============================================================================
+// PALAWAN GALLERY MANAGEMENT
+// =============================================================================
+
+const PALAWAN_GALLERY_CACHE_KEY = "kai_isla_palawan_gallery";
+let activePalawanGalleryListener = null;
+let palawanGalleryModal;
+let isPalawanGalleryEditMode = false;
+
+function initPalawanGallerySync() {
+    const tbody = document.getElementById("palawanGalleryTableBody");
+    if (!tbody) return;
+
+    if (activePalawanGalleryListener) {
+        activePalawanGalleryListener();
+        activePalawanGalleryListener = null;
+    }
+
+    // 1. Load from Cache
+    const cachedData = localStorage.getItem(PALAWAN_GALLERY_CACHE_KEY);
+    if (cachedData) {
+        try {
+            const { gallery } = JSON.parse(cachedData);
+            renderPalawanGalleryTable(gallery);
+        } catch (e) {
+            console.error("Palawan gallery cache error", e);
+        }
+    }
+
+    // 2. Real-time Listener
+    activePalawanGalleryListener = onSnapshot(collection(db, "PalawanGallery"), (snapshot) => {
+        const gallery = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+        localStorage.setItem(PALAWAN_GALLERY_CACHE_KEY, JSON.stringify({
+            gallery,
+            timestamp: Date.now()
+        }));
+        renderPalawanGalleryTable(gallery);
+    });
+}
+
+function renderPalawanGalleryTable(gallery) {
+    const tbody = document.getElementById("palawanGalleryTableBody");
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+    gallery.sort((a, b) => (b.added_at?.seconds || 0) - (a.added_at?.seconds || 0));
+
+    gallery.forEach(item => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><img src="${item.image}" alt="palawan" style="width:60px; height:40px; object-fit:cover; border-radius:4px;"></td>
+            <td><strong>${item.title || "-"}</strong></td>
+            <td><small>${item.description || "-"}</small></td>
+            <td style="text-align:center;">${item.display ? '<i class="fas fa-check" style="color:var(--accent);"></i>' : '<i class="fas fa-times" style="opacity:0.3;"></i>'}</td>
+            <td>
+                <button class="action-btn edit-palawan-gallery" data-id="${item.id}"><i class="fas fa-pen"></i></button>
+                <button class="action-btn delete-palawan-gallery" data-id="${item.id}"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    document.querySelectorAll(".edit-palawan-gallery").forEach(btn => btn.onclick = handlePalawanGalleryEdit);
+    document.querySelectorAll(".delete-palawan-gallery").forEach(btn => btn.onclick = handlePalawanGalleryDelete);
+}
+
+async function handlePalawanGalleryDelete(e) {
+    const id = e.target.closest("button").dataset.id;
+    if (!confirm("Delete this Palawan gallery item?")) return;
+    try {
+        await deleteDoc(doc(db, "PalawanGallery", id));
+        localStorage.removeItem(PALAWAN_GALLERY_CACHE_KEY);
+    } catch (err) {
+        alert("Delete failed: " + err.message);
+    }
+}
+
+async function handlePalawanGalleryEdit(e) {
+    const id = e.target.closest("button").dataset.id;
+    isPalawanGalleryEditMode = true;
+    openPalawanGalleryModal(true);
+    document.getElementById("palawanGalleryItemId").value = id;
+
+    const docSnap = await getDoc(doc(db, "PalawanGallery", id));
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById("palawanGalleryTitle").value = data.title || "";
+        document.getElementById("palawanGalleryDescription").value = data.description || "";
+        document.getElementById("palawanGalleryDisplay").checked = !!data.display;
+    }
+}
+
+function initPalawanGalleryModalEvents() {
+    palawanGalleryModal = document.getElementById("palawanGalleryModal");
+    const addBtn = document.getElementById("addPalawanGalleryBtn");
+    const closeBtn = document.getElementById("closePalawanGalleryModal");
+
+    if (!palawanGalleryModal) {
+        console.error("Palawan Gallery Modal NOT FOUND");
+        return;
+    }
+
+    if (addBtn) addBtn.onclick = () => openPalawanGalleryModal(false);
+    if (closeBtn) closeBtn.onclick = closePalawanGalleryModal;
+
+    window.addEventListener("click", (e) => {
+        if (e.target === palawanGalleryModal) closePalawanGalleryModal();
+    });
+
+    const form = document.getElementById("palawanGalleryForm");
+    if (form) {
+        form.addEventListener("submit", handlePalawanGalleryFormSubmit);
+    }
+}
+
+function openPalawanGalleryModal(edit = false) {
+    isPalawanGalleryEditMode = edit;
+    const form = document.getElementById("palawanGalleryForm");
+    const title = document.getElementById("palawanGalleryModalTitle");
+    const submitBtn = document.getElementById("palawanGallerySubmitBtn");
+    const imgInput = document.getElementById("palawanGalleryImage");
+
+    if (!form || !title || !submitBtn) {
+        console.error("Palawan Gallery modal elements missing");
+        return;
+    }
+
+    form.reset();
+
+    palawanGalleryModal.style.display = "flex";
+    setTimeout(() => {
+        palawanGalleryModal.classList.add("active");
+    }, 10);
+
+    if (edit) {
+        title.textContent = "Edit Palawan Gallery Item";
+        submitBtn.textContent = "Save Changes";
+        imgInput.removeAttribute("required");
+    } else {
+        title.textContent = "Add New Palawan Gallery Item";
+        submitBtn.textContent = "Upload Palawan Gallery Item";
+        document.getElementById("palawanGalleryItemId").value = "";
+        imgInput.setAttribute("required", "true");
+    }
+}
+
+function closePalawanGalleryModal() {
+    palawanGalleryModal.classList.remove("active");
+    setTimeout(() => {
+        if (!palawanGalleryModal.classList.contains("active")) {
+            palawanGalleryModal.style.display = "none";
+        }
+    }, 400);
+}
+
+async function handlePalawanGalleryFormSubmit(e) {
+    e.preventDefault();
+    const submitBtn = document.getElementById("palawanGallerySubmitBtn");
+    const status = document.getElementById("palawanGalleryUploadStatus");
+    const id = document.getElementById("palawanGalleryItemId").value;
+
+    submitBtn.disabled = true;
+    status.textContent = "Processing image...";
+
+    try {
+        let imageUrl = null;
+        const fileInput = document.getElementById("palawanGalleryImage");
+
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const resizedBlob = await resizeImage(file, 1000);
+            status.textContent = "Uploading optimized image...";
+            const storageRef = ref(storage, `palawan-gallery/${Date.now()}_${file.name}`);
+            await uploadBytes(storageRef, resizedBlob);
+            imageUrl = await getDownloadURL(storageRef);
+        }
+
+        const docData = {
+            title: document.getElementById("palawanGalleryTitle").value,
+            description: document.getElementById("palawanGalleryDescription").value,
+            display: document.getElementById("palawanGalleryDisplay").checked,
+            added_at: serverTimestamp(),
+            added_by: doc(db, "Users", currentUserId)
+        };
+
+        if (imageUrl) docData.image = imageUrl;
+
+        if (isPalawanGalleryEditMode) {
+            await updateDoc(doc(db, "PalawanGallery", id), docData);
+        } else {
+            await addDoc(collection(db, "PalawanGallery"), docData);
+        }
+
+        localStorage.removeItem(PALAWAN_GALLERY_CACHE_KEY);
+        closePalawanGalleryModal();
+    } catch (err) {
+        alert("Upload failed: " + err.message);
+    } finally {
+        submitBtn.disabled = false;
+        status.textContent = "";
+    }
 }

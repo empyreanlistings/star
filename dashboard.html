@@ -146,6 +146,36 @@
                 </tbody>
             </table>
         </div>
+
+        <div id="palawanGallerySection" class="listings-table-container" style="margin-top: 4rem;">
+            <!-- Centered Title -->
+            <h1 style="text-align: center; margin-bottom: 1.5rem;">Manage Palawan Gallery</h1>
+
+            <!-- Add Button (no filters needed for Palawan) -->
+            <div style="margin-bottom: 2rem; position: relative; text-align: right;">
+                <button id="addPalawanGalleryBtn" class="btn-add-icon" aria-label="Add New Palawan Gallery Item">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Display</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="palawanGalleryTableBody">
+                    <tr>
+                        <td colspan="5" style="text-align:center;padding:2rem;opacity:0.6;">Loading Palawan gallery...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </main>
 
     <!-- Listing Modal -->
@@ -276,6 +306,46 @@
                 <button type="submit" id="gallerySubmitBtn" class="btn-add" style="width:100%;margin-top:1rem;">Upload
                     Gallery Item</button>
                 <div id="galleryUploadStatus" style="margin-top:0.5rem;text-align:center;font-size:0.9rem;opacity:0.8;">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Palawan Gallery Modal -->
+    <div id="palawanGalleryModal" class="modal-overlay premium-modal">
+        <div class="modal-content">
+            <span id="closePalawanGalleryModal" class="close-modal">&times;</span>
+            <h3 id="palawanGalleryModalTitle" class="modal-title">Add New Palawan Gallery Item</h3>
+            <form id="palawanGalleryForm">
+                <input type="hidden" id="palawanGalleryItemId">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="palawanGalleryTitle" class="form-control" required
+                        placeholder="e.g. El Nido Bay">
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" id="palawanGalleryDescription" class="form-control"
+                        placeholder="e.g. El Nido, Palawan">
+                </div>
+
+                <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+                    <input type="checkbox" id="palawanGalleryDisplay" style="width:auto;margin:0;" checked>
+                    <label for="palawanGalleryDisplay" style="margin:0;cursor:pointer;font-size:0.9rem;">Display in
+                        Palawan Gallery</label>
+                </div>
+
+                <div class="form-group">
+                    <label>Image (Max width 1000px on upload)</label>
+                    <input type="file" id="palawanGalleryImage" class="form-control" accept="image/*" required>
+                </div>
+
+                <button type="submit" id="palawanGallerySubmitBtn" class="btn-add"
+                    style="width:100%;margin-top:1rem;">Upload
+                    Palawan Gallery Item</button>
+                <div id="palawanGalleryUploadStatus"
+                    style="margin-top:0.5rem;text-align:center;font-size:0.9rem;opacity:0.8;">
                 </div>
             </form>
         </div>
