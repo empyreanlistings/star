@@ -6277,8 +6277,9 @@ html[data-theme="light"] .btn-copy:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80%;
-  height: auto;
+  width: 50%;
+  height: 50%;
+  object-fit: contain;
   z-index: 2;
   pointer-events: none;
 }
