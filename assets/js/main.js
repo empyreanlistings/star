@@ -839,7 +839,8 @@ function initializeApp() {
   if (typeof window.initGallery !== 'undefined') safeInit("Gallery", window.initGallery);
   if (typeof initPropertyFilters !== 'undefined') safeInit("Property Filters", initPropertyFilters);
   if (typeof initPropertyModal !== 'undefined') safeInit("Property Modal", initPropertyModal);
-  if (typeof initCards !== 'undefined') safeInit("Cards", initCards);
+  if (typeof initHowItWorks !== 'undefined') safeInit("How It Works", initHowItWorks);
+  if (typeof initServices !== 'undefined') safeInit("Services", initServices);
   if (typeof initPalawanGallery !== 'undefined') safeInit("Palawan Gallery", initPalawanGallery);
   // Lightbox handled in gallery.js
   if (typeof initCalendly !== 'undefined') safeInit("Calendly", initCalendly);
@@ -1207,251 +1208,266 @@ function initPalawanGallery() {
 // [REMOVED DUPLICATE initWorksGalleryLightbox]
 
 // ================================================================
-// CARDS — EXPAND AT TOP OF GRID WITH NAVIGATION (WITH LOOPING)
+// SERVICES — DATA-DRIVEN TAB SYSTEM (PERFORMANCE OPTIMIZED)
 // ================================================================
-function initCards() {
-  // Check if mobile
-  const isMobile = window.innerWidth <= 768;
+const servicesData = [
+  {
+    title: "Key-in-hand Homes",
+    subtitle: "Land, House, Appliances, Deep Well, Solar (off-grid) and Swimming Pool included, ready to move in.",
+    description: `We secure your property with an official reservation agreement, fully verifying titles, ownership, zoning, boundaries, and all government requirements—no shortcuts.`,
+    image: "images/keyinhand.webp"
+  },
+  {
+    title: "Custom-built Homes",
+    subtitle: "Your land, our expertise. We can build your house or commercial building anywhere in Palawan.",
+    description: `Show us your dream and we will make it come true - from planning and design to full project management and fit out, we deliver with honesty, trust and transparency.`,
+    image: "images/customhouse.webp"
+  },
+  {
+    title: "Property Management",
+    subtitle: "Key holding, security monitoring, maintenance, cleaning and vacation rentals.",
+    description: `Fresh, clean and ready to enjoy - whether you are coming to vacation or use our holiday letting service, we always ensure your home is well maintained and ready to wow guests.`,
+    image: "images/travel.webp"
+  },
+  {
+    title: "Swimming Pools",
+    subtitle: "Design, installation and maintenance of your beautiful, tropical pool.",
+    description: `Nothing beats jumping into a beautiful pool on a hot summers day - it's truly living the dream on an award-winning Paradise Island. We also offer twice weekly cleaning services to keep your pool in top condition.`,
+    image: "images/swimming.webp"
+  },
+  {
+    title: "Gates, Walls & Fencing",
+    subtitle: "Manual & automatic gates, surrounding walls and feature lighting.",
+    description: `We provide structural and construction services for garden walls and retainer walls. We also supply and install fencing materials and can fabricate fencing, gates and staircases to your design.`,
+    image: "images/walls.webp"
+  },
+  {
+    title: "Beautiful Landscaping",
+    subtitle: "Planting, artificial grass installation, water features and maintenance.",
+    description: `With such an abundance of tropical plants and perfect weather, we are blessed to have so many options for landscaping. We design, supply and install plants, trees and edibles - perfect for a cute veggie garden setup.`,
+    image: "images/landscape.webp"
+  },
+  {
+    title: "Real Estate Brokerage",
+    subtitle: "Licensed Brokerage with access to International buyers.",
+    description: `We secure your property with an official reservation agreement, fully verifying titles, ownership, zoning, boundaries, and all government requirements—no shortcuts.`,
+    image: "images/legal.webp"
+  },
+  {
+    title: "Engineering Consultancy",
+    subtitle: "Structural guidance, Project Management & Supervision.",
+    description: `We secure your property with an official reservation agreement, fully verifying titles, ownership, zoning, boundaries, and all government requirements—no shortcuts.`,
+    image: "images/engineering.webp"
+  }
+];
 
-  // Initialize for both #how-it-works and #services sections
-  const sections = ['#how-it-works', '#services'];
+function initServices() {
+  const nav = document.getElementById('services-nav');
+  const display = document.getElementById('services-display');
 
-  sections.forEach(sectionId => {
-    const section = document.querySelector(sectionId);
-    if (!section) return;
+  if (!nav || !display || !servicesData.length) return;
 
-    const grid = section.querySelector('.grid');
-    const cards = [...section.querySelectorAll('.card')];
-    if (!cards.length || !grid) return;
+  const btns = nav.querySelectorAll('.nav-btn');
+  let currentIndex = 0;
 
-    // Grab secondary nav if present (How It Works)
-    const navBtns = section.querySelectorAll('.how-it-works-nav .nav-btn');
+  function render(index) {
+    // Loop index
+    if (index < 0) index = servicesData.length - 1;
+    if (index >= servicesData.length) index = 0;
 
-    let expandedCard = null;
-    let currentExpandedIndex = isMobile ? 0 : -1; // Start at first card on mobile
+    currentIndex = index;
+    const data = servicesData[index];
 
-    const createExpandedCard = () => {
-      const card = document.createElement('div');
-      card.className = 'card full-width';
-      card.style.display = 'none';
-      card.innerHTML = `
-        <button class="card-nav card-nav-left" aria-label="Previous card"></button>
-        <img class="card-image" src="" alt="">
+    // Update Nav
+    btns.forEach(b => b.classList.remove('active'));
+    const activeBtn = Array.from(btns).find(b => parseInt(b.dataset.index) === index);
+    if (activeBtn) {
+      activeBtn.classList.add('active');
+      // Mobile scroll
+      if (window.innerWidth <= 768) {
+        activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+
+    // Render Content
+    // Optimization: Lazy load images that aren't first view
+    const loadingAttr = index === 0 ? 'eager' : 'lazy';
+
+    const contentHTML = `
+      <button class="card-nav card-nav-left" aria-label="Previous service"></button>
+      <div class="services-content-wrapper" style="opacity: 0; transform: translateY(10px);">
+        <img class="card-image" src="${data.image}" alt="${data.title}" loading="${loadingAttr}">
         <div class="card-content">
-          <h2 class="expanded-title"></h2>
-          <p class="expanded-subtitle"></p>
-          <div class="card-expand-text expanded-description"></div>
+          <h2 class="expanded-title">${data.title}</h2>
+          <p class="expanded-subtitle">${data.subtitle}</p>
+          <div class="card-expand-text expanded-description">${data.description}</div>
+          <span class="card-cta">Find out more</span>
         </div>
-        <button class="card-nav card-nav-right" aria-label="Next card"></button>
-      `;
-      grid.parentNode.insertBefore(card, grid);
-      return card;
-    };
+      </div>
+      <button class="card-nav card-nav-right" aria-label="Next service"></button>
+    `;
 
-    expandedCard = createExpandedCard();
+    display.innerHTML = contentHTML;
+    display.style.display = 'grid'; // Ensure visible
 
-    const prevBtn = expandedCard.querySelector('.card-nav-left');
-    const nextBtn = expandedCard.querySelector('.card-nav-right');
-    const closeBtn = expandedCard.querySelector('.expanded-close-btn');
-    const expandedImage = expandedCard.querySelector('.card-image');
-    const expandedTitle = expandedCard.querySelector('.expanded-title');
-    const expandedSubtitle = expandedCard.querySelector('.expanded-subtitle');
-    const expandedDescription = expandedCard.querySelector('.expanded-description');
-
-    const expandCardAtIndex = (index) => {
-      // Loop the index
-      if (index < 0) index = cards.length - 1;
-      if (index >= cards.length) index = 0;
-
-      const card = cards[index];
-
-      // Get card content
-      const title = card.querySelector('h2')?.textContent || '';
-      const subtitle = card.querySelector('.card-content > p')?.textContent || '';
-      const description = card.querySelector('.card-expand-text')?.innerHTML || '';
-      const cardImg = card.querySelector('.card-image');
-      const imgSrc = cardImg?.getAttribute('src') || cardImg?.src || '';
-      const imgAlt = cardImg?.alt || '';
-
-      // Populate expanded card
-      expandedTitle.textContent = title;
-      expandedSubtitle.textContent = subtitle;
-      expandedDescription.innerHTML = description;
-
-      if (imgSrc) {
-        expandedImage.style.display = 'block';
-        expandedImage.src = imgSrc;
-        expandedImage.alt = imgAlt;
-
-        // Hide if loading fails to avoid broken icon
-        expandedImage.onerror = () => {
-          expandedImage.style.display = 'none';
-        };
-      } else {
-        expandedImage.style.display = 'none';
-      }
-
-      // Mark all cards as inactive
-      cards.forEach(c => c.classList.remove('card-active'));
-
-      // Mark this card as active
-      card.classList.add('card-active');
-      currentExpandedIndex = index;
-
-      // Update Nav Buttons State
-      if (navBtns.length) {
-        navBtns.forEach(btn => btn.classList.remove('active'));
-        // Find button corresponding to this index
-        const activeBtn = [...navBtns].find(btn => parseInt(btn.dataset.index) === index);
-        if (activeBtn) activeBtn.classList.add('active');
-
-        // Scroll active button into view on mobile
-        if (isMobile && activeBtn) {
-          activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        }
-      }
-
-      // Show expanded card
-      const wasHidden = expandedCard.style.display === 'none';
-      expandedCard.style.display = 'grid';
-
-      if (wasHidden && !isMobile) {
-        // Scroll to section top when first opening (desktop only)
-        const nav = document.querySelector('nav');
-        const topBar = document.querySelector('.top-bar');
-        const offset = (nav?.offsetHeight || 0) + (topBar?.offsetHeight || 0);
-
-        const sectionTop = section.offsetTop - offset;
-
-        window.scrollTo({
-          top: sectionTop,
-          behavior: 'smooth'
-        });
-      }
-
-      // Animate in with GSAP if available
-      if (wasHidden && window.gsap) {
-        gsap.fromTo(expandedCard,
-          { opacity: 0, y: -20 },
-          { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }
-        );
-      } else if (window.gsap) {
-        // Just update content with fade if already open
-        gsap.fromTo([expandedImage, expandedCard.querySelector('.card-content')],
-          { opacity: 0.5 },
-          { opacity: 1, duration: 0.3, ease: 'power2.out' }
-        );
-      }
-
-      // Nav buttons always enabled with looping
-      prevBtn.style.opacity = '1';
-      prevBtn.style.pointerEvents = 'auto';
-      nextBtn.style.opacity = '1';
-      nextBtn.style.pointerEvents = 'auto';
-    };
-
-    const collapseCard = () => {
-      cards.forEach(c => c.classList.remove('card-active'));
-      currentExpandedIndex = -1;
-
-      if (window.gsap) {
-        gsap.to(expandedCard, {
-          opacity: 0,
-          y: -20,
-          duration: 0.3,
-          ease: 'power2.in',
-          onComplete: () => {
-            expandedCard.style.display = 'none';
-            gsap.set(expandedCard, { opacity: 1, y: 0 });
-          }
-        });
-      } else {
-        expandedCard.style.display = 'none';
-      }
-    };
-
-    const navigatePrev = () => {
-      expandCardAtIndex(currentExpandedIndex - 1);
-    };
-
-    const navigateNext = () => {
-      expandCardAtIndex(currentExpandedIndex + 1);
-    };
-
-    // Add click handlers to cards (desktop only)
-    if (!isMobile) {
-      cards.forEach((card, index) => {
-        const cta = card.querySelector('.card-cta');
-
-        if (cta) {
-          cta.style.cursor = 'pointer';
-          cta.addEventListener('click', (e) => {
-            e.stopPropagation();
-            expandCardAtIndex(index);
-          });
-        }
-
-        card.addEventListener('click', (e) => {
-          if (e.target.closest('.card-nav')) return;
-          if (e.target.closest('a, button:not(.card-cta)')) return;
-          expandCardAtIndex(index);
-        });
-      });
+    // Animation
+    const wrapper = display.querySelector('.services-content-wrapper');
+    if (window.gsap) {
+      gsap.to(wrapper, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+    } else {
+      wrapper.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+      setTimeout(() => {
+        wrapper.style.opacity = "1";
+        wrapper.style.transform = "translateY(0)";
+      }, 10);
     }
 
-    // Attach Nav Button Listeners
-    if (navBtns.length) {
-      navBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const idx = parseInt(btn.dataset.index);
-          const relatedCard = cards[idx];
+    // Bind Events
+    display.querySelector('.card-nav-left').onclick = () => render(currentIndex - 1);
+    display.querySelector('.card-nav-right').onclick = () => render(currentIndex + 1);
+  }
 
-          // Scroll to card for context on mobile if needed, or just let expansion handle it
-          if (!isNaN(idx)) {
-            expandCardAtIndex(idx);
-          }
-        });
-      });
-    }
-
-    // Navigation buttons
-    prevBtn?.addEventListener('click', navigatePrev);
-    nextBtn?.addEventListener('click', navigateNext);
-
-    // Close button - always attach handler, just hide on mobile
-    if (closeBtn) {
-      closeBtn.addEventListener('click', collapseCard);
-      if (isMobile) {
-        closeBtn.style.display = 'none';
-      }
-    }
-
-    // Keyboard navigation
-    const handleKeydown = (e) => {
-      if (currentExpandedIndex === -1) return;
-
-      if (e.key === 'Escape' && !isMobile) {
-        collapseCard();
-      } else if (e.key === 'ArrowLeft') {
-        navigatePrev();
-      } else if (e.key === 'ArrowRight') {
-        navigateNext();
-      }
+  // Nav Clicks
+  btns.forEach(btn => {
+    btn.onclick = () => {
+      const idx = parseInt(btn.dataset.index);
+      if (!isNaN(idx)) render(idx);
     };
-
-    document.addEventListener('keydown', handleKeydown);
-
-    document.addEventListener('keydown', handleKeydown);
-
-    // Initialize first card on load for both desktop and mobile
-    // Small timeout to ensure DOM and images are ready for processing
-    setTimeout(() => {
-      if (cards.length > 0) {
-        expandCardAtIndex(0);
-      }
-    }, 150);
   });
+
+  // Initial Render
+  render(0);
+}
+
+// ================================================================
+// ================================================================
+// HOW IT WORKS — DATA-DRIVEN TAB SYSTEM
+// ================================================================
+const howItWorksData = [
+  {
+    title: "Legal and Secure",
+    subtitle: "Legally titled land and permitted construction; we are registered and licensed Professional Builders.",
+    description: `We secure your property with an official reservation agreement, fully verifying titles, ownership, zoning, boundaries, and all government requirements—no shortcuts.`,
+    image: "images/legal.webp"
+  },
+  {
+    title: "Beautiful Locations",
+    subtitle: "We build in scenic areas with high-growth potential in close proximity to beaches and amenities.",
+    description: `Our homes are thoughtfully sited in prime northern El Nido areas like peaceful Bucana – offering secluded beaches, dramatic limestone cliffs, and easy access to world-class lagoons while positioning you in emerging high-growth zones with rising property values.`,
+    image: "images/locations.webp"
+  },
+  {
+    title: "Off-Grid / No more bills!",
+    subtitle: "Our turn-key developments are off-grid enabled so there is no reliance on local utilities.",
+    description: `Our turn-key homes feature robust off-grid solar systems with high-capacity panels, batteries, and inverters—delivering reliable, uninterrupted power even in remote areas prone to outages.`,
+    image: "images/solar.webp"
+  },
+  {
+    title: "Milestone Payments",
+    subtitle: "Safe, verified payment channels with clear receipts and compliance tracking. No surprises. No hidden fees.",
+    description: `Our transparent, milestone-based payment system ties installments directly to clear construction progress—such as foundation completion, framing, and finishing—ensuring you only pay for verified work.`,
+    image: "images/milestone.webp"
+  },
+  {
+    title: "Appliances & Furnishings",
+    subtitle: "Everything included with upgrade options available throughout.",
+    description: `Your turn-key home comes fully equipped with premium appliances—including refrigerator, oven, stove, microwave, washer/dryer, and air conditioning—plus stylish, durable tropical furnishings for every room.`,
+    image: "images/appliances.webp"
+  },
+  {
+    title: "Land Holding/ Leasing",
+    subtitle: "We offer long-term lease solutions for non-national buyers.",
+    description: `As a foreigner, you can securely enjoy long-term land holding in the Philippines through extended leases—now up to 99 years under recent laws.`,
+    image: "images/land.webp"
+  },
+  {
+    title: "Real Estate Brokerage",
+    subtitle: "Licensed brokers with an established buyer and tenant network.",
+    description: `Our licensed real estate brokers bring deep local expertise and an extensive network of international buyers, investors, and qualified tenants.`,
+    image: "images/pic6.webp"
+  },
+  {
+    title: "After-care Services",
+    subtitle: "Maintenance, landscaping, pool care, and rental management/ holiday lettings.",
+    description: `Our dedicated after-care team provides comprehensive maintenance, inspections, landscaping, pool cleaning, and repairs to keep your property pristine year-round.`,
+    image: "images/servicesCard.webp"
+  }
+];
+
+function initHowItWorks() {
+  const nav = document.getElementById('how-it-works-nav');
+  const display = document.getElementById('how-it-works-display');
+
+  if (!nav || !display || !howItWorksData.length) return;
+
+  const btns = nav.querySelectorAll('.nav-btn');
+  let currentIndex = 0;
+
+  function render(index) {
+    if (index < 0) index = howItWorksData.length - 1;
+    if (index >= howItWorksData.length) index = 0;
+
+    currentIndex = index;
+    const data = howItWorksData[index];
+
+    // Update Nav
+    btns.forEach(b => b.classList.remove('active'));
+    const activeBtn = Array.from(btns).find(b => parseInt(b.dataset.index) === index);
+    if (activeBtn) {
+      activeBtn.classList.add('active');
+      if (window.innerWidth <= 768) {
+        activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+
+    // Render Content
+    // Optimization: Lazy load images that aren't first view
+    const loadingAttr = index === 0 ? 'eager' : 'lazy';
+
+    const contentHTML = `
+      <button class="card-nav card-nav-left" aria-label="Previous step"></button>
+      <div class="how-it-works-content-wrapper" style="opacity: 0; transform: translateY(10px);">
+        <img class="card-image" src="${data.image}" alt="${data.title}" loading="${loadingAttr}">
+        <div class="card-content">
+          <h2 class="expanded-title">${data.title}</h2>
+          <p class="expanded-subtitle">${data.subtitle}</p>
+          <div class="card-expand-text expanded-description">${data.description}</div>
+          <span class="card-cta">Find out more</span>
+        </div>
+      </div>
+      <button class="card-nav card-nav-right" aria-label="Next step"></button>
+    `;
+
+    display.innerHTML = contentHTML;
+    display.style.display = 'grid';
+
+    // Animation
+    const wrapper = display.querySelector('.how-it-works-content-wrapper');
+    if (window.gsap) {
+      gsap.to(wrapper, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+    } else {
+      wrapper.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+      setTimeout(() => {
+        wrapper.style.opacity = "1";
+        wrapper.style.transform = "translateY(0)";
+      }, 10);
+    }
+
+    // Bind Events
+    display.querySelector('.card-nav-left').onclick = () => render(currentIndex - 1);
+    display.querySelector('.card-nav-right').onclick = () => render(currentIndex + 1);
+  }
+
+  // Nav Clicks
+  btns.forEach(btn => {
+    btn.onclick = () => {
+      const idx = parseInt(btn.dataset.index);
+      if (!isNaN(idx)) render(idx);
+    };
+  });
+
+  // Initial Render
+  render(0);
 }
 
 // ================================================================

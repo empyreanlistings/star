@@ -757,6 +757,28 @@ html[data-theme="light"] .how-it-works-nav li:not(:last-child)::after {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Figtree', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  opacity: 0;
+  animation: pageFadeIn 0.8s ease-out forwards;
+}
+
+@keyframes pageFadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
 .how-it-works-nav .nav-btn {
   background: transparent;
   border: none;
