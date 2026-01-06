@@ -703,7 +703,9 @@ html[data-theme="light"] .container-glass:hover {
   order: 0;
 }
 
-.property-gallery-filters>* {
+.property-gallery-filters>*,
+.gallery-filters>*,
+.gallery-type-filters>* {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -725,18 +727,22 @@ html[data-theme="light"] .container-glass:hover {
   border: none;
 }
 
-/* Vertical Dividers for Filters (including after Commercial) */
-.property-gallery-filters>*::after {
+/* Vertical Dividers (30px) for all Filters */
+.property-gallery-filters>*::after,
+.gallery-filters>*::after,
+.gallery-type-filters>*::after {
   content: '';
   display: block;
   width: 1px;
-  height: 18px;
+  height: 30px;
   background-color: rgba(255, 255, 255, 0.2);
   margin-left: 15px;
   pointer-events: none;
 }
 
-[data-theme="light"] .property-gallery-filters>*::after {
+[data-theme="light"] .property-gallery-filters>*::after,
+[data-theme="light"] .gallery-filters>*::after,
+[data-theme="light"] .gallery-type-filters>*::after {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
@@ -854,26 +860,7 @@ body {
   }
 }
 
-.gallery-type-filters>* {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 30px;
-  padding: 0 18px;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  color: var(--text);
-  background: var(--glass-bg);
-}
+/* Consolidated with property filters above */
 
 /* ============================== FILTER CHIPS — BASE ============================== */
 .gallery-filters {
@@ -885,26 +872,7 @@ body {
   order: 0;
 }
 
-.gallery-filters>* {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 30px;
-  padding: 0 18px;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  color: var(--text);
-  background: var(--glass-bg);
-}
+/* Consolidated with property filters above */
 
 /* ============================== FILTER CHIPS — DARK MODE ============================== */
 [data-theme="dark"] .gallery-filters>*,
@@ -981,7 +949,7 @@ body {
 
 [data-theme="light"] .price-filter-inline {
   border: none;
-  color: #0b0f1a;
+  color: var(--text-light);
 }
 
 /* Light mode hover */
@@ -1001,6 +969,12 @@ body {
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: var(--text);
+}
+
+[data-theme="light"] .price-label,
+[data-theme="light"] #priceRangeValue,
+[data-theme="light"] #dashPriceRangeValue {
+  color: var(--text-light) !important;
 }
 
 #priceRangeValue,
