@@ -1888,6 +1888,7 @@ html[data-theme="light"] .hero-welcome-text h1 {
 
 .slide-content h2 {
   line-height: 1;
+  font-weight: 700;
 }
 
 /* ============================== HOVER EFFECTS ============================== */
