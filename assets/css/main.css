@@ -760,6 +760,8 @@ html[data-theme="light"] .how-it-works-nav li:not(:last-child)::after {
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  background-color: var(--bg-color);
+  /* Prevents white flash during body fade-in */
 }
 
 body {
@@ -786,7 +788,8 @@ body {
   font-weight: 500;
   font-size: 0.8rem;
   letter-spacing: 0.05em;
-  color: var(--white);
+  color: var(--text-color);
+  /* Updated to be theme-aware */
   padding: 8px 16px;
   cursor: pointer;
   position: relative;

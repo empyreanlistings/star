@@ -33,16 +33,19 @@
     crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <!-- Main CSS -->
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="preload" href="assets/css/main.css" as="style">
+  <link rel="stylesheet" href="assets/css/main.css?v=1.2">
+  <link rel="preload" href="assets/css/main.css?v=1.2" as="style">
 
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
-  <!-- Apply saved theme early -->
+  <!-- Apply saved theme early to prevent flash -->
   <script>
-    const theme = localStorage.getItem('theme');
-    if (theme) document.documentElement.setAttribute('data-theme', theme);
+    (function () {
+      const theme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.backgroundColor = theme === 'dark' ? '#0f0f0f' : '#ffffff';
+    })();
   </script>
 
   <!-- MailerLite Universal -->
@@ -402,7 +405,7 @@
   <script src="assets/js/nav.js" defer></script>
   <script src="assets/js/gallery.js" defer></script>
   <script src="assets/js/animations.js" defer></script>
-  <script src="assets/js/cards.js" defer></script>
+  <!-- <script src="assets/js/cards.js" defer></script> REMOVED to disable expansion -->
   <script src="assets/js/main.js" defer></script>
 
   <!-- MailerLite Universal -->

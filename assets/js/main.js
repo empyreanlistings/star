@@ -477,6 +477,11 @@ function initPropertyModal() {
         return;
       }
 
+      // CRITICAL: Prevent card expansion on listings.html
+      if (window.location.pathname.includes('listings.html')) {
+        return;
+      }
+
       // 2. Otherwise Open Modal
       if (e.target.closest("a, .grid-like-btn")) return;
 

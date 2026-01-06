@@ -5,17 +5,20 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="assets/css/main.css?v=1.2" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <style>
         /* Styles moved to assets/css/main.css */
     </style>
+    <!-- Apply saved theme early to prevent flash -->
     <script>
-        // Init theme immediately to prevent flash
-        const theme = localStorage.getItem('theme');
-        if (theme) document.documentElement.setAttribute('data-theme', theme);
+        (function () {
+            const theme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.style.backgroundColor = theme === 'dark' ? '#0f0f0f' : '#ffffff';
+        })();
     </script>
 </head>
 

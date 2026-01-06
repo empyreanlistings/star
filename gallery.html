@@ -35,10 +35,13 @@
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
-  <!-- Apply saved theme early -->
+  <!-- Apply saved theme early to prevent flash -->
   <script>
-    const theme = localStorage.getItem('theme');
-    if (theme) document.documentElement.setAttribute('data-theme', theme);
+    (function () {
+      const theme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.backgroundColor = theme === 'dark' ? '#0f0f0f' : '#ffffff';
+    })();
   </script>
 </head>
 
