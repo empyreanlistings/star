@@ -3055,7 +3055,7 @@ html[data-theme="light"] .card:not(.full-width)::before {
 .card-nav {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%) scale(0.9);
   z-index: 5;
   width: 56px;
   height: 56px;
@@ -3063,19 +3063,21 @@ html[data-theme="light"] .card:not(.full-width)::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.6);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(40, 40, 40, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   cursor: pointer;
-  color: var(--white);
+  color: white;
   font-size: 0;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 .card-nav:hover {
-  background: rgba(0, 0, 0, 0.8);
-  border-color: var(--accent);
+  background: rgba(60, 60, 60, 0.8);
   transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
 }
 
 .card-nav::before {
@@ -3285,7 +3287,7 @@ html[data-theme="light"] .card-nav {
 
 html[data-theme="light"] .card-nav:hover {
   background: rgba(255, 255, 255, 0.95);
-  border-color: var(--accent);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
 }
 
 /* ============================== SECTION TITLES ============================== */
@@ -4240,21 +4242,35 @@ html[data-theme="light"] .lightbox-caption p {
 .lightbox-arrow {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  font-size: 3rem;
-  cursor: pointer;
-  z-index: 100000;
-  /* above the image */
-  user-select: none;
-  opacity: 0.7;
-  transition: opacity 0.2s ease, color 0.2s ease;
+  transform: translateY(-50%) scale(0.9);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(40, 40, 40, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
   display: none;
   /* default hidden for mobile */
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100000;
+  user-select: none;
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.lightbox-arrow i {
+  font-size: 1.2rem;
 }
 
 /* Arrow hover effect */
 .lightbox-arrow:hover {
-  opacity: 1;
+  background: rgba(60, 60, 60, 0.8);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
 }
 
 /* Positioning */
@@ -4269,20 +4285,25 @@ html[data-theme="light"] .lightbox-caption p {
 /* Show arrows on desktop */
 @media (min-width: 769px) {
   .lightbox-arrow {
-    display: block;
+    display: flex;
   }
 }
 
 /* Light mode theme */
 html[data-theme="light"] .lightbox-arrow {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.15);
   color: #111;
-  /* dark arrows on light background */
+}
+
+html[data-theme="light"] .lightbox-arrow:hover {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
 }
 
 /* Dark mode theme */
 html[data-theme="dark"] .lightbox-arrow {
-  color: #fff;
-  /* light arrows on dark background */
+  /* Uses default dark styles */
 }
 
 /* ============================== WORKS LIGHTBOX FULLSCREEN ============================== */
@@ -4382,18 +4403,33 @@ html[data-theme="light"] #works-lightbox .lightbox-caption p {
 #works-lightbox .lightbox-arrow {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  font-size: 3rem;
+  transform: translateY(-50%) scale(0.9);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(40, 40, 40, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   z-index: 100000;
   user-select: none;
-  opacity: 0.7;
-  transition: opacity 0.2s ease, color 0.2s ease;
-  display: none;
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+#works-lightbox .lightbox-arrow i {
+  font-size: 1.2rem;
 }
 
 #works-lightbox .lightbox-arrow:hover {
-  opacity: 1;
+  background: rgba(60, 60, 60, 0.8);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
 }
 
 #works-lightbox .lightbox-prev {
@@ -4406,17 +4442,24 @@ html[data-theme="light"] #works-lightbox .lightbox-caption p {
 
 @media (min-width: 769px) {
   #works-lightbox .lightbox-arrow {
-    display: block;
+    display: flex;
   }
 }
 
 /* Theme-aware arrows */
 html[data-theme="light"] #works-lightbox .lightbox-arrow {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.15);
   color: #111;
 }
 
+html[data-theme="light"] #works-lightbox .lightbox-arrow:hover {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+}
+
 html[data-theme="dark"] #works-lightbox .lightbox-arrow {
-  color: #fff;
+  /* Uses default dark styles */
 }
 
 
