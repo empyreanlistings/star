@@ -6245,11 +6245,42 @@ html[data-theme="light"] .btn-copy:hover {
   border-color: rgba(255, 126, 95, 0.3) !important;
 }
 
+.ocean-gradient {
+  background: linear-gradient(135deg, rgba(67, 206, 162, 0.15) 0%, rgba(24, 90, 157, 0.15) 100%) !important;
+  border-color: rgba(67, 206, 162, 0.3) !important;
+}
+
+.tropical-gradient {
+  background: linear-gradient(135deg, rgba(168, 255, 120, 0.15) 0%, rgba(120, 255, 214, 0.15) 100%) !important;
+  border-color: rgba(120, 255, 214, 0.3) !important;
+}
+
 .sun-icon {
   font-size: 3rem;
   color: #feb47b;
   margin-bottom: 20px;
   filter: drop-shadow(0 0 10px rgba(254, 180, 123, 0.5));
+}
+
+.ocean-gradient .sun-icon {
+  color: #43cea2;
+  filter: drop-shadow(0 0 10px rgba(67, 206, 162, 0.5));
+}
+
+.tropical-gradient .sun-icon {
+  color: #78ffd6;
+  filter: drop-shadow(0 0 10px rgba(120, 255, 214, 0.5));
+}
+
+.hero-logo-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: auto;
+  z-index: 2;
+  pointer-events: none;
 }
 
 @media (max-width: 991px) {
