@@ -923,19 +923,29 @@ async function handleGalleryFormSubmit(e) {
 }
 
 function resizeImage(file, maxWidth) {
+    console.log("🛠️ [Resize] Starting resize for:", file.name, "Size:", file.size);
     return new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+            console.error("❌ [Resize] Timeout after 10s");
+            reject(new Error("Image processing timed out"));
+        }, 10000);
+
         const reader = new FileReader();
         reader.onerror = (err) => {
-            console.error("FileReader error:", err);
+            clearTimeout(timeout);
+            console.error("❌ [Resize] FileReader error:", err);
             reject(new Error("Failed to read file"));
         };
         reader.onload = (e) => {
+            console.log("   ✅ [Resize] File read successfully");
             const img = new Image();
             img.onerror = (err) => {
-                console.error("Image load error:", err);
+                clearTimeout(timeout);
+                console.error("❌ [Resize] Image load error:", err);
                 reject(new Error("Failed to load image"));
             };
             img.onload = () => {
+                console.log("   ✅ [Resize] Image loaded into memory. Original:", img.width, "x", img.height);
                 const canvas = document.createElement("canvas");
                 let width = img.width;
                 let height = img.height;
@@ -949,11 +959,24 @@ function resizeImage(file, maxWidth) {
                 canvas.height = height;
                 const ctx = canvas.getContext("2d");
                 ctx.drawImage(img, 0, 0, width, height);
+                console.log("   ✅ [Resize] Canvas drawn. Final size:", width, "x", height);
 
-                canvas.toBlob((blob) => {
-                    if (blob) resolve(blob);
-                    else reject(new Error("Canvas toBlob failed"));
-                }, file.type, 0.85);
+                try {
+                    canvas.toBlob((blob) => {
+                        clearTimeout(timeout);
+                        if (blob) {
+                            console.log("   ✅ [Resize] Blob created successfully. Final Size:", blob.size);
+                            resolve(blob);
+                        } else {
+                            console.error("❌ [Resize] toBlob returned null");
+                            reject(new Error("Canvas toBlob failed"));
+                        }
+                    }, file.type || "image/jpeg", 0.85);
+                } catch (blobErr) {
+                    clearTimeout(timeout);
+                    console.error("❌ [Resize] toBlob exception:", blobErr);
+                    reject(blobErr);
+                }
             };
             img.src = e.target.result;
         };
@@ -1139,14 +1162,14 @@ async function handlePalawanGalleryFormSubmit(e) {
 
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
-            console.log("Resizing image:", file.name);
+            console.log("🚀 [Upload] File selected:", file.name, "(" + (file.size / 1024).toFixed(2) + " KB)");
             const resizedBlob = await resizeImage(file, 1000);
-            console.log("Image resized, uploading to storage...");
+            console.log("🚀 [Upload] Starting Firebase Storage upload...");
             status.textContent = "Uploading optimized image...";
             const storageRef = ref(storage, `palawan-gallery/${Date.now()}_${file.name}`);
             await uploadBytes(storageRef, resizedBlob);
             imageUrl = await getDownloadURL(storageRef);
-            console.log("Image uploaded, URL:", imageUrl);
+            console.log("✅ [Upload] Image uploaded successfully. URL:", imageUrl);
         }
 
         if (!currentUserId) {

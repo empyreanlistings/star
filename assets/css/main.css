@@ -6122,3 +6122,83 @@ html[data-theme="light"] .btn-copy:hover {
 .email-modal-close:hover {
   opacity: 1;
 }
+
+/* ============================== PALAWAN INNER CONTAINERS ============================== */
+.palawan-row {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  width: 100%;
+  margin-top: 40px;
+}
+
+.inner_container_palawan {
+  flex: 1;
+  min-height: 400px;
+  padding: 40px;
+  border-radius: 20px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(15px) saturate(1.5);
+  -webkit-backdrop-filter: blur(15px) saturate(1.5);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.inner_container_palawan:hover {
+  background: var(--glass-hover);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px);
+}
+
+/* Liquid Glass Backdrop Effect */
+.inner_container_palawan::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+  animation: liquid-glass-float 10s infinite linear;
+  pointer-events: none;
+}
+
+@keyframes liquid-glass-float {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.sunset-gradient {
+  background: linear-gradient(135deg, rgba(255, 126, 95, 0.15) 0%, rgba(254, 180, 123, 0.15) 100%) !important;
+  border-color: rgba(255, 126, 95, 0.3) !important;
+}
+
+.sun-icon {
+  font-size: 3rem;
+  color: #feb47b;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 10px rgba(254, 180, 123, 0.5));
+}
+
+@media (max-width: 991px) {
+  .palawan-row {
+    flex-direction: column;
+  }
+
+  .inner_container_palawan {
+    min-height: auto;
+  }
+}
