@@ -698,6 +698,7 @@ html[data-theme="light"] .container-glass:hover {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   order: 0;
 }
@@ -729,6 +730,7 @@ html[data-theme="light"] .container-glass:hover {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   order: 0;
 }
