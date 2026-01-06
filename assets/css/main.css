@@ -805,10 +805,9 @@ body {
 
 .how-it-works-nav .nav-btn:hover,
 .how-it-works-nav .nav-btn.active {
-  color: var(--white);
+  color: var(--text-color);
   font-weight: 800;
   opacity: 1;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 @media (max-width: 768px) {
