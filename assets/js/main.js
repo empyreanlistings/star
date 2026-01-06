@@ -1224,6 +1224,9 @@ function initCards() {
     const cards = [...section.querySelectorAll('.card')];
     if (!cards.length || !grid) return;
 
+    // Grab secondary nav if present (How It Works)
+    const navBtns = section.querySelectorAll('.how-it-works-nav .nav-btn');
+
     let expandedCard = null;
     let currentExpandedIndex = isMobile ? 0 : -1; // Start at first card on mobile
 
@@ -1295,6 +1298,19 @@ function initCards() {
       // Mark this card as active
       card.classList.add('card-active');
       currentExpandedIndex = index;
+
+      // Update Nav Buttons State
+      if (navBtns.length) {
+        navBtns.forEach(btn => btn.classList.remove('active'));
+        // Find button corresponding to this index
+        const activeBtn = [...navBtns].find(btn => parseInt(btn.dataset.index) === index);
+        if (activeBtn) activeBtn.classList.add('active');
+
+        // Scroll active button into view on mobile
+        if (isMobile && activeBtn) {
+          activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      }
 
       // Show expanded card
       const wasHidden = expandedCard.style.display === 'none';
@@ -1380,6 +1396,22 @@ function initCards() {
           if (e.target.closest('.card-nav')) return;
           if (e.target.closest('a, button:not(.card-cta)')) return;
           expandCardAtIndex(index);
+        });
+      });
+    }
+
+    // Attach Nav Button Listeners
+    if (navBtns.length) {
+      navBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const idx = parseInt(btn.dataset.index);
+          const relatedCard = cards[idx];
+
+          // Scroll to card for context on mobile if needed, or just let expansion handle it
+          if (!isNaN(idx)) {
+            expandCardAtIndex(idx);
+          }
         });
       });
     }
