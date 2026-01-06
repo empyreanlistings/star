@@ -134,11 +134,13 @@ async function initResponsiveVideo() {
   const updateVideoSource = () => {
     const isMobile = window.innerWidth <= 768;
     const videoSrc = isMobile ? 'images/mobile-video.mp4' : 'images/web-video.mp4';
+    const posterSrc = isMobile ? (video.getAttribute('data-mobile-poster') || 'images/web-video.webp') : 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
     if (currentSrc !== videoSrc) {
       console.log(`📱 Switching to ${isMobile ? 'mobile' : 'desktop'} video`);
       video.setAttribute('data-last-src', videoSrc);
+      video.setAttribute('poster', posterSrc);
       loadAndCacheVideo(videoSrc);
     }
   };
@@ -973,8 +975,15 @@ function deprecatedInitAnimations() {
   }
 
   let carouselRevealed = false;
+  let videoEnded = false;
 
   const revealCarousel = () => {
+    // CRITICAL: Only reveal if video has actually ended
+    if (!videoEnded && heroVideo) {
+      console.log('⚠️ Video still playing, carousel reveal blocked');
+      return;
+    }
+
     if (carouselRevealed) {
       console.log('⚠️ Carousel already revealed');
       return;
@@ -1021,22 +1030,30 @@ function deprecatedInitAnimations() {
 
     heroVideo.addEventListener('ended', () => {
       console.log('🎬 Video ended');
+      videoEnded = true; // Mark video as ended
 
       if (window.gsap) {
         gsap.to(heroVideo, {
           opacity: 0,
           duration: 2,
           ease: "power2.inOut",
-          onStart: () => console.log('🌑 Video fade-out started')
+          onStart: () => console.log('🌑 Video fade-out started'),
+          onComplete: () => {
+            // Only reveal carousel AFTER video has fully faded out
+            if (!carouselRevealed) {
+              revealCarousel();
+            }
+          }
         });
       } else {
         heroVideo.style.transition = "opacity 2s ease";
         heroVideo.style.opacity = "0";
-      }
-
-      // Reveal carousel if not already done
-      if (!carouselRevealed) {
-        revealCarousel();
+        // Wait for fade-out to complete before revealing carousel
+        setTimeout(() => {
+          if (!carouselRevealed) {
+            revealCarousel();
+          }
+        }, 2000);
       }
     });
 

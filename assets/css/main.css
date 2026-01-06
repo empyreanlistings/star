@@ -1152,7 +1152,7 @@ html[data-theme="light"] nav a:not(.logo-container).active {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 20px;
+  gap: 5px;
   z-index: auto;
 }
 
@@ -1265,7 +1265,7 @@ html[data-theme="dark"] .menu-toggle:hover i {
   }
 
   .nav-right {
-    gap: 20px;
+    gap: 5px;
   }
 }
 
@@ -1881,7 +1881,7 @@ html[data-theme="light"] .hero-welcome-text h1 {
 .slide-text {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0;
   width: 100%;
   align-items: center;
 }
@@ -1940,7 +1940,7 @@ html[data-theme="light"] .hero-slide:hover .slide-image {
   }
 
   .slide-text {
-    gap: 8px;
+    gap: 0;
   }
 }
 
@@ -5471,8 +5471,6 @@ html[data-theme="light"] .messenger-fab:hover {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  margin-right: 15px;
-  /* Spacing from theme toggle */
   overflow: hidden;
   border: 2px solid transparent;
   /* default */
