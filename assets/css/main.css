@@ -711,7 +711,7 @@ html[data-theme="light"] .container-glass:hover {
   height: 30px;
   padding: 0 10px;
   border-radius: 10px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.8px;
@@ -723,6 +723,21 @@ html[data-theme="light"] .container-glass:hover {
   color: var(--text);
   background: transparent;
   border: none;
+}
+
+/* Vertical Dividers for Filters */
+.property-gallery-filters>*:not(:last-child)::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 18px;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin-left: 15px;
+  pointer-events: none;
+}
+
+[data-theme="light"] .property-gallery-filters>*:not(:last-child)::after {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 /* HOW IT WORKS NAV */
