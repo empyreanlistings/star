@@ -6632,6 +6632,13 @@ html[data-theme="light"] .btn-copy:hover {
     padding: 20px !important;
   }
 
+  /* Prevent full-page overflow on mobile */
+  .dashboard-content {
+    padding: 20px 16px !important;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
   /* Stack form groups on mobile */
   .form-group[style*="grid-template-columns"] {
     grid-template-columns: 1fr !important;
