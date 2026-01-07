@@ -6072,6 +6072,8 @@ td img {
 
 .form-group {
   margin-bottom: 1rem;
+  border: none !important;
+  /* Prevent dark mode spacer borders */
 }
 
 .form-group label {
@@ -6088,6 +6090,8 @@ td img {
   border-radius: 4px;
   background: var(--dash-bg);
   color: var(--dash-text);
+  box-sizing: border-box;
+  /* Fix right margin overflow */
 }
 
 #closeModal {
@@ -6165,6 +6169,25 @@ td img {
   border-color: var(--accent);
   color: #000;
   box-shadow: 0 4px 15px rgba(var(--accent-rgb), 0.3);
+}
+
+/* Light Mode Chip Overrides */
+html[data-theme="light"] .chip {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #444;
+}
+
+html[data-theme="light"] .chip:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #000;
+}
+
+html[data-theme="light"] .chip.active {
+  background: var(--accent);
+  color: #fff;
+  /* White text on accent for contrast */
+  border-color: var(--accent);
 }
 
 .premium-modal .close-modal {
