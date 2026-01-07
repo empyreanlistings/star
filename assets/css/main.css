@@ -6490,21 +6490,36 @@ html[data-theme="light"] .btn-copy:hover {
   align-items: center;
   justify-content: center;
   z-index: 10;
-  overflow: hidden;
+  overflow: visible;
+  /* Allow displacement to bleed */
+  isolation: isolate;
+  /* Create new stacking context */
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.4),
     0 0 1px rgba(255, 255, 255, 0.1);
 }
 
+.logo-halo-glass {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: visible;
+  /* Allow ripple to bleed out naturally */
+  z-index: 1;
+  filter: url(#liquidGlassHalo);
+}
+
 
 .halo-filter {
   position: absolute;
-  inset: -20px;
+  inset: -30px;
+  /* Expand for wider ripple */
   z-index: 0;
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
-  filter: url(#liquidGlassHalo);
-  isolation: isolate;
+  background: rgba(255, 255, 255, 0.02);
+  /* Pixel buffer for displacement */
+  border-radius: 50%;
   pointer-events: none;
 }
 
@@ -6531,10 +6546,9 @@ html[data-theme="light"] .btn-copy:hover {
 }
 
 .halo-content {
-  position: relative;
-  z-index: 3;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
