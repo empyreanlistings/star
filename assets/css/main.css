@@ -6499,14 +6499,12 @@ html[data-theme="light"] .btn-copy:hover {
 
 .halo-filter {
   position: absolute;
-  inset: -10%;
-  /* Distortion overflow */
+  inset: -20px;
   z-index: 0;
-  background: rgba(255, 255, 255, 0.01);
-  /* Pixel buffer for distortion */
-  backdrop-filter: blur(8px) saturate(200%);
-  -webkit-backdrop-filter: blur(8px) saturate(200%);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
   filter: url(#liquidGlassHalo);
+  isolation: isolate;
   pointer-events: none;
 }
 
