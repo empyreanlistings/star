@@ -186,7 +186,7 @@ function renderAdminTable(listings) {
             <td>${type}</td>
             <td>${price}</td>
             <td><span class="status-badge status-active">${category.toUpperCase()}</span></td>
-            <td style="text-align:center;">${data.featured ? '<i class="fas fa-star" style="color:var(--accent);"></i>' : '-'}</td>
+            <td style="text-align:center;">${data.featured ? '<i class="fas fa-star" style="color:var(--accent);"></i>' : ''}</td>
             <td style="text-align:center;">${data.visits || 0}</td>
             <td style="text-align:center;">${data.likes || 0}</td>
             <td>
@@ -767,7 +767,7 @@ function renderGalleryTable(gallery) {
             <td><strong>${item.headline || "-"}</strong></td>
             <td><small>${item.sub_header || "-"}</small></td>
             <td><span class="status-badge" style="background:rgba(255,255,255,0.05);">${item.category?.toUpperCase()}</span></td>
-            <td style="text-align:center;">${item.display ? '<i class="fas fa-check" style="color:var(--accent);"></i>' : '<i class="fas fa-times" style="opacity:0.3;"></i>'}</td>
+            <td style="text-align:center;">${item.display ? '<i class="fas fa-check" style="color:var(--accent);"></i>' : ''}</td>
             <td>
                 <button class="action-btn edit-gallery" data-id="${item.id}"><i class="fas fa-pen"></i></button>
                 <button class="action-btn delete-gallery" data-id="${item.id}"><i class="fas fa-trash"></i></button>
@@ -1094,7 +1094,7 @@ function renderPalawanGalleryTable(gallery) {
             <td><img src="${item.image}" alt="palawan" style="width:60px; height:40px; object-fit:cover; border-radius:4px;"></td>
             <td><strong>${item.title || "-"}</strong></td>
             <td><small>${item.description || "-"}</small></td>
-            <td style="text-align:center;">${item.display ? '<i class="fas fa-check" style="color:var(--accent);"></i>' : '<i class="fas fa-times" style="opacity:0.3;"></i>'}</td>
+            <td style="text-align:center;">${item.display ? '<i class="fas fa-check" style="color:var(--accent);"></i>' : ''}</td>
             <td>
                 <button class="action-btn edit-palawan-gallery" data-id="${item.id}"><i class="fas fa-pen"></i></button>
                 <button class="action-btn delete-palawan-gallery" data-id="${item.id}"><i class="fas fa-trash"></i></button>

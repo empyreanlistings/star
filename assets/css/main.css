@@ -6679,7 +6679,8 @@ html[data-theme="light"] .btn-copy:hover {
     border: 1px solid var(--dash-border);
     border-radius: 16px;
     padding: 16px;
-    margin-bottom: 16px;
+    margin: 0 10px 16px 10px;
+    /* Added side margins */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     position: relative;
     display: grid;
