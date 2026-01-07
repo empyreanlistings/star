@@ -98,6 +98,54 @@ function withFlip(cb) {
 }
 
 // ================================================================
+// SCROLL-REACTIVE LOGO HALO RIPPLE
+// ================================================================
+function initLogoHaloRipple() {
+  const displacement = document.getElementById("haloDisplacement");
+  if (!displacement || !window.gsap) return;
+
+  let lastScroll = window.pageYOffset;
+  let rippleLerp = { scale: 0 };
+  let scrollTimeout;
+
+  window.addEventListener("scroll", () => {
+    const currentScroll = window.pageYOffset;
+    const delta = Math.abs(currentScroll - lastScroll);
+    lastScroll = currentScroll;
+
+    // Trigger slight ripple based on scroll speed
+    // Max scale of ~10 for a subtle effect
+    const targetScale = Math.min(delta * 0.4, 10);
+
+    gsap.to(rippleLerp, {
+      scale: targetScale,
+      duration: 0.3,
+      onUpdate: () => {
+        displacement.setAttribute("scale", rippleLerp.scale);
+      }
+    });
+
+    // Settling back to zero
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      gsap.to(rippleLerp, {
+        scale: 0,
+        duration: 0.8,
+        ease: "power2.out",
+        onUpdate: () => {
+          displacement.setAttribute("scale", rippleLerp.scale);
+        }
+      });
+    }, 50);
+  }, { passive: true });
+}
+
+// Start Ripple Init
+document.addEventListener("DOMContentLoaded", () => {
+  safeInit("Logo Halo Ripple", initLogoHaloRipple);
+});
+
+// ================================================================
 // RESPONSIVE VIDEO LOADER + CACHING
 // ================================================================
 async function initResponsiveVideo() {
