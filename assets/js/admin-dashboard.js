@@ -763,10 +763,12 @@ function renderGalleryTable(gallery) {
     gallery.forEach(item => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><img src="${item.image}" alt="gallery" style="width:60px; height:40px; object-fit:cover; border-radius:4px;"></td>
-            <td><strong>${item.headline || "-"}</strong></td>
-            <td><small>${item.sub_header || "-"}</small></td>
-            <td><span class="status-badge" style="background:rgba(255,255,255,0.05);">${item.category?.toUpperCase()}</span></td>
+            <td><img src="${item.image}" alt="gallery"></td>
+            <td>
+                <strong>${item.headline || "Untitled"}</strong><br>
+                <small style="opacity: 0.7;">${item.sub_header || ""}</small>
+            </td>
+            <td><span class="status-badge status-active">${item.category?.toUpperCase() || "STRUCTURAL"}</span></td>
             <td style="text-align:center;">${item.display ? '<i class="fas fa-check" style="color:var(--accent);"></i>' : ''}</td>
             <td>
                 <button class="action-btn edit-gallery" data-id="${item.id}"><i class="fas fa-pen"></i></button>
@@ -827,7 +829,8 @@ function initGalleryFilters() {
     const filterTable = () => {
         const rows = tbody.querySelectorAll('tr');
         rows.forEach(row => {
-            const categoryCell = row.querySelector('td:nth-child(4)');
+            // Updated column index for Category (merged info column moved it from 4 to 3)
+            const categoryCell = row.querySelector('td:nth-child(3)');
             if (!categoryCell) return;
 
             const category = categoryCell.textContent.trim().toLowerCase();
@@ -1091,9 +1094,11 @@ function renderPalawanGalleryTable(gallery) {
     gallery.forEach(item => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><img src="${item.image}" alt="palawan" style="width:60px; height:40px; object-fit:cover; border-radius:4px;"></td>
-            <td><strong>${item.title || "-"}</strong></td>
-            <td><small>${item.description || "-"}</small></td>
+            <td><img src="${item.image}" alt="palawan"></td>
+            <td>
+                <strong>${item.title || "Untitled"}</strong><br>
+                <small style="opacity: 0.7;">${item.description || ""}</small>
+            </td>
             <td style="text-align:center;">${item.display ? '<i class="fas fa-check" style="color:var(--accent);"></i>' : ''}</td>
             <td>
                 <button class="action-btn edit-palawan-gallery" data-id="${item.id}"><i class="fas fa-pen"></i></button>
