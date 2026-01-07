@@ -115,11 +115,14 @@ function initLogoHaloRipple() {
 
     // Trigger much stronger ripple based on scroll speed
     // Max scale of 70 to match reference for clear "water" distortion
-    const targetScale = Math.min(delta * 2.5, 70);
+    // Boosted multiplier and added threshold for extreme visibility
+    const targetScale = Math.max(delta * 4.0, delta > 2 ? 8 : 0);
+    const clampedScale = Math.min(targetScale, 80);
 
     gsap.to(rippleLerp, {
-      scale: targetScale,
+      scale: clampedScale,
       duration: 0.3,
+      overwrite: "auto",
       onUpdate: () => {
         displacement.setAttribute("scale", rippleLerp.scale);
       }
@@ -130,13 +133,14 @@ function initLogoHaloRipple() {
     scrollTimeout = setTimeout(() => {
       gsap.to(rippleLerp, {
         scale: 0,
-        duration: 1.2,
+        duration: 1.4, // Slower settle for more organic feel
         ease: "power2.out",
+        overwrite: "auto",
         onUpdate: () => {
           displacement.setAttribute("scale", rippleLerp.scale);
         }
       });
-    }, 40);
+    }, 50);
   }, { passive: true });
 }
 
