@@ -113,9 +113,9 @@ function initLogoHaloRipple() {
     const delta = Math.abs(currentScroll - lastScroll);
     lastScroll = currentScroll;
 
-    // Trigger slight ripple based on scroll speed
-    // Max scale of ~10 for a subtle effect
-    const targetScale = Math.min(delta * 0.4, 10);
+    // Trigger stronger ripple based on scroll speed
+    // Max scale of ~25 for a clearly visible effect
+    const targetScale = Math.min(delta * 1.2, 25);
 
     gsap.to(rippleLerp, {
       scale: targetScale,
@@ -130,13 +130,13 @@ function initLogoHaloRipple() {
     scrollTimeout = setTimeout(() => {
       gsap.to(rippleLerp, {
         scale: 0,
-        duration: 0.8,
+        duration: 0.6,
         ease: "power2.out",
         onUpdate: () => {
           displacement.setAttribute("scale", rippleLerp.scale);
         }
       });
-    }, 50);
+    }, 40);
   }, { passive: true });
 }
 
