@@ -258,9 +258,16 @@ function initPropertyFilters() {
     });
 
     // Update no results message
-    const visibleCount = cards.filter(c => !toHide.includes(c) && (toShow.includes(c) || c.style.display !== "none")).length;
+    const count = cards.filter(card => {
+      const category = card.dataset.category || "all";
+      const price = +card.dataset.price || 0;
+      const categoryMatch = window.activeListingCategory === "all" || category.toLowerCase() === window.activeListingCategory.toLowerCase();
+      const priceMatch = (price >= min && price <= max) || (!price && min === 0);
+      return categoryMatch && priceMatch;
+    }).length;
+
     if (noResults) {
-      noResults.style.display = visibleCount ? "none" : "block";
+      noResults.style.display = count === 0 ? "block" : "none";
     }
 
     if (prefersReducedMotion || !animate) {

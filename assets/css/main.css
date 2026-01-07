@@ -1022,11 +1022,15 @@ body {
   width: 100%;
   height: 3px;
   border-radius: 3px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
   z-index: 1;
+}
+
+[data-theme="light"] .slider-track-inline {
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .slider-range-inline {
@@ -1035,10 +1039,14 @@ body {
   border-radius: 3px;
   top: 50%;
   transform: translateY(-50%);
-  background: var(--accent);
+  background: var(--text);
   pointer-events: none;
   z-index: 2;
   transition: left .15s ease, right .15s ease;
+}
+
+[data-theme="light"] .slider-range-inline {
+  background: var(--text-light);
 }
 
 /* Thumb */
@@ -1046,26 +1054,36 @@ body {
   -webkit-appearance: none;
   width: 14px;
   height: 14px;
-  background: var(--accent);
+  background: var(--text);
   border-radius: 50%;
-  border: 2px solid var(--glass-border);
   cursor: pointer;
   pointer-events: auto;
+  border: 2px solid var(--text);
   transition: transform .2s ease;
   margin-top: 0;
   /* Center on track */
 }
 
+[data-theme="light"] .slider-inline::-webkit-slider-thumb {
+  background: var(--text-light);
+  border-color: var(--text-light);
+}
+
 .slider-inline::-moz-range-thumb {
   width: 14px;
   height: 14px;
-  background: var(--accent);
+  background: var(--text);
   border-radius: 50%;
-  border: 2px solid var(--glass-border);
   cursor: pointer;
   pointer-events: auto;
+  border: 2px solid var(--text);
   margin-top: 0;
   /* Center on track */
+}
+
+[data-theme="light"] .slider-inline::-moz-range-thumb {
+  background: var(--text-light);
+  border-color: var(--text-light);
 }
 
 .slider-inline:active::-webkit-slider-thumb,
@@ -2395,7 +2413,6 @@ html[data-theme="light"] .property-logo {
   /* Ensure it sits above everything */
 }
 
-/* ============================== INFO ============================== */
 .property-info {
   display: flex;
   justify-content: space-between;
@@ -2403,7 +2420,16 @@ html[data-theme="light"] .property-logo {
   font-weight: 500;
   color: #e5e5e5;
   background: transparent;
-  gap: 20px;
+  gap: 12px;
+  min-width: 0;
+}
+
+.property-location {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
 }
 
 .property-info.primary {

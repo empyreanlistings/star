@@ -141,7 +141,7 @@ function handleAdminSnapshot(snapshot) {
     if (!tbody) return;
 
     if (snapshot.empty) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;">No listings found.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:3rem;opacity:0.6;"><i class="fas fa-search" style="font-size:2rem;margin-bottom:1rem;display:block;"></i><strong>Nothing here. Try updating your filters</strong></td></tr>`;
         return;
     }
 
@@ -194,6 +194,11 @@ function renderAdminTable(listings) {
         `;
         tbody.appendChild(tr);
     });
+
+    // Re-apply filters if active
+    if (window.initDashboardFilters) {
+        window.initDashboardFilters();
+    }
 
     // Bind events
     document.querySelectorAll(".action-btn.delete").forEach(btn => btn.addEventListener("click", handleDelete));
