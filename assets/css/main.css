@@ -6469,6 +6469,16 @@ html[data-theme="light"] .btn-copy:hover {
   }
 }
 
+/* ============================== HALO SEPARATOR ============================== */
+.halo-separator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 0 40px;
+  position: relative;
+  z-index: 5;
+}
+
 /* ============================== LOGO HALO — PREMIUM LIQUID GLASS ============================== */
 .logo-halo {
   position: relative;
