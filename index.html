@@ -478,7 +478,8 @@
     </div>
 
     <!-- Shared SVG Filters -->
-    <svg width="0" height="0" style="position:absolute; pointer-events:none; visibility: hidden;" aria-hidden="true">
+    <svg width="0" height="0" style="position:absolute; pointer-events:none; opacity: 0; pointer-events: none;"
+      aria-hidden="true">
       <defs>
         <!-- Original Liquid Lens (Animated) -->
         <filter id="liquidLens">
@@ -492,7 +493,7 @@
 
         <!-- Logo Halo Ripple (JS Controlled) -->
         <filter id="liquidGlassHalo">
-          <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="5" result="noise" />
+          <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="5" result="noise" />
           <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G"
             id="haloDisplacement" />
         </filter>
