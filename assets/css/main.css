@@ -4110,8 +4110,9 @@ details {
   overflow-y: hidden;
   overflow-y: hidden;
   gap: var(--gap);
-  padding: 40px 60px 60px 60px;
-  /* 40px (breakout) + 20px (internal spacing) */
+  /* Start items 40px from edge, but allow scrolling to edges */
+  padding: 40px 0 60px 40px;
+  scroll-padding-left: 40px;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   /* Firefox */
@@ -4275,8 +4276,8 @@ details {
   }
 
   .palawan-gallery {
-    padding: 20px 60px 40px 60px;
-    scroll-padding-left: 60px;
+    padding: 20px 0 40px 40px;
+    scroll-padding-left: 40px;
   }
 }
 
@@ -5571,8 +5572,20 @@ html[data-theme="dark"] .btn {
 /* ============================== FOOTER ============================== */
 footer {
   position: relative;
-  padding: 50px 20px;
+  padding: 50px 0;
+  /* Remove side padding so inner panel controls width */
   text-align: center;
+  max-width: calc(100% - 80px);
+  /* Match other containers */
+  margin: 40px auto;
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  footer {
+    max-width: 100%;
+    margin: 0;
+  }
 }
 
 /* ============================== FOOTER CONTENT ============================== */

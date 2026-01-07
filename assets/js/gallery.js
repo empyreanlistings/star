@@ -86,6 +86,25 @@ function initKaiAndIslaGallery() {
       else if (!shouldShow && isCurrentlyVisible) toHide.push(item);
     });
 
+    // Update Empty State
+    let noResults = gallery.querySelector(".gallery-no-results");
+    if (visibleCount === 0) {
+      if (!noResults) {
+        noResults = document.createElement("div");
+        noResults.className = "gallery-no-results property-card no-results-card";
+        noResults.innerHTML = `
+          <div class="property-image" style="background:var(--glass-bg);display:flex;align-items:center;justify-content:center;height:240px;flex-direction:column;gap:16px;">
+              <i class="fas fa-search" style="font-size:48px;color:var(--text);opacity:0.3;"></i>
+              <h4 style="margin:0; opacity:0.8;">Nothing here. Try updating your filters</h4>
+          </div>
+        `;
+        gallery.appendChild(noResults);
+      }
+      noResults.style.display = "block";
+    } else if (noResults) {
+      noResults.style.display = "none";
+    }
+
     if (toHide.length) {
       gsap.to(toHide, {
         opacity: 0, scale: 0.95, duration: 0.2, ease: "power2.in",
