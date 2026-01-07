@@ -6650,11 +6650,17 @@ html[data-theme="light"] .btn-copy:hover {
      Transform table rows into cards for better UX
   --------------------------------------------------------- */
   .listings-table-container {
-    background: transparent !important;
+    background: inherit !important;
+    /* Remove container background */
     box-shadow: none !important;
     border: none !important;
     padding: 0 !important;
     overflow: visible !important;
+  }
+
+  .listings-table-container table {
+    min-width: 0 !important;
+    /* Prevent overflow */
   }
 
   .listings-table-container table,
@@ -6671,6 +6677,19 @@ html[data-theme="light"] .btn-copy:hover {
     position: absolute;
     top: -9999px;
     left: -9999px;
+  }
+
+  /* Hide logout text on mobile */
+  .logout-text {
+    display: none;
+  }
+
+  /* Allow wrapping for user email */
+  #userEmail {
+    white-space: normal;
+    text-align: right;
+    max-width: 120px;
+    line-height: 1.2;
   }
 
   /* Dashboard Section Header (Flex + Wrapping) */
@@ -6696,16 +6715,18 @@ html[data-theme="light"] .btn-copy:hover {
     background: var(--dash-card-bg);
     border: 1px solid var(--dash-border);
     border-radius: 16px;
-    padding: 16px;
+    padding: 12px;
+    /* Tighter padding */
     width: auto !important;
     /* Ensure margins are respected */
-    margin: 0 10px 16px 10px !important;
+    margin: 0 10px 12px 10px !important;
+    box-sizing: border-box !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     position: relative;
     display: grid;
     grid-template-columns: 80px 1fr;
     grid-template-rows: auto auto auto;
-    gap: 8px;
+    gap: 6px;
     /* Tighter gap */
   }
 
@@ -6741,9 +6762,10 @@ html[data-theme="light"] .btn-copy:hover {
   }
 
   .listings-table-container td:nth-child(2) strong {
-    font-size: 1rem;
+    font-size: 0.95rem;
+    /* Slightly smaller */
     display: block;
-    margin-bottom: 2px;
+    margin-bottom: 0px;
     /* Tighter text */
     color: var(--dash-text);
   }
@@ -6753,8 +6775,8 @@ html[data-theme="light"] .btn-copy:hover {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    font-size: 0.8rem;
-    line-height: 1.2;
+    font-size: 0.75rem;
+    line-height: 1.1;
     /* Tighter leading */
   }
 
@@ -6770,12 +6792,13 @@ html[data-theme="light"] .btn-copy:hover {
     /* Featured */
     padding: 0;
     border: none;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--dash-text);
     opacity: 0.9;
     display: inline-block;
-    margin-right: 12px;
-    margin-bottom: 4px;
+    margin-right: 8px;
+    /* Tighter */
+    margin-bottom: 0px;
   }
 
   /* Positioning metadata in the grid */
