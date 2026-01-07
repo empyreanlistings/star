@@ -57,10 +57,16 @@
 
     <main class="dashboard-content">
         <div id="listingsSection" class="listings-table-container">
-            <!-- Centered Title -->
-            <h1 style="text-align: center; margin-bottom: 1.5rem;">Manage Listings</h1>
+            <!-- Centered Title with Add Button -->
+            <div style="position: relative; margin-bottom: 1.5rem;">
+                <h1 style="text-align: center; margin: 0;">Manage Listings</h1>
+                <button id="addListingBtn" class="btn-add-icon" aria-label="Add New Listing"
+                    style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
 
-            <!-- Filters with Add Button -->
+            <!-- Filters -->
             <div class="property-filters-container" style="margin-bottom: 2rem; position: relative;">
                 <div class="property-gallery-filters" role="group" aria-label="Property type filters">
                     <button class="filter active" data-filter="all" type="button">ALL</button>
@@ -82,11 +88,6 @@
                         <div class="slider-range-inline"></div>
                     </div>
                 </div>
-
-                <!-- Icon Button positioned to the right -->
-                <button id="addListingBtn" class="btn-add-icon" aria-label="Add New Listing">
-                    <i class="fas fa-plus"></i>
-                </button>
             </div>
 
             <table>
@@ -112,10 +113,16 @@
         </div>
 
         <div id="gallerySection" class="listings-table-container" style="margin-top: 4rem;">
-            <!-- Centered Title -->
-            <h1 style="text-align: center; margin-bottom: 1.5rem;">Manage Gallery</h1>
+            <!-- Centered Title with Add Button -->
+            <div style="position: relative; margin-bottom: 1.5rem;">
+                <h1 style="text-align: center; margin: 0;">Manage Gallery</h1>
+                <button id="addGalleryBtn" class="btn-add-icon" aria-label="Add New Gallery Item"
+                    style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
 
-            <!-- Filters with Add Button -->
+            <!-- Filters -->
             <div class="property-filters-container" style="margin-bottom: 2rem; position: relative;">
                 <div class="gallery-type-filters" role="group" aria-label="Gallery category filters">
                     <button class="filter active" data-filter="all" type="button">ALL</button>
@@ -124,11 +131,6 @@
                     <button class="filter" data-filter="interior" type="button">INTERIOR</button>
                     <button class="filter" data-filter="pool" type="button">SWIMMING POOLS</button>
                 </div>
-
-                <!-- Icon Button positioned to the right -->
-                <button id="addGalleryBtn" class="btn-add-icon" aria-label="Add New Gallery Item">
-                    <i class="fas fa-plus"></i>
-                </button>
             </div>
 
             <table>
@@ -151,12 +153,11 @@
         </div>
 
         <div id="palawanGallerySection" class="listings-table-container" style="margin-top: 4rem;">
-            <!-- Centered Title -->
-            <h1 style="text-align: center; margin-bottom: 1.5rem;">Manage Palawan Gallery</h1>
-
-            <!-- Add Button (no filters needed for Palawan) -->
-            <div style="margin-bottom: 2rem; position: relative; text-align: right;">
-                <button id="addPalawanGalleryBtn" class="btn-add-icon" aria-label="Add New Palawan Gallery Item">
+            <!-- Centered Title with Add Button -->
+            <div style="position: relative; margin-bottom: 1.5rem;">
+                <h1 style="text-align: center; margin: 0;">Manage Palawan Gallery</h1>
+                <button id="addPalawanGalleryBtn" class="btn-add-icon" aria-label="Add New Palawan Gallery Item"
+                    style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
