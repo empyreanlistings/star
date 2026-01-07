@@ -796,7 +796,6 @@ body {
   padding: 0;
   background-color: var(--bg-color);
   color: var(--text-color);
-  line-height: 1.6;
   opacity: 0;
   animation: pageFadeIn 0.8s ease-out forwards;
 }
@@ -1653,8 +1652,8 @@ html[data-theme="light"] .menu-overlay {
   /* right: 0; removed */
   /* top: 50%; removed */
   /* transform: translateY(-50%); removed */
-  width: 38px;
-  height: 38px;
+  width: 50px;
+  height: 50  px;
   border-radius: 50%;
   background: var(--accent);
   color: white;
