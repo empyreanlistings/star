@@ -6457,427 +6457,52 @@ html[data-theme="light"] .btn-copy:hover {
   height: 100px;
   object-fit: contain;
   z-index: 2;
-
-  /* Logo Halo Effect */
-  .logo-halo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 250px;
-    /* 5px larger than 240px height on each side */
-    height: 250px;
-    border-radius: 50%;
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    box-shadow:
-      0 10px 30px rgba(0, 0, 0, 0.3),
-      inset 0 1px 1px rgba(255, 255, 255, 0.1);
-    margin-bottom: 20px;
-    transition: var(--transition);
-  }
-
-  .logo-halo:hover {
-    transform: translateY(-5px);
-    background: var(--glass-hover);
-    box-shadow:
-      0 20px 40px rgba(0, 0, 0, 0.4),
-      inset 0 1px 2px rgba(255, 255, 255, 0.2);
-  }
-
-  .logo-halo img {
-    height: 240px;
-    width: auto;
-    object-fit: contain;
-  }
-
   pointer-events: none;
-
-  /* Logo Halo Effect */
-  .logo-halo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 250px;
-    /* 5px larger than 240px height on each side */
-    height: 250px;
-    border-radius: 50%;
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    box-shadow:
-      0 10px 30px rgba(0, 0, 0, 0.3),
-      inset 0 1px 1px rgba(255, 255, 255, 0.1);
-    margin-bottom: 20px;
-    transition: var(--transition);
-  }
-
-  .logo-halo:hover {
-    transform: translateY(-5px);
-    background: var(--glass-hover);
-    box-shadow:
-      0 20px 40px rgba(0, 0, 0, 0.4),
-      inset 0 1px 2px rgba(255, 255, 255, 0.2);
-  }
-
-  .logo-halo img {
-    height: 240px;
-    width: auto;
-    object-fit: contain;
-  }
-}
-
-/* Logo Halo Effect */
-.logo-halo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 250px;
-  /* 5px larger than 240px height on each side */
-  height: 250px;
-  border-radius: 50%;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.3),
-    inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  margin-bottom: 20px;
-  transition: var(--transition);
-}
-
-.logo-halo:hover {
-  transform: translateY(-5px);
-  background: var(--glass-hover);
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.4),
-    inset 0 1px 2px rgba(255, 255, 255, 0.2);
-}
-
-.logo-halo img {
-  height: 240px;
-  width: auto;
-  object-fit: contain;
-}
-
-/* Logo Halo Effect */
-.logo-halo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 250px;
-  /* 5px larger than 240px height on each side */
-  height: 250px;
-  border-radius: 50%;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.3),
-    inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  margin-bottom: 20px;
-  transition: var(--transition);
-}
-
-.logo-halo:hover {
-  transform: translateY(-5px);
-  background: var(--glass-hover);
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.4),
-    inset 0 1px 2px rgba(255, 255, 255, 0.2);
-}
-
-.logo-halo img {
-  height: 240px;
-  width: auto;
-  object-fit: contain;
 }
 
 @media (max-width: 991px) {
-
-  /* Logo Halo Effect */
-  .logo-halo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 250px;
-    /* 5px larger than 240px height on each side */
-    height: 250px;
-    border-radius: 50%;
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    box-shadow:
-      0 10px 30px rgba(0, 0, 0, 0.3),
-      inset 0 1px 1px rgba(255, 255, 255, 0.1);
-    margin-bottom: 20px;
-    transition: var(--transition);
-  }
-
-  .logo-halo:hover {
-    transform: translateY(-5px);
-    background: var(--glass-hover);
-    box-shadow:
-      0 20px 40px rgba(0, 0, 0, 0.4),
-      inset 0 1px 2px rgba(255, 255, 255, 0.2);
-  }
-
-  .logo-halo img {
-    height: 240px;
-    width: auto;
-    object-fit: contain;
-  }
-
   .palawan-row {
-
-    /* Logo Halo Effect */
-    .logo-halo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 250px;
-      /* 5px larger than 240px height on each side */
-      height: 250px;
-      border-radius: 50%;
-      background: var(--glass-bg);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border);
-      box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.3),
-        inset 0 1px 1px rgba(255, 255, 255, 0.1);
-      margin-bottom: 20px;
-      transition: var(--transition);
-    }
-
-    .logo-halo:hover {
-      transform: translateY(-5px);
-      background: var(--glass-hover);
-      box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.4),
-        inset 0 1px 2px rgba(255, 255, 255, 0.2);
-    }
-
-    .logo-halo img {
-      height: 240px;
-      width: auto;
-      object-fit: contain;
-    }
-
     flex-direction: column;
-
-    /* Logo Halo Effect */
-    .logo-halo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 250px;
-      /* 5px larger than 240px height on each side */
-      height: 250px;
-      border-radius: 50%;
-      background: var(--glass-bg);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border);
-      box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.3),
-        inset 0 1px 1px rgba(255, 255, 255, 0.1);
-      margin-bottom: 20px;
-      transition: var(--transition);
-    }
-
-    .logo-halo:hover {
-      transform: translateY(-5px);
-      background: var(--glass-hover);
-      box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.4),
-        inset 0 1px 2px rgba(255, 255, 255, 0.2);
-    }
-
-    .logo-halo img {
-      height: 240px;
-      width: auto;
-      object-fit: contain;
-    }
-  }
-
-  /* Logo Halo Effect */
-  .logo-halo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 250px;
-    /* 5px larger than 240px height on each side */
-    height: 250px;
-    border-radius: 50%;
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    box-shadow:
-      0 10px 30px rgba(0, 0, 0, 0.3),
-      inset 0 1px 1px rgba(255, 255, 255, 0.1);
-    margin-bottom: 20px;
-    transition: var(--transition);
-  }
-
-  .logo-halo:hover {
-    transform: translateY(-5px);
-    background: var(--glass-hover);
-    box-shadow:
-      0 20px 40px rgba(0, 0, 0, 0.4),
-      inset 0 1px 2px rgba(255, 255, 255, 0.2);
-  }
-
-  .logo-halo img {
-    height: 240px;
-    width: auto;
-    object-fit: contain;
-  }
-
-  /* Logo Halo Effect */
-  .logo-halo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 250px;
-    /* 5px larger than 240px height on each side */
-    height: 250px;
-    border-radius: 50%;
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    box-shadow:
-      0 10px 30px rgba(0, 0, 0, 0.3),
-      inset 0 1px 1px rgba(255, 255, 255, 0.1);
-    margin-bottom: 20px;
-    transition: var(--transition);
-  }
-
-  .logo-halo:hover {
-    transform: translateY(-5px);
-    background: var(--glass-hover);
-    box-shadow:
-      0 20px 40px rgba(0, 0, 0, 0.4),
-      inset 0 1px 2px rgba(255, 255, 255, 0.2);
-  }
-
-  .logo-halo img {
-    height: 240px;
-    width: auto;
-    object-fit: contain;
   }
 
   .inner_container_palawan {
-
-    /* Logo Halo Effect */
-    .logo-halo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 250px;
-      /* 5px larger than 240px height on each side */
-      height: 250px;
-      border-radius: 50%;
-      background: var(--glass-bg);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border);
-      box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.3),
-        inset 0 1px 1px rgba(255, 255, 255, 0.1);
-      margin-bottom: 20px;
-      transition: var(--transition);
-    }
-
-    .logo-halo:hover {
-      transform: translateY(-5px);
-      background: var(--glass-hover);
-      box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.4),
-        inset 0 1px 2px rgba(255, 255, 255, 0.2);
-    }
-
-    .logo-halo img {
-      height: 240px;
-      width: auto;
-      object-fit: contain;
-    }
-
     min-height: auto;
-
-    /* Logo Halo Effect */
-    .logo-halo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 250px;
-      /* 5px larger than 240px height on each side */
-      height: 250px;
-      border-radius: 50%;
-      background: var(--glass-bg);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border);
-      box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.3),
-        inset 0 1px 1px rgba(255, 255, 255, 0.1);
-      margin-bottom: 20px;
-      transition: var(--transition);
-    }
-
-    .logo-halo:hover {
-      transform: translateY(-5px);
-      background: var(--glass-hover);
-      box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.4),
-        inset 0 1px 2px rgba(255, 255, 255, 0.2);
-    }
-
-    .logo-halo img {
-      height: 240px;
-      width: auto;
-      object-fit: contain;
-    }
   }
+}
 
-  /* Logo Halo Effect */
-  .logo-halo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 250px;
-    /* 5px larger than 240px height on each side */
-    height: 250px;
-    border-radius: 50%;
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    box-shadow:
-      0 10px 30px rgba(0, 0, 0, 0.3),
-      inset 0 1px 1px rgba(255, 255, 255, 0.1);
-    margin-bottom: 20px;
-    transition: var(--transition);
-  }
+/* ============================== LOGO HALO EFFECT ============================== */
+.logo-halo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 255px;
+  /* image height (240px) + 15px extra for halo visible space */
+  height: 255px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  margin-bottom: 25px;
+  transition: var(--transition);
+  position: relative;
+  z-index: 1;
+}
 
-  .logo-halo:hover {
-    transform: translateY(-5px);
-    background: var(--glass-hover);
-    box-shadow:
-      0 20px 40px rgba(0, 0, 0, 0.4),
-      inset 0 1px 2px rgba(255, 255, 255, 0.2);
-  }
+.logo-halo:hover {
+  transform: translateY(-8px) scale(1.02);
+  background: var(--glass-hover);
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.25);
+}
 
-  .logo-halo img {
-    height: 240px;
-    width: auto;
-    object-fit: contain;
-  }
+.logo-halo img {
+  height: 240px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
 }
