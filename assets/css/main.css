@@ -3948,7 +3948,6 @@ html[data-theme="light"] .team-email-overlay:hover .icon-box {
 .palawan-text {
   max-width: none;
   /* Full width */
-  text-align: left;
   margin-bottom: 20px;
   min-width: 0;
   /* defensive, explicit */
