@@ -6673,20 +6673,40 @@ html[data-theme="light"] .btn-copy:hover {
     left: -9999px;
   }
 
+  /* Dashboard Section Header (Flex + Wrapping) */
+  .dashboard-section-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+    position: relative;
+    text-align: center;
+  }
+
+  .dashboard-section-header h1 {
+    margin: 0;
+    line-height: 1;
+  }
+
   /* Card Styling */
   .listings-table-container tbody tr {
     background: var(--dash-card-bg);
     border: 1px solid var(--dash-border);
     border-radius: 16px;
     padding: 16px;
-    margin: 0 10px 16px 10px;
-    /* Added side margins */
+    width: auto !important;
+    /* Ensure margins are respected */
+    margin: 0 10px 16px 10px !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     position: relative;
     display: grid;
     grid-template-columns: 80px 1fr;
     grid-template-rows: auto auto auto;
-    gap: 12px;
+    gap: 8px;
+    /* Tighter gap */
   }
 
   /* Light mode card override */
@@ -6723,7 +6743,8 @@ html[data-theme="light"] .btn-copy:hover {
   .listings-table-container td:nth-child(2) strong {
     font-size: 1rem;
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
+    /* Tighter text */
     color: var(--dash-text);
   }
 
@@ -6733,7 +6754,8 @@ html[data-theme="light"] .btn-copy:hover {
     -webkit-box-orient: vertical;
     overflow: hidden;
     font-size: 0.8rem;
-    line-height: 1.3;
+    line-height: 1.2;
+    /* Tighter leading */
   }
 
   /* 3. Meta Data Grid - Middle Right */
