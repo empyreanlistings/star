@@ -53,7 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
             initGallerySync();
             initGalleryModalEvents();
             initPalawanGallerySync();
+            initGalleryModalEvents();
+            initPalawanGallerySync();
             initPalawanGalleryModalEvents();
+            initPropertyModalEvents();
 
             // 2. Fetch user's company and RE-INIT sync with filter
             await getUserCompany(user.uid);
@@ -481,7 +484,6 @@ async function handleFormSubmit(e) {
 
         // Close modal on success
         closeModal();
-        // No need to call fetchAdminListings, the real-time listener will update
     } catch (error) {
         console.error("Error saving listing:", error);
         alert("Error: " + error.message);
@@ -489,6 +491,40 @@ async function handleFormSubmit(e) {
         submitBtn.disabled = false;
         statusDiv.textContent = "";
     }
+}
+
+// =============================================================================
+// PROPERTY MODAL (VIEW DETAILS)
+// =============================================================================
+
+function initPropertyModalEvents() {
+    console.log("🛠️ [PropertyModal] Initializing Property View Modal Events...");
+    const overlay = document.getElementById("modalOverlay");
+    const closeBtn = document.getElementById("modalClose");
+
+    if (closeBtn) closeBtn.onclick = closePropertyModal;
+
+    if (overlay) {
+        overlay.onclick = (e) => {
+            if (e.target === overlay) closePropertyModal();
+        };
+    }
+}
+
+function closePropertyModal() {
+    const overlay = document.getElementById("modalOverlay");
+    const modal = document.getElementById("propertyModal");
+
+    if (overlay) {
+        overlay.classList.remove("open");
+        overlay.style.cssText = ""; // Reset inline hacks
+    }
+    if (modal) {
+        modal.classList.remove("open");
+        modal.style.cssText = ""; // Reset inline hacks
+    }
+
+    document.body.style.overflow = ""; // Re-enable scrolling
 }
 
 // Open Property Modal with listing data

@@ -6565,3 +6565,93 @@ html[data-theme="light"] .btn-copy:hover {
   object-fit: contain;
   filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.4));
 }
+
+/* ============================== DASHBOARD RESPONSIVENESS & FIXES ============================== */
+
+/* 1. Horizontal Scroll for Tables */
+.listings-table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Smooth scroll on iOS */
+  border-radius: 16px;
+  background: var(--dash-card-bg);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.listings-table-container table {
+  min-width: 800px;
+  /* Force minimum width to trigger scroll on small screens */
+  width: 100%;
+}
+
+/* 2. Modal Responsiveness */
+.modal-content {
+  width: 90% !important;
+  max-width: 600px !important;
+  margin: 10vh auto !important;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95% !important;
+    margin: 5vh auto !important;
+    padding: 20px !important;
+  }
+
+  /* Stack form groups on mobile */
+  .form-group[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+}
+
+/* 3. Modal Light/Dark Theme Polish */
+.premium-modal .modal-content {
+  background: #1a1f2c;
+  /* Dark Default */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+html[data-theme="light"] .premium-modal .modal-content {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  color: #333;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* Inputs in Modals */
+.form-control {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+}
+
+html[data-theme="light"] .form-control {
+  background: #f9f9f9 !important;
+  border: 1px solid #ccc !important;
+  color: #333 !important;
+}
+
+html[data-theme="light"] .form-control:focus {
+  border-color: var(--accent) !important;
+  background: #fff !important;
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1);
+}
+
+html[data-theme="light"] .modal-title {
+  color: #111 !important;
+}
+
+html[data-theme="light"] .close-modal {
+  color: #666;
+}
+
+html[data-theme="light"] .close-modal:hover {
+  color: #000;
+}
