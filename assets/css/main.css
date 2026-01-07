@@ -1646,11 +1646,13 @@ html[data-theme="light"] .menu-overlay {
 }
 
 /* Icon-only Add Button */
+/* Icon-only Add Button */
 .btn-add-icon {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  position: relative;
+  /* Changed from absolute */
+  /* right: 0; removed */
+  /* top: 50%; removed */
+  /* transform: translateY(-50%); removed */
   width: 38px;
   height: 38px;
   border-radius: 50%;
@@ -1667,12 +1669,14 @@ html[data-theme="light"] .menu-overlay {
 }
 
 .btn-add-icon:hover {
-  transform: translateY(-50%) scale(1.1);
+  transform: scale(1.1);
+  /* Removed translateY */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .btn-add-icon:active {
-  transform: translateY(-50%) scale(0.95);
+  transform: scale(0.95);
+  /* Removed translateY */
 }
 
 /* Action Buttons */
