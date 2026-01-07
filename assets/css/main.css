@@ -4301,15 +4301,7 @@ details {
 
 
 /* ============================== LIGHT MODE ============================== */
-html[data-theme="light"] .palawan-gallery .gallery-overlay {
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.6) 0%, transparent 60%);
-  color: #111;
-}
-
-html[data-theme="light"] .palawan-gallery .gallery-item:hover img {
-  transform: scale(1.08);
-  filter: brightness(1.12) contrast(1.1) saturate(1.2);
-}
+/* Consolidated Palawan gallery styles into a single high-contrast design for both themes. */
 
 /* ============================== PALAWAN LIGHTBOX FULLSCREEN ============================== */
 #palawan-lightbox {
