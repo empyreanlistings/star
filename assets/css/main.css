@@ -2993,7 +2993,6 @@ html[data-theme="light"] .modal-stats div {
 
   text-align: center;
   color: var(--text);
-  cursor: pointer;
   position: relative;
   display: flex;
   flex-direction: column;
