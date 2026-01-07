@@ -6486,11 +6486,9 @@ html[data-theme="light"] .btn-copy:hover {
   /* Accommodate specular depth */
   height: 260px;
   border-radius: 50%;
-  margin-bottom: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--transition);
   z-index: 10;
   overflow: hidden;
   box-shadow:
@@ -6498,9 +6496,6 @@ html[data-theme="light"] .btn-copy:hover {
     0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-.logo-halo:hover {
-  transform: translateY(-8px) scale(1.02);
-}
 
 .halo-filter {
   position: absolute;
@@ -6550,9 +6545,4 @@ html[data-theme="light"] .btn-copy:hover {
   width: auto;
   object-fit: contain;
   filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.4));
-  transition: transform var(--transition);
-}
-
-.logo-halo:hover img {
-  transform: scale(0.96);
 }
