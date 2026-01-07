@@ -8,8 +8,8 @@
   --secondary: #2d3748;
   --feature-primary: #45403b;
   --feature-secondary: #d3cac2;
-  --accent: #5b720d;
-  --accent-rgb: 91, 114, 13;
+  --accent: #ee8297ba;
+  --accent-rgb: 238, 130, 151;
   --black: #000000;
   --white: #ffffff;
   --text: #f5f5f5;
@@ -3880,10 +3880,12 @@ html[data-theme="light"] .team-email-overlay:hover .icon-box {
 }
 
 .glass-panel h2 {
-  font-size: 2.2rem;
-  margin-bottom: 24px;
+  font-size: var(--h2-size);
+  color: var(--accent);
+  margin-bottom: 30px;
   font-weight: 800;
-  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .glass-panel p {
@@ -6455,15 +6457,427 @@ html[data-theme="light"] .btn-copy:hover {
   height: 100px;
   object-fit: contain;
   z-index: 2;
+
+  /* Logo Halo Effect */
+  .logo-halo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 250px;
+    /* 5px larger than 240px height on each side */
+    height: 250px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+    transition: var(--transition);
+  }
+
+  .logo-halo:hover {
+    transform: translateY(-5px);
+    background: var(--glass-hover);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.4),
+      inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  }
+
+  .logo-halo img {
+    height: 240px;
+    width: auto;
+    object-fit: contain;
+  }
+
   pointer-events: none;
+
+  /* Logo Halo Effect */
+  .logo-halo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 250px;
+    /* 5px larger than 240px height on each side */
+    height: 250px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+    transition: var(--transition);
+  }
+
+  .logo-halo:hover {
+    transform: translateY(-5px);
+    background: var(--glass-hover);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.4),
+      inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  }
+
+  .logo-halo img {
+    height: 240px;
+    width: auto;
+    object-fit: contain;
+  }
+}
+
+/* Logo Halo Effect */
+.logo-halo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  /* 5px larger than 240px height on each side */
+  height: 250px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  margin-bottom: 20px;
+  transition: var(--transition);
+}
+
+.logo-halo:hover {
+  transform: translateY(-5px);
+  background: var(--glass-hover);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.logo-halo img {
+  height: 240px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Logo Halo Effect */
+.logo-halo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  /* 5px larger than 240px height on each side */
+  height: 250px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  margin-bottom: 20px;
+  transition: var(--transition);
+}
+
+.logo-halo:hover {
+  transform: translateY(-5px);
+  background: var(--glass-hover);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.logo-halo img {
+  height: 240px;
+  width: auto;
+  object-fit: contain;
 }
 
 @media (max-width: 991px) {
+
+  /* Logo Halo Effect */
+  .logo-halo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 250px;
+    /* 5px larger than 240px height on each side */
+    height: 250px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+    transition: var(--transition);
+  }
+
+  .logo-halo:hover {
+    transform: translateY(-5px);
+    background: var(--glass-hover);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.4),
+      inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  }
+
+  .logo-halo img {
+    height: 240px;
+    width: auto;
+    object-fit: contain;
+  }
+
   .palawan-row {
+
+    /* Logo Halo Effect */
+    .logo-halo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 250px;
+      /* 5px larger than 240px height on each side */
+      height: 250px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+      transition: var(--transition);
+    }
+
+    .logo-halo:hover {
+      transform: translateY(-5px);
+      background: var(--glass-hover);
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    }
+
+    .logo-halo img {
+      height: 240px;
+      width: auto;
+      object-fit: contain;
+    }
+
     flex-direction: column;
+
+    /* Logo Halo Effect */
+    .logo-halo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 250px;
+      /* 5px larger than 240px height on each side */
+      height: 250px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+      transition: var(--transition);
+    }
+
+    .logo-halo:hover {
+      transform: translateY(-5px);
+      background: var(--glass-hover);
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    }
+
+    .logo-halo img {
+      height: 240px;
+      width: auto;
+      object-fit: contain;
+    }
+  }
+
+  /* Logo Halo Effect */
+  .logo-halo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 250px;
+    /* 5px larger than 240px height on each side */
+    height: 250px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+    transition: var(--transition);
+  }
+
+  .logo-halo:hover {
+    transform: translateY(-5px);
+    background: var(--glass-hover);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.4),
+      inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  }
+
+  .logo-halo img {
+    height: 240px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* Logo Halo Effect */
+  .logo-halo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 250px;
+    /* 5px larger than 240px height on each side */
+    height: 250px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+    transition: var(--transition);
+  }
+
+  .logo-halo:hover {
+    transform: translateY(-5px);
+    background: var(--glass-hover);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.4),
+      inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  }
+
+  .logo-halo img {
+    height: 240px;
+    width: auto;
+    object-fit: contain;
   }
 
   .inner_container_palawan {
+
+    /* Logo Halo Effect */
+    .logo-halo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 250px;
+      /* 5px larger than 240px height on each side */
+      height: 250px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+      transition: var(--transition);
+    }
+
+    .logo-halo:hover {
+      transform: translateY(-5px);
+      background: var(--glass-hover);
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    }
+
+    .logo-halo img {
+      height: 240px;
+      width: auto;
+      object-fit: contain;
+    }
+
     min-height: auto;
+
+    /* Logo Halo Effect */
+    .logo-halo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 250px;
+      /* 5px larger than 240px height on each side */
+      height: 250px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+      transition: var(--transition);
+    }
+
+    .logo-halo:hover {
+      transform: translateY(-5px);
+      background: var(--glass-hover);
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    }
+
+    .logo-halo img {
+      height: 240px;
+      width: auto;
+      object-fit: contain;
+    }
+  }
+
+  /* Logo Halo Effect */
+  .logo-halo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 250px;
+    /* 5px larger than 240px height on each side */
+    height: 250px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+    transition: var(--transition);
+  }
+
+  .logo-halo:hover {
+    transform: translateY(-5px);
+    background: var(--glass-hover);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.4),
+      inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  }
+
+  .logo-halo img {
+    height: 240px;
+    width: auto;
+    object-fit: contain;
   }
 }
