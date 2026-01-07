@@ -6720,9 +6720,7 @@ html[data-theme="light"] .btn-copy:hover {
     border: 1px solid var(--dash-border);
     border-radius: 16px;
     padding: 12px;
-    /* Tighter padding */
     width: auto !important;
-    /* Ensure margins are respected */
     margin: 0 10px 12px 10px !important;
     box-sizing: border-box !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -6730,8 +6728,10 @@ html[data-theme="light"] .btn-copy:hover {
     display: grid;
     grid-template-columns: 80px 1fr;
     grid-template-rows: auto auto auto;
-    gap: 6px;
+    /* 3 Rows: Title, Meta, Actions/Chip */
+    gap: 4px;
     /* Tighter gap */
+    row-gap: 8px;
   }
 
   /* Light mode card override */
@@ -6740,12 +6740,17 @@ html[data-theme="light"] .btn-copy:hover {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   }
 
-  /* 1. Image (Thumbnail) - Top Left */
+  /* Remove all inner borders */
+  .listings-table-container td {
+    border: none !important;
+  }
+
+  /* 1. Image (Thumbnail) - Spans Rows 1 & 2 on the Left */
   .listings-table-container td:nth-child(1) {
     grid-column: 1;
     grid-row: 1 / 3;
+    /* Spans top two rows */
     padding: 0;
-    border: none;
     height: 80px;
   }
 
@@ -6756,21 +6761,19 @@ html[data-theme="light"] .btn-copy:hover {
     border-radius: 12px;
   }
 
-  /* 2. Title & Description - Top Right */
+  /* 2. Title & Description - Row 1, Col 2 */
   .listings-table-container td:nth-child(2) {
     grid-column: 2;
     grid-row: 1;
     padding: 0;
-    border: none;
     align-self: start;
+    margin-bottom: 2px;
   }
 
   .listings-table-container td:nth-child(2) strong {
     font-size: 0.95rem;
-    /* Slightly smaller */
     display: block;
     margin-bottom: 0px;
-    /* Tighter text */
     color: var(--dash-text);
   }
 
@@ -6781,116 +6784,127 @@ html[data-theme="light"] .btn-copy:hover {
     overflow: hidden;
     font-size: 0.75rem;
     line-height: 1.1;
-    /* Tighter leading */
+    opacity: 0.8;
   }
 
-  /* 3. Meta Data Grid - Middle Right */
-  /* Combine Type, Price, Category, Status into a mini-grid area */
+  /* 3. Meta Data Grid - Row 2, Col 2 */
+  /* Combine Type, Price, Display, etc. */
   .listings-table-container td:nth-child(3),
-  /* Type */
   .listings-table-container td:nth-child(4),
-  /* Price */
-  .listings-table-container td:nth-child(5),
-  /* Category */
+  .listings-table-container td:nth-child(5):not(:has(.status-badge)),
+  /* Exclude Listings Category Badge */
   .listings-table-container td:nth-child(6) {
-    /* Featured */
     padding: 0;
-    border: none;
     font-size: 0.8rem;
     color: var(--dash-text);
     opacity: 0.9;
     display: inline-block;
     margin-right: 8px;
-    /* Tighter */
-    margin-bottom: 0px;
-  }
-
-  /* Positioning metadata in the grid */
-  .listings-table-container td:nth-child(3) {
     grid-column: 2;
     grid-row: 2;
-    align-self: end;
+    align-self: start;
   }
 
-  .listings-table-container td:nth-child(4)::before {
-    content: "• ";
-    opacity: 0.5;
-  }
-
-  .listings-table-container td:nth-child(4) {
-    /* Price */
-    grid-column: 2;
-    grid-row: 2;
-    justify-self: start;
-    margin-left: 60px;
-    /* Offset roughly based on 'Type' width */
-    align-self: end;
+  /* Special handling for Price (Listings table) */
+  /* Listings: Image(1), Prop(2), Type(3), Price(4), Cat(5)... */
+  #listingsSection td:nth-child(4) {
     font-weight: 600;
     color: var(--accent);
   }
 
-  /* Hide less important columns if needed, or stack them */
-  .listings-table-container td:nth-child(7),
-  /* Visits */
-  .listings-table-container td:nth-child(8) {
-    /* Likes */
-    display: none;
-    /* Simplify for mobile */
+  #listingsSection td:nth-child(3)::after {
+    content: " •";
+    opacity: 0.5;
   }
 
-  /* Category Badge */
-  .listings-table-container td:nth-child(5) {
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: end;
-    margin: 0;
+  /* 4. Category Badge & Actions - Row 3 */
+
+  /* Category Badge - Position Bottom Left (Under Image) */
+  /* Listings Table: Category is 5th child */
+  #listingsSection td:nth-child(5) {
+    grid-column: 1 / 3;
+    /* Full width or share with actions? User said "left". */
+    grid-row: 3;
+    padding: 0;
+    justify-self: start;
+    align-self: center;
+    margin-top: 4px;
+    display: block !important;
+    /* Ensure it overrides previous hiding rules if any */
   }
 
-  .listings-table-container td:nth-child(5) .status-badge {
+  /* Gallery Table: Category is 3rd child */
+  #gallerySection td:nth-child(3) {
+    grid-column: 1 / 3;
+    grid-row: 3;
+    padding: 0;
+    justify-self: start;
+    align-self: center;
+    margin-top: 4px;
+  }
+
+  .status-badge {
     font-size: 0.7rem;
     padding: 2px 8px;
   }
 
   /* Featured Star */
   .listings-table-container td:nth-child(6) {
+    /* If this is "Featured" col, position absolutely on image */
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 6px;
+    left: 6px;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     z-index: 2;
+    padding: 0 !important;
   }
 
+  /* Hide if empty */
   .listings-table-container td:nth-child(6):empty {
     display: none;
   }
 
-  /* 4. Actions - Bottom Full Width */
+  /* Warning: Listings table has Featured at 6. Gallery has Display at 4? Palawan Display at 3? 
+     Let's rely on standard logic - if it's the "Featured" star, it's absolute. 
+     If it's "Display" checkmark (Row 2 meta), it falls into generic rule above.
+  */
+
+  /* 5. Actions - Bottom Right */
   .listings-table-container td:last-child {
-    grid-column: 1 / -1;
+    grid-column: 2;
+    /* Right side of Row 3 */
     grid-row: 3;
     display: flex;
     justify-content: flex-end;
-    gap: 16px;
-    border-top: 1px solid var(--dash-border);
-    margin-top: 12px;
-    padding-top: 12px !important;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    padding: 0 !important;
+    border: none !important;
   }
 
   .listings-table-container .action-btn {
-    padding: 8px 16px;
+    padding: 6px 12px;
     background: rgba(255, 255, 255, 0.05);
+    /* Restore subtle background for visibility */
     border-radius: 6px;
   }
 
   html[data-theme="light"] .listings-table-container .action-btn {
     background: rgba(0, 0, 0, 0.05);
+  }
+
+  /* Hide columns 7, 8 (Visits, Likes) on mobile */
+  .listings-table-container td:nth-child(7),
+  .listings-table-container td:nth-child(8) {
+    display: none;
   }
 }
 
