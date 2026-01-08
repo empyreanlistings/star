@@ -4215,7 +4215,6 @@ details {
 .palawan-gallery .gallery-overlay h3 {
   font-size: 1.6rem;
   font-weight: 700;
-  margin-bottom: 4px;
   transform: translateY(10px);
   transition: transform 0.4s ease;
   color: #ffffff !important;
@@ -4817,10 +4816,6 @@ html[data-theme="dark"] #works-lightbox .lightbox-arrow {
 }
 
 /* ============================== LIGHT MODE ============================== */
-html[data-theme="light"] .gallery-overlay {
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.35) 40%, transparent 80%);
-  color: #111;
-}
 
 html[data-theme="light"] .mixed-gallery .gallery-item {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
@@ -4833,11 +4828,6 @@ html[data-theme="light"] .mixed-gallery .gallery-item:hover {
 html[data-theme="light"] .mixed-gallery img {
   filter: brightness(0.95) contrast(1.05) saturate(1.1);
   transition: transform 0.8s ease, filter 0.6s ease;
-}
-
-html[data-theme="light"] .mixed-gallery .gallery-item:hover img {
-  transform: scale(1.06);
-  filter: brightness(1.08) saturate(1.1);
 }
 
 /* ============================== LIGHTBOX ============================== */
@@ -6499,14 +6489,10 @@ html[data-theme="light"] .btn-copy:hover {
 
 .sun-icon {
   font-size: 2.5rem;
-  color: #a9323d;
+  color: #032359;
   margin-bottom: 20px;
   position: relative;
   z-index: 2;
-}
-
-.ocean-gradient .sun-icon {
-  color: #2c4c91;
 }
 
 .tropical-gradient .sun-icon {
