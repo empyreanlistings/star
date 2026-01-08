@@ -1500,7 +1500,7 @@ function initHowItWorks() {
         <div class="card-content">
           <h2 class="expanded-title">${data.title}</h2>
           <p class="expanded-subtitle">${data.subtitle}</p>
-          <div class="card-expand-text expanded-description">${data.description}</div>
+          <p>${data.description}</p>
           <span class="card-cta">Find out more</span>
         </div>
       </div>
