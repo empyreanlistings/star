@@ -6616,7 +6616,7 @@ html[data-theme="light"] .btn-copy:hover {
   z-index: 10;
   overflow: visible;
   isolation: isolate;
-  background: linear-gradient(135deg, #ff7e5f, #feb47b, #ff6b6b);
+  background: linear-gradient(122deg, #ff7e5fb8, #e6d1c0c9, #c61da1bd);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
