@@ -3311,9 +3311,7 @@ html[data-theme="light"] .card:not(.full-width)::before {
 
 .card.full-width .card-content p {
   color: #ffffff !important;
-  opacity: 0.9;
   margin-top: 0;
-  margin-bottom: 1rem;
   line-height: 1.3;
 }
 
