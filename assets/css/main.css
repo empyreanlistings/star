@@ -5869,6 +5869,22 @@ body.dashboard-page::before {
 .dashboard-content {
   margin-top: 80px;
   padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.dashboard-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 2rem;
+}
+
+.dashboard-section-header h1 {
+  margin: 0;
+  text-align: center;
 }
 
 .page-header {
@@ -6732,6 +6748,7 @@ html[data-theme="light"] .btn-copy:hover {
     align-items: center;
     justify-content: center;
     /* Centering the title */
+    gap: 20px;
     margin-top: 4rem;
     margin-bottom: 2rem;
     position: relative;
@@ -6740,6 +6757,7 @@ html[data-theme="light"] .btn-copy:hover {
   .dashboard-section-header h1 {
     margin: 0;
     line-height: 1;
+    text-align: center;
   }
 
   @media (max-width: 600px) {
