@@ -97,57 +97,7 @@ function withFlip(cb) {
   }
 }
 
-// ================================================================
-// SCROLL-REACTIVE LOGO HALO RIPPLE
-// ================================================================
-function initLogoHaloRipple() {
-  const displacement = document.getElementById("haloDisplacement");
-  if (!displacement || !window.gsap) return;
-
-  let lastScroll = window.pageYOffset;
-  let rippleLerp = { scale: 0 };
-  let scrollTimeout;
-
-  window.addEventListener("scroll", () => {
-    const currentScroll = window.pageYOffset;
-    const delta = Math.abs(currentScroll - lastScroll);
-    lastScroll = currentScroll;
-
-    // Trigger much stronger ripple based on scroll speed
-    // Max scale of 70 to match reference for clear "water" distortion
-    // Boosted multiplier and added threshold for extreme visibility
-    const targetScale = Math.max(delta * 4.0, delta > 2 ? 8 : 0);
-    const clampedScale = Math.min(targetScale, 80);
-
-    gsap.to(rippleLerp, {
-      scale: clampedScale,
-      duration: 0.3,
-      overwrite: "auto",
-      onUpdate: () => {
-        displacement.setAttribute("scale", rippleLerp.scale);
-      }
-    });
-
-    // Settling back to zero
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-      gsap.to(rippleLerp, {
-        scale: 0,
-        duration: 1.4, // Slower settle for more organic feel
-        ease: "power2.out",
-        overwrite: "auto",
-        onUpdate: () => {
-          displacement.setAttribute("scale", rippleLerp.scale);
-        }
-      });
-    }, 50);
-  }, { passive: true });
-}
-
-// Start Ripple Init
-document.addEventListener("DOMContentLoaded", () => {
-  safeInit("Logo Halo Ripple", initLogoHaloRipple);
-});
+// Logo Halo Ripple logic removed as per user request (liquid glass cleanup)
 
 // ================================================================
 // RESPONSIVE VIDEO LOADER + CACHING
