@@ -6440,15 +6440,15 @@ html[data-theme="light"] .btn-copy:hover {
 }
 
 .sunset-gradient:hover {
-  background: #ee82975c !important;
+  background: #a9323d5c !important;
 }
 
 .ocean-gradient:hover {
-  background: #3db1bb70 !important;
+  background: #2c4c915c !important;
 }
 
 .tropical-gradient:hover {
-  background: #8bee825c !important;
+  background: #d4af375c !important;
 }
 
 /* Liquid Glass Backdrop Effect */
@@ -6475,34 +6475,34 @@ html[data-theme="light"] .btn-copy:hover {
 }
 
 .sunset-gradient {
-  background: #ee829736 !important;
-  border-color: rgba(255, 126, 95, 0.3) !important;
+  background: #a9323d36 !important;
+  border-color: rgba(169, 50, 61, 0.3) !important;
 }
 
 .ocean-gradient {
-  background: #3db1bb4f !important;
-  border-color: rgba(67, 206, 162, 0.3) !important;
+  background: #2c4c9136 !important;
+  border-color: rgba(44, 76, 145, 0.3) !important;
 }
 
 .tropical-gradient {
-  background: #8bee8236 !important;
-  border-color: rgba(120, 255, 214, 0.3) !important;
+  background: #d4af3736 !important;
+  border-color: rgba(212, 175, 55, 0.3) !important;
 }
 
 .sun-icon {
   font-size: 2.5rem;
-  color: #ee8297;
+  color: #a9323d;
   margin-bottom: 20px;
   position: relative;
   z-index: 2;
 }
 
 .ocean-gradient .sun-icon {
-  color: #3db1bb;
+  color: #2c4c91;
 }
 
 .tropical-gradient .sun-icon {
-  color: #8bee82;
+  color: #d4af37;
 }
 
 /* The following filter and tropical-gradient block seem to be a copy-paste error in the instruction.
