@@ -3314,7 +3314,7 @@ html[data-theme="light"] .card:not(.full-width)::before {
   opacity: 0.9;
   margin-top: 0;
   margin-bottom: 1rem;
-  line-height: 1.6;
+  line-height: 1.3;
 }
 
 .card.full-width .card-content p:last-child {
