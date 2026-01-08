@@ -1659,6 +1659,8 @@ html[data-theme="light"] .menu-overlay {
   font-size: 16px;
   transition: all 0.2s;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+  /* Prevent shrinking in flex layouts */
 }
 
 .btn-add-icon:hover {
@@ -6765,8 +6767,6 @@ html[data-theme="light"] .btn-copy:hover {
     }
 
     .dashboard-section-header .btn-add-icon {
-      position: static;
-      transform: none;
       margin: 0 auto;
     }
   }
