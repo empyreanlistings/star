@@ -4129,7 +4129,7 @@ details {
   overflow-y: hidden;
   gap: var(--gap);
   /* Start items 40px from edge, but allow scrolling to edges */
-  padding: 40px 0 60px 40px;
+  padding: 40px 20px 0px 20px;
   scroll-padding-left: 40px;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
