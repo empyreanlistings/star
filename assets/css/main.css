@@ -6565,9 +6565,10 @@ html[data-theme="light"] .btn-copy:hover {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 50%;
-  height: auto;
+  transform: translate(-50%, -50%) scale(0.5);
+  transform-origin: center center;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
   z-index: 2;
   pointer-events: none;
