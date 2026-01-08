@@ -3295,6 +3295,32 @@ html[data-theme="light"] .card:not(.full-width)::before {
 }
 
 /* ============================== EXPANDED TEXT ============================== */
+.card.full-width .expanded-title {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.card.full-width .expanded-subtitle {
+  color: #ffffff !important;
+  opacity: 0.95;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.card.full-width .card-content p {
+  color: #ffffff !important;
+  opacity: 0.9;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.card.full-width .card-content p:last-child {
+  margin-bottom: 0;
+}
+
 /* .card-expand-text removed as we now use simple <p> tags */
 
 /* ============================== RESPONSIVE ============================== */
@@ -3428,8 +3454,8 @@ html[data-theme="light"] .card.full-width .card-content {
 
 html[data-theme="light"] .card.full-width .expanded-title,
 html[data-theme="light"] .card.full-width .expanded-subtitle,
-html[data-theme="light"] .card.full-width .card-expand-text {
-  color: var(--text-light);
+html[data-theme="light"] .card.full-width .card-content p {
+  color: var(--text-light) !important;
 }
 
 html[data-theme="light"] .expanded-close-btn {
