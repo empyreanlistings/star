@@ -3479,7 +3479,7 @@ html[data-theme="light"] .card-nav:hover {
 
 /* ============================== SECTION TITLES ============================== */
 .section-title {
-  margin-bottom: 20px;
+  margin: 20px;
   text-align: center;
 }
 
