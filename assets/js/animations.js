@@ -58,6 +58,13 @@ function initHeroSequence() {
 
     console.log(`🎬 Revealing carousel (${isImmediate ? 'Immediate' : 'Sequence'})`);
 
+    // CRITICAL: Ensure video is stopped and hidden immediately when carousel reveals
+    if (heroVideo) {
+      heroVideo.pause();
+      heroVideo.style.display = "none";
+      heroVideo.style.opacity = "0";
+    }
+
     if (window.gsap) {
       // Ensure it's hidden before starting animation to avoid jumps
       gsap.set(heroCarousel, { opacity: 0, y: 30, scale: 0.98 });
@@ -78,6 +85,18 @@ function initHeroSequence() {
       heroCarousel.classList.add("is-visible");
     }
   };
+
+  // 1. Force state sync if returning to tab
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      if (carouselRevealed && heroVideo) {
+        console.log("🔄 Tab focused: Enforcing carousel state, hiding video");
+        heroVideo.pause();
+        heroVideo.style.display = "none";
+        heroVideo.style.opacity = "0";
+      }
+    }
+  });
 
   // If there's no video, reveal immediately
   if (!heroVideo) {
