@@ -1647,13 +1647,12 @@ html[data-theme="light"] .menu-overlay {
 /* Icon-only Add Button */
 /* Icon-only Add Button */
 .btn-add-icon {
-  position: relative;
-  /* Changed from absolute */
-  /* right: 0; removed */
-  /* top: 50%; removed */
-  /* transform: translateY(-50%); removed */
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   width: 50px;
-  height: 50 px;
+  height: 50px;
   border-radius: 50%;
   background: var(--accent);
   color: white;
@@ -6775,15 +6774,16 @@ html[data-theme="light"] .btn-copy:hover {
   }
 
   /* Dashboard Section Header (Flex + Wrapping) */
-.dashboard-section-header {
-  display: flex;
-  flex-wrap: nowrap;      /* prevents stack */
-  align-items: center;
-  justify-content: space-between; /* pushes button to the right */
-  margin-top: 4rem;
-  margin-bottom: 2rem;
-  position: relative;
-}
+  .dashboard-section-header {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    /* Centering the title */
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+    position: relative;
+  }
 
   .dashboard-section-header h1 {
     margin: 0;
@@ -6791,13 +6791,19 @@ html[data-theme="light"] .btn-copy:hover {
   }
 
   @media (max-width: 600px) {
-  .dashboard-section-header {
-    flex-wrap: wrap;
-    justify-content: center;
-    text-align: center;
-    gap: 20px;
+    .dashboard-section-header {
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      gap: 15px;
+    }
+
+    .dashboard-section-header .btn-add-icon {
+      position: static;
+      transform: none;
+      margin: 0 auto;
+    }
   }
-}
 
   /* Card Styling */
   .listings-table-container tbody tr {
