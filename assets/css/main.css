@@ -620,7 +620,8 @@ html[data-theme="light"] .glass-panel::after {
     margin: 0;
     width: 100%;
     border-radius: 0;
-    padding: 32px 22px;
+    padding: 20px 10px;
+    background: #000000;
   }
 
   .container-glass:hover {
