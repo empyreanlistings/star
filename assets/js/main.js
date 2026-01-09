@@ -863,14 +863,16 @@ function initializeApp() {
   if (typeof initPalawanGallery !== 'undefined') safeInit("Palawan Gallery (Scroll/Lightbox)", initPalawanGallery);
   // Lightbox handled in gallery.js
   if (typeof initCalendly !== 'undefined') safeInit("Calendly", initCalendly);
-  loadComponent("#homebuyer-placeholder", "homebuyerRC.html");
+  loadComponent("#homebuyer-placeholder", "homebuyerRC.html", () => {
+    if (typeof initHowItWorks !== 'undefined') safeInit("How It Works", initHowItWorks);
+  });
   loadComponent("#contact-row-placeholder", "contactRC.html");
 }
 
 /**
  * Helper to fetch and inject HTML components
  */
-async function loadComponent(selector, url) {
+async function loadComponent(selector, url, callback) {
   const container = document.querySelector(selector);
   if (!container) return;
 
@@ -880,6 +882,11 @@ async function loadComponent(selector, url) {
     const html = await response.text();
     container.innerHTML = html;
     console.info(`✅ Component loaded: ${url}`);
+
+    // Execute callback if provided
+    if (typeof callback === 'function') {
+      callback();
+    }
 
     // Dispatch event to re-init scripts that might need to target new elements
     window.dispatchEvent(new Event("componentLoaded"));
