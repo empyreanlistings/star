@@ -75,8 +75,7 @@ html[data-theme="light"] .theme-text-icon {
   color: var(--text-light) !important;
 }
 
-#contact.container-glass,
-#how-it-works.container-glass {
+#contact.container-glass {
   margin: 0 !important;
   width: 100% !important;
   max-width: none !important;
