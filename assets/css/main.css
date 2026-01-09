@@ -6621,9 +6621,7 @@ html[data-theme="light"] .btn-copy:hover {
 
 @media (max-width: 768px) {
   .modal-content {
-    width: 95% !important;
     margin: 5vh auto !important;
-    padding: 20px !important;
   }
 
   /* Prevent full-page overflow on mobile */
