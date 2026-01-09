@@ -68,7 +68,7 @@ function initAuth() {
         if (user) {
             console.log("User logged in:", user.email);
             if (isLogin) {
-                window.location.href = "dashboard.html";
+                window.location.replace("dashboard.html");
             }
             // Update UI for dashboard if needed here
             const userEmailEl = document.getElementById("userEmail");
@@ -102,7 +102,7 @@ function initAuth() {
             console.log("User logged out");
 
             if (isLoggingOut) {
-                window.location.assign("index.html");
+                window.location.replace("index.html");
                 isLoggingOut = false;
                 return;
             }

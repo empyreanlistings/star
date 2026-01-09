@@ -863,6 +863,7 @@ function initializeApp() {
   if (typeof initPalawanGallery !== 'undefined') safeInit("Palawan Gallery (Scroll/Lightbox)", initPalawanGallery);
   // Lightbox handled in gallery.js
   if (typeof initCalendly !== 'undefined') safeInit("Calendly", initCalendly);
+  loadComponent("#homebuyer-placeholder", "homebuyerRC.html");
   loadComponent("#contact-row-placeholder", "contactRC.html");
 }
 

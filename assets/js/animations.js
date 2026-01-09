@@ -58,8 +58,8 @@ function initHeroSequence() {
 
     console.log(`🎬 Revealing carousel (${isImmediate ? 'Immediate' : 'Sequence'})`);
 
-    // CRITICAL: Ensure video is stopped and hidden immediately when carousel reveals
-    if (heroVideo) {
+    // CRITICAL: Ensure video is stopped and hidden immediately when carousel reveals (Only if immediate)
+    if (heroVideo && isImmediate) {
       heroVideo.pause();
       heroVideo.style.display = "none";
       heroVideo.style.opacity = "0";
