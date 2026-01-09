@@ -5499,8 +5499,6 @@ html[data-theme="light"] .contact-row .hours p {
   background: var(--accent);
   border: 1px solid rgba(255, 255, 255, 0.25);
   color: white !important;
-  font-weight: 600;
-  font-size: var(--h6-size);
   display: inline-flex;
   align-items: center;
   justify-content: center;
