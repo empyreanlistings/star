@@ -2705,11 +2705,6 @@ html[data-theme="dark"] .modal-glass {
   position: relative;
 }
 
-/* Featured Ribbon */
-/* Featured Ribbon - REMOVED favoring logo image */
-.modal-ribbon {
-  display: none;
-}
 
 .modal-header h2 {
   margin: 0;
@@ -6518,55 +6513,6 @@ html[data-theme="light"] .btn-copy:hover {
   color: #d4af37;
 }
 
-/* The following filter and tropical-gradient block seem to be a copy-paste error in the instruction.
-   Assuming the intent was to remove the filters from the individual gradient icons and only apply them if needed elsewhere,
-   or that the filter was meant for the base .sun-icon.
-   Given the instruction, I will include the provided text as is, which results in a syntactically incorrect CSS.
-   However, since the instruction is to make the change "faithfully and without making any unrelated edits",
-   and "incorporate the change in a way so that the resulting file is syntactically correct",
-   I will attempt to correct the obvious syntax error while preserving the intended style changes.
-
-   Corrected interpretation:
-   - Base .sun-icon gets new properties and loses its filter.
-   - Gradient-specific .sun-icon classes get new colors and lose their filters.
-   - The instruction's trailing `filter: drop-shadow(...)` and duplicate `.tropical-gradient .sun-icon` are likely errors.
-   I will remove the duplicate and integrate the filter if it was intended for the base icon, but it seems it was removed.
-   The instruction explicitly shows `filter: drop-shadow(0 0 10px rgba(67, 206, 162, 0.5)); } .tropical-gradient .sun-icon { color: #78ffd6; filter: drop-shadow(0 0 10px rgba(120, 255, 214, 0.5));`
-   This is clearly malformed. I will assume the intent was to update the colors and remove the filters from the gradient-specific icons,
-   and the extra filter and duplicate block were an error in the instruction.
-   If the user wanted filters, they would have been explicitly included in the new blocks.
-
-   Re-evaluating the instruction:
-   The instruction provides:
-   ```
-   .tropical-gradient .sun-icon {
-     color: #8bee82;
-   }  filter: drop-shadow(0 0 10px rgba(67, 206, 162, 0.5));
-   }
-
-   .tropical-gradient .sun-icon {
-     color: #78ffd6;
-     filter: drop-shadow(0 0 10px rgba(120, 255, 214, 0.5));
-   ```
-   This is a clear syntax error. The `filter` property is outside a block, and there's a duplicate `.tropical-gradient .sun-icon` with different color.
-   To make it syntactically correct, I must choose one or interpret.
-   The original `.tropical-gradient .sun-icon` had `color: #78ffd6; filter: drop-shadow(...)`.
-   The first part of the instruction changes it to `color: #8bee82;`.
-   The second part of the instruction (the duplicate) changes it back to `color: #78ffd6; filter: drop-shadow(...)`.
-   This suggests the *final* state for `.tropical-gradient .sun-icon` should be `color: #78ffd6; filter: drop-shadow(0 0 10px rgba(120, 255, 214, 0.5));`.
-   And the `filter: drop-shadow(0 0 10px rgba(67, 206, 162, 0.5));` that is floating should be removed.
-   Also, the `.ocean-gradient .sun-icon` in the instruction has `color: #3db1bb;` but the original had a filter.
-   The instruction does not provide a filter for `.ocean-gradient .sun-icon` in the new block.
-   So, I will apply the changes as literally as possible, correcting only the most egregious syntax error (the floating filter and duplicate block).
-
-   Let's assume the instruction meant to update the base `.sun-icon` and `.ocean-gradient .sun-icon` as provided,
-   and for `.tropical-gradient .sun-icon`, the *last* definition in the instruction should take precedence.
-   This means:
-   - `.sun-icon` gets `font-size: 2.5rem; color: #ee8297; margin-bottom: 20px; position: relative; z-index: 2;` (no filter).
-   - `.ocean-gradient .sun-icon` gets `color: #3db1bb;` (no filter).
-   - `.tropical-gradient .sun-icon` gets `color: #78ffd6; filter: drop-shadow(0 0 10px rgba(120, 255, 214, 0.5));`.
-   This makes the most sense to resolve the conflicting and malformed instruction while maintaining syntactic correctness.
-*/
 .ocean-gradient .sun-icon {
   color: #3db1bb;
 }
@@ -7009,4 +6955,53 @@ html[data-theme="light"] .close-modal {
 
 html[data-theme="light"] .close-modal:hover {
   color: #000;
+}
+
+/* ================================================================
+   MOBILE PERFORMANCE OPTIMIZATIONS
+   ================================================================ */
+@media (max-width: 768px) {
+
+  /* 1. Reduce backdrop-filter intensity for smoother scrolling */
+  .container-glass,
+  .glass-panel,
+  .modal-glass,
+  .inner_container_palawan,
+  .contact-newsletter-container,
+  .listings-table-container,
+  .mixed-gallery .gallery-item .gallery-overlay {
+    backdrop-filter: blur(8px) saturate(1.2) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(1.2) !important;
+  }
+
+  /* 2. Disable expensive radial-gradient animations on mobile */
+  .inner_container_palawan::before,
+  .logo-halo::before,
+  .hero-learn-more::before {
+    animation: none !important;
+  }
+
+  /* 3. Simplify complex background gradients for faster paint */
+  .listings-table-container {
+    background: var(--dash-card-bg) !important;
+  }
+
+  /* 4. Optimize image rendering */
+  img {
+    content-visibility: auto;
+  }
+}
+
+/* 5. Prevent "Sticky" hover states on touch devices */
+@media (hover: none) {
+
+  .btn:hover,
+  .nav-btn:hover,
+  .filter:hover,
+  .action-btn:hover,
+  .gallery-item:hover .gallery-overlay {
+    transform: none !important;
+    background: inherit !important;
+    opacity: 1 !important;
+  }
 }

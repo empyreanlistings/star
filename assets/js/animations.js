@@ -249,11 +249,3 @@ function initCarouselLogic(heroCarousel, revealCarouselFn) {
 
 // Global Expose
 window.initAnimations = initAnimations;
-
-// Auto-init fallback
-// Auto-init fallback REMOVED to prevent duplicate calls
-// if (document.readyState === 'complete') {
-//   initAnimations();
-// } else {
-//   window.addEventListener('load', initAnimations);
-// }

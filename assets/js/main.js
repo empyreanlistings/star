@@ -975,20 +975,6 @@ function initScrollbarBehavior() {
 // DEPRECATED: initAnimations functionality moved to assets/js/animations.js
 // Removed to prevent synchronization conflicts between Hero Video and Carousel.
 
-// ================================================================
-// CAROUSEL SWIPE & AUTO-ROTATE
-// ================================================================
-// Redundant Carousel initializing removed (moved to animations.js)
-function initCarousel() {
-  console.log("Carousel logic moved to animations.js");
-}
-
-// ================================================================
-// GALLERY – APPLE-GRADE STAGGERED FADE (FIXED)
-// ================================================================
-function deprecatedInitGallery() { /* Handled in gallery.js */ }
-
-
 
 // ================================================================
 // PALAWAN GALLERY LIGHTBOX
@@ -1093,10 +1079,6 @@ function initPalawanGallery() {
   lightbox.dataset.initialized = "true";
 }
 
-// ================================================================
-// WORKS GALLERY LIGHTBOX - COMPLETE IMPLEMENTATION
-// ================================================================
-// [REMOVED DUPLICATE initWorksGalleryLightbox]
 
 // ================================================================
 // SERVICES — DATA-DRIVEN TAB SYSTEM (PERFORMANCE OPTIMIZED)
