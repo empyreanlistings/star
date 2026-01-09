@@ -67,12 +67,10 @@ function initHeroSequence() {
 
     if (window.gsap) {
       // Ensure it's hidden before starting animation to avoid jumps
-      gsap.set(heroCarousel, { opacity: 0, y: 30, scale: 0.98 });
+      gsap.set(heroCarousel, { opacity: 0 });
 
       gsap.to(heroCarousel, {
         opacity: 1,
-        y: 0,
-        scale: 1,
         duration: isImmediate ? 1.2 : 1.5,
         ease: "power2.out",
         onComplete: () => {

@@ -1172,7 +1172,7 @@ function initServices() {
         <img class="card-image" src="${data.image}" alt="${data.title}" loading="${loadingAttr}">
         <div class="card-content">
           <h2 class="expanded-title">${data.title}</h2>
-          <p class="expanded-subtitle">${data.subtitle}</p>
+          <p>${data.subtitle}</p>
           <p>${data.description}</p>
           <span class="card-cta">Find out more</span>
         </div>
@@ -1303,7 +1303,7 @@ function initHowItWorks() {
         <img class="card-image" src="${data.image}" alt="${data.title}" loading="${loadingAttr}">
         <div class="card-content">
           <h2 class="expanded-title">${data.title}</h2>
-          <p class="expanded-subtitle">${data.subtitle}</p>
+          <p>${data.subtitle}</p>
           <p>${data.description}</p>
           <span class="card-cta">Find out more</span>
         </div>

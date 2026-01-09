@@ -56,6 +56,7 @@
       rgba(255, 255, 255, 0.22) 55%,
       rgba(255, 255, 255, 0.28) 100%);
 
+  /* Shared SVG Filters */
   --site-bg-overlay-chroma:
     radial-gradient(circle at 70% 30%,
       rgba(180, 220, 255, 0.06),
@@ -64,6 +65,21 @@
       rgba(255, 200, 255, 0.05),
       transparent 65%);
 
+}
+
+.theme-text-icon {
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] .theme-text-icon {
+  color: var(--text-light) !important;
+}
+
+#contact.container-glass {
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  border-radius: 0 !important;
 }
 
 
@@ -881,7 +897,14 @@ body {
 [data-theme="dark"] .gallery-filters>*,
 [data-theme="dark"] .property-gallery-filters>*,
 [data-theme="dark"] .gallery-type-filters>* {
-  color: rgba(255, 255, 255, 0.85);
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .property-card p,
+[data-theme="dark"] .property-card span,
+[data-theme="dark"] .property-card div {
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
 
 [data-theme="dark"] .gallery-filters>*:hover,
@@ -1147,11 +1170,7 @@ body {
   }
 
   .gallery-filters>*,
-  .property-gallery-filters>* {
-    font-size: 11px;
-    padding: 0 10px;
-    height: 32px;
-  }
+  .property-gallery-filters>* {}
 
   .slider-container-inline {
     width: 100%;
@@ -1942,7 +1961,6 @@ html[data-theme="light"] .hero-welcome-text h1 {
   overflow: hidden;
   touch-action: pan-y;
   opacity: 0 !important;
-  transform: translateY(24px) scale(0.98) !important;
   will-change: transform, opacity;
 }
 
@@ -2320,6 +2338,7 @@ html[data-theme="light"] .properties {
 }
 
 .property-card {
+  cursor: pointer;
   position: relative;
   background: rgba(25, 25, 25, 0.85);
   /* deep glass dark */
@@ -2334,8 +2353,8 @@ html[data-theme="light"] .properties {
 }
 
 .property-card:hover {
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
-  z-index: 20;
+  box-shadow: var(--shadow-card);
+  transform: translateY(-4px);
 }
 
 /* LIGHT MODE — PROPERTY CARD */
@@ -6968,8 +6987,7 @@ html[data-theme="light"] .close-modal:hover {
   .modal-glass,
   .inner_container_palawan,
   .contact-newsletter-container,
-  .listings-table-container,
-  .mixed-gallery .gallery-item .gallery-overlay {
+  .listings-table-container {
     backdrop-filter: blur(8px) saturate(1.2) !important;
     -webkit-backdrop-filter: blur(8px) saturate(1.2) !important;
   }
