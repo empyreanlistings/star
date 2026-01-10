@@ -5326,11 +5326,9 @@ html[data-theme="light"] .newsletter-card input.form-control {
 /* ============================== CONTACT ROW LAYOUT (3 Cards Grid) ============================== */
 .contact-cards-grid {
   display: grid;
-  grid-template-columns: 1fr;
   gap: 40px;
   margin-top: 40px;
   align-items: stretch;
-  width: 100%;
 }
 
 /* Desktop: 3 columns */
@@ -5344,13 +5342,6 @@ html[data-theme="light"] .newsletter-card input.form-control {
 @media (min-width: 768px) and (max-width: 991px) {
   .contact-cards-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Mobile: 1 column (default) */
-@media (max-width: 767px) {
-  .contact-cards-grid {
-    gap: 24px;
   }
 }
 
