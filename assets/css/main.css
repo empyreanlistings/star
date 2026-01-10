@@ -6544,7 +6544,8 @@ html[data-theme="light"] .btn-copy:hover {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -45%);
+  /* Start slightly lower */
   width: 75%;
   max-width: 320px;
   height: auto;
@@ -6552,6 +6553,13 @@ html[data-theme="light"] .btn-copy:hover {
   z-index: 2;
   pointer-events: none;
   filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+  opacity: 0;
+  transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+}
+
+.hero-slide.active .hero-logo-overlay {
+  opacity: 1;
+  transform: translate(-50%, -50%);
 }
 
 @media (max-width: 991px) {
