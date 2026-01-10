@@ -262,23 +262,32 @@ window.openEditGalleryModal = async (id) => {
 
     console.log("Opening edit modal for:", id);
 
-    modal.style.display = "block";
+    // Use .active class to trigger CSS transitions (opacity/visibility)
+    // AND set display property to ensure it exists in layout
+    modal.classList.add("active");
+    modal.style.display = "flex"; // Force flex to match CSS requirement
     document.body.style.overflow = "hidden"; // Lock scroll
 
     // Explicitly bind close handlers to ensure they work
     const closeBtn = document.getElementById("closeGalleryModal");
     if (closeBtn) {
         closeBtn.onclick = () => {
-            modal.style.display = "none";
-            document.body.style.overflow = "";
+            modal.classList.remove("active");
+            setTimeout(() => {
+                modal.style.display = "none";
+                document.body.style.overflow = "";
+            }, 300); // Wait for transition
         };
     }
 
     // Check background click
     window.onclick = (event) => {
         if (event.target == modal) {
-            modal.style.display = "none";
-            document.body.style.overflow = "";
+            modal.classList.remove("active");
+            setTimeout(() => {
+                modal.style.display = "none";
+                document.body.style.overflow = "";
+            }, 300);
         }
     };
 
@@ -322,13 +331,16 @@ window.openEditGalleryModal = async (id) => {
     }
 };
 
-// Close logic
+// Close logic global handler
 document.addEventListener("click", (e) => {
-    if (e.target.id === "closeGalleryModal" || e.target.id === "galleryModal") {
+    if (e.target.id === "closeGalleryModal") {
         const modal = document.getElementById("galleryModal");
         if (modal) {
-            modal.style.display = "none";
-            document.body.style.overflow = "";
+            modal.classList.remove("active");
+            setTimeout(() => {
+                modal.style.display = "none";
+                document.body.style.overflow = "";
+            }, 300);
         }
     }
 });
