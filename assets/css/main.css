@@ -2722,6 +2722,7 @@ html[data-theme="light"] .modal-content {
   border: none;
   z-index: 10000;
   transition: transform 0.25s ease, background 0.25s ease;
+  color: var(--white);
   background: var(--accent);
 
 }
