@@ -868,7 +868,7 @@ function initializeApp() {
     if (typeof initHowItWorks !== 'undefined') safeInit("How It Works", initHowItWorks);
   });
   loadComponent("#contact-row-placeholder", "contactRC.html");
-  loadComponent("#footer-placeholder", "footerRC.html");
+  loadComponent("#footer-placeholder", "footerRC.html", () => console.log("✅ Footer Loaded"));
   loadComponent("#fabs-placeholder", "fabsRC.html");
   loadComponent("#gallery-modal-placeholder", "galleryModalRC.html");
 }

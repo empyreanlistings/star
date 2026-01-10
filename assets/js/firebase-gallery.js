@@ -200,10 +200,10 @@ function renderGalleryItems(gallery) {
         if (currentUser) {
             adminActions = `
                 <div class="admin-actions-overlay">
-                    <button class="admin-btn edit" onclick="window.openEditGalleryModal('${item.id}')" title="Edit">
+                    <button class="admin-btn edit" onclick="event.stopPropagation(); window.openEditGalleryModal('${item.id}')" title="Edit">
                         <i class="fas fa-pen"></i>
                     </button>
-                    <button class="admin-btn delete" onclick="window.deleteGalleryItem('${item.id}', '${item.imageRef || ''}')" title="Delete">
+                    <button class="admin-btn delete" onclick="event.stopPropagation(); window.deleteGalleryItem('${item.id}', '${item.imageRef || ''}')" title="Delete">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
