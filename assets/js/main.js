@@ -868,7 +868,14 @@ function initializeApp() {
     if (typeof initHowItWorks !== 'undefined') safeInit("How It Works", initHowItWorks);
   });
   loadComponent("#contact-row-placeholder", "contactRC.html");
-  loadComponent("#footer-placeholder", "footerRC.html", () => console.log("✅ Footer Loaded"));
+  loadComponent("#footer-placeholder", "footerRC.html", () => {
+    // Unwrap the footer to ensure it sits directly on the body for full width
+    const placeholder = document.getElementById("footer-placeholder");
+    if (placeholder && placeholder.firstElementChild) {
+      placeholder.replaceWith(placeholder.firstElementChild);
+    }
+    console.log("✅ Footer Loaded & Unwrapped");
+  });
   loadComponent("#fabs-placeholder", "fabsRC.html");
   loadComponent("#gallery-modal-placeholder", "galleryModalRC.html");
 }
