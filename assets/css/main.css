@@ -2722,11 +2722,8 @@ html[data-theme="light"] .modal-content {
   border: none;
   z-index: 10000;
   transition: transform 0.25s ease, background 0.25s ease;
-}
-
-html[data-theme="dark"] .modal-close {
   background: var(--accent);
-  color: var(--white);
+
 }
 
 .modal-close:hover {
