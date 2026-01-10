@@ -6678,6 +6678,13 @@ html[data-theme="light"] .btn-copy:hover {
   z-index: 2000 !important;
   display: none;
   /* Default hidden */
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 /* 2. Modal Responsiveness */
