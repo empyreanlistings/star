@@ -6581,7 +6581,7 @@ html[data-theme="light"] .btn-copy:hover {
   pointer-events: none;
   filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
   opacity: 0;
-  transition: opacity 0.3s ease-out, transform 1.5s ease-out;
+  transition: opacity 0.3s ease-out, transform 0.3s ease;
 }
 
 .version-display {
