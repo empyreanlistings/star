@@ -75,50 +75,50 @@ html[data-theme="light"] .theme-text-icon {
   color: var(--text-light) !important;
 }
 
-#contact.container-glass {
-  margin: 0 !important;
-  width: 100% !important;
-  max-width: none !important;
-  border-radius: 0 !important;
-  background: none !important;
-  box-shadow: none !important;
-  border: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+/* ============================== STANDALONE FOOTER ============================== */
+.footer-full-width {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  margin: 0;
+  padding: 40px;
+  box-sizing: border-box;
+
+  /* Glass Effect (Copied from container-glass but adapted) */
+  background:
+    linear-gradient(135deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.02) 100%),
+    var(--parent-bg-dark);
+
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+
+  backdrop-filter:
+    blur(var(--parent-blur)) saturate(var(--parent-saturation)) brightness(1.05);
+  -webkit-backdrop-filter:
+    blur(var(--parent-blur)) saturate(var(--parent-saturation)) brightness(1.05);
 }
 
-#contact.container-glass::before,
-#contact.container-glass::after {
-  display: none !important;
-  content: none !important;
+/* Light Mode specific footer override */
+html[data-theme="light"] .footer-full-width {
+  background:
+    linear-gradient(135deg,
+      rgba(255, 255, 255, 0.9) 0%,
+      /* Significantly more opaque for light mode footer */
+      rgba(255, 255, 255, 0.7) 100%),
+    var(--parent-bg-light);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-#main-footer.container-glass {
-  margin: 0 !important;
-  width: 100% !important;
-  max-width: none !important;
-  border-radius: 0 !important;
-  border-left: none !important;
-  border-right: none !important;
-  border-bottom: none !important;
-}
-
-#main-footer .glass-panel {
-  background: none !important;
-  box-shadow: none !important;
-  border: none !important;
-  width: 100% !important;
-  max-width: none !important;
-  border-radius: 0 !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
-#contact,
-.contact-cards-grid {
+/* ============================== CLEAN CONTACT SECTION ============================== */
+#contact {
   background: transparent !important;
+  width: 100%;
+  margin: 0;
+  padding: 20px 0;
+  /* Adjust padding as needed */
+  border: none;
+  box-shadow: none;
 }
 
 
