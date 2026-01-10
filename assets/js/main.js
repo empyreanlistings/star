@@ -1192,24 +1192,46 @@ function initServices() {
       <button class="card-nav card-nav-right" aria-label="Next service"></button>
     `;
 
-    display.innerHTML = contentHTML;
-    display.style.display = 'grid'; // Ensure visible
+    // SMOOTH TRANSITION: Fade Out -> Swap -> Fade In
+    const existingWrapper = display.querySelector('.services-content-wrapper');
 
-    // Animation
-    const wrapper = display.querySelector('.services-content-wrapper');
-    if (window.gsap) {
-      gsap.to(wrapper, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+    const swapContent = () => {
+      display.innerHTML = contentHTML;
+      display.style.display = 'grid'; // Ensure visible
+
+      // Animation - Fade In
+      const wrapper = display.querySelector('.services-content-wrapper');
+      if (window.gsap) {
+        gsap.to(wrapper, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+      } else {
+        wrapper.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+        setTimeout(() => {
+          wrapper.style.opacity = "1";
+          wrapper.style.transform = "translateY(0)";
+        }, 10);
+      }
+
+      // Bind Events
+      display.querySelector('.card-nav-left').onclick = () => render(currentIndex - 1);
+      display.querySelector('.card-nav-right').onclick = () => render(currentIndex + 1);
+    };
+
+    if (existingWrapper) {
+      // Phase 1: Fade Out
+      if (window.gsap) {
+        gsap.to(existingWrapper, {
+          opacity: 0,
+          duration: 0.2,
+          onComplete: swapContent
+        });
+      } else {
+        existingWrapper.style.opacity = '0';
+        setTimeout(swapContent, 200);
+      }
     } else {
-      wrapper.style.transition = "opacity 0.4s ease, transform 0.4s ease";
-      setTimeout(() => {
-        wrapper.style.opacity = "1";
-        wrapper.style.transform = "translateY(0)";
-      }, 10);
+      // First load - instant swap (wrapper handles fade in)
+      swapContent();
     }
-
-    // Bind Events
-    display.querySelector('.card-nav-left').onclick = () => render(currentIndex - 1);
-    display.querySelector('.card-nav-right').onclick = () => render(currentIndex + 1);
   }
 
   // Nav Clicks
@@ -1323,24 +1345,45 @@ function initHowItWorks() {
       <button class="card-nav card-nav-right" aria-label="Next step"></button>
     `;
 
-    display.innerHTML = contentHTML;
-    display.style.display = 'grid';
+    // SMOOTH TRANSITION: Fade Out -> Swap -> Fade In
+    const existingWrapper = display.querySelector('.how-it-works-content-wrapper');
 
-    // Animation
-    const wrapper = display.querySelector('.how-it-works-content-wrapper');
-    if (window.gsap) {
-      gsap.to(wrapper, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+    const swapContent = () => {
+      display.innerHTML = contentHTML;
+      display.style.display = 'grid';
+
+      // Animation - Fade In
+      const wrapper = display.querySelector('.how-it-works-content-wrapper');
+      if (window.gsap) {
+        gsap.to(wrapper, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+      } else {
+        wrapper.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+        setTimeout(() => {
+          wrapper.style.opacity = "1";
+          wrapper.style.transform = "translateY(0)";
+        }, 10);
+      }
+
+      // Bind Events
+      display.querySelector('.card-nav-left').onclick = () => render(currentIndex - 1);
+      display.querySelector('.card-nav-right').onclick = () => render(currentIndex + 1);
+    };
+
+    if (existingWrapper) {
+      // Phase 1: Fade Out
+      if (window.gsap) {
+        gsap.to(existingWrapper, {
+          opacity: 0,
+          duration: 0.2,
+          onComplete: swapContent
+        });
+      } else {
+        existingWrapper.style.opacity = '0';
+        setTimeout(swapContent, 200);
+      }
     } else {
-      wrapper.style.transition = "opacity 0.4s ease, transform 0.4s ease";
-      setTimeout(() => {
-        wrapper.style.opacity = "1";
-        wrapper.style.transform = "translateY(0)";
-      }, 10);
+      swapContent();
     }
-
-    // Bind Events
-    display.querySelector('.card-nav-left').onclick = () => render(currentIndex - 1);
-    display.querySelector('.card-nav-right').onclick = () => render(currentIndex + 1);
   }
 
   // Nav Clicks

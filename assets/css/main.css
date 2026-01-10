@@ -7078,3 +7078,15 @@ html[data-theme="light"] .close-modal:hover {
     opacity: 1 !important;
   }
 }
+
+/* ============================== DARK MODE TEXT FIXES ============================== */
+/* Force white text for dynamic card content in dark mode (Services & How It Works) */
+html:not([data-theme="light"]) .services-display .card-content p,
+html:not([data-theme="light"]) .services-display .card-content h2,
+html:not([data-theme="light"]) .how-it-works-display .card-content p,
+html:not([data-theme="light"]) .how-it-works-display .card-content h2,
+html:not([data-theme="light"]) .card.full-width .card-content p,
+html:not([data-theme="light"]) .card.full-width .card-content h2 {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
