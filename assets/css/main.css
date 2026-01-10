@@ -5317,7 +5317,7 @@ html[data-theme="light"] .newsletter-card input.form-control {
 .contact-cards-grid {
   display: grid;
   gap: 40px;
-  margin-top: 40px;
+  margin: 40px;
   align-items: stretch;
 }
 
