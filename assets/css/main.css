@@ -2677,13 +2677,8 @@ html[data-theme="light"] .modal-content {
 }
 
 html[data-theme="dark"] .modal-close {
-  background: var(--black);
+  background: var(--accent);
   color: var(--white);
-}
-
-html[data-theme="light"] .modal-close {
-  background: rgba(0, 0, 0, 0.08);
-  color: #111;
 }
 
 .modal-close:hover {
