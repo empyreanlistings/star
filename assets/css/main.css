@@ -642,6 +642,12 @@ html[data-theme="light"] .glass-panel::after {
     background: #000000;
   }
 
+  /* Mobile Light Mode Override */
+  html[data-theme="light"] .container-glass,
+  html[data-theme="light"] .glass-panel {
+    background: var(--white) !important;
+  }
+
   .container-glass:hover {
     transform: none;
   }
@@ -7087,6 +7093,6 @@ html:not([data-theme="light"]) .how-it-works-display .card-content p,
 html:not([data-theme="light"]) .how-it-works-display .card-content h2,
 html:not([data-theme="light"]) .card.full-width .card-content p,
 html:not([data-theme="light"]) .card.full-width .card-content h2 {
-    color: #ffffff !important;
-    opacity: 1 !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
