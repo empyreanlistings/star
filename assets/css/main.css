@@ -5652,20 +5652,13 @@ html[data-theme="dark"] .btn {
 
 /* ============================== FOOTER ============================== */
 footer {
-  position: relative;
-  padding: 50px 0;
-  /* Remove side padding so inner panel controls width */
-  text-align: center;
-  max-width: calc(100% - 80px);
-  /* Match other containers */
-  margin: 40px auto;
-  box-sizing: border-box;
+  padding: 40px;
+  background: var(--black);
 }
 
 @media (max-width: 640px) {
   footer {
     max-width: 100%;
-    margin: 0;
   }
 }
 
@@ -5673,6 +5666,7 @@ footer {
 footer p {
   font-size: var(--h5-size);
   font-weight: 500;
+  font-
 }
 
 /* ============================== FLOATING ACTION BUTTONS ============================== */
