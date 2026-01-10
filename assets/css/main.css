@@ -87,6 +87,22 @@ html[data-theme="light"] .theme-text-icon {
   -webkit-backdrop-filter: none !important;
 }
 
+#contact.container-glass::before,
+#contact.container-glass::after {
+  display: none !important;
+  content: none !important;
+}
+
+#main-footer.container-glass {
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  border-radius: 0 !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+}
+
 
 /* ============================== VISIBILITY UTILITIES ============================== */
 .desktop-only {
