@@ -83,14 +83,8 @@ html[data-theme="light"] .theme-text-icon {
   margin: 0;
   padding: 40px;
   box-sizing: border-box;
-
   background: var(--black) !important;
   color: var(--white) !important;
-
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
 }
 
 /* Ensure text and links are white in the footer */
@@ -99,12 +93,6 @@ html[data-theme="light"] .theme-text-icon {
 .footer-full-width .btn,
 .footer-full-width .icon-box {
   color: var(--white) !important;
-}
-
-/* Light Mode specific footer override - REMOVED (Footer is always black) */
-html[data-theme="light"] .footer-full-width {
-  background: var(--black) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* ============================== CLEAN CONTACT SECTION ============================== */
