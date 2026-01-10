@@ -1,0 +1,48 @@
+<!-- Gallery Modal (Reusable) -->
+<div id="galleryModal" class="modal-overlay premium-modal">
+    <div class="modal-content">
+        <span id="closeGalleryModal" class="close-modal">&times;</span>
+        <h3 id="galleryModalTitle" class="modal-title">Edit Gallery Item</h3>
+        <form id="galleryForm">
+            <input type="hidden" id="galleryItemId">
+            <div class="form-group">
+                <label>Headline (Title)</label>
+                <input type="text" id="galleryHeadline" class="form-control" required
+                    placeholder="e.g. Spacious Pool House">
+            </div>
+
+            <div class="form-group">
+                <label>Sub-header (Description)</label>
+                <input type="text" id="gallerySubHeader" class="form-control" placeholder="e.g. AAC Blockwork • Pool">
+            </div>
+
+            <div class="form-group">
+                <label>Category</label>
+                <div id="galleryCategoryChips" class="category-chips">
+                    <div class="chip active" data-value="structural">Structural</div>
+                    <div class="chip" data-value="exterior">Exterior</div>
+                    <div class="chip" data-value="interior">Interior</div>
+                    <div class="chip" data-value="pool">Swimming Pools</div>
+                </div>
+            </div>
+
+            <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+                <input type="checkbox" id="galleryDisplay" style="width:auto;margin:0;" checked>
+                <label for="galleryDisplay" style="margin:0;cursor:pointer;font-size:0.9rem;">Display in
+                    Portfolio</label>
+            </div>
+
+            <!-- Image upload is optional for edit, but required for new. 
+                 For Edit: If empty, keep existing. -->
+            <div class="form-group">
+                <label>Image (Leave empty to keep current)</label>
+                <input type="file" id="galleryImage" class="form-control" accept="image/*">
+            </div>
+
+            <button type="submit" id="gallerySubmitBtn" class="btn-add" style="width:100%;margin-top:1rem;">Save
+                Changes</button>
+            <div id="galleryUploadStatus" style="margin-top:0.5rem;text-align:center;font-size:0.9rem;opacity:0.8;">
+            </div>
+        </form>
+    </div>
+</div>

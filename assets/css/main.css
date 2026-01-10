@@ -632,7 +632,9 @@ html[data-theme="light"] .glass-panel::after {
 
 /* MOBILE — full-bleed with preserved effects */
 @media (max-width: 640px) {
-  .container-glass {
+
+  .container-glass,
+  .glass-panel {
     margin: 0;
     width: 100%;
     border-radius: 0;

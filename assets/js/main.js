@@ -863,12 +863,13 @@ function initializeApp() {
   if (typeof initPalawanGallery !== 'undefined') safeInit("Palawan Gallery (Scroll/Lightbox)", initPalawanGallery);
   // Lightbox handled in gallery.js
   if (typeof initCalendly !== 'undefined') safeInit("Calendly", initCalendly);
-  loadComponent("#homebuyer-placeholder", "homebuyerRC.html", () => {
+  loadComponent("#homebuyer-placeholder", "homebuyerRC.html", async () => {
     if (typeof initHowItWorks !== 'undefined') safeInit("How It Works", initHowItWorks);
+    await loadComponent("#contact-row-placeholder", "contactRC.html");
+    await loadComponent("#footer-placeholder", "footerRC.html");
+    await loadComponent("#fabs-placeholder", "fabsRC.html");
+    await loadComponent("#gallery-modal-placeholder", "galleryModalRC.html");
   });
-  loadComponent("#contact-row-placeholder", "contactRC.html");
-  loadComponent("#footer-placeholder", "footerRC.html");
-  loadComponent("#fabs-placeholder", "fabsRC.html");
 }
 
 /**
