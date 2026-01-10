@@ -103,6 +103,24 @@ html[data-theme="light"] .theme-text-icon {
   border-bottom: none !important;
 }
 
+#main-footer .glass-panel {
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  width: 100% !important;
+  max-width: none !important;
+  border-radius: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+#contact,
+.contact-cards-grid {
+  background: transparent !important;
+}
+
 
 /* ============================== VISIBILITY UTILITIES ============================== */
 .desktop-only {
