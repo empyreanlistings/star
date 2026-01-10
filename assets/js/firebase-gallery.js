@@ -200,10 +200,10 @@ function renderGalleryItems(gallery) {
         if (currentUser) {
             adminActions = `
                 <div class="admin-actions-overlay">
-                    <button class="admin-btn edit" onclick="event.stopPropagation(); window.openEditGalleryModal('${item.id}')" title="Edit">
+                    <button class="admin-btn edit" onclick="event.preventDefault(); event.stopImmediatePropagation(); window.openEditGalleryModal('${item.id}')" title="Edit">
                         <i class="fas fa-pen"></i>
                     </button>
-                    <button class="admin-btn delete" onclick="event.stopPropagation(); window.deleteGalleryItem('${item.id}', '${item.imageRef || ''}')" title="Delete">
+                    <button class="admin-btn delete" onclick="event.preventDefault(); event.stopImmediatePropagation(); window.deleteGalleryItem('${item.id}', '${item.imageRef || ''}')" title="Delete">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -264,6 +264,23 @@ window.openEditGalleryModal = async (id) => {
 
     modal.style.display = "block";
     document.body.style.overflow = "hidden"; // Lock scroll
+
+    // Explicitly bind close handlers to ensure they work
+    const closeBtn = document.getElementById("closeGalleryModal");
+    if (closeBtn) {
+        closeBtn.onclick = () => {
+            modal.style.display = "none";
+            document.body.style.overflow = "";
+        };
+    }
+
+    // Check background click
+    window.onclick = (event) => {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            document.body.style.overflow = "";
+        }
+    };
 
     // Set ID
     document.getElementById("galleryItemId").value = id;
