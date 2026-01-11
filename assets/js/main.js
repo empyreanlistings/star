@@ -1161,14 +1161,38 @@ function initServices() {
 
   const btns = nav.querySelectorAll('.nav-btn');
   let currentIndex = 0;
+  let autoplayTimer = null;
 
-  function render(index, direction = 'top') {
-    // Loop index
+  // Build Carousel Structure
+  display.innerHTML = `
+    <button class="card-nav card-nav-left" aria-label="Previous service"></button>
+    <div class="carousel-container">
+      <div class="carousel-track">
+        ${servicesData.map((data, index) => `
+          <div class="carousel-slide">
+            <img class="card-image" src="${data.image}" alt="${data.title}" loading="${index === 0 ? 'eager' : 'lazy'}">
+            <div class="card-content">
+              <h2 class="expanded-title">${data.title}</h2>
+              <p>${data.subtitle}</p>
+              <p>${data.description}</p>
+              <span class="card-cta">Find out more</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <button class="card-nav card-nav-right" aria-label="Next service"></button>
+  `;
+
+  const track = display.querySelector('.carousel-track');
+  const cardContent = display.querySelectorAll('.card-content');
+
+  function goToSlide(index) {
     if (index < 0) index = servicesData.length - 1;
     if (index >= servicesData.length) index = 0;
 
     currentIndex = index;
-    const data = servicesData[index];
+    track.style.transform = `translateX(-${index * 100}%)`;
 
     // Update Nav
     btns.forEach(b => b.classList.remove('active'));
@@ -1180,69 +1204,48 @@ function initServices() {
         activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       }
     }
-
-    // Render Content
-    // Optimization: Lazy load images that aren't first view
-    const loadingAttr = index === 0 ? 'eager' : 'lazy';
-
-    // Determine animation based on direction
-    let animationClass = '';
-    if (direction === 'left') animationClass = 'slideInFromLeft';
-    else if (direction === 'right') animationClass = 'slideInFromRight';
-    else animationClass = 'slideInFromTop';
-
-    const contentHTML = `
-      <button class="card-nav card-nav-left" aria-label="Previous service"></button>
-      <div class="services-content-wrapper" style="animation: ${animationClass} 0.4s ease-out;">
-        <img class="card-image" src="${data.image}" alt="${data.title}" loading="${loadingAttr}">
-        <div class="card-content">
-          <h2 class="expanded-title">${data.title}</h2>
-          <p>${data.subtitle}</p>
-          <p>${data.description}</p>
-          <span class="card-cta">Find out more</span>
-        </div>
-      </div>
-      <button class="card-nav card-nav-right" aria-label="Next service"></button>
-    `;
-
-    const swapContent = () => {
-      display.innerHTML = contentHTML;
-      display.style.display = 'grid'; // Ensure visible
-
-      // Bind Events with direction tracking
-      display.querySelector('.card-nav-left').onclick = () => render(currentIndex - 1, 'left');
-      display.querySelector('.card-nav-right').onclick = () => render(currentIndex + 1, 'right');
-    };
-
-    const existingWrapper = display.querySelector('.services-content-wrapper');
-    if (existingWrapper) {
-      // Phase 1: Fade Out
-      if (window.gsap) {
-        gsap.to(existingWrapper, {
-          opacity: 0,
-          duration: 0.2,
-          onComplete: swapContent
-        });
-      } else {
-        existingWrapper.style.opacity = '0';
-        setTimeout(swapContent, 200);
-      }
-    } else {
-      // First load - instant swap (wrapper handles fade in)
-      swapContent();
-    }
   }
 
-  // Nav Clicks
+  function startAutoplay() {
+    stopAutoplay();
+    autoplayTimer = setInterval(() => {
+      goToSlide(currentIndex + 1);
+    }, 5000);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) clearInterval(autoplayTimer);
+  }
+
+  // Events
+  display.querySelector('.card-nav-left').onclick = () => {
+    goToSlide(currentIndex - 1);
+    startAutoplay();
+  };
+  display.querySelector('.card-nav-right').onclick = () => {
+    goToSlide(currentIndex + 1);
+    startAutoplay();
+  };
+
   btns.forEach(btn => {
     btn.onclick = () => {
       const idx = parseInt(btn.dataset.index);
-      if (!isNaN(idx)) render(idx);
+      if (!isNaN(idx)) {
+        goToSlide(idx);
+        startAutoplay();
+      }
     };
   });
 
+  // Pause on hover
+  cardContent.forEach(content => {
+    content.onmouseenter = stopAutoplay;
+    content.onmouseleave = startAutoplay;
+  });
+
   // Initial Render
-  render(0);
+  goToSlide(0);
+  startAutoplay();
 }
 
 // ================================================================
@@ -1308,13 +1311,38 @@ function initHowItWorks() {
 
   const btns = nav.querySelectorAll('.nav-btn');
   let currentIndex = 0;
+  let autoplayTimer = null;
 
-  function render(index, direction = 'top') {
+  // Build Carousel Structure
+  display.innerHTML = `
+    <button class="card-nav card-nav-left" aria-label="Previous step"></button>
+    <div class="carousel-container">
+      <div class="carousel-track">
+        ${howItWorksData.map((data, index) => `
+          <div class="carousel-slide">
+            <img class="card-image" src="${data.image}" alt="${data.title}" loading="${index === 0 ? 'eager' : 'lazy'}">
+            <div class="card-content">
+              <h2 class="expanded-title">${data.title}</h2>
+              <p>${data.subtitle}</p>
+              <p>${data.description}</p>
+              <span class="card-cta">Find out more</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <button class="card-nav card-nav-right" aria-label="Next step"></button>
+  `;
+
+  const track = display.querySelector('.carousel-track');
+  const cardContent = display.querySelectorAll('.card-content');
+
+  function goToSlide(index) {
     if (index < 0) index = howItWorksData.length - 1;
     if (index >= howItWorksData.length) index = 0;
 
     currentIndex = index;
-    const data = howItWorksData[index];
+    track.style.transform = `translateX(-${index * 100}%)`;
 
     // Update Nav
     btns.forEach(b => b.classList.remove('active'));
@@ -1325,68 +1353,48 @@ function initHowItWorks() {
         activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       }
     }
-
-    // Render Content
-    // Optimization: Lazy load images that aren't first view
-    const loadingAttr = index === 0 ? 'eager' : 'lazy';
-
-    // Determine animation based on direction
-    let animationClass = '';
-    if (direction === 'left') animationClass = 'slideInFromLeft';
-    else if (direction === 'right') animationClass = 'slideInFromRight';
-    else animationClass = 'slideInFromTop';
-
-    const contentHTML = `
-      <button class="card-nav card-nav-left" aria-label="Previous step"></button>
-      <div class="how-it-works-content-wrapper" style="animation: ${animationClass} 0.4s ease-out;">
-        <img class="card-image" src="${data.image}" alt="${data.title}" loading="${loadingAttr}">
-        <div class="card-content">
-          <h2 class="expanded-title">${data.title}</h2>
-          <p>${data.subtitle}</p>
-          <p>${data.description}</p>
-          <span class="card-cta">Find out more</span>
-        </div>
-      </div>
-      <button class="card-nav card-nav-right" aria-label="Next step"></button>
-    `;
-
-    const swapContent = () => {
-      display.innerHTML = contentHTML;
-      display.style.display = 'grid';
-
-      // Bind Events with direction tracking
-      display.querySelector('.card-nav-left').onclick = () => render(currentIndex - 1, 'left');
-      display.querySelector('.card-nav-right').onclick = () => render(currentIndex + 1, 'right');
-    };
-
-    const existingWrapper = display.querySelector('.how-it-works-content-wrapper');
-    if (existingWrapper) {
-      // Phase 1: Fade Out
-      if (window.gsap) {
-        gsap.to(existingWrapper, {
-          opacity: 0,
-          duration: 0.2,
-          onComplete: swapContent
-        });
-      } else {
-        existingWrapper.style.opacity = '0';
-        setTimeout(swapContent, 200);
-      }
-    } else {
-      swapContent();
-    }
   }
 
-  // Nav Clicks
+  function startAutoplay() {
+    stopAutoplay();
+    autoplayTimer = setInterval(() => {
+      goToSlide(currentIndex + 1);
+    }, 5000);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) clearInterval(autoplayTimer);
+  }
+
+  // Events
+  display.querySelector('.card-nav-left').onclick = () => {
+    goToSlide(currentIndex - 1);
+    startAutoplay(); // Restart timer on manual interaction
+  };
+  display.querySelector('.card-nav-right').onclick = () => {
+    goToSlide(currentIndex + 1);
+    startAutoplay(); // Restart timer on manual interaction
+  };
+
   btns.forEach(btn => {
     btn.onclick = () => {
       const idx = parseInt(btn.dataset.index);
-      if (!isNaN(idx)) render(idx);
+      if (!isNaN(idx)) {
+        goToSlide(idx);
+        startAutoplay();
+      }
     };
   });
 
+  // Pause on hover
+  cardContent.forEach(content => {
+    content.onmouseenter = stopAutoplay;
+    content.onmouseleave = startAutoplay;
+  });
+
   // Initial Render
-  render(0);
+  goToSlide(0);
+  startAutoplay();
 }
 
 // ================================================================
