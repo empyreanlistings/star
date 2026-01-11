@@ -4320,6 +4320,7 @@ details {
   color: var(--white) !important;
   /* Force white */
   opacity: 1 !important;
+  margin-bottom: 4px;
 }
 
 .palawan-gallery .gallery-overlay p {
@@ -4329,6 +4330,7 @@ details {
   color: var(--white) !important;
   /* Force white */
   opacity: 1 !important;
+  margin-top: 0;
 }
 
 .palawan-gallery .gallery-item:hover .gallery-overlay h3,
