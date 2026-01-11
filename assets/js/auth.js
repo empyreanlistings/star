@@ -17,13 +17,22 @@ const db = getFirestore(app);
 let isLoggingOut = false;
 
 const USER_CACHE_KEY = "kai_isla_user_profile";
+const REMEMBER_KEY = "kai_isla_remember_me";
 
 // Login Function
 async function handleLogin(e) {
     e.preventDefault();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
+    const rememberMe = document.getElementById("rememberMe")?.checked;
     const errorDiv = document.getElementById("loginError");
+
+    // Handle Remember Me (Email only for security)
+    if (rememberMe) {
+        localStorage.setItem(REMEMBER_KEY, JSON.stringify({ email }));
+    } else {
+        localStorage.removeItem(REMEMBER_KEY);
+    }
 
     try {
         await signInWithEmailAndPassword(auth, email, password);
@@ -185,6 +194,19 @@ function initAuth() {
 
     const loginForm = document.getElementById("loginForm");
     if (loginForm) {
+        // Pre-fill Remembered Email
+        const remembered = localStorage.getItem(REMEMBER_KEY);
+        if (remembered) {
+            try {
+                const { email } = JSON.parse(remembered);
+                const emailInput = document.getElementById("email");
+                const rememberCheckbox = document.getElementById("rememberMe");
+                if (emailInput) emailInput.value = email;
+                if (rememberCheckbox) rememberCheckbox.checked = true;
+            } catch (e) {
+                console.warn("Failed to parse remember cache", e);
+            }
+        }
         loginForm.addEventListener("submit", handleLogin);
     }
 
