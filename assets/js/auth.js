@@ -13,6 +13,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 let isLoggingOut = false;
 
 // Login Function
@@ -55,7 +56,7 @@ async function handleLogout() {
 
 // Monitor Auth State
 function initAuth() {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
         const path = window.location.pathname.toLowerCase();
         const isDashboard = document.body.classList.contains('dashboard-page');
         const isLogin = document.body.classList.contains('login-page') || path.includes("login");
@@ -68,6 +69,22 @@ function initAuth() {
 
         if (user) {
             console.log("User logged in:", user.email);
+
+            // Fetch User Profile from Firestore (for image_url)
+            let profileImageUrl = user.photoURL;
+            try {
+                const userDoc = await getDoc(doc(db, "Users", user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    if (userData.image_url) {
+                        profileImageUrl = userData.image_url;
+                        console.log("Avatar loaded from Firestore:", profileImageUrl);
+                    }
+                }
+            } catch (err) {
+                console.error("Error fetching user avatar from Firestore:", err);
+            }
+
             if (isLogin) {
                 window.location.replace("dashboard.html");
             }
@@ -88,9 +105,9 @@ function initAuth() {
 
             if (avatarLink) {
                 avatarLink.style.display = "inline-flex";
-                if (user.photoURL) {
+                if (profileImageUrl) {
                     if (avatarImg) {
-                        avatarImg.src = user.photoURL;
+                        avatarImg.src = profileImageUrl;
                         avatarImg.style.display = "block";
                         avatarImg.onerror = () => {
                             avatarImg.style.display = "none";
