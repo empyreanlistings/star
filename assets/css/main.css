@@ -832,6 +832,43 @@ body {
   }
 }
 
+/* Directional slide animations for how-it-works and services */
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .how-it-works-nav .nav-btn {
   background: transparent;
   border: none;
@@ -3157,6 +3194,12 @@ html[data-theme="light"] .card:not(.full-width)::before {
 .card:hover {
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
   transform: translateY(-4px);
+}
+
+/* Remove hover transform for display cards */
+#how-it-works-display.card:hover,
+#services-display.card:hover {
+  transform: none;
 }
 
 .card:not(.full-width) {

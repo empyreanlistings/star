@@ -1162,7 +1162,7 @@ function initServices() {
   const btns = nav.querySelectorAll('.nav-btn');
   let currentIndex = 0;
 
-  function render(index) {
+  function render(index, direction = 'top') {
     // Loop index
     if (index < 0) index = servicesData.length - 1;
     if (index >= servicesData.length) index = 0;
@@ -1185,9 +1185,15 @@ function initServices() {
     // Optimization: Lazy load images that aren't first view
     const loadingAttr = index === 0 ? 'eager' : 'lazy';
 
+    // Determine animation based on direction
+    let animationClass = '';
+    if (direction === 'left') animationClass = 'slideInFromLeft';
+    else if (direction === 'right') animationClass = 'slideInFromRight';
+    else animationClass = 'slideInFromTop';
+
     const contentHTML = `
       <button class="card-nav card-nav-left" aria-label="Previous service"></button>
-      <div class="services-content-wrapper" style="opacity: 0; transform: translateY(10px);">
+      <div class="services-content-wrapper" style="animation: ${animationClass} 0.4s ease-out;">
         <img class="card-image" src="${data.image}" alt="${data.title}" loading="${loadingAttr}">
         <div class="card-content">
           <h2 class="expanded-title">${data.title}</h2>
@@ -1199,30 +1205,16 @@ function initServices() {
       <button class="card-nav card-nav-right" aria-label="Next service"></button>
     `;
 
-    // SMOOTH TRANSITION: Fade Out -> Swap -> Fade In
-    const existingWrapper = display.querySelector('.services-content-wrapper');
-
     const swapContent = () => {
       display.innerHTML = contentHTML;
       display.style.display = 'grid'; // Ensure visible
 
-      // Animation - Fade In
-      const wrapper = display.querySelector('.services-content-wrapper');
-      if (window.gsap) {
-        gsap.to(wrapper, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
-      } else {
-        wrapper.style.transition = "opacity 0.4s ease, transform 0.4s ease";
-        setTimeout(() => {
-          wrapper.style.opacity = "1";
-          wrapper.style.transform = "translateY(0)";
-        }, 10);
-      }
-
-      // Bind Events
-      display.querySelector('.card-nav-left').onclick = () => render(currentIndex - 1);
-      display.querySelector('.card-nav-right').onclick = () => render(currentIndex + 1);
+      // Bind Events with direction tracking
+      display.querySelector('.card-nav-left').onclick = () => render(currentIndex - 1, 'left');
+      display.querySelector('.card-nav-right').onclick = () => render(currentIndex + 1, 'right');
     };
 
+    const existingWrapper = display.querySelector('.services-content-wrapper');
     if (existingWrapper) {
       // Phase 1: Fade Out
       if (window.gsap) {
@@ -1317,7 +1309,7 @@ function initHowItWorks() {
   const btns = nav.querySelectorAll('.nav-btn');
   let currentIndex = 0;
 
-  function render(index) {
+  function render(index, direction = 'top') {
     if (index < 0) index = howItWorksData.length - 1;
     if (index >= howItWorksData.length) index = 0;
 
@@ -1338,9 +1330,15 @@ function initHowItWorks() {
     // Optimization: Lazy load images that aren't first view
     const loadingAttr = index === 0 ? 'eager' : 'lazy';
 
+    // Determine animation based on direction
+    let animationClass = '';
+    if (direction === 'left') animationClass = 'slideInFromLeft';
+    else if (direction === 'right') animationClass = 'slideInFromRight';
+    else animationClass = 'slideInFromTop';
+
     const contentHTML = `
       <button class="card-nav card-nav-left" aria-label="Previous step"></button>
-      <div class="how-it-works-content-wrapper" style="opacity: 0; transform: translateY(10px);">
+      <div class="how-it-works-content-wrapper" style="animation: ${animationClass} 0.4s ease-out;">
         <img class="card-image" src="${data.image}" alt="${data.title}" loading="${loadingAttr}">
         <div class="card-content">
           <h2 class="expanded-title">${data.title}</h2>
@@ -1352,30 +1350,16 @@ function initHowItWorks() {
       <button class="card-nav card-nav-right" aria-label="Next step"></button>
     `;
 
-    // SMOOTH TRANSITION: Fade Out -> Swap -> Fade In
-    const existingWrapper = display.querySelector('.how-it-works-content-wrapper');
-
     const swapContent = () => {
       display.innerHTML = contentHTML;
       display.style.display = 'grid';
 
-      // Animation - Fade In
-      const wrapper = display.querySelector('.how-it-works-content-wrapper');
-      if (window.gsap) {
-        gsap.to(wrapper, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
-      } else {
-        wrapper.style.transition = "opacity 0.4s ease, transform 0.4s ease";
-        setTimeout(() => {
-          wrapper.style.opacity = "1";
-          wrapper.style.transform = "translateY(0)";
-        }, 10);
-      }
-
-      // Bind Events
-      display.querySelector('.card-nav-left').onclick = () => render(currentIndex - 1);
-      display.querySelector('.card-nav-right').onclick = () => render(currentIndex + 1);
+      // Bind Events with direction tracking
+      display.querySelector('.card-nav-left').onclick = () => render(currentIndex - 1, 'left');
+      display.querySelector('.card-nav-right').onclick = () => render(currentIndex + 1, 'right');
     };
 
+    const existingWrapper = display.querySelector('.how-it-works-content-wrapper');
     if (existingWrapper) {
       // Phase 1: Fade Out
       if (window.gsap) {
