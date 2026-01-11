@@ -16,6 +16,8 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 let isLoggingOut = false;
 
+const USER_CACHE_KEY = "kai_isla_user_profile";
+
 // Login Function
 async function handleLogin(e) {
     e.preventDefault();
@@ -44,6 +46,7 @@ async function handleLogout() {
         localStorage.removeItem("kai_isla_listings");
         localStorage.removeItem("kai_isla_gallery");
         localStorage.removeItem("kai_isla_palawan_gallery");
+        localStorage.removeItem(USER_CACHE_KEY);
         // Let's keep theme but definitely clear the data.
 
         await signOut(auth);
@@ -70,8 +73,24 @@ function initAuth() {
         if (user) {
             console.log("User logged in:", user.email);
 
-            // Fetch User Profile from Firestore (for photo_url)
+            // Fetch User Profile with Cache
             let profileImageUrl = user.photoURL;
+
+            // 1. Try Cache First
+            const cachedUser = localStorage.getItem(USER_CACHE_KEY);
+            if (cachedUser) {
+                try {
+                    const { photo_url, uid } = JSON.parse(cachedUser);
+                    if (uid === user.uid && photo_url) {
+                        profileImageUrl = photo_url;
+                        console.log("Avatar loaded from Cache:", profileImageUrl);
+                    }
+                } catch (e) {
+                    console.error("User cache parse error", e);
+                }
+            }
+
+            // 2. Fetch/Update from Firestore if needed (or to keep fresh)
             try {
                 const userDoc = await getDoc(doc(db, "Users", user.uid));
                 if (userDoc.exists()) {
@@ -79,6 +98,13 @@ function initAuth() {
                     if (userData.photo_url) {
                         profileImageUrl = userData.photo_url;
                         console.log("Avatar loaded from Firestore:", profileImageUrl);
+
+                        // Update Cache
+                        localStorage.setItem(USER_CACHE_KEY, JSON.stringify({
+                            photo_url: profileImageUrl,
+                            uid: user.uid,
+                            timestamp: Date.now()
+                        }));
                     }
                 }
             } catch (err) {
@@ -129,6 +155,7 @@ function initAuth() {
 
         } else {
             console.log("User logged out");
+            localStorage.removeItem(USER_CACHE_KEY);
 
             if (isLoggingOut) {
                 window.location.replace("index.html");
