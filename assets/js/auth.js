@@ -82,48 +82,12 @@ function initAuth() {
         if (user) {
             console.log("User logged in:", user.email);
 
-            // Fetch User Profile with Cache
-            let profileImageUrl = user.photoURL;
-
-            // 1. Try Cache First
-            const cachedUser = localStorage.getItem(USER_CACHE_KEY);
-            if (cachedUser) {
-                try {
-                    const { photo_url, uid } = JSON.parse(cachedUser);
-                    if (uid === user.uid && photo_url) {
-                        profileImageUrl = photo_url;
-                        console.log("Avatar loaded from Cache:", profileImageUrl);
-                    }
-                } catch (e) {
-                    console.error("User cache parse error", e);
-                }
-            }
-
-            // 2. Fetch/Update from Firestore if needed (or to keep fresh)
-            try {
-                const userDoc = await getDoc(doc(db, "Users", user.uid));
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    if (userData.photo_url) {
-                        profileImageUrl = userData.photo_url;
-                        console.log("Avatar loaded from Firestore:", profileImageUrl);
-
-                        // Update Cache
-                        localStorage.setItem(USER_CACHE_KEY, JSON.stringify({
-                            photo_url: profileImageUrl,
-                            uid: user.uid,
-                            timestamp: Date.now()
-                        }));
-                    }
-                }
-            } catch (err) {
-                console.error("Error fetching user avatar from Firestore:", err);
-            }
-
+            // 1. Handle Redirects & Static UI immediately
             if (isLogin) {
                 window.location.replace("dashboard.html");
+                return;
             }
-            // Update UI for dashboard if needed here
+
             const userEmailEl = document.getElementById("userEmail");
             if (userEmailEl) userEmailEl.textContent = user.email;
 
@@ -133,16 +97,17 @@ function initAuth() {
                 document.body.style.pointerEvents = 'auto';
             }
 
-            // Update UI for public site (index.html)
+            // 2. Avatar UI Logic
             const avatarLink = document.getElementById("navAvatarLink");
             const avatarImg = document.getElementById("navAvatarImg");
             const dashboardIcon = document.getElementById("navDashboardIcon");
 
-            if (avatarLink) {
+            const updateAvatarUI = (url) => {
+                if (!avatarLink) return;
                 avatarLink.style.display = "inline-flex";
-                if (profileImageUrl) {
+                if (url) {
                     if (avatarImg) {
-                        avatarImg.src = profileImageUrl;
+                        avatarImg.src = url;
                         avatarImg.style.display = "block";
                         avatarImg.onerror = () => {
                             avatarImg.style.display = "none";
@@ -156,11 +121,54 @@ function initAuth() {
                 } else {
                     if (avatarImg) avatarImg.style.display = "none";
                     if (dashboardIcon) {
-                        dashboardIcon.className = "fas fa-user-circle"; // Show profile icon when logged in
+                        dashboardIcon.className = "fas fa-user-circle";
                         dashboardIcon.style.display = "block";
                     }
                 }
+            };
+
+            // 3. Render from Cache Instantly
+            let currentProfileUrl = user.photoURL;
+            const cachedUser = localStorage.getItem(USER_CACHE_KEY);
+            if (cachedUser) {
+                try {
+                    const { photo_url, uid } = JSON.parse(cachedUser);
+                    if (uid === user.uid && photo_url) {
+                        currentProfileUrl = photo_url;
+                        console.log("⚡ [Cache] Rendering instantly...");
+                    }
+                } catch (e) {
+                    console.error("User cache parse error", e);
+                }
             }
+            updateAvatarUI(currentProfileUrl);
+
+            // 4. Background Sync with Firestore (Non-blocking)
+            (async () => {
+                try {
+                    const userDoc = await getDoc(doc(db, "Users", user.uid));
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        const remoteUrl = userData.photo_url || user.photoURL;
+
+                        if (remoteUrl && remoteUrl !== currentProfileUrl) {
+                            console.log("🔄 [Firestore] Updating avatar from remote...");
+                            updateAvatarUI(remoteUrl);
+                        }
+
+                        // Always ensure cache is up to date if we have a remote URL
+                        if (remoteUrl) {
+                            localStorage.setItem(USER_CACHE_KEY, JSON.stringify({
+                                photo_url: remoteUrl,
+                                uid: user.uid,
+                                timestamp: Date.now()
+                            }));
+                        }
+                    }
+                } catch (err) {
+                    console.error("Error fetching user avatar from Firestore:", err);
+                }
+            })();
 
         } else {
             console.log("User logged out");
