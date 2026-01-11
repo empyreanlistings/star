@@ -838,8 +838,7 @@ body {
   font-weight: 500;
   font-size: 0.8rem;
   letter-spacing: 0.05em;
-  color: var(--text-color);
-  /* Updated to be theme-aware */
+  color: var(--white);
   padding: 8px 16px;
   cursor: pointer;
   position: relative;
@@ -855,9 +854,19 @@ body {
 
 .how-it-works-nav .nav-btn:hover,
 .how-it-works-nav .nav-btn.active {
-  color: var(--text-color);
+  color: var(--white);
   font-weight: 800;
   opacity: 1;
+}
+
+/* Light mode override for nav buttons */
+html[data-theme="light"] .how-it-works-nav .nav-btn {
+  color: var(--black);
+}
+
+html[data-theme="light"] .how-it-works-nav .nav-btn:hover,
+html[data-theme="light"] .how-it-works-nav .nav-btn.active {
+  color: var(--black);
 }
 
 @media (max-width: 768px) {
