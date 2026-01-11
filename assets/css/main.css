@@ -218,6 +218,7 @@ p {
 
 a {
   text-decoration: none;
+  font-size: var(--h6-size);
   color: inherit;
   transition: var(--transition);
 }
