@@ -84,17 +84,28 @@ function initAuth() {
             const avatarLink = document.getElementById("navAvatarLink");
             const avatarImg = document.getElementById("navAvatarImg");
             const dashboardIcon = document.getElementById("navDashboardIcon");
+
             if (avatarLink) {
                 avatarLink.style.display = "inline-flex";
                 if (user.photoURL) {
                     if (avatarImg) {
                         avatarImg.src = user.photoURL;
                         avatarImg.style.display = "block";
+                        avatarImg.onerror = () => {
+                            avatarImg.style.display = "none";
+                            if (dashboardIcon) {
+                                dashboardIcon.className = "fas fa-user-circle";
+                                dashboardIcon.style.display = "block";
+                            }
+                        };
                     }
                     if (dashboardIcon) dashboardIcon.style.display = "none";
                 } else {
                     if (avatarImg) avatarImg.style.display = "none";
-                    if (dashboardIcon) dashboardIcon.style.display = "block";
+                    if (dashboardIcon) {
+                        dashboardIcon.className = "fas fa-user-circle"; // Show profile icon when logged in
+                        dashboardIcon.style.display = "block";
+                    }
                 }
             }
 
@@ -119,7 +130,10 @@ function initAuth() {
             if (avatarLink) {
                 avatarLink.style.display = "inline-flex";
                 if (avatarImg) avatarImg.style.display = "none";
-                if (dashboardIcon) dashboardIcon.style.display = "block";
+                if (dashboardIcon) {
+                    dashboardIcon.className = "fas fa-th-large"; // Reset to dashboard icon when logged out
+                    dashboardIcon.style.display = "block";
+                }
             }
         }
     });

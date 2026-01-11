@@ -1396,7 +1396,6 @@ html[data-theme="light"] nav a:not(.logo-container).active {
 
 .nav-right button:hover {
   background: var(--accent);
-  transform: translateY(-2px);
 }
 
 .nav-right i {
@@ -5857,7 +5856,6 @@ html[data-theme="light"] .messenger-fab:hover {
 .nav-avatar:hover {
   border-color: var(--accent);
   color: var(--accent);
-  transform: scale(1.05);
 }
 
 .nav-avatar i {
