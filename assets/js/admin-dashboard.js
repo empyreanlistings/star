@@ -46,15 +46,15 @@ document.addEventListener("DOMContentLoaded", () => {
             currentUserId = user.uid;
             console.log("User authenticated:", user.email);
 
-            // 1. Load listings immediately (uses cache first)
+            // Sync collections
             initAdminListingsSync();
+            initGallerySync();
+            initPalawanGallerySync();
+
+            // Initialize filters & events
             initDashboardFilters();
             initModalEvents();
-            initGallerySync();
             initGalleryModalEvents();
-            initPalawanGallerySync();
-            initGalleryModalEvents();
-            initPalawanGallerySync();
             initPalawanGalleryModalEvents();
             initPropertyModalEvents();
 
@@ -743,13 +743,18 @@ function initGallerySync() {
     }
 
     // 2. Listener
+    console.log("📡 [Firebase] Connecting to real-time Gallery sync...");
     activeGalleryListener = onSnapshot(collection(db, "Gallery"), (snapshot) => {
         const gallery = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+        console.log(`🔥 [Firebase] Gallery sync received: ${gallery.length} items`);
         localStorage.setItem(GALLERY_CACHE_KEY, JSON.stringify({
             gallery,
             timestamp: Date.now()
         }));
         renderGalleryTable(gallery);
+    }, (error) => {
+        console.error("❌ [Firebase] Gallery sync error:", error);
+        if (tbody) tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;color:red;">Error loading gallery: ${error.message}</td></tr>`;
     });
 }
 
@@ -759,6 +764,11 @@ function renderGalleryTable(gallery) {
 
     tbody.innerHTML = "";
     gallery.sort((a, b) => (b.added_at?.seconds || 0) - (a.added_at?.seconds || 0));
+
+    if (gallery.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;opacity:0.6;">No gallery items found.</td></tr>`;
+        return;
+    }
 
     gallery.forEach(item => {
         const tr = document.createElement("tr");
@@ -1074,13 +1084,18 @@ function initPalawanGallerySync() {
     }
 
     // 2. Real-time Listener
+    console.log("📡 [Firebase] Connecting to real-time Palawan sync...");
     activePalawanGalleryListener = onSnapshot(collection(db, "PalawanGallery"), (snapshot) => {
         const gallery = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+        console.log(`🔥 [Firebase] Palawan sync received: ${gallery.length} items`);
         localStorage.setItem(PALAWAN_GALLERY_CACHE_KEY, JSON.stringify({
             gallery,
             timestamp: Date.now()
         }));
         renderPalawanGalleryTable(gallery);
+    }, (error) => {
+        console.error("❌ [Firebase] Palawan sync error:", error);
+        if (tbody) tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:2rem;color:red;">Error loading Palawan gallery: ${error.message}</td></tr>`;
     });
 }
 
@@ -1090,6 +1105,11 @@ function renderPalawanGalleryTable(gallery) {
 
     tbody.innerHTML = "";
     gallery.sort((a, b) => (b.added_at?.seconds || 0) - (a.added_at?.seconds || 0));
+
+    if (gallery.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:2rem;opacity:0.6;">No Palawan items found.</td></tr>`;
+        return;
+    }
 
     gallery.forEach(item => {
         const tr = document.createElement("tr");
