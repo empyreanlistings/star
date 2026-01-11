@@ -5833,7 +5833,8 @@ html[data-theme="light"] .messenger-fab:hover {
 
 
 /* Nav Avatar */
-.nav-avatar {
+.nav-avatar,
+.nav-icon-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -5841,10 +5842,12 @@ html[data-theme="light"] .messenger-fab:hover {
   height: 38px;
   border-radius: 50%;
   overflow: hidden;
-  border: 2px solid transparent;
-  /* default */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* Subtle default border */
   transition: all 0.3s ease;
   cursor: pointer;
+  color: var(--white);
+  text-decoration: none;
 }
 
 .nav-avatar img {
@@ -5853,9 +5856,11 @@ html[data-theme="light"] .messenger-fab:hover {
   object-fit: cover;
 }
 
-.nav-avatar:hover {
+.nav-avatar:hover,
+.nav-icon-link:hover {
   border-color: var(--accent);
   color: var(--accent);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .nav-avatar i {
@@ -5868,11 +5873,19 @@ html[data-theme="light"] .messenger-fab:hover {
   color: var(--accent);
 }
 
-html[data-theme="light"] .nav-avatar i {
+html[data-theme="light"] .nav-avatar,
+html[data-theme="light"] .nav-icon-link {
+  color: #222;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme="light"] .nav-avatar i,
+html[data-theme="light"] .nav-icon-link i {
   color: #222;
 }
 
-html[data-theme="light"] .nav-avatar:hover i {
+html[data-theme="light"] .nav-avatar:hover i,
+html[data-theme="light"] .nav-icon-link:hover i {
   color: var(--accent);
 }
 

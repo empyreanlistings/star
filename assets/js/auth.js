@@ -103,46 +103,63 @@ function initAuth() {
             const dashboardIcon = document.getElementById("navDashboardIcon");
 
             const updateAvatarUI = (url) => {
+                const avatarLink = document.getElementById("navAvatarLink");
+                const avatarImg = document.getElementById("navAvatarImg");
+                const profileIcon = document.getElementById("navDashboardIcon"); // Fallback icon
+
                 if (!avatarLink) return;
                 avatarLink.style.display = "inline-flex";
-                avatarLink.href = "profile.html"; // Redirect to profile
+                avatarLink.href = "profile.html";
+
                 if (url) {
                     if (avatarImg) {
                         avatarImg.src = url;
                         avatarImg.style.display = "block";
                         avatarImg.onerror = () => {
                             avatarImg.style.display = "none";
-                            if (dashboardIcon) {
-                                dashboardIcon.className = "fas fa-user-circle";
-                                dashboardIcon.style.display = "block";
+                            if (profileIcon) {
+                                profileIcon.className = "fas fa-user-circle";
+                                profileIcon.style.display = "block";
                             }
                         };
                     }
-                    if (dashboardIcon) dashboardIcon.style.display = "none";
+                    if (profileIcon) profileIcon.style.display = "none";
                 } else {
                     if (avatarImg) avatarImg.style.display = "none";
-                    if (dashboardIcon) {
-                        dashboardIcon.className = "fas fa-user-circle";
-                        dashboardIcon.style.display = "block";
+                    if (profileIcon) {
+                        profileIcon.className = "fas fa-user-circle";
+                        profileIcon.style.display = "block";
                     }
                 }
             };
 
             // 3. Render from Cache Instantly
             let currentProfileUrl = user.photoURL;
+            let currentRole = 'user';
             const cachedUser = localStorage.getItem(USER_CACHE_KEY);
             if (cachedUser) {
                 try {
-                    const { photo_url, uid } = JSON.parse(cachedUser);
-                    if (uid === user.uid && photo_url) {
-                        currentProfileUrl = photo_url;
-                        console.log("⚡ [Cache] Rendering instantly...");
+                    const { photo_url, uid, role } = JSON.parse(cachedUser);
+                    if (uid === user.uid) {
+                        if (photo_url) currentProfileUrl = photo_url;
+                        if (role) currentRole = role;
+                        console.log(`⚡ [Cache] Rendering instantly... (Role: ${currentRole})`);
                     }
                 } catch (e) {
                     console.error("User cache parse error", e);
                 }
             }
             updateAvatarUI(currentProfileUrl);
+
+            // Initial Dashboard/Avatar visibility from cache
+            const dashLink = document.getElementById("navDashboardLink");
+            const avatarLink = document.getElementById("navAvatarLink");
+            if (dashLink) {
+                dashLink.style.display = (currentRole === 'admin') ? 'inline-flex' : 'none';
+            }
+            if (avatarLink) {
+                avatarLink.style.display = "inline-flex";
+            }
 
             // 4. Background Sync with Firestore (Non-blocking)
             (async () => {
@@ -151,6 +168,13 @@ function initAuth() {
                     if (userDoc.exists()) {
                         const userData = userDoc.data();
                         const remoteUrl = userData.photo_url || user.photoURL;
+                        const role = userData.role || 'user';
+
+                        // Dashboard visibility for admins
+                        const dashLink = document.getElementById("navDashboardLink");
+                        if (dashLink) {
+                            dashLink.style.display = (role === 'admin') ? 'inline-flex' : 'none';
+                        }
 
                         if (remoteUrl && remoteUrl !== currentProfileUrl) {
                             console.log("🔄 [Firestore] Updating avatar from remote...");
@@ -162,6 +186,7 @@ function initAuth() {
                             localStorage.setItem(USER_CACHE_KEY, JSON.stringify({
                                 photo_url: remoteUrl,
                                 uid: user.uid,
+                                role: role,
                                 timestamp: Date.now()
                             }));
                         }
@@ -186,19 +211,21 @@ function initAuth() {
                 return;
             }
 
-            // Show dashboard icon, hide avatar on public site
+            // Reset Nav on Logout 
+            const dashLink = document.getElementById("navDashboardLink");
             const avatarLink = document.getElementById("navAvatarLink");
             const avatarImg = document.getElementById("navAvatarImg");
-            const dashboardIcon = document.getElementById("navDashboardIcon");
-            if (avatarLink) {
-                avatarLink.style.display = "inline-flex";
-                avatarLink.href = "dashboard.html"; // Reset to dashboard/login
-                if (avatarImg) avatarImg.style.display = "none";
-                if (dashboardIcon) {
-                    dashboardIcon.className = "fas fa-th-large"; // Reset to dashboard icon when logged out
-                    dashboardIcon.style.display = "block";
-                }
+            const profileIcon = document.getElementById("navDashboardIcon");
+
+            if (dashLink) {
+                dashLink.style.display = "inline-flex"; // Show as login entry
+                dashLink.href = "dashboard.html";
             }
+            if (avatarLink) {
+                avatarLink.style.display = "none"; // Hide avatar when out
+            }
+            if (avatarImg) avatarImg.style.display = "none";
+            if (profileIcon) profileIcon.style.display = "none";
         }
     });
 

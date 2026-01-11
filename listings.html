@@ -33,8 +33,8 @@
     crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <!-- Main CSS -->
-  <link rel="stylesheet" href="assets/css/main.css?v=2.13">
-  <link rel="preload" href="assets/css/main.css?v=2.13" as="style">
+  <link rel="stylesheet" href="assets/css/main.css?v=2.14">
+  <link rel="preload" href="assets/css/main.css?v=2.14" as="style">
 
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
@@ -83,8 +83,14 @@
       </li>
     </ul>
     <div class="nav-right">
-      <a href="dashboard.html" id="navAvatarLink" class="nav-avatar" aria-label="Go to Dashboard">
-        <i id="navDashboardIcon" class="fas fa-th-large"></i>
+      <!-- Dashboard Icon (Shown for admins or when logged out as login entry) -->
+      <a href="dashboard.html" id="navDashboardLink" class="nav-icon-link" aria-label="Dashboard">
+        <i class="fas fa-th-large"></i>
+      </a>
+
+      <!-- User Avatar (Shown when signed in) -->
+      <a href="profile.html" id="navAvatarLink" class="nav-avatar" aria-label="My Profile" style="display:none;">
+        <i id="navDashboardIcon" class="fas fa-user-circle" style="display:none;"></i>
         <img id="navAvatarImg" src="images/logo.png" alt="User" style="display:none;">
       </a>
       <button class="theme-toggle" aria-label="Toggle dark/light theme">
