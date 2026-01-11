@@ -105,6 +105,7 @@ function initAuth() {
             const updateAvatarUI = (url) => {
                 if (!avatarLink) return;
                 avatarLink.style.display = "inline-flex";
+                avatarLink.href = "profile.html"; // Redirect to profile
                 if (url) {
                     if (avatarImg) {
                         avatarImg.src = url;
@@ -191,6 +192,7 @@ function initAuth() {
             const dashboardIcon = document.getElementById("navDashboardIcon");
             if (avatarLink) {
                 avatarLink.style.display = "inline-flex";
+                avatarLink.href = "dashboard.html"; // Reset to dashboard/login
                 if (avatarImg) avatarImg.style.display = "none";
                 if (dashboardIcon) {
                     dashboardIcon.className = "fas fa-th-large"; // Reset to dashboard icon when logged out

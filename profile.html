@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <title>My Profile - Kai & Isla</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css?v=2.13">
+    <link rel="preload" href="assets/css/main.css?v=2.13" as="style">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <!-- Apply saved theme early to prevent flash -->
+    <script>
+        (function () {
+            const theme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.style.backgroundColor = theme === 'dark' ? '#0f0f0f' : '#ffffff';
+        })();
+    </script>
+</head>
+
+<body class="is-preload dashboard-page profile-page">
+
+    <!-- Protection & Auth Logic -->
+    <style>
+        body.profile-page {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        body.auth-verified {
+            opacity: 1 !important;
+        }
+    </style>
+    <script type="module" src="assets/js/auth.js"></script>
+
+    <header class="dashboard-header">
+        <div class="dashboard-logo">
+            <a href="index.html">
+                <img src="images/logo2-dark.png" alt="Kai & Isla" id="dashLogo">
+            </a>
+        </div>
+        <div class="user-info">
+            <button id="themeToggleDash" class="theme-toggle" aria-label="Toggle Theme">
+                <i class="theme-icon fas fa-moon"></i>
+            </button>
+            <span id="userEmail" style="color:var(--dash-text);font-size:0.9rem;"></span>
+            <a href="dashboard.html" class="btn-back-dash" title="Go to Dashboard">
+                <i class="fas fa-th-large"></i>
+            </a>
+            <button id="logoutBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> <span
+                    class="logout-text">Logout</span></button>
+        </div>
+    </header>
+
+    <main class="profile-content-wrapper">
+        <div class="profile-card">
+            <div class="profile-header-main">
+                <div class="avatar-upload-container">
+                    <div class="profile-avatar-large">
+                        <img id="profileDisplayImg" src="images/logo.png" alt="Profile Image">
+                        <div class="avatar-overlay" onclick="document.getElementById('avatarInput').click()">
+                            <i class="fas fa-camera"></i>
+                            <span>Change Photo</span>
+                        </div>
+                    </div>
+                    <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+                </div>
+                <div class="profile-title-section">
+                    <h1 id="topDisplayName">User Profile</h1>
+                    <p id="topUserRole">Member</p>
+                </div>
+            </div>
+
+            <form id="profileForm" class="profile-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="display_name">FULL NAME</label>
+                        <input type="text" id="display_name" class="form-control" placeholder="Your Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">EMAIL ADDRESS</label>
+                        <input type="email" id="profileEmail" class="form-control" readonly disabled>
+                        <small style="opacity:0.5; font-size: 0.75rem;">Email cannot be changed here.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone_number">PHONE NUMBER</label>
+                        <input type="tel" id="phone_number" class="form-control" placeholder="+63 900 000 0000">
+                    </div>
+                    <div class="form-group">
+                        <label for="role">ROLE / PROFESSION</label>
+                        <input type="text" id="role" class="form-control" placeholder="e.g. Architect, Developer">
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button type="submit" id="saveProfileBtn" class="btn-save-profile">
+                        <span class="btn-text">SAVE CHANGES</span>
+                        <div class="loader" style="display:none;"></div>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Metadata / Assets Sections -->
+            <div class="profile-secondary-grid">
+                <div class="secondary-card">
+                    <div class="card-header">
+                        <h3>My Properties</h3>
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div id="propertiesList" class="asset-list">
+                        <p class="empty-msg">No properties linked to your account.</p>
+                    </div>
+                </div>
+                <div class="secondary-card">
+                    <div class="card-header">
+                        <h3>My Lands</h3>
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div id="landsList" class="asset-list">
+                        <p class="empty-msg">No land plots linked to your account.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="saveMessage" class="status-message"></div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js?v=2.13" defer></script>
+    <script type="module" src="assets/js/profile.js"></script>
+
+</body>
+
+</html>
