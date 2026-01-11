@@ -70,14 +70,14 @@ function initAuth() {
         if (user) {
             console.log("User logged in:", user.email);
 
-            // Fetch User Profile from Firestore (for photo-url)
+            // Fetch User Profile from Firestore (for photo_url)
             let profileImageUrl = user.photoURL;
             try {
                 const userDoc = await getDoc(doc(db, "Users", user.uid));
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
-                    if (userData['photo-url']) {
-                        profileImageUrl = userData['photo-url'];
+                    if (userData.photo_url) {
+                        profileImageUrl = userData.photo_url;
                         console.log("Avatar loaded from Firestore:", profileImageUrl);
                     }
                 }
