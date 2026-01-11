@@ -5,13 +5,13 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=2.14">
-    <link rel="preload" href="assets/css/main.css?v=2.14" as="style">
+    <link rel="stylesheet" href="assets/css/main.css?v=2.15">
+    <link rel="preload" href="assets/css/main.css?v=2.15" as="style">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <style>
-        /* Styles moved to assets/css/main.css?v=2.14
+        /* Styles moved to assets/css/main.css?v=2.15
     </style>
     <!-- Apply saved theme early to prevent flash -->
     <script>
@@ -51,11 +51,11 @@
             <button id="themeToggleDash" class="theme-toggle" aria-label="Toggle Theme">
                 <i class="theme-icon fas fa-moon"></i>
             </button>
-            <span id="userEmail" style="color:var(--dash-text);font-size:0.9rem;"></span>
-            <a href="profile.html" class="btn-profile-link" title="My Profile"
-                style="color:var(--dash-text); text-decoration:none;">
-                <i class="fas fa-user-circle"></i>
+            <a href="profile.html" id="navAvatarLink" class="nav-avatar" title="My Profile" style="display:none;">
+                <img id="navAvatarImg" src="images/logo.png" alt="Profile" style="display:none;">
+                <i id="navDashboardIcon" class="fas fa-user-circle" style="display:none;"></i>
             </a>
+            <span id="userEmail" style="color:var(--dash-text);font-size:0.9rem;"></span>
             <button id="logoutBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> <span
                     class="logout-text">Logout</span></button>
         </div>

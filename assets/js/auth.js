@@ -72,6 +72,7 @@ function initAuth() {
         const path = window.location.pathname.toLowerCase();
         const isDashboard = document.body.classList.contains('dashboard-page');
         const isLogin = document.body.classList.contains('login-page') || path.includes("login");
+        const isProfile = document.body.classList.contains('profile-page') || path.includes("profile");
 
         // Force body hide for dashboard until state is known
         if (isDashboard && !document.body.classList.contains('auth-verified')) {
@@ -98,16 +99,19 @@ function initAuth() {
             }
 
             // 2. Avatar UI Logic
-            const avatarLink = document.getElementById("navAvatarLink");
-            const avatarImg = document.getElementById("navAvatarImg");
-            const dashboardIcon = document.getElementById("navDashboardIcon");
-
             const updateAvatarUI = (url) => {
                 const avatarLink = document.getElementById("navAvatarLink");
                 const avatarImg = document.getElementById("navAvatarImg");
-                const profileIcon = document.getElementById("navDashboardIcon"); // Fallback icon
+                const profileIcon = document.getElementById("navDashboardIcon");
 
                 if (!avatarLink) return;
+
+                // Rule: On profile page, do not show avatar in header
+                if (isProfile) {
+                    avatarLink.style.display = "none";
+                    return;
+                }
+
                 avatarLink.style.display = "inline-flex";
                 avatarLink.href = "profile.html";
 
@@ -151,14 +155,14 @@ function initAuth() {
             }
             updateAvatarUI(currentProfileUrl);
 
-            // Initial Dashboard/Avatar visibility from cache
+            // Initial Dashboard visibility from cache or default
             const dashLink = document.getElementById("navDashboardLink");
-            const avatarLink = document.getElementById("navAvatarLink");
             if (dashLink) {
-                dashLink.style.display = (currentRole === 'admin') ? 'inline-flex' : 'none';
-            }
-            if (avatarLink) {
-                avatarLink.style.display = "inline-flex";
+                if (isProfile) {
+                    dashLink.style.display = "none"; // Hide on profile
+                } else {
+                    dashLink.style.display = "inline-flex"; // Always show index/listings if logged in
+                }
             }
 
             // 4. Background Sync with Firestore (Non-blocking)
@@ -170,10 +174,15 @@ function initAuth() {
                         const remoteUrl = userData.photo_url || user.photoURL;
                         const role = userData.role || 'user';
 
-                        // Dashboard visibility for admins
+                        // Dashboard visibility rules
                         const dashLink = document.getElementById("navDashboardLink");
                         if (dashLink) {
-                            dashLink.style.display = (role === 'admin') ? 'inline-flex' : 'none';
+                            if (isProfile) {
+                                dashLink.style.display = "none";
+                            } else {
+                                // Logged in on index/listings -> Always show dashboard icon
+                                dashLink.style.display = "inline-flex";
+                            }
                         }
 
                         if (remoteUrl && remoteUrl !== currentProfileUrl) {
