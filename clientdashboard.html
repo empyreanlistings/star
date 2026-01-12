@@ -5,7 +5,7 @@
     <title>Client Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=2.25">
+    <link rel="stylesheet" href="assets/css/main.css?v=2.26">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
@@ -129,35 +129,34 @@
                 </table>
             </div>
 
-            <!-- Gallery Placeholder -->
+            <!-- Gallery Section -->
             <div class="client-card container-glass"
                 style="grid-column: 1 / -1; width: 100%; margin: 0; max-width: none;">
                 <h2><i class="fas fa-images"></i> CONSTRUCTION PROGRESS</h2>
-                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:1rem;">
-                    <!-- Placeholder images -->
-                    <div
-                        style="aspect-ratio:16/9; background:rgba(255,255,255,0.05); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;">
-                        <i class="far fa-image" style="font-size:2rem; opacity:0.2;"></i>
-                        <span style="font-size:0.75rem; opacity:0.4;">Site Prep - Oct 2025</span>
-                    </div>
-                    <div
-                        style="aspect-ratio:16/9; background:rgba(255,255,255,0.05); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;">
-                        <i class="far fa-image" style="font-size:2rem; opacity:0.2;"></i>
-                        <span style="font-size:0.75rem; opacity:0.4;">Foundation - Dec 2025</span>
-                    </div>
-                    <div
-                        style="aspect-ratio:16/9; background:rgba(255,255,255,0.05); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;">
-                        <i class="far fa-image" style="font-size:2rem; opacity:0.2;"></i>
-                        <span style="font-size:0.75rem; opacity:0.4;">Current Progress</span>
+                <div id="inspectionsGallery" class="mixed-gallery">
+                    <!-- Dynamically populated from Inspections collection -->
+                    <div class="gallery-loader"
+                        style="grid-column: 1 / -1; text-align: center; padding: 3rem; opacity: 0.5;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <p>Syncing latest inspections...</p>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- Lightbox for Inspections -->
+    <div id="inspections-lightbox" class="lightbox" role="dialog" aria-hidden="true" tabindex="-1">
+        <div class="lightbox-arrow lightbox-prev">&#10094;</div>
+        <img id="inspections-lightbox-img" src="" alt="">
+        <div class="lightbox-arrow lightbox-next">&#10095;</div>
+        <div class="lightbox-caption"></div>
+    </div>
+
     <!-- Scripts -->
-    <script src="assets/js/snackbar.js?v=2.25"></script>
-    <script src="assets/js/main.js?v=2.25" defer></script>
+    <script src="assets/js/snackbar.js?v=2.26"></script>
+    <script src="assets/js/client-dashboard.js?v=2.26" type="module"></script>
+    <script src="assets/js/main.js?v=2.26" defer></script>
 
 </body>
 
