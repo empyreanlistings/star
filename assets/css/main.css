@@ -1383,7 +1383,7 @@ html[data-theme="light"] nav a:not(.logo-container).active {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 5px;
+  gap: 1rem;
   z-index: auto;
 }
 
