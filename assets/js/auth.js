@@ -150,6 +150,7 @@ function initAuth() {
             updateAvatarUI(currentProfileUrl);
 
             // Initial Dashboard visibility from cache or default
+            const dashLink = document.getElementById("navDashboardLink");
             if (dashLink) {
                 if (isProfile) {
                     dashLink.style.display = "none";
