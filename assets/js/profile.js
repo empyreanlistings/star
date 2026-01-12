@@ -128,8 +128,10 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
         localStorage.removeItem(USER_CACHE_KEY);
 
         if (window.showSnackbar) {
+            console.log("Calling snackbar: Profile updated successfully!");
             window.showSnackbar("Profile updated successfully!", "success");
         } else {
+            console.warn("Snackbar function not found!");
             statusMsg.textContent = "Profile updated successfully!";
             statusMsg.classList.add('success');
         }
@@ -137,7 +139,7 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
     } catch (err) {
         console.error("Error saving profile:", err);
         if (window.showSnackbar) {
-            showSnackbar("Failed to update profile. Please try again.", "error");
+            window.showSnackbar("Failed to update profile. Please try again.", "error");
         } else {
             statusMsg.textContent = "Failed to update profile. Please try again.";
             statusMsg.classList.add('error');
@@ -179,7 +181,6 @@ document.getElementById('avatarInput').addEventListener('change', async (e) => {
 
         // Update UI
         profileImg.src = downloadUrl;
-
         // Clear Cache to reflect changes site-wide
         localStorage.removeItem(USER_CACHE_KEY);
 
@@ -195,7 +196,7 @@ document.getElementById('avatarInput').addEventListener('change', async (e) => {
         console.error("Upload failed:", err);
         profileImg.src = originalSrc;
         if (window.showSnackbar) {
-            showSnackbar("Upload failed. Please try again.", "error");
+            window.showSnackbar("Upload failed. Please try again.", "error");
             statusMsg.textContent = "";
         } else {
             statusMsg.textContent = "Upload failed. Please try again.";

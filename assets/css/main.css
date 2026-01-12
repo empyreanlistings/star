@@ -7439,6 +7439,7 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
   text-align: center;
   padding: 1rem;
 }
+
 /* ============================== SNACKBAR COMPONENT ============================== */
 .snackbar-container {
   position: fixed;
@@ -7481,6 +7482,7 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
     opacity: 0;
     transform: translateX(40px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -7497,10 +7499,21 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
 }
 
 /* Status Types */
-.snackbar.success::before { background: #4CAF50; }
-.snackbar.error::before { background: #F44336; }
-.snackbar.info::before { background: #2196F3; }
-.snackbar.warning::before { background: #FF9800; }
+.snackbar.success::before {
+  background: #4CAF50;
+}
+
+.snackbar.error::before {
+  background: #F44336;
+}
+
+.snackbar.info::before {
+  background: #2196F3;
+}
+
+.snackbar.warning::before {
+  background: #FF9800;
+}
 
 .snackbar-content {
   flex: 1;
@@ -7534,6 +7547,7 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
     left: 10px;
     top: 10px;
   }
+
   .snackbar {
     min-width: 0;
     max-width: none;
@@ -7551,12 +7565,17 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .btn-save-profile {
   position: relative;
-  min-width: 200px; /* Ensure button doesn't jump */
+  min-width: 200px;
+  /* Ensure button doesn't jump */
+  min-height: 54px;
+  /* Fix vertical shrinking */
 }
 
 .btn-save-profile .loader {
