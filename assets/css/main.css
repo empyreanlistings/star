@@ -2785,7 +2785,6 @@ html[data-theme="light"] .modal-content {
   transition: transform 0.25s ease, background 0.25s ease;
   color: var(--white);
   background: var(--accent);
-
 }
 
 .modal-close:hover {
@@ -8061,10 +8060,10 @@ mark.search-highlight.active {
   position: absolute;
   top: 24px;
   right: 24px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--accent);
   border: none;
-  color: white;
-  font-size: 24px;
+  color: var(--white);
+  font-size: 28px;
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -8072,12 +8071,12 @@ mark.search-highlight.active {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
-  z-index: 20;
+  transition: transform 0.25s ease, background 0.25s ease;
+  z-index: 10000;
 }
 
 .lightbox-close:hover {
-  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg) scale(1.1);
 }
 
 /* ============================== DASHBOARD GALLERY PREVIEW ============================== */
