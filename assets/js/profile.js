@@ -105,9 +105,8 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
 
     // Loading State
     saveBtn.disabled = true;
-    btnText.style.display = 'none';
+    btnText.style.visibility = 'hidden'; // Keep width
     loader.style.display = 'block';
-    statusMsg.className = 'status-message';
     statusMsg.textContent = '';
 
     const updatedData = {
@@ -129,7 +128,7 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
         localStorage.removeItem(USER_CACHE_KEY);
 
         if (window.showSnackbar) {
-            showSnackbar("Profile updated successfully!", "success");
+            window.showSnackbar("Profile updated successfully!", "success");
         } else {
             statusMsg.textContent = "Profile updated successfully!";
             statusMsg.classList.add('success');
@@ -145,7 +144,7 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
         }
     } finally {
         saveBtn.disabled = false;
-        btnText.style.display = 'block';
+        btnText.style.visibility = 'visible';
         loader.style.display = 'none';
     }
 });
@@ -185,7 +184,7 @@ document.getElementById('avatarInput').addEventListener('change', async (e) => {
         localStorage.removeItem(USER_CACHE_KEY);
 
         if (window.showSnackbar) {
-            showSnackbar("Photo updated successfully!", "success");
+            window.showSnackbar("Photo updated successfully!", "success");
             statusMsg.textContent = "";
         } else {
             statusMsg.textContent = "Photo updated successfully!";

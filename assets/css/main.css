@@ -7539,3 +7539,30 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
     max-width: none;
   }
 }
+
+/* Spinner Loader */
+.loader {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn-save-profile {
+  position: relative;
+  min-width: 200px; /* Ensure button doesn't jump */
+}
+
+.btn-save-profile .loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -10px;
+  margin-top: -10px;
+}
