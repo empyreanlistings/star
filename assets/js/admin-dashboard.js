@@ -272,21 +272,40 @@ function renderAdminTable(listings) {
         const title = data.title || "Untitled";
         const thumbnail = data.media?.thumbnail || "images/coming-soon.webp";
         const price = data.price ? `₱${Number(data.price).toLocaleString()}` : "TBC";
-        const type = data.type || "-";
+        const status = data.status || "-";
         const category = data.category || "All";
-
         const shortDesc = data.content?.short_description || "";
+
+        // Gallery Badge Logic
+        const allImages = data.media?.images || [];
+        const thumbUrl = data.media?.thumbnail;
+        const galleryItems = allImages.filter(url => url !== thumbUrl);
+        const galleryCount = galleryItems.length;
+
+        // Source Icon Logic
+        let sourceHtml = '<i class="fas fa-user source-icon user" title="Manual / User"></i>';
+        if (data.whatsapp) {
+            sourceHtml = '<i class="fab fa-whatsapp source-icon whatsapp" title="WhatsApp Source"></i>';
+        } else if (data.telegram) {
+            sourceHtml = '<i class="fab fa-telegram source-icon telegram" title="Telegram Source"></i>';
+        }
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><img src="${thumbnail}" alt="thumb"></td>
+            <td>
+                <div class="thumb-wrapper">
+                    <img src="${thumbnail}" alt="thumb">
+                    ${galleryCount > 0 ? `<span class="gallery-badge" title="${galleryCount} more images">${galleryCount}</span>` : ''}
+                </div>
+            </td>
             <td>
                 <strong>${title}</strong><br>
                 <small style="opacity: 0.7;">${shortDesc}</small>
             </td>
-            <td>${type}</td>
+            <td><span style="text-transform: capitalize;">${status.replace('_', ' ')}</span></td>
             <td>${price}</td>
             <td><span class="status-badge status-active">${category.toUpperCase()}</span></td>
+            <td style="text-align:center;">${sourceHtml}</td>
             <td style="text-align:center;">${data.featured ? '<i class="fas fa-star" style="color:var(--accent);"></i>' : ''}</td>
             <td style="text-align:center;">${data.visits || 0}</td>
             <td style="text-align:center;">${data.likes || 0}</td>
@@ -723,8 +742,8 @@ async function handleFormSubmit(e) {
             console.log("📤 [Submit] Uploading new thumbnail...");
             statusDiv.textContent = "Uploading thumbnail...";
             const file = fileInput.files[0];
-            const resizedBlob = await resizeImage(file, 800);
-            const storageRef = ref(storage, 'property-images/' + Date.now() + '_thumb_' + file.name);
+            const resizedBlob = await compressAndConvertToWebP(file, 800);
+            const storageRef = ref(storage, 'property-images/' + Date.now() + '_thumb_' + file.name.split('.')[0] + '.webp');
             await uploadBytes(storageRef, resizedBlob);
             thumbnailURL = await getDownloadURL(storageRef);
         } else if (isEditMode && id) {
@@ -744,8 +763,8 @@ async function handleFormSubmit(e) {
         // Parallel Uploads
         const uploadPromises = currentGalleryState.map(async (item) => {
             if (item instanceof File) {
-                const resizedBlob = await resizeImage(item, 800);
-                const storageRef = ref(storage, 'property-images/' + Date.now() + '_gallery_' + item.name);
+                const resizedBlob = await compressAndConvertToWebP(item, 800);
+                const storageRef = ref(storage, 'property-images/' + Date.now() + '_gallery_' + item.name.split('.')[0] + '.webp');
                 await uploadBytes(storageRef, resizedBlob);
                 const url = await getDownloadURL(storageRef);
                 return url;
@@ -1239,9 +1258,9 @@ async function handleGalleryFormSubmit(e) {
 
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
-            const resizedBlob = await resizeImage(file, 800);
+            const resizedBlob = await compressAndConvertToWebP(file, 800);
             status.textContent = "Uploading optimized image...";
-            const storageRef = ref(storage, `gallery / ${Date.now()}_${file.name} `);
+            const storageRef = ref(storage, `gallery/${Date.now()}_${file.name.split('.')[0]}.webp`);
             await uploadBytes(storageRef, resizedBlob);
             imageUrl = await getDownloadURL(storageRef);
         }
@@ -1273,31 +1292,15 @@ async function handleGalleryFormSubmit(e) {
     }
 }
 
-function resizeImage(file, maxWidth) {
-    console.log("🛠️ [Resize] Starting resize for:", file.name, "Size:", file.size);
+async function compressAndConvertToWebP(file, maxWidth = 800, quality = 0.75) {
     return new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => {
-            console.error("❌ [Resize] Timeout after 10s");
-            reject(new Error("Image processing timed out"));
-        }, 10000);
-
         const reader = new FileReader();
-        reader.onerror = (err) => {
-            clearTimeout(timeout);
-            console.error("❌ [Resize] FileReader error:", err);
-            reject(new Error("Failed to read file"));
-        };
-        reader.onload = (e) => {
-            console.log("   ✅ [Resize] File read successfully");
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
             const img = new Image();
-            img.onerror = (err) => {
-                clearTimeout(timeout);
-                console.error("❌ [Resize] Image load error:", err);
-                reject(new Error("Failed to load image"));
-            };
+            img.src = event.target.result;
             img.onload = () => {
-                console.log("   ✅ [Resize] Image loaded into memory. Original:", img.width, "x", img.height);
-                const canvas = document.createElement("canvas");
+                const canvas = document.createElement('canvas');
                 let width = img.width;
                 let height = img.height;
 
@@ -1308,30 +1311,17 @@ function resizeImage(file, maxWidth) {
 
                 canvas.width = width;
                 canvas.height = height;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0, width, height);
-                console.log("   ✅ [Resize] Canvas drawn. Final size:", width, "x", height);
 
-                try {
-                    canvas.toBlob((blob) => {
-                        clearTimeout(timeout);
-                        if (blob) {
-                            console.log("   ✅ [Resize] Blob created successfully. Final Size:", blob.size);
-                            resolve(blob);
-                        } else {
-                            console.error("❌ [Resize] toBlob returned null");
-                            reject(new Error("Canvas toBlob failed"));
-                        }
-                    }, file.type || "image/jpeg", 0.85);
-                } catch (blobErr) {
-                    clearTimeout(timeout);
-                    console.error("❌ [Resize] toBlob exception:", blobErr);
-                    reject(blobErr);
-                }
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob((blob) => {
+                    resolve(blob);
+                }, 'image/webp', quality);
             };
-            img.src = e.target.result;
+            img.onerror = (error) => reject(error);
         };
-        reader.readAsDataURL(file);
+        reader.onerror = (error) => reject(error);
     });
 }
 
@@ -1543,10 +1533,10 @@ async function handlePalawanGalleryFormSubmit(e) {
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
             console.log("🚀 [Upload] File selected:", file.name, "(" + (file.size / 1024).toFixed(2) + " KB)");
-            const resizedBlob = await resizeImage(file, 800);
+            const resizedBlob = await compressAndConvertToWebP(file, 800);
             console.log("🚀 [Upload] Starting Firebase Storage upload...");
             status.textContent = "Uploading optimized image...";
-            const storageRef = ref(storage, `palawan - gallery / ${Date.now()}_${file.name} `);
+            const storageRef = ref(storage, `palawan-gallery/${Date.now()}_${file.name.split('.')[0]}.webp`);
             await uploadBytes(storageRef, resizedBlob);
             imageUrl = await getDownloadURL(storageRef);
             console.log("✅ [Upload] Image uploaded successfully. URL:", imageUrl);
