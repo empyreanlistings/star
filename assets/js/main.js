@@ -1562,62 +1562,6 @@ function initHowItWorks() {
   startAutoplay();
 }
 
-currentIndex = index;
-track.style.transform = `translateX(-${index * 100}%)`;
-
-// Update Nav
-btns.forEach(b => b.classList.remove('active'));
-const activeBtn = Array.from(btns).find(b => parseInt(b.dataset.index) === index);
-if (activeBtn) {
-  activeBtn.classList.add('active');
-  if (window.innerWidth <= 768) {
-    activeBtn.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
-  }
-}
-  }
-
-function startAutoplay() {
-  stopAutoplay();
-  autoplayTimer = setInterval(() => {
-    goToSlide(currentIndex + 1);
-  }, 5000);
-}
-
-function stopAutoplay() {
-  if (autoplayTimer) clearInterval(autoplayTimer);
-}
-
-// Events
-display.querySelector('.card-nav-left').onclick = () => {
-  goToSlide(currentIndex - 1);
-  startAutoplay(); // Restart timer on manual interaction
-};
-display.querySelector('.card-nav-right').onclick = () => {
-  goToSlide(currentIndex + 1);
-  startAutoplay(); // Restart timer on manual interaction
-};
-
-btns.forEach(btn => {
-  btn.onclick = () => {
-    const idx = parseInt(btn.dataset.index);
-    if (!isNaN(idx)) {
-      goToSlide(idx);
-      startAutoplay();
-    }
-  };
-});
-
-// Pause on hover
-cardContent.forEach(content => {
-  content.onmouseenter = stopAutoplay;
-  content.onmouseleave = startAutoplay;
-});
-
-// Initial Render
-goToSlide(0);
-startAutoplay();
-}
-
 // ================================================================
 // CALENDLY
 // ================================================================
