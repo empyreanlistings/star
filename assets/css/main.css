@@ -7276,11 +7276,7 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
 }
 
 .profile-title-section p {
-  opacity: 0.8;
-  font-size: 1.1rem;
   margin: 0;
-  color: var(--white);
-  font-weight: 600;
 }
 
 [data-theme="light"] .profile-title-section p {
