@@ -8234,11 +8234,11 @@ html[data-theme="light"] .pagination-btn {
 
 /* ============================== UNIFIED MODAL CLOSE ============================== */
 .closeModalDefault {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  width: 2.5rem;
-  height: 2.5rem;
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  width: 3rem;
+  height: 3rem;
   background: var(--accent);
   color: var(--white) !important;
   border: none;
@@ -8248,7 +8248,7 @@ html[data-theme="light"] .pagination-btn {
   justify-content: center;
   font-size: 1.5rem;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 2147483647;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }

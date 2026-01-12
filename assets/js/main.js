@@ -1609,7 +1609,7 @@ function initLb() {
   lb.id = "lightboxOverlay";
   lb.className = "lightbox-overlay";
   lb.innerHTML = `
-    <button class="lightbox-close" id="lbClose"><i class="fas fa-times"></i></button>
+    <button class="closeModalDefault" id="lbClose"><i class="fas fa-times"></i></button>
     <img class="lightbox-image" id="lbImage" src="" alt="Full Screen View">
   `;
   document.body.appendChild(lb);

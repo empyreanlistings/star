@@ -152,19 +152,29 @@ function initAdminListingsSync() {
     });
 }
 
-allListings = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
-console.log(`🔥 [Firebase] Admin sync received: ${allListings.length} listings`);
+function handleAdminSnapshot(snapshot) {
+    const tbody = document.getElementById("listingsTableBody");
+    if (!tbody) return;
 
-// 3. Update Cache
-localStorage.setItem(CACHE_KEY, JSON.stringify({
-    listings: allListings,
-    timestamp: Date.now()
-}));
+    if (snapshot.empty) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:3rem;opacity:0.6;"><i class="fas fa-search" style="font-size:2rem;margin-bottom:1rem;display:block;"></i><strong>Nothing here. Try updating your filters</strong></td></tr>`;
+        allListings = [];
+        return;
+    }
 
-currentListings = allListings; // Update global for sorting
+    allListings = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+    console.log(`🔥 [Firebase] Admin sync received: ${allListings.length} listings`);
 
-// 4. Apply Filters & Render
-applyDashboardFilters();
+    // 3. Update Cache
+    localStorage.setItem(CACHE_KEY, JSON.stringify({
+        listings: allListings,
+        timestamp: Date.now()
+    }));
+
+    currentListings = allListings; // Update global for sorting
+
+    // 4. Apply Filters & Render
+    applyDashboardFilters();
 }
 
 function applyDashboardFilters() {
@@ -172,7 +182,10 @@ function applyDashboardFilters() {
 
     // Category Filter
     if (dashboardFilters.category !== 'all') {
-        filtered = filtered.filter(l => (l.category || '').toLowerCase() === dashboardFilters.category);
+        filtered = filtered.filter(l => {
+            const cat = (l.category || '').toLowerCase().trim();
+            return cat === dashboardFilters.category;
+        });
     }
 
     // Price Filter
@@ -1302,10 +1315,14 @@ function initPalawanGallerySync() {
             gallery: allPalawanGallery,
             timestamp: Date.now()
         }));
-        renderPalawanGalleryTable(allPalawanGallery);
+        applyPalawanGalleryFilters();
     }, (error) => {
         console.error("❌ [Firebase] Palawan sync error:", error);
     });
+}
+
+function applyPalawanGalleryFilters() {
+    renderPalawanGalleryTable(allPalawanGallery);
 }
 
 function renderPalawanGalleryTable(gallery) {
@@ -1346,7 +1363,7 @@ function renderPalawanGalleryTable(gallery) {
     // Render Pagination
     renderTablePagination("palawanGalleryPagination", totalRecords, palawanPerPage, palawanPage, (newPage) => {
         palawanPage = newPage;
-        renderPalawanGalleryTable(gallery);
+        applyPalawanGalleryFilters();
         document.getElementById("palawanGallerySection").scrollIntoView({ behavior: 'smooth' });
     });
 
