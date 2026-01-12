@@ -126,6 +126,10 @@ function initAuth() {
                     if (avatarImg) {
                         avatarImg.src = url;
                         avatarImg.style.display = "block";
+                        avatarImg.style.opacity = "0";
+                        avatarImg.onload = () => {
+                            avatarImg.style.opacity = "1";
+                        };
                         avatarImg.onerror = () => {
                             avatarImg.style.display = "none";
                             if (profileIcon) {

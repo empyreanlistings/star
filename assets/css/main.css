@@ -5864,6 +5864,8 @@ html[data-theme="light"] .messenger-fab:hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease;
 }
 
 .nav-avatar:hover,
