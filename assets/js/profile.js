@@ -128,13 +128,21 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
         // Clear Cache to reflect changes site-wide
         localStorage.removeItem(USER_CACHE_KEY);
 
-        statusMsg.textContent = "Profile updated successfully!";
-        statusMsg.classList.add('success');
+        if (window.showSnackbar) {
+            showSnackbar("Profile updated successfully!", "success");
+        } else {
+            statusMsg.textContent = "Profile updated successfully!";
+            statusMsg.classList.add('success');
+        }
 
     } catch (err) {
         console.error("Error saving profile:", err);
-        statusMsg.textContent = "Failed to update profile. Please try again.";
-        statusMsg.classList.add('error');
+        if (window.showSnackbar) {
+            showSnackbar("Failed to update profile. Please try again.", "error");
+        } else {
+            statusMsg.textContent = "Failed to update profile. Please try again.";
+            statusMsg.classList.add('error');
+        }
     } finally {
         saveBtn.disabled = false;
         btnText.style.display = 'block';
@@ -176,13 +184,23 @@ document.getElementById('avatarInput').addEventListener('change', async (e) => {
         // Clear Cache to reflect changes site-wide
         localStorage.removeItem(USER_CACHE_KEY);
 
-        statusMsg.textContent = "Photo updated successfully!";
-        statusMsg.classList.add('success');
+        if (window.showSnackbar) {
+            showSnackbar("Photo updated successfully!", "success");
+            statusMsg.textContent = "";
+        } else {
+            statusMsg.textContent = "Photo updated successfully!";
+            statusMsg.classList.add('success');
+        }
 
     } catch (err) {
         console.error("Upload failed:", err);
         profileImg.src = originalSrc;
-        statusMsg.textContent = "Upload failed. Please try again.";
-        statusMsg.classList.add('error');
+        if (window.showSnackbar) {
+            showSnackbar("Upload failed. Please try again.", "error");
+            statusMsg.textContent = "";
+        } else {
+            statusMsg.textContent = "Upload failed. Please try again.";
+            statusMsg.classList.add('error');
+        }
     }
 });
