@@ -384,8 +384,14 @@ async function handleEdit(e) {
             const features = data.content?.features || [];
             document.getElementById("propFeatures").value = Array.isArray(features) ? features.join(", ") : "";
 
-            // Image note
-            // We don't preview existing image in this simple form, but users know it exists.
+            // Populate Gallery (Slide 1 is Thumbnail, Slide 2+ is Gallery)
+            const allImages = data.media?.images || [];
+            const thumb = data.media?.thumbnail;
+
+            // Filter out thumbnail from gallery view if it exists
+            currentGalleryState = allImages.filter(url => url !== thumb);
+            updateGalleryPreview();
+
         } else {
             console.log("No such document!");
         }
@@ -403,6 +409,55 @@ function closeModal() {
             modal.style.display = "none";
         }
     }, 400);
+}
+
+// =============================================================================
+// GALLERY UPLOAD LOGIC
+// =============================================================================
+let currentGalleryState = []; // Stores mixed array of Strings (URLs) and File objects
+
+function initGalleryLogic() {
+    const galleryInput = document.getElementById("propGallery");
+    if (galleryInput) {
+        galleryInput.addEventListener("change", (e) => {
+            const files = Array.from(e.target.files);
+            if (files.length > 0) {
+                currentGalleryState = [...currentGalleryState, ...files];
+                updateGalleryPreview();
+                galleryInput.value = ""; // Reset to allow adding more
+            }
+        });
+    }
+}
+
+function updateGalleryPreview() {
+    const grid = document.getElementById("galleryPreview");
+    if (!grid) return;
+    grid.innerHTML = "";
+
+    currentGalleryState.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "preview-item";
+
+        const img = document.createElement("img");
+        if (item instanceof File) {
+            img.src = URL.createObjectURL(item);
+        } else {
+            img.src = item;
+        }
+
+        const btn = document.createElement("button");
+        btn.className = "preview-remove";
+        btn.innerHTML = "&times;";
+        btn.onclick = () => {
+            currentGalleryState.splice(index, 1);
+            updateGalleryPreview();
+        };
+
+        div.appendChild(img);
+        div.appendChild(btn);
+        grid.appendChild(div);
+    });
 }
 
 function initModalEvents() {
@@ -428,6 +483,8 @@ function initModalEvents() {
     if (form) {
         form.addEventListener("submit", handleFormSubmit);
     }
+
+    initGalleryLogic();
 }
 
 function openModal(edit = false) {
@@ -445,6 +502,8 @@ function openModal(edit = false) {
     }
 
     form.reset();
+    currentGalleryState = []; // Reset gallery
+    updateGalleryPreview();
 
     // Safer transition trigger: display then active class with delay
     modal.style.display = "flex";
@@ -464,6 +523,7 @@ function openModal(edit = false) {
     }
 }
 
+// Form Submit (Create or Update)
 // Form Submit (Create or Update)
 async function handleFormSubmit(e) {
     e.preventDefault();
@@ -499,57 +559,68 @@ async function handleFormSubmit(e) {
             updated_at: new Date().toISOString()
         };
 
-        // Handle Image Upload if file selected
+        // 1. Handle Thumbnail Upload (Slide 1)
+        let thumbnailURL = null;
         const fileInput = document.getElementById("propImage");
-        if (fileInput.files.length > 0) {
-            statusDiv.textContent = "Uploading new image...";
-            const file = fileInput.files[0];
-            const storageRef = ref(storage, 'property-images/' + Date.now() + '_' + file.name);
-            await uploadBytes(storageRef, file);
-            const downloadURL = await getDownloadURL(storageRef);
 
-            docData.media = {
-                thumbnail: downloadURL,
-                images: [downloadURL]
-            };
+        if (fileInput.files.length > 0) {
+            statusDiv.textContent = "Uploading thumbnail...";
+            const file = fileInput.files[0];
+            const storageRef = ref(storage, 'property-images/' + Date.now() + '_thumb_' + file.name);
+            await uploadBytes(storageRef, file);
+            thumbnailURL = await getDownloadURL(storageRef);
+        } else if (isEditMode && id) {
+            const docRef = doc(db, "Listings", id);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                thumbnailURL = docSnap.data().media?.thumbnail;
+            }
         }
+
+        // 2. Handle Gallery Uploads (Slides 2+)
+        statusDiv.textContent = "Uploading gallery images...";
+        const galleryURLs = [];
+
+        for (const item of currentGalleryState) {
+            if (item instanceof File) {
+                const storageRef = ref(storage, 'property-images/' + Date.now() + '_gallery_' + item.name);
+                await uploadBytes(storageRef, item);
+                const url = await getDownloadURL(storageRef);
+                galleryURLs.push(url);
+            } else if (typeof item === 'string') {
+                galleryURLs.push(item);
+            }
+        }
+
+        // 3. Construct Media Object
+        const finalImages = [thumbnailURL, ...galleryURLs].filter(Boolean);
+
+        docData.media = {
+            thumbnail: thumbnailURL,
+            images: finalImages
+        };
 
         if (isEditMode && id) {
             // UPDATE
             const docRef = doc(db, "Listings", id);
-
-            // Add editor metadata
-            if (currentUserId) {
-                docData.editor = doc(db, "Users", currentUserId);
-            }
+            if (currentUserId) docData.editor = doc(db, "Users", currentUserId);
             docData.edited_date = serverTimestamp();
 
             await updateDoc(docRef, docData);
-            // Invalidate cache
             localStorage.removeItem("kai_isla_listings");
             alert("Listing updated successfully!");
         } else {
             // CREATE
-            if (!docData.media) {
-                throw new Error("Image is required for new listings.");
-            }
-
-            // Add company and creator metadata
-            if (currentUserCompany) {
-                docData.company = currentUserCompany;
-            }
-            if (currentUserId) {
-                docData.creator = doc(db, "Users", currentUserId);
-            }
+            if (!thumbnailURL) throw new Error("Thumbnail is required.");
+            if (currentUserCompany) docData.company = currentUserCompany;
+            if (currentUserId) docData.creator = doc(db, "Users", currentUserId);
             docData.created_date = serverTimestamp();
 
             await addDoc(collection(db, "Listings"), docData);
-            // Invalidate cache
             localStorage.removeItem("kai_isla_listings");
             alert("Listing created successfully!");
         }
 
-        // Close modal on success
         closeModal();
     } catch (error) {
         console.error("Error saving listing:", error);

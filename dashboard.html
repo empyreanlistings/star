@@ -5,12 +5,12 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=2.30">
+    <link rel="stylesheet" href="assets/css/main.css?v=2.31">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <style>
-        /* Styles moved to assets/css/main.css?v=2.30
+        /* Styles moved to assets/css/main.css?v=2.31
     </style>
     <!-- Apply saved theme early to prevent flash -->
     <script>
@@ -232,8 +232,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Thumbnail Image</label>
-                    <input type="file" id="propImage" class="form-control" accept="image/*" required>
+                    <label>Thumbnail Image (Slide 1)</label>
+                    <input type="file" id="propImage" class="form-control" accept="image/*">
+                </div>
+
+                <div class="form-group">
+                    <label>Gallery Images (Slides 2+)</label>
+                    <input type="file" id="propGallery" class="form-control" multiple accept="image/*">
+                    <div id="galleryPreview" class="gallery-preview-grid"></div>
                 </div>
 
                 <div class="form-group">
@@ -399,8 +405,8 @@
     </div>
 
     <!-- Scripts -->
-    <script src="assets/js/snackbar.js?v=2.30"></script>
-    <script src="assets/js/main.js?v=2.30" defer></script>
+    <script src="assets/js/snackbar.js?v=2.31"></script>
+    <script src="assets/js/main.js?v=2.31" defer></script>
     <script type="module" src="assets/js/admin-dashboard.js"></script>
 
 </body>
