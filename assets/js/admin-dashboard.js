@@ -278,6 +278,12 @@ function sortListings() {
         if (sortConfig.column === 'price') {
             valA = Number(valA) || 0;
             valB = Number(valB) || 0;
+        } else if (['visits', 'likes'].includes(sortConfig.column)) {
+            valA = Number(valA) || 0;
+            valB = Number(valB) || 0;
+        } else if (sortConfig.column === 'featured') {
+            valA = a.featured ? 1 : 0;
+            valB = b.featured ? 1 : 0;
         } else {
             valA = (valA || "").toString().toLowerCase();
             valB = (valB || "").toString().toLowerCase();

@@ -5,7 +5,7 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=2.45">
+    <link rel="stylesheet" href="assets/css/main.css?v=2.46">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
@@ -61,7 +61,7 @@
     </header>
 
     <main class="dashboard-content">
-        <div id="listingsSection" class="listings-table-container">
+        <div id="listingsTableContainer" class="listings-table-container">
             <!-- Header with Add Button -->
             <div class="dashboard-section-header">
                 <h1>Manage Listings</h1>
@@ -97,22 +97,20 @@
             <table>
                 <thead>
                     <tr>
-                        <thead>
-                            <tr>
-                                <th style="width: 80px;">Image</th>
-                                <th class="sortable" data-sort="title">Property <i class="fas fa-sort"></i></th>
-                                <th class="sortable" data-sort="type">Type <i class="fas fa-sort"></i></th>
-                                <th class="sortable" data-sort="price">Price <i class="fas fa-sort"></i></th>
-                                <th class="sortable" data-sort="category">Category <i class="fas fa-sort"></i></th>
-                                <th class="sortable" data-sort="featured">Featured <i class="fas fa-sort"></i></th>
-                                <th class="sortable" data-sort="visits">Visits <i class="fas fa-sort"></i></th>
-                                <th class="sortable" data-sort="likes">Likes <i class="fas fa-sort"></i></th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
+                        <th style="width: 80px;">Image</th>
+                        <th class="sortable" data-sort="title">Property <i class="fas fa-sort"></i></th>
+                        <th class="sortable" data-sort="type">Type <i class="fas fa-sort"></i></th>
+                        <th class="sortable" data-sort="price">Price <i class="fas fa-sort"></i></th>
+                        <th class="sortable" data-sort="category">Category <i class="fas fa-sort"></i></th>
+                        <th class="sortable" data-sort="featured">Featured <i class="fas fa-sort"></i></th>
+                        <th class="sortable" data-sort="visits">Visits <i class="fas fa-sort"></i></th>
+                        <th class="sortable" data-sort="likes">Likes <i class="fas fa-sort"></i></th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
                 <tbody id="listingsTableBody">
                     <tr>
-                        <td colspan="7" style="text-align:center;padding:2rem;opacity:0.6;">Loading listings...</td>
+                        <td colspan="9" style="text-align:center;padding:2rem;opacity:0.6;">Loading listings...</td>
                     </tr>
                 </tbody>
             </table>
@@ -368,9 +366,9 @@
 
     <!-- Scripts -->
     <script src="assets/js/nav.js" defer></script>
-    <script src="assets/js/snackbar.js?v=2.45"></script>
-    <script src="assets/js/main.js?v=2.45" defer></script>
-    <script type="module" src="assets/js/admin-dashboard.js?v=2.45"></script>
+    <script src="assets/js/snackbar.js?v=2.46"></script>
+    <script src="assets/js/main.js?v=2.46" defer></script>
+    <script type="module" src="assets/js/admin-dashboard.js?v=2.46"></script>
 
 </body>
 
