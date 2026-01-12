@@ -58,6 +58,9 @@ document.addEventListener("DOMContentLoaded", () => {
             currentUserId = user.uid;
             console.log("User authenticated:", user.email);
 
+            // Initialize UI elements
+            initGlobalDelegation(); // Added for robust event handling
+
             // Sync collections
             initAdminListingsSync();
             initGallerySync();
@@ -74,9 +77,49 @@ document.addEventListener("DOMContentLoaded", () => {
             await getUserCompany(user.uid);
             initAdminListingsSync();
         }
-        // No else needed here, auth.js handles strict redirect for unauth users
     });
 });
+
+/**
+ * Global Event Delegation for Dynamic Content
+ */
+function initGlobalDelegation() {
+    console.log("🛠️ [Global] Initializing Global Event Delegation...");
+
+    document.addEventListener("click", async (e) => {
+        const target = e.target;
+
+        // 1. Action Buttons Delegation
+        const actionBtn = target.closest(".action-btn");
+        if (actionBtn) {
+            const id = actionBtn.dataset.id;
+            if (actionBtn.classList.contains("edit")) {
+                handleEdit(e);
+            } else if (actionBtn.classList.contains("delete")) {
+                handleDelete(e);
+            } else if (actionBtn.classList.contains("duplicate")) {
+                handleDuplicate(e);
+            }
+            return; // Stop here if it was an action button
+        }
+
+        // 2. Row Click Delegation (View Property)
+        const tr = target.closest("tr");
+        if (tr && tr.parentElement?.id === "listingsTableBody") {
+            console.log("🕵️ [RowClick] Triggered for property view");
+            const firstBtn = tr.querySelector(".action-btn");
+            const id = firstBtn?.dataset.id;
+            if (id) {
+                const listing = allListings.find(l => l.id === id);
+                if (listing) {
+                    openPropertyModal(listing);
+                } else {
+                    console.warn("⚠️ [RowClick] Listing data not found for ID:", id);
+                }
+            }
+        }
+    });
+}
 
 // Fetch User's Company Reference
 async function getUserCompany(uid) {
@@ -263,31 +306,6 @@ function renderAdminTable(listings) {
         document.getElementById("listingsTableContainer").scrollIntoView({ behavior: 'smooth' });
     });
 
-    // Bind events
-    document.querySelectorAll(".action-btn.delete").forEach(btn => btn.addEventListener("click", handleDelete));
-    document.querySelectorAll(".action-btn.edit").forEach(btn => btn.addEventListener("click", handleEdit));
-    document.querySelectorAll(".action-btn.duplicate").forEach(btn => btn.addEventListener("click", handleDuplicate));
-
-    // Add row click to view property details
-    tbody.querySelectorAll("tr").forEach(tr => {
-        tr.style.cursor = "pointer";
-        tr.addEventListener("click", (e) => {
-            // Don't trigger if clicking action buttons
-            if (e.target.closest(".action-btn")) return;
-
-            const id = tr.querySelector(".action-btn")?.dataset.id;
-            if (id) {
-                const listing = listings.find(l => l.id === id);
-                if (listing) openPropertyModal(listing);
-            }
-        });
-    });
-
-    // Initialize filters after table is rendered
-    if (typeof window.initDashboardFilters === 'function') {
-        setTimeout(() => window.initDashboardFilters(), 100);
-    }
-
     initSorting();
 }
 
@@ -456,57 +474,67 @@ async function handleDelete(e) {
 
 // Edit - Open Modal & Populate
 async function handleEdit(e) {
-    const btn = e.target.closest("button");
-    const id = btn.dataset.id;
-
-    // Reset Form First
-    openModal(true); // true = edit mode
-    const form = document.getElementById("listingForm");
-
-    // Show Loading or similar if needed? 
-    // Ideally we fetch data then show, or show then fill. 
-    // Let's optimize UX: set ID now.
-    document.getElementById("listingId").value = id;
-
     try {
+        const btn = e.target.closest("button");
+        if (!btn) return;
+
+        const id = btn.dataset.id;
+        console.log("📝 [Edit] handleEdit triggered for ID:", id);
+
+        // Reset Form First
+        openModal(true); // true = edit mode
+
+        const idInput = document.getElementById("listingId");
+        if (idInput) idInput.value = id;
+
         const docRef = doc(db, "Listings", id);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
             const data = docSnap.data();
+            console.log("📥 [Edit] Document data fetched:", data.title);
 
-            document.getElementById("propTitle").value = data.title || "";
-            document.getElementById("propPrice").value = data.price || "";
-            document.getElementById("propType").value = data.type || "";
-            document.getElementById("propCategory").value = data.category || "residential";
-            document.getElementById("propStatus").value = data.status || "for_sale";
-            document.getElementById("propFeatured").checked = !!data.featured;
+            const setField = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.value = val !== undefined && val !== null ? val : "";
+            };
 
-            document.getElementById("propShortDesc").value = data.content?.short_description || "";
-            document.getElementById("propFullDesc").value = data.content?.full_description || "";
+            setField("propTitle", data.title);
+            setField("propPrice", data.price);
+            setField("propType", data.type);
+            setField("propCategory", data.category);
+            setField("propStatus", data.status);
 
-            document.getElementById("propBeds").value = data.specs?.beds || "";
-            document.getElementById("propBaths").value = data.specs?.baths || "";
-            document.getElementById("propSize").value = data.specs?.size || "";
-            document.getElementById("propLotSize").value = data.specs?.lot_size || "";
-            document.getElementById("propFloorArea").value = data.specs?.floor_area || "";
+            const featuredEl = document.getElementById("propFeatured");
+            if (featuredEl) featuredEl.checked = !!data.featured;
 
-            const features = data.content?.features || [];
-            document.getElementById("propFeatures").value = Array.isArray(features) ? features.join(", ") : "";
+            setField("propShortDesc", data.content?.short_description);
+            setField("propFullDesc", data.content?.full_description);
 
-            // Populate Gallery (Slide 1 is Thumbnail, Slide 2+ is Gallery)
+            setField("propBeds", data.specs?.beds);
+            setField("propBaths", data.specs?.baths);
+            setField("propSize", data.specs?.size);
+            setField("propLotSize", data.specs?.lot_size);
+            setField("propFloorArea", data.specs?.floor_area);
+
+            const featuresInput = document.getElementById("propFeatures");
+            if (featuresInput) {
+                const features = data.content?.features || [];
+                featuresInput.value = Array.isArray(features) ? features.join(", ") : "";
+            }
+
+            // Populate Gallery
             const allImages = data.media?.images || [];
             const thumb = data.media?.thumbnail;
-
-            // Filter out thumbnail from gallery view if it exists
             currentGalleryState = allImages.filter(url => url !== thumb);
             updateGalleryPreview();
 
         } else {
-            console.log("No such document!");
+            console.error("❌ [Edit] No such document!");
+            alert("Error: Listing not found in database.");
         }
     } catch (error) {
-        console.error("Error getting document:", error);
+        console.error("❌ [Edit] Error in handleEdit:", error);
     }
 }
 
@@ -607,6 +635,15 @@ function initModalEvents() {
 function openModal(edit = false) {
     console.log("🚀 [Modal] openModal triggered. Edit Mode:", edit);
     isEditMode = edit;
+
+    if (!modal) {
+        modal = document.getElementById("listingModal");
+        if (!modal) {
+            console.error("❌ [Modal] CRITICAL: listingModal NOT FOUND in DOM");
+            return;
+        }
+    }
+
     const form = document.getElementById("listingForm");
     const title = document.getElementById("modalTitle");
     const submitBtn = document.getElementById("submitBtn");
@@ -614,7 +651,7 @@ function openModal(edit = false) {
     const imgInput = document.getElementById("propImage");
 
     if (!form || !title || !submitBtn) {
-        console.error("Modal elements missing");
+        console.error("❌ [Modal] Missing elements inside listingModal", { form, title, submitBtn });
         return;
     }
 
@@ -624,6 +661,8 @@ function openModal(edit = false) {
 
     // Safer transition trigger: display then active class with delay
     modal.style.display = "flex";
+    modal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483647 !important; pointer-events: auto !important;";
+
     setTimeout(() => {
         modal.classList.add("active");
     }, 10);
@@ -796,64 +835,81 @@ function closePropertyModal() {
 
 // Open Property Modal with listing data
 function openPropertyModal(data) {
+    console.log("🔍 [PropertyModal] openPropertyModal called for:", data?.title);
     const overlay = document.getElementById("modalOverlay");
     const modal = document.getElementById("propertyModal");
 
-    if (!overlay || !modal) return;
+    if (!overlay || !modal) {
+        console.error("❌ [PropertyModal] overlay or modal NOT FOUND", { overlay, modal });
+        return;
+    }
 
     // Populate modal fields
-    const img = document.getElementById("modalImage");
-    const locationEl = document.getElementById("modalLocation");
-    const typeEl = document.getElementById("modalType");
-    const priceEl = document.getElementById("modalPrice");
-    const bedsEl = document.getElementById("modalBeds");
-    const bathsEl = document.getElementById("modalBaths");
-    const sizeEl = document.getElementById("modalSize");
-    const descEl = document.getElementById("modalDescription");
-    const featuresEl = document.getElementById("modalFeatures");
-    const visitsEl = document.getElementById("modalVisits");
-    const likesEl = document.getElementById("modalLikes");
-    const visitsLabel = document.getElementById("modalVisitsLabel");
-    const likesLabel = document.getElementById("modalLikesLabel");
+    try {
+        const getEl = (id) => {
+            const el = document.getElementById(id);
+            if (!el) console.warn(`⚠️ [PropertyModal] Element #${id} missing`);
+            return el;
+        };
 
-    if (img) img.src = data.media?.thumbnail || "images/coming-soon.webp";
-    if (locationEl) locationEl.textContent = data.title || "Untitled";
-    if (typeEl) typeEl.textContent = data.type || "";
-    if (priceEl) {
-        const price = data.price ? `₱${Number(data.price).toLocaleString()
-            }` : "TBC";
-        priceEl.textContent = price;
+        const img = getEl("modalImage");
+        const locationEl = getEl("modalLocation");
+        const typeEl = getEl("modalType");
+        const priceEl = getEl("modalPrice");
+        const bedsEl = getEl("modalBeds");
+        const bathsEl = getEl("modalBaths");
+        const sizeEl = getEl("modalSize");
+        const descEl = getEl("modalDescription");
+        const featuresEl = getEl("modalFeatures");
+        const visitsEl = getEl("modalVisits");
+        const likesEl = getEl("modalLikes");
+        const visitsLabel = getEl("modalVisitsLabel");
+        const likesLabel = getEl("modalLikesLabel");
+
+        if (img) img.src = data.media?.thumbnail || "images/coming-soon.webp";
+        if (locationEl) locationEl.textContent = data.title || "Untitled";
+        if (typeEl) typeEl.textContent = data.type || "";
+        if (priceEl) {
+            const price = data.price ? `₱${Number(data.price).toLocaleString()}` : "TBC";
+            priceEl.textContent = price;
+        }
+        if (bedsEl) bedsEl.textContent = data.specs?.beds || "-";
+        if (bathsEl) bathsEl.textContent = data.specs?.baths || "-";
+        if (sizeEl) sizeEl.textContent = data.specs?.lot_size || "-";
+        if (descEl) descEl.textContent = data.content?.full_description || data.content?.short_description || "";
+
+        // Features
+        if (featuresEl) {
+            featuresEl.innerHTML = "";
+            const features = data.content?.features || [];
+            features.forEach(f => {
+                const li = document.createElement("li");
+                li.textContent = f;
+                featuresEl.appendChild(li);
+            });
+        }
+
+        // Engagement stats
+        const visits = data.visits || 0;
+        const likes = data.likes || 0;
+        if (visitsEl) visitsEl.textContent = visits;
+        if (likesEl) likesEl.textContent = likes;
+        if (visitsLabel) visitsLabel.textContent = visits === 1 ? 'visit' : 'visits';
+        if (likesLabel) likesLabel.textContent = likes === 1 ? 'like' : 'likes';
+
+        // Open modal
+        overlay.classList.add("open");
+        modal.classList.add("open");
+        document.body.style.overflow = "hidden";
+
+        // Use inline styles to override any display:none
+        overlay.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483647 !important; pointer-events: auto !important;";
+        modal.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
+
+        console.log("✅ [PropertyModal] Finished populating and showing modal.");
+    } catch (err) {
+        console.error("❌ [PropertyModal] Error populating modal:", err);
     }
-    if (bedsEl) bedsEl.textContent = data.specs?.beds || "-";
-    if (bathsEl) bathsEl.textContent = data.specs?.baths || "-";
-    if (sizeEl) sizeEl.textContent = data.specs?.lot_size || "-";
-    if (descEl) descEl.textContent = data.content?.full_description || data.content?.short_description || "";
-
-    // Features
-    if (featuresEl) {
-        featuresEl.innerHTML = "";
-        const features = data.content?.features || [];
-        features.forEach(f => {
-            const li = document.createElement("li");
-            li.textContent = f;
-            featuresEl.appendChild(li);
-        });
-    }
-
-    // Engagement stats
-    const visits = data.visits || 0;
-    const likes = data.likes || 0;
-    if (visitsEl) visitsEl.textContent = visits;
-    if (likesEl) likesEl.textContent = likes;
-    if (visitsLabel) visitsLabel.textContent = visits === 1 ? 'visit' : 'visits';
-    if (likesLabel) likesLabel.textContent = likes === 1 ? 'like' : 'likes';
-
-    // Open modal
-    overlay.classList.add("open");
-    modal.classList.add("open");
-    document.body.style.overflow = "hidden";
-    overlay.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483647 !important;";
-    modal.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
 }
 
 // Dashboard Table Filters
