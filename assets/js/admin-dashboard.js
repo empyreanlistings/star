@@ -878,10 +878,12 @@ function initDashboardFilters() {
     };
 
     const updatePriceDisplay = () => {
-        if (dashboardFilters.minPrice === 0 && dashboardFilters.maxPrice === 50000000) {
-            priceRangeValue.textContent = 'Any Price';
-        } else {
-            priceRangeValue.textContent = `${formatPrice(dashboardFilters.minPrice)} – ${formatPrice(dashboardFilters.maxPrice)} `;
+        if (priceRangeValue) {
+            if (dashboardFilters.minPrice === 0 && dashboardFilters.maxPrice === 50000000) {
+                priceRangeValue.textContent = 'Any Price';
+            } else {
+                priceRangeValue.textContent = `${formatPrice(dashboardFilters.minPrice)} – ${formatPrice(dashboardFilters.maxPrice)} `;
+            }
         }
     };
 
@@ -926,10 +928,11 @@ function initDashboardFilters() {
         applyDashboardFilters();
     };
 
-    priceMin.oninput = updateSlider;
-    priceMax.oninput = updateSlider;
-
-    updateSlider(); // Initial run
+    if (priceMin && priceMax) {
+        priceMin.oninput = updateSlider;
+        priceMax.oninput = updateSlider;
+        updateSlider(); // Initial run
+    }
 }
 
 // Call this at the end of renderAdminTable
