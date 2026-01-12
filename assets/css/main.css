@@ -2689,11 +2689,10 @@ html[data-theme="light"] .property-features .feature::before {
   top: -5px;
   right: -5px;
   background: var(--accent);
-  color: white;
-  font-size: 0.65rem;
+  color: var(--white);
   font-weight: 700;
-  padding: 2px 5px;
-  border-radius: 10px;
+  padding: 10px 10px;
+  border-radius: 50px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 2;
   pointer-events: none;
@@ -2714,7 +2713,7 @@ html[data-theme="light"] .property-features .feature::before {
 
 .source-icon.user {
   color: var(--text-muted);
-  opacity: 0.6;
+  opacity: 0.9;
 }
 
 .source-icon:hover {
@@ -2829,7 +2828,7 @@ html[data-theme="light"] .modal-content {
   right: 24px;
   width: 44px;
   height: 44px;
-  font-size: 28px;
+  font-size: 2rem;
   border-radius: 50%;
   cursor: pointer;
   border: none;
