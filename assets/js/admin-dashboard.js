@@ -587,28 +587,29 @@ async function handleFormSubmit(e) {
         }
 
         // 2. Handle Gallery Uploads (Slides 2+)
-        console.log(\`📤 [Submit] Processing \${currentGalleryState.length} gallery items...\`);
+        // 2. Handle Gallery Uploads (Slides 2+)
+        console.log(`📤 [Submit] Processing ${currentGalleryState.length} gallery items...`);
         statusDiv.textContent = "Uploading gallery images...";
-        
+
         // Parallel Uploads
         const uploadPromises = currentGalleryState.map(async (item) => {
             if (item instanceof File) {
-                 const storageRef = ref(storage, 'property-images/' + Date.now() + '_gallery_' + item.name);
-                 await uploadBytes(storageRef, item);
-                 const url = await getDownloadURL(storageRef);
-                 return url;
+                const storageRef = ref(storage, 'property-images/' + Date.now() + '_gallery_' + item.name);
+                await uploadBytes(storageRef, item);
+                const url = await getDownloadURL(storageRef);
+                return url;
             } else if (typeof item === 'string') {
-                 return item;
+                return item;
             }
             return null;
         });
-        
+
         const galleryURLs = (await Promise.all(uploadPromises)).filter(Boolean);
-        console.log(\`✅ [Submit] Gallery URLs processed: \${galleryURLs.length}\`);
+        console.log(`✅ [Submit] Gallery URLs processed: ${galleryURLs.length}`);
 
         // 3. Construct Media Object
         const finalImages = [thumbnailURL, ...galleryURLs].filter(Boolean);
-        
+
         docData.media = {
             thumbnail: thumbnailURL,
             images: finalImages
@@ -707,8 +708,8 @@ function openPropertyModal(data) {
     if (locationEl) locationEl.textContent = data.title || "Untitled";
     if (typeEl) typeEl.textContent = data.type || "";
     if (priceEl) {
-        const price = data.price ? `₱${ Number(data.price).toLocaleString()
-    }` : "TBC";
+        const price = data.price ? `₱${Number(data.price).toLocaleString()
+            }` : "TBC";
         priceEl.textContent = price;
     }
     if (bedsEl) bedsEl.textContent = data.specs?.beds || "-";
@@ -764,16 +765,16 @@ function initDashboardFilters() {
     let maxPrice = 50000000;
 
     const formatPrice = v => {
-        if (v >= 1_000_000) return `₱${ (v / 1_000_000).toFixed(v % 1_000_000 ? 1 : 0) } m`;
-        if (v >= 1_000) return `₱${ (v / 1_000).toFixed(0) } k`;
-        return `₱${ v } `;
+        if (v >= 1_000_000) return `₱${(v / 1_000_000).toFixed(v % 1_000_000 ? 1 : 0)} m`;
+        if (v >= 1_000) return `₱${(v / 1_000).toFixed(0)} k`;
+        return `₱${v} `;
     };
 
     const updatePriceDisplay = () => {
         if (minPrice === 0 && maxPrice === 50000000) {
             priceRangeValue.textContent = 'Any Price';
         } else {
-            priceRangeValue.textContent = `${ formatPrice(minPrice) } – ${ formatPrice(maxPrice) } `;
+            priceRangeValue.textContent = `${formatPrice(minPrice)} – ${formatPrice(maxPrice)} `;
         }
     };
 
@@ -821,7 +822,7 @@ function initDashboardFilters() {
             noResultsRow.style.display = 'none';
         }
 
-        console.log(`Dashboard filter: ${ visibleCount } listings visible`);
+        console.log(`Dashboard filter: ${visibleCount} listings visible`);
     };
 
     // Category filter buttons
@@ -901,7 +902,7 @@ function initGallerySync() {
     console.log("📡 [Firebase] Connecting to real-time Gallery sync...");
     activeGalleryListener = onSnapshot(collection(db, "Gallery"), (snapshot) => {
         const gallery = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
-        console.log(`🔥[Firebase] Gallery sync received: ${ gallery.length } items`);
+        console.log(`🔥[Firebase] Gallery sync received: ${gallery.length} items`);
         localStorage.setItem(GALLERY_CACHE_KEY, JSON.stringify({
             gallery,
             timestamp: Date.now()
@@ -1113,7 +1114,7 @@ async function handleGalleryFormSubmit(e) {
             const file = fileInput.files[0];
             const resizedBlob = await resizeImage(file, 1000);
             status.textContent = "Uploading optimized image...";
-            const storageRef = ref(storage, `gallery / ${ Date.now() }_${ file.name } `);
+            const storageRef = ref(storage, `gallery / ${Date.now()}_${file.name} `);
             await uploadBytes(storageRef, resizedBlob);
             imageUrl = await getDownloadURL(storageRef);
         }
@@ -1242,7 +1243,7 @@ function initPalawanGallerySync() {
     console.log("📡 [Firebase] Connecting to real-time Palawan sync...");
     activePalawanGalleryListener = onSnapshot(collection(db, "PalawanGallery"), (snapshot) => {
         const gallery = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
-        console.log(`🔥[Firebase] Palawan sync received: ${ gallery.length } items`);
+        console.log(`🔥[Firebase] Palawan sync received: ${gallery.length} items`);
         localStorage.setItem(PALAWAN_GALLERY_CACHE_KEY, JSON.stringify({
             gallery,
             timestamp: Date.now()
@@ -1401,7 +1402,7 @@ async function handlePalawanGalleryFormSubmit(e) {
             const resizedBlob = await resizeImage(file, 1000);
             console.log("🚀 [Upload] Starting Firebase Storage upload...");
             status.textContent = "Uploading optimized image...";
-            const storageRef = ref(storage, `palawan - gallery / ${ Date.now() }_${ file.name } `);
+            const storageRef = ref(storage, `palawan - gallery / ${Date.now()}_${file.name} `);
             await uploadBytes(storageRef, resizedBlob);
             imageUrl = await getDownloadURL(storageRef);
             console.log("✅ [Upload] Image uploaded successfully. URL:", imageUrl);
