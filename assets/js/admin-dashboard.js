@@ -418,15 +418,20 @@ let currentGalleryState = []; // Stores mixed array of Strings (URLs) and File o
 
 function initGalleryLogic() {
     const galleryInput = document.getElementById("propGallery");
+    console.log("🛠️ [Gallery] Initializing logic. Input found:", !!galleryInput);
+
     if (galleryInput) {
         galleryInput.addEventListener("change", (e) => {
             const files = Array.from(e.target.files);
+            console.log(`📸 [Gallery] Selected ${files.length} files`);
             if (files.length > 0) {
                 currentGalleryState = [...currentGalleryState, ...files];
                 updateGalleryPreview();
                 galleryInput.value = ""; // Reset to allow adding more
             }
         });
+    } else {
+        console.error("❌ [Gallery] #propGallery input not found!");
     }
 }
 
@@ -434,6 +439,7 @@ function updateGalleryPreview() {
     const grid = document.getElementById("galleryPreview");
     if (!grid) return;
     grid.innerHTML = "";
+    console.log(`🖼️ [Gallery] Updating preview with ${currentGalleryState.length} items`);
 
     currentGalleryState.forEach((item, index) => {
         const div = document.createElement("div");
@@ -450,6 +456,7 @@ function updateGalleryPreview() {
         btn.className = "preview-remove";
         btn.innerHTML = "&times;";
         btn.onclick = () => {
+            console.log(`🗑️ [Gallery] Removing item at index ${index}`);
             currentGalleryState.splice(index, 1);
             updateGalleryPreview();
         };
@@ -524,7 +531,6 @@ function openModal(edit = false) {
 }
 
 // Form Submit (Create or Update)
-// Form Submit (Create or Update)
 async function handleFormSubmit(e) {
     e.preventDefault();
 
@@ -536,6 +542,7 @@ async function handleFormSubmit(e) {
     statusDiv.textContent = isEditMode ? "Saving changes..." : "Uploading & Creating...";
 
     try {
+        console.log("💾 [Submit] Starting form submission...");
         // Prepare Data Object (Base)
         let docData = {
             title: document.getElementById("propTitle").value,
@@ -564,12 +571,14 @@ async function handleFormSubmit(e) {
         const fileInput = document.getElementById("propImage");
 
         if (fileInput.files.length > 0) {
+            console.log("📤 [Submit] Uploading new thumbnail...");
             statusDiv.textContent = "Uploading thumbnail...";
             const file = fileInput.files[0];
             const storageRef = ref(storage, 'property-images/' + Date.now() + '_thumb_' + file.name);
             await uploadBytes(storageRef, file);
             thumbnailURL = await getDownloadURL(storageRef);
         } else if (isEditMode && id) {
+            console.log("📥 [Submit] Fetching existing thumbnail...");
             const docRef = doc(db, "Listings", id);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
@@ -578,23 +587,28 @@ async function handleFormSubmit(e) {
         }
 
         // 2. Handle Gallery Uploads (Slides 2+)
+        console.log(\`📤 [Submit] Processing \${currentGalleryState.length} gallery items...\`);
         statusDiv.textContent = "Uploading gallery images...";
-        const galleryURLs = [];
-
-        for (const item of currentGalleryState) {
+        
+        // Parallel Uploads
+        const uploadPromises = currentGalleryState.map(async (item) => {
             if (item instanceof File) {
-                const storageRef = ref(storage, 'property-images/' + Date.now() + '_gallery_' + item.name);
-                await uploadBytes(storageRef, item);
-                const url = await getDownloadURL(storageRef);
-                galleryURLs.push(url);
+                 const storageRef = ref(storage, 'property-images/' + Date.now() + '_gallery_' + item.name);
+                 await uploadBytes(storageRef, item);
+                 const url = await getDownloadURL(storageRef);
+                 return url;
             } else if (typeof item === 'string') {
-                galleryURLs.push(item);
+                 return item;
             }
-        }
+            return null;
+        });
+        
+        const galleryURLs = (await Promise.all(uploadPromises)).filter(Boolean);
+        console.log(\`✅ [Submit] Gallery URLs processed: \${galleryURLs.length}\`);
 
         // 3. Construct Media Object
         const finalImages = [thumbnailURL, ...galleryURLs].filter(Boolean);
-
+        
         docData.media = {
             thumbnail: thumbnailURL,
             images: finalImages
@@ -602,6 +616,7 @@ async function handleFormSubmit(e) {
 
         if (isEditMode && id) {
             // UPDATE
+            console.log("📝 [Submit] Updating existing listing...");
             const docRef = doc(db, "Listings", id);
             if (currentUserId) docData.editor = doc(db, "Users", currentUserId);
             docData.edited_date = serverTimestamp();
@@ -611,6 +626,7 @@ async function handleFormSubmit(e) {
             alert("Listing updated successfully!");
         } else {
             // CREATE
+            console.log("✨ [Submit] Creating new listing...");
             if (!thumbnailURL) throw new Error("Thumbnail is required.");
             if (currentUserCompany) docData.company = currentUserCompany;
             if (currentUserId) docData.creator = doc(db, "Users", currentUserId);
@@ -691,7 +707,8 @@ function openPropertyModal(data) {
     if (locationEl) locationEl.textContent = data.title || "Untitled";
     if (typeEl) typeEl.textContent = data.type || "";
     if (priceEl) {
-        const price = data.price ? `₱${Number(data.price).toLocaleString()}` : "TBC";
+        const price = data.price ? `₱${ Number(data.price).toLocaleString()
+    }` : "TBC";
         priceEl.textContent = price;
     }
     if (bedsEl) bedsEl.textContent = data.specs?.beds || "-";
@@ -747,16 +764,16 @@ function initDashboardFilters() {
     let maxPrice = 50000000;
 
     const formatPrice = v => {
-        if (v >= 1_000_000) return `₱${(v / 1_000_000).toFixed(v % 1_000_000 ? 1 : 0)}m`;
-        if (v >= 1_000) return `₱${(v / 1_000).toFixed(0)}k`;
-        return `₱${v}`;
+        if (v >= 1_000_000) return `₱${ (v / 1_000_000).toFixed(v % 1_000_000 ? 1 : 0) } m`;
+        if (v >= 1_000) return `₱${ (v / 1_000).toFixed(0) } k`;
+        return `₱${ v } `;
     };
 
     const updatePriceDisplay = () => {
         if (minPrice === 0 && maxPrice === 50000000) {
             priceRangeValue.textContent = 'Any Price';
         } else {
-            priceRangeValue.textContent = `${formatPrice(minPrice)} – ${formatPrice(maxPrice)}`;
+            priceRangeValue.textContent = `${ formatPrice(minPrice) } – ${ formatPrice(maxPrice) } `;
         }
     };
 
@@ -792,11 +809,11 @@ function initDashboardFilters() {
                 noResultsRow = document.createElement('tr');
                 noResultsRow.className = 'no-results-row';
                 noResultsRow.innerHTML = `
-                    <td colspan="9" style="text-align:center; padding:3rem; opacity:0.6;">
+        < td colspan = "9" style = "text-align:center; padding:3rem; opacity:0.6;" >
                         <i class="fas fa-search" style="font-size:2rem; margin-bottom:1rem; display:block;"></i>
                         <strong>Nothing here. Try updating your filters</strong>
-                    </td>
-                `;
+                    </td >
+        `;
                 tbody.appendChild(noResultsRow);
             }
             noResultsRow.style.display = '';
@@ -804,7 +821,7 @@ function initDashboardFilters() {
             noResultsRow.style.display = 'none';
         }
 
-        console.log(`Dashboard filter: ${visibleCount} listings visible`);
+        console.log(`Dashboard filter: ${ visibleCount } listings visible`);
     };
 
     // Category filter buttons
@@ -884,7 +901,7 @@ function initGallerySync() {
     console.log("📡 [Firebase] Connecting to real-time Gallery sync...");
     activeGalleryListener = onSnapshot(collection(db, "Gallery"), (snapshot) => {
         const gallery = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
-        console.log(`🔥 [Firebase] Gallery sync received: ${gallery.length} items`);
+        console.log(`🔥[Firebase] Gallery sync received: ${ gallery.length } items`);
         localStorage.setItem(GALLERY_CACHE_KEY, JSON.stringify({
             gallery,
             timestamp: Date.now()
@@ -892,7 +909,7 @@ function initGallerySync() {
         renderGalleryTable(gallery);
     }, (error) => {
         console.error("❌ [Firebase] Gallery sync error:", error);
-        if (tbody) tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;color:red;">Error loading gallery: ${error.message}</td></tr>`;
+        if (tbody) tbody.innerHTML = `< tr > <td colspan="5" style="text-align:center;padding:2rem;color:red;">Error loading gallery: ${error.message}</td></tr > `;
     });
 }
 
@@ -904,14 +921,14 @@ function renderGalleryTable(gallery) {
     gallery.sort((a, b) => (b.added_at?.seconds || 0) - (a.added_at?.seconds || 0));
 
     if (gallery.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;opacity:0.6;">No gallery items found.</td></tr>`;
+        tbody.innerHTML = `< tr > <td colspan="5" style="text-align:center;padding:2rem;opacity:0.6;">No gallery items found.</td></tr > `;
         return;
     }
 
     gallery.forEach(item => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><img src="${item.image}" alt="gallery"></td>
+        < td ><img src="${item.image}" alt="gallery"></td>
             <td>
                 <strong>${item.headline || "Untitled"}</strong><br>
                 <small style="opacity: 0.7;">${item.sub_header || ""}</small>
@@ -922,7 +939,7 @@ function renderGalleryTable(gallery) {
                 <button class="action-btn edit-gallery" data-id="${item.id}" title="Edit"><i class="fas fa-pen"></i></button>
                 <button class="action-btn delete delete-gallery" data-id="${item.id}" title="Delete"><i class="fas fa-trash"></i></button>
             </td>
-        `;
+    `;
         tbody.appendChild(tr);
     });
 
@@ -1096,7 +1113,7 @@ async function handleGalleryFormSubmit(e) {
             const file = fileInput.files[0];
             const resizedBlob = await resizeImage(file, 1000);
             status.textContent = "Uploading optimized image...";
-            const storageRef = ref(storage, `gallery/${Date.now()}_${file.name}`);
+            const storageRef = ref(storage, `gallery / ${ Date.now() }_${ file.name } `);
             await uploadBytes(storageRef, resizedBlob);
             imageUrl = await getDownloadURL(storageRef);
         }
@@ -1225,7 +1242,7 @@ function initPalawanGallerySync() {
     console.log("📡 [Firebase] Connecting to real-time Palawan sync...");
     activePalawanGalleryListener = onSnapshot(collection(db, "PalawanGallery"), (snapshot) => {
         const gallery = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
-        console.log(`🔥 [Firebase] Palawan sync received: ${gallery.length} items`);
+        console.log(`🔥[Firebase] Palawan sync received: ${ gallery.length } items`);
         localStorage.setItem(PALAWAN_GALLERY_CACHE_KEY, JSON.stringify({
             gallery,
             timestamp: Date.now()
@@ -1233,7 +1250,7 @@ function initPalawanGallerySync() {
         renderPalawanGalleryTable(gallery);
     }, (error) => {
         console.error("❌ [Firebase] Palawan sync error:", error);
-        if (tbody) tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:2rem;color:red;">Error loading Palawan gallery: ${error.message}</td></tr>`;
+        if (tbody) tbody.innerHTML = `< tr > <td colspan="4" style="text-align:center;padding:2rem;color:red;">Error loading Palawan gallery: ${error.message}</td></tr > `;
     });
 }
 
@@ -1245,14 +1262,14 @@ function renderPalawanGalleryTable(gallery) {
     gallery.sort((a, b) => (b.added_at?.seconds || 0) - (a.added_at?.seconds || 0));
 
     if (gallery.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:2rem;opacity:0.6;">No Palawan items found.</td></tr>`;
+        tbody.innerHTML = `< tr > <td colspan="4" style="text-align:center;padding:2rem;opacity:0.6;">No Palawan items found.</td></tr > `;
         return;
     }
 
     gallery.forEach(item => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><img src="${item.image}" alt="palawan"></td>
+        < td ><img src="${item.image}" alt="palawan"></td>
             <td>
                 <strong>${item.title || "Untitled"}</strong><br>
                 <small style="opacity: 0.7;">${item.description || ""}</small>
@@ -1262,7 +1279,7 @@ function renderPalawanGalleryTable(gallery) {
                 <button class="action-btn edit-palawan-gallery" data-id="${item.id}" title="Edit"><i class="fas fa-pen"></i></button>
                 <button class="action-btn delete delete-palawan-gallery" data-id="${item.id}" title="Delete"><i class="fas fa-trash"></i></button>
             </td>
-        `;
+    `;
         tbody.appendChild(tr);
     });
 
@@ -1384,14 +1401,10 @@ async function handlePalawanGalleryFormSubmit(e) {
             const resizedBlob = await resizeImage(file, 1000);
             console.log("🚀 [Upload] Starting Firebase Storage upload...");
             status.textContent = "Uploading optimized image...";
-            const storageRef = ref(storage, `palawan-gallery/${Date.now()}_${file.name}`);
+            const storageRef = ref(storage, `palawan - gallery / ${ Date.now() }_${ file.name } `);
             await uploadBytes(storageRef, resizedBlob);
             imageUrl = await getDownloadURL(storageRef);
             console.log("✅ [Upload] Image uploaded successfully. URL:", imageUrl);
-        }
-
-        if (!currentUserId) {
-            throw new Error("User session not found. Please refresh page.");
         }
 
         const docData = {
@@ -1404,13 +1417,11 @@ async function handlePalawanGalleryFormSubmit(e) {
 
         if (imageUrl) docData.image = imageUrl;
 
-        console.log("Saving document to Firestore:", docData);
         if (isPalawanGalleryEditMode) {
             await updateDoc(doc(db, "PalawanGallery", id), docData);
         } else {
             await addDoc(collection(db, "PalawanGallery"), docData);
         }
-        console.log("Document saved successfully");
 
         localStorage.removeItem(PALAWAN_GALLERY_CACHE_KEY);
         closePalawanGalleryModal();
