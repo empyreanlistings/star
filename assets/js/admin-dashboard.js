@@ -173,7 +173,13 @@ function renderAdminTable(listings) {
 
     tbody.innerHTML = "";
 
-    listings.forEach(data => {
+    // PAGINATION
+    const totalRecords = listings.length;
+    const startIndex = (listingsPage - 1) * listingsPerPage;
+    const endIndex = startIndex + listingsPerPage;
+    const paginatedListings = listings.slice(startIndex, endIndex);
+
+    paginatedListings.forEach(data => {
         const id = data.id;
         const title = data.title || "Untitled";
         const thumbnail = data.media?.thumbnail || "images/coming-soon.webp";
@@ -203,6 +209,13 @@ function renderAdminTable(listings) {
             </td>
         `;
         tbody.appendChild(tr);
+    });
+
+    // Render Pagination
+    renderTablePagination("listingsPagination", totalRecords, listingsPerPage, listingsPage, (newPage) => {
+        listingsPage = newPage;
+        renderAdminTable(listings);
+        document.getElementById("listingsTableContainer").scrollIntoView({ behavior: 'smooth' });
     });
 
     // Re-apply filters if active
@@ -241,6 +254,47 @@ function renderAdminTable(listings) {
 let currentListings = [];
 let sortConfig = { column: null, direction: 'asc' };
 
+// Pagination State
+let listingsPage = 1;
+const listingsPerPage = 25;
+let galleryPage = 1;
+const galleryPerPage = 10;
+let palawanPage = 1;
+const palawanPerPage = 10;
+
+// Shared Pagination Helper
+function renderTablePagination(containerId, totalRecords, recordsPerPage, currentPage, onPageChange) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const totalPages = Math.ceil(totalRecords / recordsPerPage);
+    if (totalPages <= 1) {
+        container.innerHTML = "";
+        return;
+    }
+
+    const startRecord = (currentPage - 1) * recordsPerPage + 1;
+    const endRecord = Math.min(currentPage * recordsPerPage, totalRecords);
+
+    container.innerHTML = `
+        <div class="pagination-info" style="display:flex; justify-content:space-between; align-items:center; width:100%; opacity:0.8; font-size:0.9rem;">
+            <span>Showing <strong>${startRecord}-${endRecord}</strong> of <strong>${totalRecords}</strong></span>
+            <div class="pagination-nav" style="display:flex; gap:1rem; align-items:center;">
+                <button class="action-btn" id="${containerId}_prev" ${currentPage === 1 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span>Page ${currentPage} of ${totalPages}</span>
+                <button class="action-btn" id="${containerId}_next" ${currentPage === totalPages ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.getElementById(`${containerId}_prev`).onclick = () => onPageChange(currentPage - 1);
+    document.getElementById(`${containerId}_next`).onclick = () => onPageChange(currentPage + 1);
+}
+
 function initSorting() {
     const headers = document.querySelectorAll("#listingsTableContainer th.sortable");
     headers.forEach(th => {
@@ -253,6 +307,7 @@ function initSorting() {
                 sortConfig.column = column;
                 sortConfig.direction = 'asc';
             }
+            listingsPage = 1; // Reset to first page on sort change
             sortListings();
             updateSortIcons(column, sortConfig.direction);
         };
@@ -930,14 +985,20 @@ function renderGalleryTable(gallery) {
     gallery.sort((a, b) => (b.added_at?.seconds || 0) - (a.added_at?.seconds || 0));
 
     if (gallery.length === 0) {
-        tbody.innerHTML = `< tr > <td colspan="5" style="text-align:center;padding:2rem;opacity:0.6;">No gallery items found.</td></tr > `;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;opacity:0.6;">No gallery items found.</td></tr>`;
         return;
     }
 
-    gallery.forEach(item => {
+    // PAGINATION
+    const totalRecords = gallery.length;
+    const startIndex = (galleryPage - 1) * galleryPerPage;
+    const endIndex = startIndex + galleryPerPage;
+    const paginatedGallery = gallery.slice(startIndex, endIndex);
+
+    paginatedGallery.forEach(item => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-        < td ><img src="${item.image}" alt="gallery"></td>
+            <td><img src="${item.image}" alt="gallery"></td>
             <td>
                 <strong>${item.headline || "Untitled"}</strong><br>
                 <small style="opacity: 0.7;">${item.sub_header || ""}</small>
@@ -948,8 +1009,15 @@ function renderGalleryTable(gallery) {
                 <button class="action-btn edit-gallery" data-id="${item.id}" title="Edit"><i class="fas fa-pen"></i></button>
                 <button class="action-btn delete delete-gallery" data-id="${item.id}" title="Delete"><i class="fas fa-trash"></i></button>
             </td>
-    `;
+        `;
         tbody.appendChild(tr);
+    });
+
+    // Render Pagination
+    renderTablePagination("galleryPagination", totalRecords, galleryPerPage, galleryPage, (newPage) => {
+        galleryPage = newPage;
+        renderGalleryTable(gallery);
+        document.getElementById("gallerySection").scrollIntoView({ behavior: 'smooth' });
     });
 
     document.querySelectorAll(".edit-gallery").forEach(btn => btn.onclick = handleGalleryEdit);
@@ -1271,14 +1339,20 @@ function renderPalawanGalleryTable(gallery) {
     gallery.sort((a, b) => (b.added_at?.seconds || 0) - (a.added_at?.seconds || 0));
 
     if (gallery.length === 0) {
-        tbody.innerHTML = `< tr > <td colspan="4" style="text-align:center;padding:2rem;opacity:0.6;">No Palawan items found.</td></tr > `;
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:2rem;opacity:0.6;">No Palawan items found.</td></tr>`;
         return;
     }
 
-    gallery.forEach(item => {
+    // PAGINATION
+    const totalRecords = gallery.length;
+    const startIndex = (palawanPage - 1) * palawanPerPage;
+    const endIndex = startIndex + palawanPerPage;
+    const paginatedPalawan = gallery.slice(startIndex, endIndex);
+
+    paginatedPalawan.forEach(item => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-        < td ><img src="${item.image}" alt="palawan"></td>
+            <td><img src="${item.image}" alt="palawan"></td>
             <td>
                 <strong>${item.title || "Untitled"}</strong><br>
                 <small style="opacity: 0.7;">${item.description || ""}</small>
@@ -1288,8 +1362,15 @@ function renderPalawanGalleryTable(gallery) {
                 <button class="action-btn edit-palawan-gallery" data-id="${item.id}" title="Edit"><i class="fas fa-pen"></i></button>
                 <button class="action-btn delete delete-palawan-gallery" data-id="${item.id}" title="Delete"><i class="fas fa-trash"></i></button>
             </td>
-    `;
+        `;
         tbody.appendChild(tr);
+    });
+
+    // Render Pagination
+    renderTablePagination("palawanGalleryPagination", totalRecords, palawanPerPage, palawanPage, (newPage) => {
+        palawanPage = newPage;
+        renderPalawanGalleryTable(gallery);
+        document.getElementById("palawanGallerySection").scrollIntoView({ behavior: 'smooth' });
     });
 
     document.querySelectorAll(".edit-palawan-gallery").forEach(btn => btn.onclick = handlePalawanGalleryEdit);
