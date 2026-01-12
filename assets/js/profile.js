@@ -20,54 +20,10 @@ const auth = getAuth(app);
 const USER_CACHE_KEY = "kai_isla_user_profile";
 let currentUid = null;
 
-// Initialize Profile Page
-auth.onAuthStateChanged(async (user) => {
-    if (user) {
-        currentUid = user.uid;
-        console.log("Profile page: User authenticated", user.email);
-        await loadUserProfile(user.uid);
-    } else {
-        // Auth protection is handled in auth.js (redirects to login)
-        console.log("Profile page: No user found");
-    }
-});
-
-async function loadUserProfile(uid) {
-    // 1. Load from Cache Instantly
-    const cachedData = localStorage.getItem(USER_CACHE_KEY);
-    if (cachedData) {
-        try {
-            const data = JSON.parse(cachedData);
-            if (data.uid === uid) {
-                renderProfileData(data);
-                console.log("⚡ [Cache] Profile loaded instantly");
-            }
-        } catch (e) { console.warn("Cache parse error", e); }
-    }
-
-    // 2. Fetch from Firestore (Background Sync)
-    try {
-        const userDoc = await getDoc(doc(db, "Users", uid));
-        if (userDoc.exists()) {
-            const data = userDoc.data();
-            renderProfileData({ ...data, uid });
-
-            // Update Cache
-            localStorage.setItem(USER_CACHE_KEY, JSON.stringify({
-                photo_url: data.photo_url,
-                uid: uid,
-                role: data.role,
-                display_name: data.display_name,
-                phone_number: data.phone_number,
-                timestamp: Date.now()
-            }));
-            console.log("✅ [Firestore] Profile synced");
-        }
-    } catch (err) {
-        console.error("Error syncing profile:", err);
-    }
-}
-
+/**
+ * Renders user data to the DOM fields.
+ * Extracted into a named function for early cache loading.
+ */
 function renderProfileData(data) {
     const displayNameField = document.getElementById('display_name');
     const phoneField = document.getElementById('phone_number');
@@ -81,7 +37,7 @@ function renderProfileData(data) {
     if (phoneField) phoneField.value = data.phone_number || '';
     if (roleField) {
         roleField.value = data.role || '';
-        roleField.readOnly = true; // Always read-only as requested
+        roleField.readOnly = true;
     }
     if (emailField) emailField.value = data.email || (auth.currentUser ? auth.currentUser.email : '');
 
@@ -90,6 +46,55 @@ function renderProfileData(data) {
 
     if (profileImg) {
         profileImg.src = data.photo_url || (auth.currentUser ? auth.currentUser.photoURL : 'images/logo.png') || 'images/logo.png';
+    }
+}
+
+// ⚡ [IMPROVEMENT] Try Early Cache Load IMMEDIATELY before auth initialization
+(() => {
+    const cachedData = localStorage.getItem(USER_CACHE_KEY);
+    if (cachedData) {
+        try {
+            const data = JSON.parse(cachedData);
+            renderProfileData(data);
+            console.log("⚡ [Early Cache] Rendered profile data instantly");
+        } catch (e) {
+            console.warn("Early cache parse error", e);
+        }
+    }
+})();
+
+// Initialize Profile Page
+auth.onAuthStateChanged(async (user) => {
+    if (user) {
+        currentUid = user.uid;
+        console.log("Profile page: User authenticated", user.email);
+        await loadUserProfile(user.uid);
+    } else {
+        console.log("Profile page: No user found");
+    }
+});
+
+async function loadUserProfile(uid) {
+    // Background Sync with Firestore
+    try {
+        const userDoc = await getDoc(doc(db, "Users", uid));
+        if (userDoc.exists()) {
+            const data = userDoc.data();
+            renderProfileData({ ...data, uid });
+
+            // Ensure cache is updated with latest from server
+            localStorage.setItem(USER_CACHE_KEY, JSON.stringify({
+                photo_url: data.photo_url,
+                uid: uid,
+                role: data.role,
+                display_name: data.display_name,
+                phone_number: data.phone_number,
+                timestamp: Date.now()
+            }));
+            console.log("✅ [Firestore] Profile synced and cached");
+        }
+    } catch (err) {
+        console.error("Error syncing profile:", err);
     }
 }
 
@@ -124,8 +129,18 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
         document.getElementById('topDisplayName').textContent = updatedData.display_name;
         document.getElementById('topUserRole').textContent = updatedData.role;
 
-        // Clear Cache to reflect changes site-wide
-        localStorage.removeItem(USER_CACHE_KEY);
+        // Update Cache instead of removing it for instant persistence
+        const cachedUser = localStorage.getItem(USER_CACHE_KEY);
+        if (cachedUser) {
+            const data = JSON.parse(cachedUser);
+            localStorage.setItem(USER_CACHE_KEY, JSON.stringify({
+                ...data,
+                display_name: updatedData.display_name,
+                phone_number: updatedData.phone_number,
+                role: updatedData.role,
+                timestamp: Date.now()
+            }));
+        }
 
         if (window.showSnackbar) {
             console.log("Calling snackbar: Profile updated successfully!");
@@ -181,8 +196,17 @@ document.getElementById('avatarInput').addEventListener('change', async (e) => {
 
         // Update UI
         profileImg.src = downloadUrl;
-        // Clear Cache to reflect changes site-wide
-        localStorage.removeItem(USER_CACHE_KEY);
+
+        // Update Cache instead of removing it
+        const cachedUser = localStorage.getItem(USER_CACHE_KEY);
+        if (cachedUser) {
+            const data = JSON.parse(cachedUser);
+            localStorage.setItem(USER_CACHE_KEY, JSON.stringify({
+                ...data,
+                photo_url: downloadUrl,
+                timestamp: Date.now()
+            }));
+        }
 
         if (window.showSnackbar) {
             window.showSnackbar("Photo updated successfully!", "success");
