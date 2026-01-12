@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <title>Client Dashboard - Kai & Isla</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css?v=2.23">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <!-- Apply saved theme early to prevent flash -->
+    <script>
+        (function () {
+            const theme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.style.backgroundColor = theme === 'dark' ? '#0f0f0f' : '#ffffff';
+        })();
+    </script>
+</head>
+
+<body class="is-preload client-dashboard-page">
+
+    <!-- Protection & Auth Logic -->
+    <script type="module" src="assets/js/auth.js"></script>
+
+    <header class="dashboard-header">
+        <div class="dashboard-logo">
+            <a href="index.html">
+                <img src="images/logo2-dark.png" alt="Kai & Isla" id="dashLogo">
+            </a>
+        </div>
+        <div class="user-info">
+            <button id="themeToggleDash" class="theme-toggle" aria-label="Toggle Theme">
+                <i class="theme-icon fas fa-moon"></i>
+            </button>
+            <a href="profile.html" id="navAvatarLink" class="nav-avatar" title="My Profile" style="display:none;">
+                <img id="navAvatarImg" src="images/logo.png" alt="Profile" style="display:none;">
+                <i id="navDashboardIcon" class="fas fa-user-circle" style="display:none;"></i>
+            </a>
+            <span id="userEmail" style="color:var(--dash-text);font-size:0.9rem;"></span>
+            <button id="logoutBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> <span
+                    class="logout-text">Logout</span></button>
+        </div>
+    </header>
+
+    <main class="dashboard-content">
+        <div class="dashboard-section-header">
+            <h1>Client Dashboard</h1>
+            <p>Welcome back! Here's the latest update on your property.</p>
+        </div>
+
+        <div class="client-dash-grid">
+            <!-- Project Overview -->
+            <div class="client-card">
+                <h2><i class="fas fa-project-diagram"></i> ACTIVE PROJECTS</h2>
+                <div class="project-item" style="display:flex; gap:15px; align-items:center;">
+                    <div
+                        style="width:80px; height:80px; border-radius:8px; background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center;">
+                        <i class="fas fa-home" style="font-size:2rem; opacity:0.3;"></i>
+                    </div>
+                    <div>
+                        <h4 style="margin:0;">Tropical Modern Villa - Phase 1</h4>
+                        <p style="margin:5px 0 0 0; font-size:0.85rem; opacity:0.6;">Bacungan, Puerto Princesa</p>
+                        <div
+                            style="margin-top:10px; height:6px; width:150px; background:rgba(255,255,255,0.1); border-radius:3px;">
+                            <div style="height:100%; width:65%; background:var(--accent); border-radius:3px;"></div>
+                        </div>
+                        <p style="margin:5px 0 0 0; font-size:0.75rem; color:var(--accent);">65% Complete</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Milestones -->
+            <div class="client-card">
+                <h2><i class="fas fa-tasks"></i> MILESTONES</h2>
+                <div class="timeline">
+                    <div class="timeline-item completed">
+                        <h4>Land Preparation</h4>
+                        <p>Completed Oct 15, 2025</p>
+                    </div>
+                    <div class="timeline-item completed">
+                        <h4>Foundation & Footing</h4>
+                        <p>Completed Dec 02, 2025</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Structural Blockwork</h4>
+                        <p>In Progress - Expected Feb 2026</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Roofing & Sealing</h4>
+                        <p>Scheduled for March 2026</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financials -->
+            <div class="client-card">
+                <h2><i class="fas fa-wallet"></i> PAYMENT SCHEDULE</h2>
+                <table class="payment-table">
+                    <thead>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Downpayment</td>
+                            <td>PHP 2.5M</td>
+                            <td><span class="status-badge status-paid">PAID</span></td>
+                        </tr>
+                        <tr>
+                            <td>Foundation</td>
+                            <td>PHP 1.2M</td>
+                            <td><span class="status-badge status-paid">PAID</span></td>
+                        </tr>
+                        <tr>
+                            <td>Structure</td>
+                            <td>PHP 1.8M</td>
+                            <td><span class="status-badge status-pending">DUE</span></td>
+                        </tr>
+                        <tr>
+                            <td>Finishing</td>
+                            <td>PHP 2.0M</td>
+                            <td><span class="status-badge status-pending">LATER</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Gallery Placeholder -->
+            <div class="client-card" style="grid-column: 1 / -1;">
+                <h2><i class="fas fa-images"></i> CONSTRUCTION PROGRESS</h2>
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:1rem;">
+                    <!-- Placeholder images -->
+                    <div
+                        style="aspect-ratio:16/9; background:rgba(255,255,255,0.05); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;">
+                        <i class="far fa-image" style="font-size:2rem; opacity:0.2;"></i>
+                        <span style="font-size:0.75rem; opacity:0.4;">Site Prep - Oct 2025</span>
+                    </div>
+                    <div
+                        style="aspect-ratio:16/9; background:rgba(255,255,255,0.05); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;">
+                        <i class="far fa-image" style="font-size:2rem; opacity:0.2;"></i>
+                        <span style="font-size:0.75rem; opacity:0.4;">Foundation - Dec 2025</span>
+                    </div>
+                    <div
+                        style="aspect-ratio:16/9; background:rgba(255,255,255,0.05); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;">
+                        <i class="far fa-image" style="font-size:2rem; opacity:0.2;"></i>
+                        <span style="font-size:0.75rem; opacity:0.4;">Current Progress</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="assets/js/snackbar.js?v=2.23"></script>
+    <script src="assets/js/main.js?v=2.23" defer></script>
+
+</body>
+
+</html>

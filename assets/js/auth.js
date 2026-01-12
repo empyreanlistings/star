@@ -71,11 +71,12 @@ function initAuth() {
     onAuthStateChanged(auth, async (user) => {
         const path = window.location.pathname.toLowerCase();
         const isDashboard = document.body.classList.contains('dashboard-page');
+        const isClientDashboard = document.body.classList.contains('client-dashboard-page') || path.includes("clientdashboard");
         const isLogin = document.body.classList.contains('login-page') || path.includes("login");
         const isProfile = document.body.classList.contains('profile-page') || path.includes("profile");
 
-        // Force body hide for dashboard until state is known
-        if (isDashboard && !document.body.classList.contains('auth-verified')) {
+        // Force body hide for dashboards until state is known
+        if ((isDashboard || isClientDashboard) && !document.body.classList.contains('auth-verified')) {
             document.body.style.opacity = '0';
             document.body.style.pointerEvents = 'none';
         }
@@ -83,19 +84,12 @@ function initAuth() {
         if (user) {
             console.log("User logged in:", user.email);
 
-            // 1. Handle Redirects & Static UI immediately
-            if (isLogin) {
-                window.location.replace("dashboard.html");
-                return;
-            }
-
+            // 1. Static UI immediately
             const userEmailEl = document.getElementById("userEmail");
             if (userEmailEl) userEmailEl.textContent = user.email;
 
-            if (isDashboard) {
-                document.body.classList.add('auth-verified');
-                document.body.style.opacity = '1';
-                document.body.style.pointerEvents = 'auto';
+            if (isDashboard || isClientDashboard) {
+                // We'll show body after role check
             }
 
             // 2. Avatar UI Logic
@@ -156,12 +150,18 @@ function initAuth() {
             updateAvatarUI(currentProfileUrl);
 
             // Initial Dashboard visibility from cache or default
-            const dashLink = document.getElementById("navDashboardLink");
             if (dashLink) {
                 if (isProfile) {
-                    dashLink.style.display = "none"; // Hide on profile
+                    dashLink.style.display = "none";
                 } else {
-                    dashLink.style.display = "inline-flex"; // Always show index/listings if logged in
+                    dashLink.style.display = "inline-flex";
+                    // Update dashLink destination based on cached role if available
+                    if (cachedUser) {
+                        try {
+                            const { role } = JSON.parse(cachedUser);
+                            dashLink.href = role === "owner" ? "clientdashboard.html" : "dashboard.html";
+                        } catch (e) { }
+                    }
                 }
             }
 
@@ -175,17 +175,6 @@ function initAuth() {
                         const role = userData.role || 'user';
                         const displayName = userData.display_name || user.displayName || '';
                         const phoneNumber = userData.phone_number || '';
-
-                        // Dashboard visibility rules
-                        const dashLink = document.getElementById("navDashboardLink");
-                        if (dashLink) {
-                            if (isProfile) {
-                                dashLink.style.display = "none";
-                            } else {
-                                // Logged in on index/listings -> Always show dashboard icon
-                                dashLink.style.display = "inline-flex";
-                            }
-                        }
 
                         if (remoteUrl && remoteUrl !== currentProfileUrl) {
                             console.log("🔄 [Firestore] Updating avatar from remote...");
@@ -201,6 +190,45 @@ function initAuth() {
                             phone_number: phoneNumber,
                             timestamp: Date.now()
                         }));
+
+                        // 5. Intelligent Redirection & Protection
+                        if (isLogin) {
+                            if (role === "admin") window.location.replace("dashboard.html");
+                            else if (role === "owner") window.location.replace("clientdashboard.html");
+                            else window.location.replace("profile.html");
+                            return;
+                        }
+
+                        if (isDashboard) {
+                            if (role === "admin") {
+                                document.body.classList.add('auth-verified');
+                                document.body.style.opacity = '1';
+                                document.body.style.pointerEvents = 'auto';
+                            } else {
+                                // Not admin, but on admin dashboard
+                                window.location.replace(role === "owner" ? "clientdashboard.html" : "profile.html");
+                            }
+                        }
+
+                        if (isClientDashboard) {
+                            if (role === "owner" || role === "admin") { // Allow admin to see client dash too
+                                document.body.classList.add('auth-verified');
+                                document.body.style.opacity = '1';
+                                document.body.style.pointerEvents = 'auto';
+                            } else {
+                                window.location.replace("profile.html");
+                            }
+                        }
+
+                        // Update dashLink again if profile synced
+                        const dashLink = document.getElementById("navDashboardLink");
+                        if (dashLink && !isProfile) {
+                            dashLink.href = role === "owner" ? "clientdashboard.html" : "dashboard.html";
+                        }
+                    } else {
+                        // User exists in Auth but not in Firestore -> Profile page for setup
+                        if (isDashboard || isClientDashboard) window.location.replace("profile.html");
+                        if (isLogin) window.location.replace("profile.html");
                     }
                 } catch (err) {
                     console.error("Error fetching user avatar from Firestore:", err);
@@ -217,7 +245,7 @@ function initAuth() {
                 return;
             }
 
-            if (isDashboard) {
+            if (isDashboard || isClientDashboard) {
                 window.location.replace("login.html");
                 return;
             }
