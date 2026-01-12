@@ -6785,7 +6785,6 @@ html[data-theme="light"] .btn-copy:hover {
   /* Prevent full-page overflow on mobile */
   .dashboard-content {
     padding: 20px 16px !important;
-    width: 100%;
     overflow-x: hidden;
   }
 
@@ -7605,8 +7604,6 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
   gap: 2rem;
-  margin-bottom: 3rem;
-  width: 100%;
 }
 
 .client-card {
@@ -7711,8 +7708,7 @@ html[data-theme="light"] .timeline::before {
 }
 
 .payment-table td:last-child {
-  padding-right: 0;
-  text-align: right;
+  text-align: left;
 }
 
 html[data-theme="light"] .payment-table th,
