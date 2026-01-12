@@ -574,8 +574,9 @@ async function handleFormSubmit(e) {
             console.log("📤 [Submit] Uploading new thumbnail...");
             statusDiv.textContent = "Uploading thumbnail...";
             const file = fileInput.files[0];
+            const resizedBlob = await resizeImage(file, 800);
             const storageRef = ref(storage, 'property-images/' + Date.now() + '_thumb_' + file.name);
-            await uploadBytes(storageRef, file);
+            await uploadBytes(storageRef, resizedBlob);
             thumbnailURL = await getDownloadURL(storageRef);
         } else if (isEditMode && id) {
             console.log("📥 [Submit] Fetching existing thumbnail...");
@@ -594,8 +595,9 @@ async function handleFormSubmit(e) {
         // Parallel Uploads
         const uploadPromises = currentGalleryState.map(async (item) => {
             if (item instanceof File) {
+                const resizedBlob = await resizeImage(item, 800);
                 const storageRef = ref(storage, 'property-images/' + Date.now() + '_gallery_' + item.name);
-                await uploadBytes(storageRef, item);
+                await uploadBytes(storageRef, resizedBlob);
                 const url = await getDownloadURL(storageRef);
                 return url;
             } else if (typeof item === 'string') {
@@ -1112,7 +1114,7 @@ async function handleGalleryFormSubmit(e) {
 
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
-            const resizedBlob = await resizeImage(file, 1000);
+            const resizedBlob = await resizeImage(file, 800);
             status.textContent = "Uploading optimized image...";
             const storageRef = ref(storage, `gallery / ${Date.now()}_${file.name} `);
             await uploadBytes(storageRef, resizedBlob);
@@ -1399,7 +1401,7 @@ async function handlePalawanGalleryFormSubmit(e) {
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
             console.log("🚀 [Upload] File selected:", file.name, "(" + (file.size / 1024).toFixed(2) + " KB)");
-            const resizedBlob = await resizeImage(file, 1000);
+            const resizedBlob = await resizeImage(file, 800);
             console.log("🚀 [Upload] Starting Firebase Storage upload...");
             status.textContent = "Uploading optimized image...";
             const storageRef = ref(storage, `palawan - gallery / ${Date.now()}_${file.name} `);

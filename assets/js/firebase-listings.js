@@ -330,4 +330,13 @@ window.getLatestEngagement = async (propertyId) => {
   return null;
 };
 
-initListingsSync();
+// Initialize when grid is ready (for dynamic loading)
+window.addEventListener("listingsGridReady", () => {
+  console.log("📦 Listings grid ready, initializing sync...");
+  initListingsSync();
+});
+
+// Fallback for static pages or if script loads after injection
+if (document.querySelector(".property-grid")) {
+  initListingsSync();
+}

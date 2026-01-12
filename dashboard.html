@@ -5,7 +5,7 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=2.42">
+    <link rel="stylesheet" href="assets/css/main.css?v=2.43">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
@@ -349,7 +349,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Image (Max width 1000px on upload)</label>
+                    <label>Image (Max width 800px on upload)</label>
                     <input type="file" id="palawanGalleryImage" class="form-control" accept="image/*" required>
                 </div>
 
@@ -363,51 +363,13 @@
         </div>
     </div>
 
-    <!-- Property Modal -->
-    <div class="modal-overlay" id="modalOverlay">
-        <button id="modalClose" class="modal-close" aria-label="Close modal">×</button>
-        <div class="property-modal" id="propertyModal">
-            <div class="modal-content">
-                <img id="modalImage" class="modal-image" src="" alt="">
-                <div class="modal-glass">
-                    <div class="modal-header">
-                        <div>
-                            <h2 id="modalLocation"></h2><span id="modalType" class="modal-subtext"></span>
-                        </div>
-                        <h2 id="modalPrice" class="modal-price"></h2>
-                    </div>
-                    <div class="modal-stats">
-                        <div><strong id="modalBeds"></strong><span>Beds</span></div>
-                        <div><strong id="modalBaths"></strong><span>Baths</span></div>
-                        <div><strong id="modalSize"></strong><span>sqm</span></div>
-                    </div>
-                    <div>
-                        <h3>OVERVIEW</h3>
-                        <p id="modalDescription"></p>
-                    </div>
-                    <div class="modal-section">
-                        <h3>KEY FEATURES</h3>
-                        <ul class="modal-features" id="modalFeatures"></ul>
-                    </div>
-                    <div class="modal-engagement">
-                        <div class="engagement-stats">
-                            <span><i class="far fa-eye"></i> <span id="modalVisits">0</span> <span
-                                    id="modalVisitsLabel">visits</span></span>
-                            <span><i class="far fa-heart"></i> <span id="modalLikes">0</span> <span
-                                    id="modalLikesLabel">likes</span></span>
-                        </div>
-                        <button id="modalLikeBtn" class="btn-like" aria-label="Like Property"><i
-                                class="far fa-heart"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Property Modal == [DYNAMIC COMPONENT] -->
+    <div id="propertymodal-placeholder"></div>
 
     <!-- Scripts -->
-    <script src="assets/js/snackbar.js?v=2.42"></script>
-    <script src="assets/js/main.js?v=2.42" defer></script>
-    <script type="module" src="assets/js/admin-dashboard.js?v=2.42"></script>
+    <script src="assets/js/snackbar.js?v=2.43"></script>
+    <script src="assets/js/main.js?v=2.43" defer></script>
+    <script type="module" src="assets/js/admin-dashboard.js?v=2.43"></script>
 
 </body>
 

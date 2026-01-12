@@ -33,7 +33,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <!-- Main CSS -->
-  <link rel="stylesheet" href="assets/css/main.css?v=2.42">
+  <link rel="stylesheet" href="assets/css/main.css?v=2.43">
 
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
@@ -120,91 +120,12 @@
   </svg>
 
   <!-- ============================== PROPERTY LISTINGS ============================== -->
-  <section id="listings" class="container-glass" aria-labelledby="listings-title" style="margin-top: 120px;">
-    <div class="section-title">
-      <h1 style="color: var(--white);">LATEST LISTINGS</h1>
-      <h2 class="gallery-subtitle">LAND & PROPERTY FOR SALE IN PALAWAN</h2>
-    </div>
-
-    <div class="property-filters-container">
-      <div class="property-gallery-filters" role="group" aria-label="Property type filters">
-        <button class="filter active" data-filter="all" type="button">ALL</button>
-        <button class="filter" data-filter="land" type="button">LAND</button>
-        <button class="filter" data-filter="residential" type="button">RESIDENTIAL</button>
-        <button class="filter" data-filter="commercial" type="button">COMMERCIAL</button>
-      </div>
-
-      <div class="price-filter-inline">
-        <div class="price-header-row">
-          <span class="price-label">Price:</span>
-          <span id="priceRangeValue">Any Price</span>
-        </div>
-        <div class="slider-container-inline">
-          <input type="range" min="0" max="50000000" value="0" class="slider-inline" id="priceMin">
-          <input type="range" min="0" max="50000000" value="50000000" class="slider-inline" id="priceMax">
-          <div class="slider-track-inline"></div>
-          <div class="slider-range-inline"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="property-grid">
-
-      <!-- NO RESULTS -->
-      <div id="noResults" class="property-card no-results-card" role="alert" style="display:none;">
-        <div class="property-image"
-          style="background:var(--glass-bg);display:flex;align-items:center;justify-content:center;height:220px;flex-direction:column;gap:16px;">
-          <i class="fas fa-search" style="font-size:48px;color:var(--text-light);opacity:0.3;"></i>
-          <h4>Nothing here. Try updating your filters</h4>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- PROPERTY LISTINGS == [DYNAMIC COMPONENT] -->
+  <div id="listings-placeholder" style="margin-top: 120px;"></div>
 
   <!-- PROPERTY MODAL -->
-  <div class="modal-overlay" id="modalOverlay">
-    <button id="modalClose" class="modal-close" aria-label="Close modal">×</button>
-    <div class="property-modal" id="propertyModal">
-      <div class="modal-content">
-        <img id="modalImage" class="modal-image" src="" alt="">
-        <div class="modal-glass">
-          <div class="modal-header">
-            <div>
-              <h2 id="modalLocation"></h2><span id="modalType" class="modal-subtext"></span>
-            </div>
-            <h2 id="modalPrice" class="modal-price"></h2>
-          </div>
-          <div class="modal-stats">
-            <div><strong id="modalBeds"></strong><span>Beds</span></div>
-            <div><strong id="modalBaths"></strong><span>Baths</span></div>
-            <div><strong id="modalSize"></strong><span>sqm</span></div>
-          </div>
-          <div>
-            <h3>OVERVIEW</h3>
-            <p id="modalDescription"></p>
-          </div>
-          <div class="modal-section">
-            <h3>KEY FEATURES</h3>
-            <ul class="modal-features" id="modalFeatures"></ul>
-          </div>
-          <div class="modal-engagement">
-            <div class="engagement-stats">
-              <span><i class="far fa-eye"></i> <span id="modalVisits">0</span> <span
-                  id="modalVisitsLabel">visits</span></span>
-              <span><i class="far fa-heart"></i> <span id="modalLikes">0</span> <span
-                  id="modalLikesLabel">likes</span></span>
-            </div>
-            <button id="modalLikeBtn" class="btn-like" aria-label="Like Property"><i class="far fa-heart"></i></button>
-          </div>
-          <div class="modal-btn-grid">
-            <a href="#schedule" class="btn" id="scheduleCallBtn">Schedule a Call</a>
-            <a href="#contact" class="btn" id="contactCallBtn">Contact us</a>
-            <a href="#how-it-works" class="btn" id="homebuyerBtn">Paradise Life Homebuyer</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- PROPERTY MODAL == [DYNAMIC COMPONENT] -->
+  <div id="propertymodal-placeholder"></div>
 
   <!-- ============================== PARADISE LIFE HOME BUYER = [DYNAMIC COMPONENT] ============================== -->
   <div id="homebuyer-placeholder" style="width: 100%;"></div>
@@ -243,8 +164,8 @@
   <script src="assets/js/gallery.js" defer></script>
   <script src="assets/js/animations.js" defer></script>
   <!-- <script src="assets/js/cards.js" defer></script> REMOVED to disable expansion -->
-  <script src="assets/js/snackbar.js?v=2.42"></script>
-  <script src="assets/js/main.js?v=2.42" defer></script>
+  <script src="assets/js/snackbar.js?v=2.43"></script>
+  <script src="assets/js/main.js?v=2.43" defer></script>
 
   <!-- MailerLite Universal -->
   <script>
@@ -262,6 +183,6 @@
 
   <!-- Calendly -->
   <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
-  <script src="assets/js/firebase-listings.js?v=4" type="module"></script>
+  <script src="assets/js/firebase-listings.js?v=5" type="module"></script>
 
 </body>

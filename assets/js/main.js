@@ -969,6 +969,14 @@ function initializeApp() {
   loadComponent("#homebuyer-placeholder", "homebuyerRC.html", () => {
     if (typeof initHowItWorks !== 'undefined') safeInit("How It Works", initHowItWorks);
   });
+  loadComponent("#listings-placeholder", "propertylistingsRC.html", () => {
+    if (typeof initPropertyFilters !== 'undefined') safeInit("Property Filters", initPropertyFilters);
+    // Notify firebase-listings that the grid is ready
+    window.dispatchEvent(new Event("listingsGridReady"));
+  });
+  loadComponent("#propertymodal-placeholder", "propertymodalRC.html", () => {
+    if (typeof initPropertyModal !== 'undefined') safeInit("Property Modal", initPropertyModal);
+  });
   loadComponent("#contact-row-placeholder", "contactRC.html");
   loadComponent("#footer-placeholder", "footerRC.html", () => {
     // Unwrap the footer to ensure it sits directly on the body for full width
@@ -990,7 +998,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=2.31`);
+    const response = await fetch(`${url}?v=2.32`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
