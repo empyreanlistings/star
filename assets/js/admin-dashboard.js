@@ -858,76 +858,78 @@ function openPropertyModal(data) {
 
 // Dashboard Table Filters
 // Dashboard Table Filters
-function initDashboardFilters() {
-    const section = document.getElementById('listingsSection');
-    if (!section) return;
+const section = document.getElementById('listingsTableContainer');
+if (!section) {
+    console.warn('Dashboard filters: listingsTableContainer not found');
+    return;
+}
 
-    const filterBtns = section.querySelectorAll('.property-gallery-filters .filter');
-    const priceMin = document.getElementById('dashPriceMin');
-    const priceMax = document.getElementById('dashPriceMax');
-    const priceRangeValue = document.getElementById('dashPriceRangeValue');
+const filterBtns = section.querySelectorAll('.property-gallery-filters .filter');
+const priceMin = document.getElementById('dashPriceMin');
+const priceMax = document.getElementById('dashPriceMax');
+const priceRangeValue = document.getElementById('dashPriceRangeValue');
 
-    if (!filterBtns.length || !priceMin || !priceMax) return;
+if (!filterBtns.length || !priceMin || !priceMax) return;
 
-    const formatPrice = v => {
-        if (v >= 1_000_000) return `₱${(v / 1_000_000).toFixed(v % 1_000_000 ? 1 : 0)} m`;
-        if (v >= 1_000) return `₱${(v / 1_000).toFixed(0)} k`;
-        return `₱${v} `;
-    };
+const formatPrice = v => {
+    if (v >= 1_000_000) return `₱${(v / 1_000_000).toFixed(v % 1_000_000 ? 1 : 0)} m`;
+    if (v >= 1_000) return `₱${(v / 1_000).toFixed(0)} k`;
+    return `₱${v} `;
+};
 
-    const updatePriceDisplay = () => {
-        if (dashboardFilters.minPrice === 0 && dashboardFilters.maxPrice === 50000000) {
-            priceRangeValue.textContent = 'Any Price';
-        } else {
-            priceRangeValue.textContent = `${formatPrice(dashboardFilters.minPrice)} – ${formatPrice(dashboardFilters.maxPrice)} `;
-        }
-    };
+const updatePriceDisplay = () => {
+    if (dashboardFilters.minPrice === 0 && dashboardFilters.maxPrice === 50000000) {
+        priceRangeValue.textContent = 'Any Price';
+    } else {
+        priceRangeValue.textContent = `${formatPrice(dashboardFilters.minPrice)} – ${formatPrice(dashboardFilters.maxPrice)} `;
+    }
+};
 
-    // Category filter buttons
-    filterBtns.forEach(btn => {
-        btn.onclick = () => {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            dashboardFilters.category = btn.dataset.filter.toLowerCase();
-            listingsPage = 1; // Reset to page 1
-            applyDashboardFilters();
-        };
-    });
-
-    // Price sliders
-    const updateSlider = () => {
-        const min = parseInt(priceMin.value);
-        const max = parseInt(priceMax.value);
-
-        if (min > max - 1000000) {
-            if (priceMin === document.activeElement) {
-                priceMin.value = Math.max(0, max - 1000000);
-            } else {
-                priceMax.value = Math.min(50000000, min + 1000000);
-            }
-        }
-
-        dashboardFilters.minPrice = parseInt(priceMin.value);
-        dashboardFilters.maxPrice = parseInt(priceMax.value);
-
-        const percentMin = (dashboardFilters.minPrice / 50000000) * 100;
-        const percentMax = (dashboardFilters.maxPrice / 50000000) * 100;
-
-        const sliderRange = document.querySelector('.slider-range-inline');
-        if (sliderRange) {
-            sliderRange.style.left = percentMin + '%';
-            sliderRange.style.width = (percentMax - percentMin) + '%';
-        }
-
-        updatePriceDisplay();
+// Category filter buttons
+filterBtns.forEach(btn => {
+    btn.onclick = () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        dashboardFilters.category = btn.dataset.filter.toLowerCase();
         listingsPage = 1; // Reset to page 1
         applyDashboardFilters();
     };
+});
 
-    priceMin.oninput = updateSlider;
-    priceMax.oninput = updateSlider;
+// Price sliders
+const updateSlider = () => {
+    const min = parseInt(priceMin.value);
+    const max = parseInt(priceMax.value);
 
-    updateSlider(); // Initial run
+    if (min > max - 1000000) {
+        if (priceMin === document.activeElement) {
+            priceMin.value = Math.max(0, max - 1000000);
+        } else {
+            priceMax.value = Math.min(50000000, min + 1000000);
+        }
+    }
+
+    dashboardFilters.minPrice = parseInt(priceMin.value);
+    dashboardFilters.maxPrice = parseInt(priceMax.value);
+
+    const percentMin = (dashboardFilters.minPrice / 50000000) * 100;
+    const percentMax = (dashboardFilters.maxPrice / 50000000) * 100;
+
+    const sliderRange = document.querySelector('.slider-range-inline');
+    if (sliderRange) {
+        sliderRange.style.left = percentMin + '%';
+        sliderRange.style.width = (percentMax - percentMin) + '%';
+    }
+
+    updatePriceDisplay();
+    listingsPage = 1; // Reset to page 1
+    applyDashboardFilters();
+};
+
+priceMin.oninput = updateSlider;
+priceMax.oninput = updateSlider;
+
+updateSlider(); // Initial run
 }
 
 // Call this at the end of renderAdminTable
