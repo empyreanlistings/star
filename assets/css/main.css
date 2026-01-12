@@ -1285,6 +1285,8 @@ nav .logo-container img {
   width: 120px;
   height: auto;
   max-height: 60px;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 @media (max-width: 900px) {
@@ -1297,6 +1299,14 @@ nav .logo-container img {
   nav .logo-container img {
     width: 110px;
   }
+
+  #userEmail {
+    display: none !important;
+  }
+}
+
+#userEmail {
+  padding-right: 15px;
 }
 
 nav ul {
@@ -7732,6 +7742,7 @@ html[data-theme="light"] .payment-table td {
   background: rgba(255, 152, 0, 0.1);
   color: #FF9800;
 }
+
 /* --- Inspections Lightbox Customizations --- */
 #inspections-lightbox .lightbox-caption {
   position: absolute;
@@ -7782,11 +7793,11 @@ html[data-theme="light"] .payment-table td {
   .client-card {
     padding: 1.5rem;
   }
-  
+
   .client-dash-grid {
     gap: 1.5rem;
   }
-  
+
   #inspections-lightbox .lightbox-caption {
     width: 95%;
     bottom: 20px;

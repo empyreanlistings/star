@@ -68,29 +68,42 @@ async function handleLogout() {
 
 // Monitor Auth State
 function initAuth() {
-    onAuthStateChanged(auth, async (user) => {
-        const path = window.location.pathname.toLowerCase();
-        const isDashboard = document.body.classList.contains('dashboard-page');
-        const isClientDashboard = document.body.classList.contains('client-dashboard-page') || path.includes("clientdashboard");
-        const isLogin = document.body.classList.contains('login-page') || path.includes("login");
-        const isProfile = document.body.classList.contains('profile-page') || path.includes("profile");
+    const path = window.location.pathname.toLowerCase();
+    const isDashboard = document.body.classList.contains('dashboard-page') || path.includes("dashboard.html") && !path.includes("clientdashboard");
+    const isClientDashboard = document.body.classList.contains('client-dashboard-page') || path.includes("clientdashboard");
+    const isLogin = document.body.classList.contains('login-page') || path.includes("login");
+    const isProfile = document.body.classList.contains('profile-page') || path.includes("profile");
 
-        // Force body hide for dashboards until state is known
-        if ((isDashboard || isClientDashboard) && !document.body.classList.contains('auth-verified')) {
-            document.body.style.opacity = '0';
-            document.body.style.pointerEvents = 'none';
+    // --- IMMEDIATE PRE-FLIGHT PROTECTION ---
+    // If we're on a protected page, hide the body instantly before Firebase even initializes
+    if (isDashboard || isClientDashboard || isProfile) {
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'none';
+
+        // Fast redirection check using cached role
+        const cachedUser = localStorage.getItem(USER_CACHE_KEY);
+        if (cachedUser) {
+            try {
+                const { role } = JSON.parse(cachedUser);
+                if (isDashboard && role !== "admin") {
+                    window.location.replace(role === "owner" ? "clientdashboard.html" : "profile.html");
+                } else if (isClientDashboard && role !== "owner" && role !== "admin") {
+                    window.location.replace("profile.html");
+                }
+            } catch (e) { }
+        } else {
+            // No cached user but on a protected page? This is likely a direct link access.
+            // We keep body hidden and wait for onAuthStateChanged to bounce if not logged in.
         }
+    }
 
+    onAuthStateChanged(auth, async (user) => {
         if (user) {
             console.log("User logged in:", user.email);
 
             // 1. Static UI immediately
             const userEmailEl = document.getElementById("userEmail");
             if (userEmailEl) userEmailEl.textContent = user.email;
-
-            if (isDashboard || isClientDashboard) {
-                // We'll show body after role check
-            }
 
             // 2. Avatar UI Logic
             const updateAvatarUI = (url) => {
@@ -141,11 +154,8 @@ function initAuth() {
                     if (uid === user.uid) {
                         if (photo_url) currentProfileUrl = photo_url;
                         if (role) currentRole = role;
-                        console.log(`⚡ [Cache] Rendering instantly... (Role: ${currentRole})`);
                     }
-                } catch (e) {
-                    console.error("User cache parse error", e);
-                }
+                } catch (e) { }
             }
             updateAvatarUI(currentProfileUrl);
 
@@ -156,7 +166,6 @@ function initAuth() {
                     dashLink.style.display = "none";
                 } else {
                     dashLink.style.display = "inline-flex";
-                    // Update dashLink destination based on cached role if available
                     if (cachedUser) {
                         try {
                             const { role } = JSON.parse(cachedUser);
@@ -178,7 +187,6 @@ function initAuth() {
                         const phoneNumber = userData.phone_number || '';
 
                         if (remoteUrl && remoteUrl !== currentProfileUrl) {
-                            console.log("🔄 [Firestore] Updating avatar from remote...");
                             updateAvatarUI(remoteUrl);
                         }
 
@@ -206,19 +214,26 @@ function initAuth() {
                                 document.body.style.opacity = '1';
                                 document.body.style.pointerEvents = 'auto';
                             } else {
-                                // Not admin, but on admin dashboard
                                 window.location.replace(role === "owner" ? "clientdashboard.html" : "profile.html");
+                                return;
                             }
                         }
 
                         if (isClientDashboard) {
-                            if (role === "owner" || role === "admin") { // Allow admin to see client dash too
+                            if (role === "owner" || role === "admin") {
                                 document.body.classList.add('auth-verified');
                                 document.body.style.opacity = '1';
                                 document.body.style.pointerEvents = 'auto';
                             } else {
                                 window.location.replace("profile.html");
+                                return;
                             }
+                        }
+
+                        if (isProfile) {
+                            document.body.classList.add('auth-verified');
+                            document.body.style.opacity = '1';
+                            document.body.style.pointerEvents = 'auto';
                         }
 
                         // Update dashLink again if profile synced
@@ -227,12 +242,18 @@ function initAuth() {
                             dashLink.href = role === "owner" ? "clientdashboard.html" : "dashboard.html";
                         }
                     } else {
-                        // User exists in Auth but not in Firestore -> Profile page for setup
-                        if (isDashboard || isClientDashboard) window.location.replace("profile.html");
-                        if (isLogin) window.location.replace("profile.html");
+                        // User exists in Auth but not in Firestore
+                        if (isDashboard || isClientDashboard) {
+                            window.location.replace("profile.html");
+                        } else {
+                            // On profile page, show it so they can set up
+                            document.body.classList.add('auth-verified');
+                            document.body.style.opacity = '1';
+                            document.body.style.pointerEvents = 'auto';
+                        }
                     }
                 } catch (err) {
-                    console.error("Error fetching user avatar from Firestore:", err);
+                    console.error("Auth sync error:", err);
                 }
             })();
 
@@ -246,7 +267,7 @@ function initAuth() {
                 return;
             }
 
-            if (isDashboard || isClientDashboard) {
+            if (isDashboard || isClientDashboard || isProfile) {
                 window.location.replace("login.html");
                 return;
             }
@@ -254,18 +275,11 @@ function initAuth() {
             // Reset Nav on Logout 
             const dashLink = document.getElementById("navDashboardLink");
             const avatarLink = document.getElementById("navAvatarLink");
-            const avatarImg = document.getElementById("navAvatarImg");
-            const profileIcon = document.getElementById("navDashboardIcon");
-
             if (dashLink) {
-                dashLink.style.display = "inline-flex"; // Show as login entry
+                dashLink.style.display = "inline-flex";
                 dashLink.href = "dashboard.html";
             }
-            if (avatarLink) {
-                avatarLink.style.display = "none"; // Hide avatar when out
-            }
-            if (avatarImg) avatarImg.style.display = "none";
-            if (profileIcon) profileIcon.style.display = "none";
+            if (avatarLink) avatarLink.style.display = "none";
         }
     });
 
