@@ -633,6 +633,7 @@ function initPropertyModal() {
       // Engagement Display Prep
       const visitsEl = document.getElementById("modalVisits");
       const likesEl = document.getElementById("modalLikes");
+      const likeBtn = document.getElementById("modalLikeBtn");
 
       const updateLabels = (v, l, isLoading = false) => {
         const vCount = parseInt(v || 0);
@@ -1528,10 +1529,10 @@ function initLb() {
   const closeLb = () => {
     lb.classList.remove("open");
     setTimeout(() => {
-        if (!lb.classList.contains("open")) {
-            img.src = "";
-            document.body.style.overflow = ""; // Unlock scroll
-        }
+      if (!lb.classList.contains("open")) {
+        img.src = "";
+        document.body.style.overflow = ""; // Unlock scroll
+      }
     }, 300);
   };
 
@@ -1539,10 +1540,10 @@ function initLb() {
   lb.addEventListener("click", (e) => {
     if (e.target === lb) closeLb();
   });
-  
+
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && lb.classList.contains("open")) {
-        closeLb();
+      closeLb();
     }
   });
 }
