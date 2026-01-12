@@ -831,7 +831,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const target = document.querySelector(hash);
     if (target) {
       setTimeout(() => {
-        target.scrollIntoView({ behavior: 'smooth' });
+        target.scrollIntoView({ behavior: 'auto' });
         history.replaceState(null, null, ' ');
       }, 100);
     } else {
@@ -1201,7 +1201,7 @@ function initServices() {
       activeBtn.classList.add('active');
       // Mobile scroll
       if (window.innerWidth <= 768) {
-        activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        activeBtn.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
       }
     }
   }
@@ -1350,7 +1350,7 @@ function initHowItWorks() {
     if (activeBtn) {
       activeBtn.classList.add('active');
       if (window.innerWidth <= 768) {
-        activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        activeBtn.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
       }
     }
   }

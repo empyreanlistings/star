@@ -810,7 +810,7 @@ html[data-theme="light"] .how-it-works-nav li:not(:last-child)::after {
 
 html {
   font-size: 16px;
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; REMOVED per user request for instant jumps */
   background-color: var(--bg-color);
   /* Prevents white flash during body fade-in */
 }

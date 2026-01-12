@@ -30,39 +30,22 @@ function initHeader() {
   // ================================================================
   function updateScrollProgress(forceTop = false) {
     const bar = document.querySelector(".scroll-progress-bar");
-    if (!bar || !sections || sections.length === 0) return;
+    if (!bar) return;
 
-    const offset = nav.offsetHeight + topBar.offsetHeight;
-    const scrollY = window.scrollY;
+    // Standard Global Scroll Progress (0% at top, 100% at bottom)
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
 
-    if (forceTop || scrollY < sections[0].offsetTop - offset) {
+    if (scrollHeight <= 0) {
       bar.style.width = "0%";
-      bar.style.opacity = "0";
       return;
     }
 
-    // Determine current section
-    let currentSection = sections[0];
-    for (let i = sections.length - 1; i >= 0; i--) {
-      if (scrollY + offset >= sections[i].offsetTop) {
-        currentSection = sections[i];
-        break;
-      }
-    }
-
-    const nextIndex = sections.indexOf(currentSection) + 1;
-    const nextSection = sections[nextIndex] || {
-      offsetTop: document.documentElement.scrollHeight,
-    };
-
-    const start = currentSection.offsetTop - offset;
-    const end = nextSection.offsetTop - offset;
-
-    let progress = (scrollY - start) / (end - start);
+    let progress = scrollTop / scrollHeight;
     progress = Math.min(Math.max(progress, 0), 1);
 
     bar.style.width = `${progress * 100}%`;
-    bar.style.opacity = progress < 0.01 ? "0" : "1";
+    bar.style.opacity = progress < 0.001 ? "0" : "1";
   }
 
   // ================================================================
@@ -221,7 +204,7 @@ function initHeader() {
     const offset = nav.offsetHeight + topBar.offsetHeight + 20;
     window.scrollTo({
       top: target.offsetTop - offset,
-      behavior: "smooth",
+      behavior: "auto",
     });
 
     if (hash === "#home") {
