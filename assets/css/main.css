@@ -7598,6 +7598,7 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
   margin-left: -10px;
   margin-top: -10px;
 }
+
 /* ============================== CLIENT DASHBOARD ============================== */
 .client-dash-grid {
   display: grid;
@@ -7607,16 +7608,19 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
 }
 
 .client-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 2rem;
-  transition: all 0.3s ease;
+  padding: 2.5rem;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  display: flex;
+  flex-direction: column;
 }
 
-html[data-theme="light"] .client-card {
-  background: rgba(0, 0, 0, 0.02);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+/* Override container-glass layout for the dashboard grid */
+.client-dash-grid .container-glass {
+  width: 100%;
+  margin: 0;
+  max-width: none;
+  border-radius: 16px;
+  min-height: 100%;
 }
 
 .client-card h2 {
