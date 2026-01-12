@@ -532,9 +532,9 @@ function initPropertyModal() {
                     <img src="${src}" 
                          alt="Property Image" 
                          draggable="false" 
-                         ${idx === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'}
+                         ${(idx === 0 || rawSlides.length === 1) ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'}
                          onload="this.style.opacity='1'"
-                         style="opacity:0; transition: opacity 0.3s ease;">
+                         style="${(idx === 0 || rawSlides.length === 1) ? 'opacity:1;' : 'opacity:0;'} transition: opacity 0.3s ease;">
                  </div>
                `).join('')}
                ${rawSlides.length > 1 ? `<div class="modal-carousel-slide"><img src="${firstClone}" draggable="false" loading="lazy"></div>` : ''}

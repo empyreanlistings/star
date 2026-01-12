@@ -8134,3 +8134,99 @@ mark.search-highlight.active {
 .preview-remove:hover {
   background: #ff4444;
 }
+/* ============================== PAGINATION ============================== */
+.listings-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 40px;
+  width: 100%;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 25px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  color: var(--white);
+  font-family: var(--font-base);
+}
+
+.pagination-info {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.pagination-info strong {
+  color: var(--accent);
+}
+
+.pagination-nav {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.page-count {
+  font-size: 0.9rem;
+  font-weight: 500;
+  min-width: 80px;
+  text-align: center;
+}
+
+.pagination-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  color: var(--white);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--black);
+  transform: translateY(-2px);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.view-all-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Light mode overrides */
+html[data-theme="light"] .pagination-container {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--black);
+}
+
+html[data-theme="light"] .pagination-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--black);
+}
+
+@media (max-width: 600px) {
+  .pagination-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+}

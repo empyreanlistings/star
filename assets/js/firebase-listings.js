@@ -123,12 +123,19 @@ function formatNumber(val) {
   return num.toLocaleString();
 }
 
+let currentPage = 1;
+const recordsPerPage = 16;
+let fullListings = [];
+
 function renderListings(listings) {
   const grid = document.querySelector(".property-grid");
   if (!grid) return;
 
+  fullListings = listings;
+
   // Read optional limit (e.g., 8 for home page)
-  const limit = parseInt(grid.dataset.limit);
+  const explicitLimit = parseInt(grid.dataset.limit);
+  const isHomePage = !isNaN(explicitLimit);
 
   // Sort: Featured first
   const sorted = [...listings].sort((a, b) => {
@@ -137,8 +144,17 @@ function renderListings(listings) {
     return 0; // Maintain order otherwise (could sort by date if available)
   });
 
-  // Apply limit if specified
-  const displayList = !isNaN(limit) ? sorted.slice(0, limit) : sorted;
+  let displayList = [];
+  if (isHomePage) {
+    displayList = sorted.slice(0, explicitLimit);
+  } else {
+    // PAGINATION LOGIC for Listings Page
+    const startIndex = (currentPage - 1) * recordsPerPage;
+    const endIndex = startIndex + recordsPerPage;
+    displayList = sorted.slice(startIndex, endIndex);
+
+    renderPagination(sorted.length);
+  }
 
   grid.innerHTML = ""; // Clear grid
   const fragment = document.createDocumentFragment();
@@ -149,6 +165,12 @@ function renderListings(listings) {
   });
 
   grid.appendChild(fragment);
+
+  // Home page "View All" button visibility
+  const viewAllBtn = document.querySelector(".view-all-row");
+  if (viewAllBtn) {
+    viewAllBtn.style.display = isHomePage ? "flex" : "none";
+  }
 
   if (!document.getElementById("noResults")) {
     const noResults = document.createElement("div");
@@ -166,6 +188,56 @@ function renderListings(listings) {
 
   // Dispatch event for other scripts (like filters) to re-init or update
   window.dispatchEvent(new Event("listingsLoaded"));
+}
+
+function renderPagination(totalRecords) {
+  const container = document.getElementById("paginationControls");
+  if (!container) return;
+
+  const totalPages = Math.ceil(totalRecords / recordsPerPage);
+  if (totalPages <= 1) {
+    container.innerHTML = "";
+    return;
+  }
+
+  const startRecord = (currentPage - 1) * recordsPerPage + 1;
+  const endRecord = Math.min(currentPage * recordsPerPage, totalRecords);
+
+  container.innerHTML = `
+    <div class="pagination-info">
+      <span>Showing <strong>${startRecord}-${endRecord}</strong> of <strong>${totalRecords}</strong> records</span>
+    </div>
+    <div class="pagination-nav">
+      <button class="pagination-btn" id="prevPage" ${currentPage === 1 ? 'disabled' : ''} aria-label="Previous Page">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <span class="page-count">Page ${currentPage} of ${totalPages}</span>
+      <button class="pagination-btn" id="nextPage" ${currentPage === totalPages ? 'disabled' : ''} aria-label="Next Page">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  `;
+
+  // Bind Events
+  const prev = document.getElementById("prevPage");
+  const next = document.getElementById("nextPage");
+
+  if (prev) prev.onclick = () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderListings(fullListings);
+      window.scrollTo({ top: document.getElementById("listings").offsetTop - 100, behavior: 'smooth' });
+    }
+  };
+
+  if (next) next.onclick = () => {
+    const totalPages = Math.ceil(totalRecords / recordsPerPage);
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderListings(fullListings);
+      window.scrollTo({ top: document.getElementById("listings").offsetTop - 100, behavior: 'smooth' });
+    }
+  };
 }
 
 function createPropertyCard(data) {
