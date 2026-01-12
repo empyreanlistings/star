@@ -517,19 +517,27 @@ function initPropertyModal() {
       // Inject Carousel HTML (Include Clones for Smooth Loop)
       const imgContainer = modal.querySelector(".modal-image-container");
       if (imgContainer) {
+        // PRE-LOAD: Set thumbnail as background immediately so there is no empty screen
+        imgContainer.style.background = `url("${thumbnailInfo}") center/cover no-repeat`;
+
         const firstClone = rawSlides[0];
         const lastClone = rawSlides[rawSlides.length - 1];
 
         imgContainer.innerHTML = `
           <div class="modal-image-carousel">
             <div class="modal-carousel-track" id="modalCarouselTrack">
-               ${rawSlides.length > 1 ? `<div class="modal-carousel-slide"><img src="${lastClone}" draggable="false"></div>` : ''}
-               ${rawSlides.map(src => `
+               ${rawSlides.length > 1 ? `<div class="modal-carousel-slide"><img src="${lastClone}" draggable="false" loading="lazy"></div>` : ''}
+               ${rawSlides.map((src, idx) => `
                  <div class="modal-carousel-slide">
-                    <img src="${src}" alt="Property Image" draggable="false">
+                    <img src="${src}" 
+                         alt="Property Image" 
+                         draggable="false" 
+                         ${idx === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'}
+                         onload="this.style.opacity='1'"
+                         style="opacity:0; transition: opacity 0.3s ease;">
                  </div>
                `).join('')}
-               ${rawSlides.length > 1 ? `<div class="modal-carousel-slide"><img src="${firstClone}" draggable="false"></div>` : ''}
+               ${rawSlides.length > 1 ? `<div class="modal-carousel-slide"><img src="${firstClone}" draggable="false" loading="lazy"></div>` : ''}
             </div>
             ${rawSlides.length > 1 ? `
               <button class="modal-carousel-nav modal-carousel-prev" id="modalPrev"><i class="fas fa-chevron-left"></i></button>

@@ -8087,6 +8087,17 @@ mark.search-highlight.active {
   margin-top: 10px;
 }
 
+.modal-image-container {
+  width: 100%;
+  height: 400px;
+  /* Fixed height for consistency */
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background-color: #000;
+  /* Fallback */
+}
+
 .preview-item {
   position: relative;
   width: 100%;
