@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
             initGalleryModalEvents();
             initPalawanGalleryModalEvents();
             initPropertyModalEvents();
+            initLocationPicker(); // Initialize Google Maps Places Autocomplete
 
             // 2. Fetch user's company and RE-INIT sync with filter
             await getUserCompany(user.uid);
@@ -381,6 +382,48 @@ function renderTablePagination(containerId, totalRecords, recordsPerPage, curren
     if (nextBtn) nextBtn.onclick = () => onPageChange(currentPage + 1);
 }
 
+// Google Maps Location Picker
+function initLocationPicker() {
+    const input = document.getElementById('locationSearch');
+    if (!input) return;
+
+    try {
+        const autocomplete = new google.maps.places.Autocomplete(input, {
+            types: ['geocode', 'establishment']
+        });
+
+        autocomplete.addListener('place_changed', () => {
+            const place = autocomplete.getPlace();
+            if (!place.geometry) {
+                console.log("Returned place contains no geometry");
+                return;
+            }
+
+            document.getElementById('locLat').value = place.geometry.location.lat();
+            document.getElementById('locLng').value = place.geometry.location.lng();
+
+            // Extract Area and Municipality
+            let area = "";
+            let municipality = "";
+
+            place.address_components.forEach(component => {
+                const types = component.types;
+                if (types.includes('sublocality') || types.includes('neighborhood')) {
+                    area = component.long_name;
+                }
+                if (types.includes('locality') || types.includes('administrative_area_level_2')) {
+                    municipality = component.long_name;
+                }
+            });
+
+            document.getElementById('locArea').value = area;
+            document.getElementById('locMunicipality').value = municipality;
+        });
+    } catch (err) {
+        console.error("Google Maps failed to load or initialize:", err);
+    }
+}
+
 function initSorting() {
     const headers = document.querySelectorAll("#listingsTableContainer th.sortable");
     headers.forEach(th => {
@@ -519,13 +562,18 @@ async function handleEdit(e) {
             };
 
             setField("propTitle", data.title);
+            setField("propSlug", data.slug);
             setField("propPrice", data.price);
+            setField("propCurrency", data.currency || "PHP");
             setField("propType", data.type);
             setField("propCategory", data.category);
             setField("propStatus", data.status);
 
             const featuredEl = document.getElementById("propFeatured");
             if (featuredEl) featuredEl.checked = !!data.featured;
+
+            const displayEl = document.getElementById("propDisplay");
+            if (displayEl) displayEl.checked = data.display !== false; // default true
 
             setField("propShortDesc", data.content?.short_description);
             setField("propFullDesc", data.content?.full_description);
@@ -535,6 +583,23 @@ async function handleEdit(e) {
             setField("propSize", data.specs?.size);
             setField("propLotSize", data.specs?.lot_size);
             setField("propFloorArea", data.specs?.floor_area);
+
+            // Lead Source
+            if (data.whatsapp) document.getElementById("sourceWhatsapp").checked = true;
+            else if (data.telegram) document.getElementById("sourceTelegram").checked = true;
+            else document.getElementById("sourceUser").checked = true;
+
+            // Location
+            setField("locArea", data.location?.area);
+            setField("locMunicipality", data.location?.municipality);
+            setField("locLat", data.location?.coordinates?.lat);
+            setField("locLng", data.location?.coordinates?.lng);
+            const locSearch = document.getElementById("locationSearch");
+            if (locSearch) locSearch.value = data.location?.display || "";
+
+            // Meta
+            setField("metaTitle", data.meta?.title);
+            setField("metaDesc", data.meta?.description);
 
             const featuresInput = document.getElementById("propFeatures");
             if (featuresInput) {
@@ -678,6 +743,12 @@ function openModal(edit = false) {
     currentGalleryState = []; // Reset gallery
     updateGalleryPreview();
 
+    // Reset Hidden Location Fields
+    const lat = document.getElementById('locLat');
+    const lng = document.getElementById('locLng');
+    if (lat) lat.value = "";
+    if (lng) lng.value = "";
+
     // Safer transition trigger: display then active class with delay
     modal.style.display = "flex";
     modal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483647 !important; pointer-events: auto !important;";
@@ -711,14 +782,38 @@ async function handleFormSubmit(e) {
 
     try {
         console.log("💾 [Submit] Starting form submission...");
+
+        // Lead Source Logic
+        const leadSource = document.querySelector('input[name="leadSource"]:checked')?.value;
+        const isWhatsapp = leadSource === "whatsapp";
+        const isTelegram = leadSource === "telegram";
+
         // Prepare Data Object (Base)
         let docData = {
             title: document.getElementById("propTitle").value,
+            slug: document.getElementById("propSlug").value || document.getElementById("propTitle").value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
             price: Number(document.getElementById("propPrice").value),
+            currency: document.getElementById("propCurrency").value,
             type: document.getElementById("propType").value,
             category: document.getElementById("propCategory").value,
             status: document.getElementById("propStatus").value,
             featured: document.getElementById("propFeatured").checked,
+            display: document.getElementById("propDisplay").checked,
+            whatsapp: isWhatsapp,
+            telegram: isTelegram,
+            location: {
+                display: document.getElementById("locationSearch").value,
+                area: document.getElementById("locArea").value,
+                municipality: document.getElementById("locMunicipality").value,
+                coordinates: {
+                    lat: Number(document.getElementById("locLat").value) || null,
+                    lng: Number(document.getElementById("locLng").value) || null
+                }
+            },
+            meta: {
+                title: document.getElementById("metaTitle").value,
+                description: document.getElementById("metaDesc").value
+            },
             content: {
                 short_description: document.getElementById("propShortDesc").value,
                 full_description: document.getElementById("propFullDesc").value,

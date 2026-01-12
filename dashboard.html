@@ -5,7 +5,7 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=2.54">
+    <link rel="stylesheet" href="assets/css/main.css?v=2.55">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
@@ -193,21 +193,80 @@
             <h3 id="modalTitle" class="modal-title">Add New Property</h3>
             <form id="listingForm">
                 <input type="hidden" id="listingId">
-                <div class="form-group">
-                    <label>Property Title</label>
-                    <input type="text" id="propTitle" class="form-control" required>
-                </div>
-
                 <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
                     <div>
-                        <label>Price (PHP)</label>
+                        <label>Property Title</label>
+                        <input type="text" id="propTitle" class="form-control" required
+                            placeholder="Luxurious Beach Villa">
+                    </div>
+                    <div>
+                        <label>Slug (URL Identifier)</label>
+                        <input type="text" id="propSlug" class="form-control" placeholder="luxurious-beach-villa">
+                    </div>
+                </div>
+
+                <!-- LEAD SOURCE -->
+                <div class="form-group">
+                    <label>Lead Source (Select One)</label>
+                    <div style="display:flex; gap:1.5rem; margin-top:0.5rem;">
+                        <label
+                            style="display:flex; align-items:center; gap:0.5rem; font-weight:normal; cursor:pointer;">
+                            <input type="radio" name="leadSource" value="whatsapp" id="sourceWhatsapp"
+                                style="width:auto; margin:0;">
+                            <i class="fab fa-whatsapp" style="color:#25D366"></i> WhatsApp
+                        </label>
+                        <label
+                            style="display:flex; align-items:center; gap:0.5rem; font-weight:normal; cursor:pointer;">
+                            <input type="radio" name="leadSource" value="telegram" id="sourceTelegram"
+                                style="width:auto; margin:0;">
+                            <i class="fab fa-telegram" style="color:#0088cc"></i> Telegram
+                        </label>
+                        <label
+                            style="display:flex; align-items:center; gap:0.5rem; font-weight:normal; cursor:pointer;">
+                            <input type="radio" name="leadSource" value="user" id="sourceUser" checked
+                                style="width:auto; margin:0;">
+                            <i class="fas fa-user" style="color:var(--text-muted)"></i> Manual / User
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" style="display:grid;grid-template-columns:100px 1fr 1fr;gap:1rem;">
+                    <div>
+                        <label>Currency</label>
+                        <select id="propCurrency" class="form-control">
+                            <option value="PHP">₱ PHP</option>
+                            <option value="USD">$ USD</option>
+                            <option value="EUR">€ EUR</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Price</label>
                         <input type="number" id="propPrice" class="form-control" required>
                     </div>
                     <div>
                         <label>Type (e.g. Villa, Land)</label>
-                        <input type="text" id="propType" class="form-control">
+                        <input type="text" id="propType" class="form-control" placeholder="Villa">
                     </div>
                 </div>
+
+                <!-- LOCATION PICKER -->
+                <div class="form-group">
+                    <label>Location Search (Google Maps)</label>
+                    <input type="text" id="locationSearch" class="form-control"
+                        placeholder="Search for property location...">
+                </div>
+                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div>
+                        <label>Area / Neighborhood</label>
+                        <input type="text" id="locArea" class="form-control" placeholder="El Nido">
+                    </div>
+                    <div>
+                        <label>Municipality / City</label>
+                        <input type="text" id="locMunicipality" class="form-control" placeholder="Palawan">
+                    </div>
+                </div>
+                <input type="hidden" id="locLat">
+                <input type="hidden" id="locLng">
 
                 <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
                     <div>
@@ -223,26 +282,36 @@
                         <select id="propStatus" class="form-control">
                             <option value="for_sale">For Sale</option>
                             <option value="sold">Sold</option>
+                            <option value="under_offer">Under Offer</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;margin-top:-0.5rem;">
-                    <input type="checkbox" id="propFeatured" style="width:auto;margin:0;">
-                    <label for="propFeatured" style="margin:0;cursor:pointer;font-size:0.9rem;">Featured Property (Logo
-                        overlay & priority sorting)</label>
+                <div class="form-group"
+                    style="display:flex; justify-content: space-between; align-items:center; gap:1rem;">
+                    <div style="display:flex; align-items:center; gap:0.5rem;">
+                        <input type="checkbox" id="propFeatured" style="width:auto;margin:0;">
+                        <label for="propFeatured" style="margin:0;cursor:pointer;font-size:0.9rem;">Featured
+                            Property</label>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:0.5rem;">
+                        <input type="checkbox" id="propDisplay" checked style="width:auto;margin:0;">
+                        <label for="propDisplay" style="margin:0;cursor:pointer;font-size:0.9rem;">Publicly
+                            Visible</label>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Thumbnail Image (Slide 1)</label>
-                    <input type="file" id="propImage" class="form-control" accept="image/*">
+                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div>
+                        <label>Thumbnail (Slide 1)</label>
+                        <input type="file" id="propImage" class="form-control" accept="image/*">
+                    </div>
+                    <div>
+                        <label>Gallery (Slides 2+)</label>
+                        <input type="file" id="propGallery" class="form-control" multiple accept="image/*">
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label>Gallery Images (Slides 2+)</label>
-                    <input type="file" id="propGallery" class="form-control" multiple accept="image/*">
-                    <div id="galleryPreview" class="gallery-preview-grid"></div>
-                </div>
+                <div id="galleryPreview" class="gallery-preview-grid" style="margin-bottom:1rem;"></div>
 
                 <div class="form-group">
                     <label>Short Description (Card)</label>
@@ -270,7 +339,22 @@
                     <input type="text" id="propFeatures" class="form-control" placeholder="Pool, Solar, View...">
                 </div>
 
-                <button type="submit" id="submitBtn" class="btn-add" style="width:100%;margin-top:1rem;">Create
+                <!-- META DATA -->
+                <div style="margin-top:2rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.1);">
+                    <h4 style="margin-bottom:1rem; opacity:0.8;">SEO / Meta Data</h4>
+                    <div class="form-group">
+                        <label>Meta Title</label>
+                        <input type="text" id="metaTitle" class="form-control"
+                            placeholder="Browse Palawan Homes | Villa XYZ">
+                    </div>
+                    <div class="form-group">
+                        <label>Meta Description</label>
+                        <textarea id="metaDesc" class="form-control" rows="2"
+                            placeholder="Explore this beautiful villa in El Nido..."></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-add" style="width:100%;margin-top:1rem;">Save
                     Listing</button>
                 <div id="uploadStatus" style="margin-top:0.5rem;text-align:center;font-size:0.9rem;opacity:0.8;"></div>
             </form>
@@ -370,9 +454,9 @@
 
     <!-- Scripts -->
     <script src="assets/js/nav.js" defer></script>
-    <script src="assets/js/snackbar.js?v=2.54"></script>
-    <script src="assets/js/main.js?v=2.54" defer></script>
-    <script type="module" src="assets/js/admin-dashboard.js?v=2.54"></script>
+    <script src="assets/js/snackbar.js?v=2.55"></script>
+    <script src="assets/js/main.js?v=2.55" defer></script>
+    <script type="module" src="assets/js/admin-dashboard.js?v=2.55"></script>
 
 </body>
 
