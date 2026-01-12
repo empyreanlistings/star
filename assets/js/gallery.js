@@ -207,46 +207,43 @@ const nextBtn = document.querySelector(".scroll-arrow.scroll-next");
 
 if (scrollContainer && prevBtn && nextBtn) {
   const updateArrows = () => {
-    const buffer = 10; // tolerance
-    const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
-
-    // Show/Hide Prev
-    if (scrollContainer.scrollLeft > buffer) {
-      prevBtn.classList.add("visible");
-    } else {
-      prevBtn.classList.remove("visible");
-    }
-
-    // Show/Hide Next
-    if (scrollContainer.scrollLeft < maxScroll - buffer) {
-      nextBtn.classList.add("visible");
-    } else {
-      nextBtn.classList.remove("visible");
-    }
+    // Keep both arrows visible for looping
+    prevBtn.classList.add("visible");
+    nextBtn.classList.add("visible");
   };
 
   const getScrollAmount = () => {
-    // Read CSS variable or fallback
     const style = getComputedStyle(scrollWrapper);
     const w = parseInt(style.getPropertyValue('--card-width')) || 380;
     const g = parseInt(style.getPropertyValue('--gap')) || 24;
     return w + g;
   };
 
-  // Scroll Handlers
   prevBtn.addEventListener("click", () => {
-    scrollContainer.scrollBy({ left: -getScrollAmount(), behavior: "smooth" });
+    const buffer = 10;
+    if (scrollContainer.scrollLeft <= buffer) {
+      // Loop to end
+      scrollContainer.scrollTo({ left: scrollContainer.scrollWidth, behavior: "smooth" });
+    } else {
+      scrollContainer.scrollBy({ left: -getScrollAmount(), behavior: "smooth" });
+    }
   });
 
   nextBtn.addEventListener("click", () => {
-    scrollContainer.scrollBy({ left: getScrollAmount(), behavior: "smooth" });
+    const buffer = 10;
+    const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+    if (scrollContainer.scrollLeft >= maxScroll - buffer) {
+      // Loop to start
+      scrollContainer.scrollTo({ left: 0, behavior: "smooth" });
+    } else {
+      scrollContainer.scrollBy({ left: getScrollAmount(), behavior: "smooth" });
+    }
   });
 
   scrollContainer.addEventListener("scroll", () => {
     window.requestAnimationFrame(updateArrows);
   }, { passive: true });
 
-  // Initial check (delay slightly to allow layout)
   setTimeout(updateArrows, 100);
   window.addEventListener("resize", updateArrows);
 }

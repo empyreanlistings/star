@@ -509,24 +509,29 @@ function initPropertyModal() {
 
       // Build Slides (Thumbnail + Gallery)
       // Filter out duplicate thumbnail if it exists in gallery to clean up
-      const slides = [thumbnailInfo];
+      const rawSlides = [thumbnailInfo];
       galleryData.forEach(src => {
-        if (src !== thumbnailInfo) slides.push(src);
+        if (src !== thumbnailInfo) rawSlides.push(src);
       });
 
-      // Inject Carousel HTML
+      // Inject Carousel HTML (Include Clones for Smooth Loop)
       const imgContainer = modal.querySelector(".modal-image-container");
       if (imgContainer) {
+        const firstClone = rawSlides[0];
+        const lastClone = rawSlides[rawSlides.length - 1];
+
         imgContainer.innerHTML = `
           <div class="modal-image-carousel">
             <div class="modal-carousel-track" id="modalCarouselTrack">
-               ${slides.map(src => `
+               ${rawSlides.length > 1 ? `<div class="modal-carousel-slide"><img src="${lastClone}" draggable="false"></div>` : ''}
+               ${rawSlides.map(src => `
                  <div class="modal-carousel-slide">
                     <img src="${src}" alt="Property Image" draggable="false">
                  </div>
                `).join('')}
+               ${rawSlides.length > 1 ? `<div class="modal-carousel-slide"><img src="${firstClone}" draggable="false"></div>` : ''}
             </div>
-            ${slides.length > 1 ? `
+            ${rawSlides.length > 1 ? `
               <button class="modal-carousel-nav modal-carousel-prev" id="modalPrev"><i class="fas fa-chevron-left"></i></button>
               <button class="modal-carousel-nav modal-carousel-next" id="modalNext"><i class="fas fa-chevron-right"></i></button>
             ` : ''}
@@ -534,67 +539,73 @@ function initPropertyModal() {
         `;
 
         // Carousel Logic
-        let currentIndex = 0;
+        let currentIndex = rawSlides.length > 1 ? 1 : 0;
+        let isTransitioning = false;
         const track = document.getElementById("modalCarouselTrack");
         const prevBtn = document.getElementById("modalPrev");
         const nextBtn = document.getElementById("modalNext");
 
-        const updateCarousel = () => {
-          if (track) track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        if (track && rawSlides.length > 1) {
+          track.style.transform = `translateX(-100%)`;
+        }
+
+        const updateCarousel = (withTransition = true) => {
+          if (!track) return;
+          if (withTransition) {
+            track.style.transition = "transform 0.4s ease-out";
+          } else {
+            track.style.transition = "none";
+          }
+          track.style.transform = `translateX(-${currentIndex * 100}%)`;
         };
 
-        if (prevBtn) prevBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        const handleNext = () => {
+          if (isTransitioning || rawSlides.length <= 1) return;
+          isTransitioning = true;
+          currentIndex++;
           updateCarousel();
-        });
+        };
 
-        if (nextBtn) nextBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          currentIndex = (currentIndex + 1) % slides.length;
+        const handlePrev = () => {
+          if (isTransitioning || rawSlides.length <= 1) return;
+          isTransitioning = true;
+          currentIndex--;
           updateCarousel();
-        });
+        };
+
+        if (track) {
+          track.addEventListener("transitionend", () => {
+            isTransitioning = false;
+            if (currentIndex === 0) {
+              currentIndex = rawSlides.length;
+              updateCarousel(false);
+            } else if (currentIndex === rawSlides.length + 1) {
+              currentIndex = 1;
+              updateCarousel(false);
+            }
+          });
+        }
+
+        if (prevBtn) prevBtn.addEventListener("click", (e) => { e.stopPropagation(); handlePrev(); });
+        if (nextBtn) nextBtn.addEventListener("click", (e) => { e.stopPropagation(); handleNext(); });
 
         // Swipe Logic
         let touchStartX = 0;
         let touchEndX = 0;
 
-        const handleTouchStart = (e) => {
-          touchStartX = e.changedTouches[0].screenX;
-        };
-
+        const handleTouchStart = (e) => { touchStartX = e.changedTouches[0].screenX; };
         const handleTouchEnd = (e) => {
           touchEndX = e.changedTouches[0].screenX;
-          handleSwipe();
-        };
-
-        const handleSwipe = () => {
-          if (touchEndX < touchStartX - 50) {
-            // Swipe Left (Next)
-            if (slides.length > 1) {
-              currentIndex = (currentIndex + 1) % slides.length;
-              updateCarousel();
-            }
-          }
-          if (touchEndX > touchStartX + 50) {
-            // Swipe Right (Prev)
-            if (slides.length > 1) {
-              currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-              updateCarousel();
-            }
-          }
+          if (touchEndX < touchStartX - 50) handleNext();
+          if (touchEndX > touchStartX + 50) handlePrev();
         };
 
         if (track) {
-          track.addEventListener('touchstart', handleTouchStart);
-          track.addEventListener('touchend', handleTouchEnd);
-
-          // LIGHTBOX TRIGGER
+          track.addEventListener('touchstart', handleTouchStart, { passive: true });
+          track.addEventListener('touchend', handleTouchEnd, { passive: true });
           track.addEventListener('click', (e) => {
             const img = e.target.closest('img');
-            if (img && window.openLightbox) {
-              window.openLightbox(img.src);
-            }
+            if (img && window.openLightbox) window.openLightbox(img.src);
           });
         }
       }
@@ -1243,51 +1254,85 @@ function initServices() {
   if (!nav || !display || !servicesData.length) return;
 
   const btns = nav.querySelectorAll('.nav-btn');
-  let currentIndex = 0;
+  let currentIndex = 1; // Start at 1 because of clone
   let autoplayTimer = null;
+  let isTransitioning = false;
 
-  // Build Carousel Structure
+  // Build Carousel Structure (Clone Last -> Start, First -> End)
+  const firstClone = servicesData[0];
+  const lastClone = servicesData[servicesData.length - 1];
+  const renderSlide = (data, idx, isClone = false) => `
+    <div class="carousel-slide" ${isClone ? 'aria-hidden="true"' : ''}>
+      <img class="card-image" src="${data.image}" alt="${data.title}" loading="lazy">
+      <div class="card-content">
+        <h2 class="expanded-title">${data.title}</h2>
+        <p>${data.subtitle}</p>
+        <p>${data.description}</p>
+        <span class="card-cta">Find out more</span>
+      </div>
+    </div>
+  `;
+
   display.innerHTML = `
     <button class="card-nav card-nav-left" aria-label="Previous service"></button>
     <div class="carousel-container">
       <div class="carousel-track">
-        ${servicesData.map((data, index) => `
-          <div class="carousel-slide">
-            <img class="card-image" src="${data.image}" alt="${data.title}" loading="${index === 0 ? 'eager' : 'lazy'}">
-            <div class="card-content">
-              <h2 class="expanded-title">${data.title}</h2>
-              <p>${data.subtitle}</p>
-              <p>${data.description}</p>
-              <span class="card-cta">Find out more</span>
-            </div>
-          </div>
-        `).join('')}
+        ${renderSlide(lastClone, -1, true)}
+        ${servicesData.map((d, i) => renderSlide(d, i)).join('')}
+        ${renderSlide(firstClone, servicesData.length, true)}
       </div>
     </div>
     <button class="card-nav card-nav-right" aria-label="Next service"></button>
   `;
 
   const track = display.querySelector('.carousel-track');
+  const slides = display.querySelectorAll('.carousel-slide');
   const cardContent = display.querySelectorAll('.card-content');
 
-  function goToSlide(index) {
-    if (index < 0) index = servicesData.length - 1;
-    if (index >= servicesData.length) index = 0;
+  // Set initial position (showing real slide 1)
+  track.style.transform = `translateX(-100%)`;
 
-    currentIndex = index;
-    track.style.transform = `translateX(-${index * 100}%)`;
-
-    // Update Nav
+  function updateNav(realIndex) {
     btns.forEach(b => b.classList.remove('active'));
-    const activeBtn = Array.from(btns).find(b => parseInt(b.dataset.index) === index);
+    // realIndex is 0-based index of data
+    const activeBtn = Array.from(btns).find(b => parseInt(b.dataset.index) === realIndex);
     if (activeBtn) {
       activeBtn.classList.add('active');
-      // Mobile scroll
       if (window.innerWidth <= 768) {
         activeBtn.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
       }
     }
   }
+
+  function goToSlide(index) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+    currentIndex = index;
+
+    track.style.transition = 'transform 0.5s ease-in-out';
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+    // Calculate "Real" index for Nav
+    let realIndex = currentIndex - 1;
+    if (realIndex < 0) realIndex = servicesData.length - 1;
+    if (realIndex >= servicesData.length) realIndex = 0;
+    updateNav(realIndex);
+  }
+
+  // Handle Infinite Loop Reset
+  track.addEventListener('transitionend', () => {
+    isTransitioning = false;
+    if (currentIndex === 0) {
+      track.style.transition = 'none';
+      currentIndex = servicesData.length;
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+    if (currentIndex === servicesData.length + 1) {
+      track.style.transition = 'none';
+      currentIndex = 1;
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+  });
 
   function startAutoplay() {
     stopAutoplay();
@@ -1302,19 +1347,21 @@ function initServices() {
 
   // Events
   display.querySelector('.card-nav-left').onclick = () => {
+    if (isTransitioning) return;
     goToSlide(currentIndex - 1);
     startAutoplay();
   };
   display.querySelector('.card-nav-right').onclick = () => {
+    if (isTransitioning) return;
     goToSlide(currentIndex + 1);
     startAutoplay();
   };
 
   btns.forEach(btn => {
     btn.onclick = () => {
-      const idx = parseInt(btn.dataset.index);
+      const idx = parseInt(btn.dataset.index); // 0-based
       if (!isNaN(idx)) {
-        goToSlide(idx);
+        goToSlide(idx + 1); // +1 because of clone
         startAutoplay();
       }
     };
@@ -1326,8 +1373,7 @@ function initServices() {
     content.onmouseleave = startAutoplay;
   });
 
-  // Initial Render
-  goToSlide(0);
+  // Initial State is already set by HTML structure + initial transform
   startAutoplay();
 }
 
@@ -1393,43 +1439,48 @@ function initHowItWorks() {
   if (!nav || !display || !howItWorksData.length) return;
 
   const btns = nav.querySelectorAll('.nav-btn');
-  let currentIndex = 0;
+  let currentIndex = 1; // Start at 1
   let autoplayTimer = null;
+  let isTransitioning = false;
 
-  // Build Carousel Structure
+  // Build Carousel Structure (Clone Last -> Start, First -> End)
+  const firstClone = howItWorksData[0];
+  const lastClone = howItWorksData[howItWorksData.length - 1];
+  const renderSlide = (data, idx, isClone = false) => `
+    <div class="carousel-slide" ${isClone ? 'aria-hidden="true"' : ''}>
+      <img class="card-image" src="${data.image}" alt="${data.title}" loading="lazy">
+      <div class="card-content">
+        <h2 class="expanded-title">${data.title}</h2>
+        <p>${data.subtitle}</p>
+        <p>${data.description}</p>
+        <span class="card-cta">Find out more</span>
+      </div>
+    </div>
+  `;
+
   display.innerHTML = `
     <button class="card-nav card-nav-left" aria-label="Previous step"></button>
     <div class="carousel-container">
       <div class="carousel-track">
-        ${howItWorksData.map((data, index) => `
-          <div class="carousel-slide">
-            <img class="card-image" src="${data.image}" alt="${data.title}" loading="${index === 0 ? 'eager' : 'lazy'}">
-            <div class="card-content">
-              <h2 class="expanded-title">${data.title}</h2>
-              <p>${data.subtitle}</p>
-              <p>${data.description}</p>
-              <span class="card-cta">Find out more</span>
-            </div>
-          </div>
-        `).join('')}
+        ${renderSlide(lastClone, -1, true)}
+        ${howItWorksData.map((d, i) => renderSlide(d, i)).join('')}
+        ${renderSlide(firstClone, howItWorksData.length, true)}
       </div>
     </div>
     <button class="card-nav card-nav-right" aria-label="Next step"></button>
   `;
 
   const track = display.querySelector('.carousel-track');
+  const slides = display.querySelectorAll('.carousel-slide');
   const cardContent = display.querySelectorAll('.card-content');
 
-  function goToSlide(index) {
-    if (index < 0) index = howItWorksData.length - 1;
-    if (index >= howItWorksData.length) index = 0;
+  // Set initial position
+  track.style.transform = `translateX(-100%)`;
 
-    currentIndex = index;
-    track.style.transform = `translateX(-${index * 100}%)`;
-
-    // Update Nav
+  function updateNav(realIndex) {
     btns.forEach(b => b.classList.remove('active'));
-    const activeBtn = Array.from(btns).find(b => parseInt(b.dataset.index) === index);
+    // realIndex is 0-based index of data
+    const activeBtn = Array.from(btns).find(b => parseInt(b.dataset.index) === realIndex);
     if (activeBtn) {
       activeBtn.classList.add('active');
       if (window.innerWidth <= 768) {
@@ -1437,6 +1488,36 @@ function initHowItWorks() {
       }
     }
   }
+
+  function goToSlide(index) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+    currentIndex = index;
+
+    track.style.transition = 'transform 0.5s ease-in-out';
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+    // Calculate "Real" index for Nav
+    let realIndex = currentIndex - 1;
+    if (realIndex < 0) realIndex = howItWorksData.length - 1;
+    if (realIndex >= howItWorksData.length) realIndex = 0;
+    updateNav(realIndex);
+  }
+
+  // Handle Infinite Loop Reset
+  track.addEventListener('transitionend', () => {
+    isTransitioning = false;
+    if (currentIndex === 0) {
+      track.style.transition = 'none';
+      currentIndex = howItWorksData.length;
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+    if (currentIndex === howItWorksData.length + 1) {
+      track.style.transition = 'none';
+      currentIndex = 1;
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+  });
 
   function startAutoplay() {
     stopAutoplay();
@@ -1451,19 +1532,21 @@ function initHowItWorks() {
 
   // Events
   display.querySelector('.card-nav-left').onclick = () => {
+    if (isTransitioning) return;
     goToSlide(currentIndex - 1);
-    startAutoplay(); // Restart timer on manual interaction
+    startAutoplay();
   };
   display.querySelector('.card-nav-right').onclick = () => {
+    if (isTransitioning) return;
     goToSlide(currentIndex + 1);
-    startAutoplay(); // Restart timer on manual interaction
+    startAutoplay();
   };
 
   btns.forEach(btn => {
     btn.onclick = () => {
-      const idx = parseInt(btn.dataset.index);
+      const idx = parseInt(btn.dataset.index); // 0-based
       if (!isNaN(idx)) {
-        goToSlide(idx);
+        goToSlide(idx + 1); // +1 because of clone
         startAutoplay();
       }
     };
@@ -1475,9 +1558,64 @@ function initHowItWorks() {
     content.onmouseleave = startAutoplay;
   });
 
-  // Initial Render
-  goToSlide(0);
+  // Initial State
   startAutoplay();
+}
+
+currentIndex = index;
+track.style.transform = `translateX(-${index * 100}%)`;
+
+// Update Nav
+btns.forEach(b => b.classList.remove('active'));
+const activeBtn = Array.from(btns).find(b => parseInt(b.dataset.index) === index);
+if (activeBtn) {
+  activeBtn.classList.add('active');
+  if (window.innerWidth <= 768) {
+    activeBtn.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
+  }
+}
+  }
+
+function startAutoplay() {
+  stopAutoplay();
+  autoplayTimer = setInterval(() => {
+    goToSlide(currentIndex + 1);
+  }, 5000);
+}
+
+function stopAutoplay() {
+  if (autoplayTimer) clearInterval(autoplayTimer);
+}
+
+// Events
+display.querySelector('.card-nav-left').onclick = () => {
+  goToSlide(currentIndex - 1);
+  startAutoplay(); // Restart timer on manual interaction
+};
+display.querySelector('.card-nav-right').onclick = () => {
+  goToSlide(currentIndex + 1);
+  startAutoplay(); // Restart timer on manual interaction
+};
+
+btns.forEach(btn => {
+  btn.onclick = () => {
+    const idx = parseInt(btn.dataset.index);
+    if (!isNaN(idx)) {
+      goToSlide(idx);
+      startAutoplay();
+    }
+  };
+});
+
+// Pause on hover
+cardContent.forEach(content => {
+  content.onmouseenter = stopAutoplay;
+  content.onmouseleave = startAutoplay;
+});
+
+// Initial Render
+goToSlide(0);
+startAutoplay();
 }
 
 // ================================================================
