@@ -31,6 +31,18 @@ let isGalleryEditMode = false;
 let palawanGalleryModal;
 let isPalawanGalleryEditMode = false;
 
+// Global Data Store for Filtering
+let allListings = [];
+let allGallery = [];
+let allPalawanGallery = [];
+
+// Filtering State
+let dashboardFilters = {
+    category: 'all',
+    minPrice: 0,
+    maxPrice: 50000000
+};
+
 // Init
 document.addEventListener("DOMContentLoaded", () => {
     if (isInitialized) return;
@@ -110,7 +122,8 @@ function initAdminListingsSync() {
         try {
             const { listings } = JSON.parse(cachedData);
             console.log("🚀 [Cache] Loading initial admin listings...");
-            renderAdminTable(listings);
+            allListings = listings;
+            applyDashboardFilters();
         } catch (e) {
             console.error("Error parsing cache", e);
         }
@@ -139,32 +152,51 @@ function initAdminListingsSync() {
     });
 }
 
-function handleAdminSnapshot(snapshot) {
-    const tbody = document.getElementById("listingsTableBody");
-    if (!tbody) return;
+allListings = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+console.log(`🔥 [Firebase] Admin sync received: ${allListings.length} listings`);
 
-    if (snapshot.empty) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:3rem;opacity:0.6;"><i class="fas fa-search" style="font-size:2rem;margin-bottom:1rem;display:block;"></i><strong>Nothing here. Try updating your filters</strong></td></tr>`;
-        return;
+// 3. Update Cache
+localStorage.setItem(CACHE_KEY, JSON.stringify({
+    listings: allListings,
+    timestamp: Date.now()
+}));
+
+currentListings = allListings; // Update global for sorting
+
+// 4. Apply Filters & Render
+applyDashboardFilters();
+}
+
+function applyDashboardFilters() {
+    let filtered = [...allListings];
+
+    // Category Filter
+    if (dashboardFilters.category !== 'all') {
+        filtered = filtered.filter(l => (l.category || '').toLowerCase() === dashboardFilters.category);
     }
 
-    const listings = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
-    console.log(`🔥 [Firebase] Admin sync received: ${listings.length} listings`);
+    // Price Filter
+    filtered = filtered.filter(l => {
+        const p = parseInt(l.price) || 0;
+        return p >= dashboardFilters.minPrice && p <= dashboardFilters.maxPrice;
+    });
 
-    // 3. Update Cache & Render
-    localStorage.setItem(CACHE_KEY, JSON.stringify({
-        listings,
-        timestamp: Date.now()
-    }));
-
-    currentListings = listings; // Update global for sorting
-
-    // Apply sort if active
+    // Apply sorting to the filtered set if active
     if (sortConfig.column) {
-        sortListings();
-    } else {
-        renderAdminTable(listings);
+        const col = sortConfig.column;
+        const dir = sortConfig.direction === 'asc' ? 1 : -1;
+        filtered.sort((a, b) => {
+            let valA = a[col] || '';
+            let valB = b[col] || '';
+            if (typeof valA === 'string') valA = valA.toLowerCase();
+            if (typeof valB === 'string') valB = valB.toLowerCase();
+            if (valA < valB) return -dir;
+            if (valA > valB) return dir;
+            return 0;
+        });
     }
+
+    renderAdminTable(filtered);
 }
 
 function renderAdminTable(listings) {
@@ -211,17 +243,12 @@ function renderAdminTable(listings) {
         tbody.appendChild(tr);
     });
 
-    // Render Pagination
+    // Pagination helper will be called here
     renderTablePagination("listingsPagination", totalRecords, listingsPerPage, listingsPage, (newPage) => {
         listingsPage = newPage;
-        renderAdminTable(listings);
+        applyDashboardFilters(); // Re-apply filters and render
         document.getElementById("listingsTableContainer").scrollIntoView({ behavior: 'smooth' });
     });
-
-    // Re-apply filters if active
-    if (window.initDashboardFilters) {
-        window.initDashboardFilters();
-    }
 
     // Bind events
     document.querySelectorAll(".action-btn.delete").forEach(btn => btn.addEventListener("click", handleDelete));
@@ -263,12 +290,16 @@ let palawanPage = 1;
 const palawanPerPage = 10;
 
 // Shared Pagination Helper
+// =============================================================================
+// SHARED UI HELPERS
+// =============================================================================
+
 function renderTablePagination(containerId, totalRecords, recordsPerPage, currentPage, onPageChange) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
     const totalPages = Math.ceil(totalRecords / recordsPerPage);
-    if (totalPages <= 1) {
+    if (totalPages === 0) {
         container.innerHTML = "";
         return;
     }
@@ -277,22 +308,27 @@ function renderTablePagination(containerId, totalRecords, recordsPerPage, curren
     const endRecord = Math.min(currentPage * recordsPerPage, totalRecords);
 
     container.innerHTML = `
-        <div class="pagination-info" style="display:flex; justify-content:space-between; align-items:center; width:100%; opacity:0.8; font-size:0.9rem;">
-            <span>Showing <strong>${startRecord}-${endRecord}</strong> of <strong>${totalRecords}</strong></span>
-            <div class="pagination-nav" style="display:flex; gap:1rem; align-items:center;">
-                <button class="action-btn" id="${containerId}_prev" ${currentPage === 1 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}>
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Showing <strong>${startRecord}-${endRecord}</strong> of <strong>${totalRecords}</strong>
+            </div>
+            <div class="pagination-nav">
+                <button class="pagination-btn" id="${containerId}_prev" ${currentPage === 1 ? 'disabled' : ''}>
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <span>Page ${currentPage} of ${totalPages}</span>
-                <button class="action-btn" id="${containerId}_next" ${currentPage === totalPages ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}>
+                <span class="page-count">Page ${currentPage} of ${totalPages}</span>
+                <button class="pagination-btn" id="${containerId}_next" ${currentPage === totalPages ? 'disabled' : ''}>
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
         </div>
     `;
 
-    document.getElementById(`${containerId}_prev`).onclick = () => onPageChange(currentPage - 1);
-    document.getElementById(`${containerId}_next`).onclick = () => onPageChange(currentPage + 1);
+    const prevBtn = document.getElementById(`${containerId}_prev`);
+    const nextBtn = document.getElementById(`${containerId}_next`);
+
+    if (prevBtn) prevBtn.onclick = () => onPageChange(currentPage - 1);
+    if (nextBtn) nextBtn.onclick = () => onPageChange(currentPage + 1);
 }
 
 function initSorting() {
@@ -808,24 +844,17 @@ function openPropertyModal(data) {
 }
 
 // Dashboard Table Filters
+// Dashboard Table Filters
 function initDashboardFilters() {
     const section = document.getElementById('listingsSection');
-    if (!section) {
-        console.error("Listings section not found for filters.");
-        return;
-    }
+    if (!section) return;
 
     const filterBtns = section.querySelectorAll('.property-gallery-filters .filter');
     const priceMin = document.getElementById('dashPriceMin');
     const priceMax = document.getElementById('dashPriceMax');
     const priceRangeValue = document.getElementById('dashPriceRangeValue');
-    const tbody = document.getElementById('listingsTableBody');
 
-    if (!filterBtns.length || !priceMin || !priceMax || !tbody) return;
-
-    let activeCategory = 'all';
-    let minPrice = 0;
-    let maxPrice = 50000000;
+    if (!filterBtns.length || !priceMin || !priceMax) return;
 
     const formatPrice = v => {
         if (v >= 1_000_000) return `₱${(v / 1_000_000).toFixed(v % 1_000_000 ? 1 : 0)} m`;
@@ -834,68 +863,22 @@ function initDashboardFilters() {
     };
 
     const updatePriceDisplay = () => {
-        if (minPrice === 0 && maxPrice === 50000000) {
+        if (dashboardFilters.minPrice === 0 && dashboardFilters.maxPrice === 50000000) {
             priceRangeValue.textContent = 'Any Price';
         } else {
-            priceRangeValue.textContent = `${formatPrice(minPrice)} – ${formatPrice(maxPrice)} `;
+            priceRangeValue.textContent = `${formatPrice(dashboardFilters.minPrice)} – ${formatPrice(dashboardFilters.maxPrice)} `;
         }
-    };
-
-    const filterTable = () => {
-        const rows = tbody.querySelectorAll('tr'); // Re-query cards to ensure latest DOM
-        let visibleCount = 0;
-
-        rows.forEach(row => {
-            const categoryCell = row.querySelector('td:nth-child(5)');
-            const priceCell = row.querySelector('td:nth-child(4)');
-
-            if (!categoryCell || !priceCell) return;
-
-            const category = categoryCell.textContent.trim().toLowerCase();
-            const priceText = priceCell.textContent.replace(/[₱,]/g, '');
-            const price = parseInt(priceText) || 0;
-
-            const categoryMatch = activeCategory === 'all' || category === activeCategory;
-            const priceMatch = price >= minPrice && price <= maxPrice;
-
-            if (categoryMatch && priceMatch) {
-                row.style.display = '';
-                visibleCount++;
-            } else {
-                row.style.display = 'none';
-            }
-        });
-
-        // Show empty state if no results
-        let noResultsRow = tbody.querySelector('.no-results-row');
-        if (visibleCount === 0) {
-            if (!noResultsRow) {
-                noResultsRow = document.createElement('tr');
-                noResultsRow.className = 'no-results-row';
-                noResultsRow.innerHTML = `
-        < td colspan = "9" style = "text-align:center; padding:3rem; opacity:0.6;" >
-                        <i class="fas fa-search" style="font-size:2rem; margin-bottom:1rem; display:block;"></i>
-                        <strong>Nothing here. Try updating your filters</strong>
-                    </td >
-        `;
-                tbody.appendChild(noResultsRow);
-            }
-            noResultsRow.style.display = '';
-        } else if (noResultsRow) {
-            noResultsRow.style.display = 'none';
-        }
-
-        console.log(`Dashboard filter: ${visibleCount} listings visible`);
     };
 
     // Category filter buttons
     filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.onclick = () => {
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            activeCategory = btn.dataset.filter;
-            filterTable();
-        });
+            dashboardFilters.category = btn.dataset.filter.toLowerCase();
+            listingsPage = 1; // Reset to page 1
+            applyDashboardFilters();
+        };
     });
 
     // Price sliders
@@ -905,17 +888,17 @@ function initDashboardFilters() {
 
         if (min > max - 1000000) {
             if (priceMin === document.activeElement) {
-                priceMin.value = max - 1000000;
+                priceMin.value = Math.max(0, max - 1000000);
             } else {
-                priceMax.value = min + 1000000;
+                priceMax.value = Math.min(50000000, min + 1000000);
             }
         }
 
-        minPrice = parseInt(priceMin.value);
-        maxPrice = parseInt(priceMax.value);
+        dashboardFilters.minPrice = parseInt(priceMin.value);
+        dashboardFilters.maxPrice = parseInt(priceMax.value);
 
-        const percentMin = (minPrice / 50000000) * 100;
-        const percentMax = (maxPrice / 50000000) * 100;
+        const percentMin = (dashboardFilters.minPrice / 50000000) * 100;
+        const percentMax = (dashboardFilters.maxPrice / 50000000) * 100;
 
         const sliderRange = document.querySelector('.slider-range-inline');
         if (sliderRange) {
@@ -924,13 +907,14 @@ function initDashboardFilters() {
         }
 
         updatePriceDisplay();
-        filterTable();
+        listingsPage = 1; // Reset to page 1
+        applyDashboardFilters();
     };
 
-    priceMin.addEventListener('input', updateSlider);
-    priceMax.addEventListener('input', updateSlider);
+    priceMin.oninput = updateSlider;
+    priceMax.oninput = updateSlider;
 
-    updateSlider();
+    updateSlider(); // Initial run
 }
 
 // Call this at the end of renderAdminTable
@@ -955,7 +939,8 @@ function initGallerySync() {
     if (cachedData) {
         try {
             const { gallery } = JSON.parse(cachedData);
-            renderGalleryTable(gallery);
+            allGallery = gallery;
+            applyGalleryFilters();
         } catch (e) {
             console.error("Gallery cache error", e);
         }
@@ -964,17 +949,28 @@ function initGallerySync() {
     // 2. Listener
     console.log("📡 [Firebase] Connecting to real-time Gallery sync...");
     activeGalleryListener = onSnapshot(collection(db, "Gallery"), (snapshot) => {
-        const gallery = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
-        console.log(`🔥[Firebase] Gallery sync received: ${gallery.length} items`);
+        allGallery = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+        console.log(`🔥[Firebase] Gallery sync received: ${allGallery.length} items`);
         localStorage.setItem(GALLERY_CACHE_KEY, JSON.stringify({
-            gallery,
+            gallery: allGallery,
             timestamp: Date.now()
         }));
-        renderGalleryTable(gallery);
+        applyGalleryFilters();
     }, (error) => {
         console.error("❌ [Firebase] Gallery sync error:", error);
-        if (tbody) tbody.innerHTML = `< tr > <td colspan="5" style="text-align:center;padding:2rem;color:red;">Error loading gallery: ${error.message}</td></tr > `;
     });
+}
+
+function applyGalleryFilters() {
+    let filtered = [...allGallery];
+    const filterContainer = document.querySelector('.gallery-type-filters');
+    const activeFilter = filterContainer?.querySelector('.filter.active')?.dataset.filter || 'all';
+
+    if (activeFilter !== 'all') {
+        filtered = filtered.filter(item => (item.category || '').toLowerCase() === activeFilter);
+    }
+
+    renderGalleryTable(filtered);
 }
 
 function renderGalleryTable(gallery) {
@@ -1016,7 +1012,7 @@ function renderGalleryTable(gallery) {
     // Render Pagination
     renderTablePagination("galleryPagination", totalRecords, galleryPerPage, galleryPage, (newPage) => {
         galleryPage = newPage;
-        renderGalleryTable(gallery);
+        applyGalleryFilters();
         document.getElementById("gallerySection").scrollIntoView({ behavior: 'smooth' });
     });
 
@@ -1062,36 +1058,17 @@ function initGalleryFilters() {
     if (!filterContainer) return;
 
     const filterBtns = filterContainer.querySelectorAll('.filter');
-    const tbody = document.getElementById('galleryTableBody');
-    if (!filterBtns.length || !tbody) return;
-
-    // Use current active filter or default to 'all'
-    let activeFilter = filterContainer.querySelector('.filter.active')?.dataset.filter || 'all';
-
-    const filterTable = () => {
-        const rows = tbody.querySelectorAll('tr');
-        rows.forEach(row => {
-            // Updated column index for Category (merged info column moved it from 4 to 3)
-            const categoryCell = row.querySelector('td:nth-child(3)');
-            if (!categoryCell) return;
-
-            const category = categoryCell.textContent.trim().toLowerCase();
-            const match = activeFilter === 'all' || category === activeFilter;
-            row.style.display = match ? '' : 'none';
-        });
-    };
+    if (!filterBtns.length) return;
 
     filterBtns.forEach(btn => {
         btn.onclick = (e) => {
             e.stopPropagation();
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            activeFilter = btn.dataset.filter;
-            filterTable();
+            galleryPage = 1; // Reset to page 1
+            applyGalleryFilters();
         };
     });
-
-    filterTable(); // Run immediately
 }
 
 function initCategoryChips() {
@@ -1309,7 +1286,8 @@ function initPalawanGallerySync() {
     if (cachedData) {
         try {
             const { gallery } = JSON.parse(cachedData);
-            renderPalawanGalleryTable(gallery);
+            allPalawanGallery = gallery;
+            renderPalawanGalleryTable(allPalawanGallery);
         } catch (e) {
             console.error("Palawan gallery cache error", e);
         }
@@ -1318,16 +1296,15 @@ function initPalawanGallerySync() {
     // 2. Real-time Listener
     console.log("📡 [Firebase] Connecting to real-time Palawan sync...");
     activePalawanGalleryListener = onSnapshot(collection(db, "PalawanGallery"), (snapshot) => {
-        const gallery = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
-        console.log(`🔥[Firebase] Palawan sync received: ${gallery.length} items`);
+        allPalawanGallery = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+        console.log(`🔥[Firebase] Palawan sync received: ${allPalawanGallery.length} items`);
         localStorage.setItem(PALAWAN_GALLERY_CACHE_KEY, JSON.stringify({
-            gallery,
+            gallery: allPalawanGallery,
             timestamp: Date.now()
         }));
-        renderPalawanGalleryTable(gallery);
+        renderPalawanGalleryTable(allPalawanGallery);
     }, (error) => {
         console.error("❌ [Firebase] Palawan sync error:", error);
-        if (tbody) tbody.innerHTML = `< tr > <td colspan="4" style="text-align:center;padding:2rem;color:red;">Error loading Palawan gallery: ${error.message}</td></tr > `;
     });
 }
 

@@ -8134,6 +8134,7 @@ mark.search-highlight.active {
 .preview-remove:hover {
   background: #ff4444;
 }
+
 /* ============================== PAGINATION ============================== */
 .listings-footer {
   display: flex;
@@ -8229,4 +8230,30 @@ html[data-theme="light"] .pagination-btn {
     text-align: center;
     gap: 15px;
   }
+}
+
+/* ============================== UNIFIED MODAL CLOSE ============================== */
+.closeModalDefault {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--accent);
+  color: var(--white) !important;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.closeModalDefault:hover {
+  transform: rotate(90deg) scale(1.1);
+  background: var(--primary);
 }
