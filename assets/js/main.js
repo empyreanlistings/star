@@ -503,38 +503,120 @@ function initPropertyModal() {
         window.trackVisit(propertyId);
       }
 
-      const image = card.querySelector(".property-image img")?.src || "";
-      if (img) {
-        img.src = image;
-        img.alt = card.querySelector("img")?.alt || "Property image";
+      // 3. Carousel & Lightbox Logic
+      const galleryData = JSON.parse(card.dataset.gallery || "[]");
+      const thumbnailInfo = card.querySelector(".property-image img")?.src || "";
+
+      // Build Slides (Thumbnail + Gallery)
+      // Filter out duplicate thumbnail if it exists in gallery to clean up
+      const slides = [thumbnailInfo];
+      galleryData.forEach(src => {
+        if (src !== thumbnailInfo) slides.push(src);
+      });
+
+      // Inject Carousel HTML
+      const imgContainer = modal.querySelector(".modal-image-container");
+      if (imgContainer) {
+        imgContainer.innerHTML = `
+          <div class="modal-image-carousel">
+            <div class="modal-carousel-track" id="modalCarouselTrack">
+               ${slides.map(src => `
+                 <div class="modal-carousel-slide">
+                    <img src="${src}" alt="Property Image" draggable="false">
+                 </div>
+               `).join('')}
+            </div>
+            ${slides.length > 1 ? `
+              <button class="modal-carousel-nav modal-carousel-prev" id="modalPrev"><i class="fas fa-chevron-left"></i></button>
+              <button class="modal-carousel-nav modal-carousel-next" id="modalNext"><i class="fas fa-chevron-right"></i></button>
+            ` : ''}
+          </div>
+        `;
+
+        // Carousel Logic
+        let currentIndex = 0;
+        const track = document.getElementById("modalCarouselTrack");
+        const prevBtn = document.getElementById("modalPrev");
+        const nextBtn = document.getElementById("modalNext");
+
+        const updateCarousel = () => {
+          if (track) track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        };
+
+        if (prevBtn) prevBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+          updateCarousel();
+        });
+
+        if (nextBtn) nextBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          currentIndex = (currentIndex + 1) % slides.length;
+          updateCarousel();
+        });
+
+        // Swipe Logic
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        const handleTouchStart = (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        };
+
+        const handleTouchEnd = (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          handleSwipe();
+        };
+
+        const handleSwipe = () => {
+          if (touchEndX < touchStartX - 50) {
+            // Swipe Left (Next)
+            if (slides.length > 1) {
+              currentIndex = (currentIndex + 1) % slides.length;
+              updateCarousel();
+            }
+          }
+          if (touchEndX > touchStartX + 50) {
+            // Swipe Right (Prev)
+            if (slides.length > 1) {
+              currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+              updateCarousel();
+            }
+          }
+        };
+
+        if (track) {
+          track.addEventListener('touchstart', handleTouchStart);
+          track.addEventListener('touchend', handleTouchEnd);
+
+          // LIGHTBOX TRIGGER
+          track.addEventListener('click', (e) => {
+            const img = e.target.closest('img');
+            if (img && window.openLightbox) {
+              window.openLightbox(img.src);
+            }
+          });
+        }
       }
 
       const location = card.getAttribute("data-address") || card.querySelector(".property-location")?.textContent || "";
       if (locationEl) locationEl.textContent = location;
 
       // CAPTURE ACTUAL TITLE FOR CALENDLY
-      // The card has two .property-location elements. The first one inside .property-info.primary is the title.
-      // The second one is the short description (location).
       const realTitle = card.querySelector(".property-info.primary .property-location")?.textContent || location;
       modal.dataset.currentTitle = realTitle;
 
       // Handle Featured Ribbon
       // Handle Featured Logo
       const isFeatured = card.dataset.featured === "true";
-      const existingLogo = modal.querySelector(".property-logo-modal");
-      if (existingLogo) existingLogo.remove();
-
       if (isFeatured) {
         const logoDiv = document.createElement("div");
-        logoDiv.className = "property-logo property-logo-modal"; // Re-use property-logo styles
-        // Ensure z-index is higher if needed, but property-logo has z-index: 20 which is fine relative to modal-content
-
+        logoDiv.className = "property-logo property-logo-modal";
         const logoImg = document.createElement("img");
         logoImg.src = "images/homebuyer_dark2.png";
         logoImg.alt = "Paradise Life Homebuyer";
-
         logoDiv.appendChild(logoImg);
-        const imgContainer = modal.querySelector(".modal-image-container");
+        // Re-append to container over carousel
         if (imgContainer) imgContainer.appendChild(logoDiv);
       }
 
@@ -551,7 +633,6 @@ function initPropertyModal() {
       // Engagement Display Prep
       const visitsEl = document.getElementById("modalVisits");
       const likesEl = document.getElementById("modalLikes");
-      const likeBtn = document.getElementById("modalLikeBtn");
 
       const updateLabels = (v, l, isLoading = false) => {
         const vCount = parseInt(v || 0);
@@ -576,6 +657,7 @@ function initPropertyModal() {
             likesEl.classList.remove('skeleton');
           }
         }
+
 
         if (!isLoading) {
           const vLabel = document.getElementById("modalVisitsLabel");
@@ -888,7 +970,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=2.28`);
+    const response = await fetch(`${url}?v=2.30`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
@@ -1418,3 +1500,52 @@ function initCalendly() {
 window.safeInit = safeInit;
 window.withGSAP = withGSAP;
 window.withFlip = withFlip;
+// ================================================================
+// LIGHTBOX
+// ================================================================
+function initLb() {
+  if (document.getElementById("lightboxOverlay")) return;
+
+  const lb = document.createElement("div");
+  lb.id = "lightboxOverlay";
+  lb.className = "lightbox-overlay";
+  lb.innerHTML = `
+    <button class="lightbox-close" id="lbClose"><i class="fas fa-times"></i></button>
+    <img class="lightbox-image" id="lbImage" src="" alt="Full Screen View">
+  `;
+  document.body.appendChild(lb);
+
+  const closeBtn = document.getElementById("lbClose");
+  const img = document.getElementById("lbImage");
+
+  window.openLightbox = (src) => {
+    if (!src) return;
+    img.src = src;
+    lb.classList.add("open");
+    document.body.style.overflow = "hidden"; // Lock scroll
+  };
+
+  const closeLb = () => {
+    lb.classList.remove("open");
+    setTimeout(() => {
+        if (!lb.classList.contains("open")) {
+            img.src = "";
+            document.body.style.overflow = ""; // Unlock scroll
+        }
+    }, 300);
+  };
+
+  closeBtn.addEventListener("click", closeLb);
+  lb.addEventListener("click", (e) => {
+    if (e.target === lb) closeLb();
+  });
+  
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && lb.classList.contains("open")) {
+        closeLb();
+    }
+  });
+}
+
+// Init Lightbox
+initLb();

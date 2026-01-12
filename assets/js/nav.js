@@ -243,4 +243,171 @@ function initHeader() {
 }
 
 // ---------------- Init ----------------
+// ================================================================
+// SEARCH FEATURE (Ctrl+F / Cmd+F Replaced)
+// ================================================================
+if (!document.getElementById("searchFab")) {
+  const searchFab = document.createElement("div");
+  searchFab.id = "searchFab";
+  searchFab.className = "search-fab";
+  searchFab.innerHTML = '<i class="fas fa-search"></i>';
+  document.body.appendChild(searchFab);
+
+  const searchContainer = document.createElement("div");
+  searchContainer.id = "searchContainer";
+  searchContainer.className = "search-container";
+  searchContainer.innerHTML = `
+      <input type="text" id="searchInput" class="search-input" placeholder="Find in page...">
+      <span id="searchCount" class="search-count">0/0</span>
+      <button id="searchPrev" class="search-nav-btn"><i class="fas fa-chevron-up"></i></button>
+      <button id="searchNext" class="search-nav-btn"><i class="fas fa-chevron-down"></i></button>
+      <button id="searchClose" class="search-close"><i class="fas fa-times"></i></button>
+    `;
+  document.body.appendChild(searchContainer);
+
+  let matches = [];
+  let currentMatchIndex = -1;
+
+  const toggleSearch = () => {
+    const isOpen = searchContainer.classList.contains("open");
+    if (isOpen) {
+      closeSearch();
+    } else {
+      openSearch();
+    }
+  };
+
+  const openSearch = () => {
+    searchContainer.classList.add("open");
+    searchFab.style.opacity = "0";
+    searchFab.style.visibility = "hidden";
+    setTimeout(() => document.getElementById("searchInput").focus(), 100);
+  };
+
+  const closeSearch = () => {
+    searchContainer.classList.remove("open");
+    searchFab.style.opacity = "";
+    searchFab.style.visibility = "";
+    removeHighlights();
+    document.getElementById("searchInput").value = "";
+    document.getElementById("searchCount").textContent = "0/0";
+  };
+
+  const removeHighlights = () => {
+    document.querySelectorAll("mark.search-highlight").forEach(mark => {
+      const parent = mark.parentNode;
+      parent.replaceChild(document.createTextNode(mark.textContent), mark);
+      parent.normalize(); // Merge text nodes
+    });
+    matches = [];
+    currentMatchIndex = -1;
+  };
+
+  const performSearch = (text) => {
+    removeHighlights();
+    if (!text || text.length < 2) {
+      document.getElementById("searchCount").textContent = "0/0";
+      return;
+    }
+
+    const regex = new RegExp(`(${text})`, "gi");
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: (node) => {
+          if (node.parentElement.closest(".search-container")) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest("script")) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest("style")) return NodeFilter.FILTER_REJECT;
+          if (node.textContent.trim().length === 0) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+    const nodesToHighlight = [];
+    while (walker.nextNode()) {
+      if (regex.test(walker.currentNode.textContent)) {
+        nodesToHighlight.push(walker.currentNode);
+      }
+    }
+
+    let count = 0;
+    nodesToHighlight.forEach(node => {
+      const span = document.createElement("span");
+      span.innerHTML = node.textContent.replace(regex, '<mark class="search-highlight">$1</mark>');
+
+      // Replace node with new HTML
+      const fragment = document.createDocumentFragment();
+      while (span.firstChild) {
+        fragment.appendChild(span.firstChild);
+      }
+      node.parentNode.replaceChild(fragment, node);
+    });
+
+    matches = Array.from(document.querySelectorAll("mark.search-highlight"));
+    if (matches.length > 0) {
+      currentMatchIndex = 0;
+      updateMatchState();
+    }
+
+    document.getElementById("searchCount").textContent = matches.length > 0 ? `1/${matches.length}` : "0/0";
+  };
+
+  const updateMatchState = () => {
+    matches.forEach(m => m.classList.remove("active"));
+    if (currentMatchIndex >= 0 && matches[currentMatchIndex]) {
+      const match = matches[currentMatchIndex];
+      match.classList.add("active");
+      match.scrollIntoView({ behavior: "auto", block: "center" });
+      document.getElementById("searchCount").textContent = `${currentMatchIndex + 1}/${matches.length}`;
+    }
+  };
+
+  // Events
+  searchFab.addEventListener("click", toggleSearch);
+  document.getElementById("searchClose").addEventListener("click", closeSearch);
+
+  document.getElementById("searchInput").addEventListener("input", (e) => {
+    performSearch(e.target.value);
+  });
+
+  document.getElementById("searchInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (matches.length > 0) {
+        currentMatchIndex = e.shiftKey ?
+          (currentMatchIndex - 1 + matches.length) % matches.length :
+          (currentMatchIndex + 1) % matches.length;
+        updateMatchState();
+      }
+    }
+  });
+
+  document.getElementById("searchPrev").addEventListener("click", () => {
+    if (matches.length > 0) {
+      currentMatchIndex = (currentMatchIndex - 1 + matches.length) % matches.length;
+      updateMatchState();
+    }
+  });
+
+  document.getElementById("searchNext").addEventListener("click", () => {
+    if (matches.length > 0) {
+      currentMatchIndex = (currentMatchIndex + 1) % matches.length;
+      updateMatchState();
+    }
+  });
+
+  // Keyboard Shortcuts
+  document.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "f") {
+      e.preventDefault();
+      openSearch();
+    }
+    if (e.key === "Escape" && searchContainer.classList.contains("open")) {
+      closeSearch();
+    }
+  });
+}
+
 window.initHeader = initHeader;

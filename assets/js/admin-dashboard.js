@@ -157,7 +157,14 @@ function handleAdminSnapshot(snapshot) {
         timestamp: Date.now()
     }));
 
-    renderAdminTable(listings);
+    currentListings = listings; // Update global for sorting
+
+    // Apply sort if active
+    if (sortConfig.column) {
+        sortListings();
+    } else {
+        renderAdminTable(listings);
+    }
 }
 
 function renderAdminTable(listings) {
@@ -227,7 +234,67 @@ function renderAdminTable(listings) {
     if (typeof window.initDashboardFilters === 'function') {
         setTimeout(() => window.initDashboardFilters(), 100);
     }
+
+    initSorting();
 }
+
+let currentListings = [];
+let sortConfig = { column: null, direction: 'asc' };
+
+function initSorting() {
+    const headers = document.querySelectorAll("#listingsTableContainer th.sortable");
+    headers.forEach(th => {
+        th.style.cursor = "pointer";
+        th.onclick = () => {
+            const column = th.dataset.sort;
+            if (sortConfig.column === column) {
+                sortConfig.direction = sortConfig.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortConfig.column = column;
+                sortConfig.direction = 'asc';
+            }
+            sortListings();
+            updateSortIcons(column, sortConfig.direction);
+        };
+    });
+}
+
+function updateSortIcons(column, direction) {
+    document.querySelectorAll("#listingsTableContainer th.sortable i").forEach(i => i.className = "fas fa-sort");
+    const activeHeader = document.querySelector(`#listingsTableContainer th[data-sort="${column}"] i`);
+    if (activeHeader) {
+        activeHeader.className = `fas fa-sort-${direction === 'asc' ? 'up' : 'down'}`;
+    }
+}
+
+function sortListings() {
+    if (!currentListings.length) return;
+
+    currentListings.sort((a, b) => {
+        let valA = a[sortConfig.column];
+        let valB = b[sortConfig.column];
+
+        // Handle nested or special fields
+        if (sortConfig.column === 'price') {
+            valA = Number(valA) || 0;
+            valB = Number(valB) || 0;
+        } else {
+            valA = (valA || "").toString().toLowerCase();
+            valB = (valB || "").toString().toLowerCase();
+        }
+
+        if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+    });
+
+    renderAdminTable(currentListings, true); // true = prevent infinite recursion if we called sort inside render
+}
+
+// Updated Render Function to support Sorting State
+// NOTE: We overwrite the previous renderAdminTable but need to keep its core logic
+// For simplicity in this `replace_file_content`, we are injecting helper functions.
+// To fully hook this up, we need to modify handleAdminSnapshot to update `currentListings` global.
 
 // Duplicate
 async function handleDuplicate(e) {

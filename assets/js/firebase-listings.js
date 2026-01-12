@@ -209,6 +209,7 @@ function createPropertyCard(data) {
   card.dataset.visits = data.visits || 0;
   card.dataset.features = Array.isArray(featuresList) ? featuresList.join("|") : "";
   card.dataset.featured = isFeatured;
+  card.dataset.gallery = JSON.stringify(media.images || []);
 
   // Feature icons HTML generation
   let featuresHTML = "";
