@@ -173,6 +173,8 @@ function initAuth() {
                         const userData = userDoc.data();
                         const remoteUrl = userData.photo_url || user.photoURL;
                         const role = userData.role || 'user';
+                        const displayName = userData.display_name || user.displayName || '';
+                        const phoneNumber = userData.phone_number || '';
 
                         // Dashboard visibility rules
                         const dashLink = document.getElementById("navDashboardLink");
@@ -190,15 +192,15 @@ function initAuth() {
                             updateAvatarUI(remoteUrl);
                         }
 
-                        // Always ensure cache is up to date if we have a remote URL
-                        if (remoteUrl) {
-                            localStorage.setItem(USER_CACHE_KEY, JSON.stringify({
-                                photo_url: remoteUrl,
-                                uid: user.uid,
-                                role: role,
-                                timestamp: Date.now()
-                            }));
-                        }
+                        // Always ensure cache is up to date with full profile
+                        localStorage.setItem(USER_CACHE_KEY, JSON.stringify({
+                            photo_url: remoteUrl,
+                            uid: user.uid,
+                            role: role,
+                            display_name: displayName,
+                            phone_number: phoneNumber,
+                            timestamp: Date.now()
+                        }));
                     }
                 } catch (err) {
                     console.error("Error fetching user avatar from Firestore:", err);

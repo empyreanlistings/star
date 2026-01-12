@@ -33,30 +33,63 @@ auth.onAuthStateChanged(async (user) => {
 });
 
 async function loadUserProfile(uid) {
+    // 1. Load from Cache Instantly
+    const cachedData = localStorage.getItem(USER_CACHE_KEY);
+    if (cachedData) {
+        try {
+            const data = JSON.parse(cachedData);
+            if (data.uid === uid) {
+                renderProfileData(data);
+                console.log("⚡ [Cache] Profile loaded instantly");
+            }
+        } catch (e) { console.warn("Cache parse error", e); }
+    }
+
+    // 2. Fetch from Firestore (Background Sync)
     try {
         const userDoc = await getDoc(doc(db, "Users", uid));
         if (userDoc.exists()) {
             const data = userDoc.data();
+            renderProfileData({ ...data, uid });
 
-            // Populate Fields
-            document.getElementById('display_name').value = data.display_name || '';
-            document.getElementById('profileEmail').value = data.email || auth.currentUser.email;
-            document.getElementById('phone_number').value = data.phone_number || '';
-            document.getElementById('role').value = data.role || '';
-
-            // Header Info
-            document.getElementById('topDisplayName').textContent = data.display_name || 'User Profile';
-            document.getElementById('topUserRole').textContent = data.role || 'Member';
-
-            // Profile Image
-            const imgUrl = data.photo_url || auth.currentUser.photoURL || 'images/logo.png';
-            document.getElementById('profileDisplayImg').src = imgUrl;
-
-        } else {
-            console.error("User document not found in Firestore");
+            // Update Cache
+            localStorage.setItem(USER_CACHE_KEY, JSON.stringify({
+                photo_url: data.photo_url,
+                uid: uid,
+                role: data.role,
+                display_name: data.display_name,
+                phone_number: data.phone_number,
+                timestamp: Date.now()
+            }));
+            console.log("✅ [Firestore] Profile synced");
         }
     } catch (err) {
-        console.error("Error loading profile:", err);
+        console.error("Error syncing profile:", err);
+    }
+}
+
+function renderProfileData(data) {
+    const displayNameField = document.getElementById('display_name');
+    const phoneField = document.getElementById('phone_number');
+    const roleField = document.getElementById('role');
+    const emailField = document.getElementById('profileEmail');
+    const topName = document.getElementById('topDisplayName');
+    const topRole = document.getElementById('topUserRole');
+    const profileImg = document.getElementById('profileDisplayImg');
+
+    if (displayNameField) displayNameField.value = data.display_name || '';
+    if (phoneField) phoneField.value = data.phone_number || '';
+    if (roleField) {
+        roleField.value = data.role || '';
+        roleField.readOnly = true; // Always read-only as requested
+    }
+    if (emailField) emailField.value = data.email || (auth.currentUser ? auth.currentUser.email : '');
+
+    if (topName) topName.textContent = data.display_name || 'User Profile';
+    if (topRole) topRole.textContent = data.role || 'Member';
+
+    if (profileImg) {
+        profileImg.src = data.photo_url || (auth.currentUser ? auth.currentUser.photoURL : 'images/logo.png') || 'images/logo.png';
     }
 }
 

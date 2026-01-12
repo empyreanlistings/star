@@ -7264,12 +7264,16 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
   letter-spacing: 0.05em;
 }
 
+[data-theme="light"] .profile-title-section h1 {
+  color: var(--black);
+}
+
 .profile-title-section p {
-  opacity: 0.6;
+  opacity: 0.8;
   font-size: 1.1rem;
   margin: 0;
   color: var(--accent);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .profile-form .form-grid {
@@ -7284,8 +7288,14 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   margin-bottom: 0.8rem;
-  opacity: 0.7;
+  opacity: 0.9;
   font-weight: 700;
+  color: var(--white);
+  /* White in dark mode */
+}
+
+[data-theme="light"] .profile-form label {
+  color: var(--black);
 }
 
 .profile-form .form-control {
