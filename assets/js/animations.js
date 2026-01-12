@@ -71,8 +71,8 @@ function initHeroSequence() {
 
       gsap.to(heroCarousel, {
         opacity: 1,
-        duration: isImmediate ? 1.2 : 1.5,
-        ease: "power2.out",
+        duration: isImmediate ? 0.8 : 1.0,        
+        ease: "sine.out",
         onComplete: () => {
           heroCarousel.classList.add("is-visible");
         }
