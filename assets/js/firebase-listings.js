@@ -133,8 +133,9 @@ function renderListings(listings) {
 
   fullListings = listings;
 
-  // Read optional limit (e.g., 8 for home page)
-  const explicitLimit = parseInt(grid.dataset.limit);
+  // Read optional limit from grid OR its parent placeholder
+  const parentPlaceholder = grid.closest("#listings-placeholder");
+  const explicitLimit = parseInt(grid.dataset.limit) || (parentPlaceholder ? parseInt(parentPlaceholder.dataset.limit) : NaN);
   const isHomePage = !isNaN(explicitLimit);
 
   // Sort: Featured first
@@ -147,6 +148,9 @@ function renderListings(listings) {
   let displayList = [];
   if (isHomePage) {
     displayList = sorted.slice(0, explicitLimit);
+    // Hide pagination container on index/home
+    const container = document.getElementById("paginationControls");
+    if (container) container.style.display = "none";
   } else {
     // PAGINATION LOGIC for Listings Page
     const startIndex = (currentPage - 1) * recordsPerPage;
@@ -197,9 +201,11 @@ function renderPagination(totalRecords) {
   const totalPages = Math.ceil(totalRecords / recordsPerPage);
   if (totalPages <= 1) {
     container.innerHTML = "";
+    container.style.display = "none";
     return;
   }
 
+  container.style.display = "flex";
   const startRecord = (currentPage - 1) * recordsPerPage + 1;
   const endRecord = Math.min(currentPage * recordsPerPage, totalRecords);
 
