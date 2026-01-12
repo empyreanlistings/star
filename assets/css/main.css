@@ -7258,9 +7258,7 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
 }
 
 .profile-title-section h1 {
-  font-size: 2.2rem;
-  margin: 0 0 0.5rem 0;
-  letter-spacing: 0.05em;
+  /* Default font weights and sizes will apply */
 }
 
 [data-theme="light"] .profile-title-section h1 {
@@ -7271,8 +7269,12 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
   opacity: 0.8;
   font-size: 1.1rem;
   margin: 0;
-  color: var(--accent);
+  color: var(--white);
   font-weight: 600;
+}
+
+[data-theme="light"] .profile-title-section p {
+  color: var(--black);
 }
 
 .profile-form .form-grid {
@@ -7294,6 +7296,18 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
 }
 
 [data-theme="light"] .profile-form label {
+  color: var(--black);
+}
+
+.form-helper {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.6;
+  color: var(--white);
+}
+
+[data-theme="light"] .form-helper {
   color: var(--black);
 }
 
