@@ -5794,7 +5794,7 @@ footer p {
   right: 24px;
   bottom: 24px;
   display: flex;
-  gap: 20px;
+  gap: 12px;
   z-index: 998;
 }
 
@@ -5825,7 +5825,7 @@ footer p {
 
 .whatsapp-fab:hover {
   background: #128C7E;
-  transform: translateY(-6px) scale(1.08);
+  transform: scale(1.08);
   box-shadow: 0 16px 40px rgba(37, 211, 102, 0.5);
   color: #fff !important;
   /* Keep white on hover */
@@ -5839,7 +5839,7 @@ footer p {
 
 .messenger-fab:hover {
   background: #0066CC;
-  transform: translateY(-6px) scale(1.08);
+  transform: scale(1.08);
   box-shadow: 0 16px 40px rgba(0, 132, 255, 0.5);
   color: #fff !important;
   /* Keep white on hover */
@@ -5853,7 +5853,7 @@ footer p {
 
 .telegram-fab:hover {
   background: #006699;
-  transform: translateY(-6px) scale(1.08);
+  transform: scale(1.08);
   box-shadow: 0 16px 40px rgba(0, 136, 204, 0.5);
   color: #fff !important;
 }
