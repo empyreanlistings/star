@@ -1667,3 +1667,207 @@ async function handlePalawanGalleryFormSubmit(e) {
         status.textContent = "";
     }
 }
+
+/**
+ * Initialize Inspection Modal Events
+ */
+function initInspectionModalEvents() {
+    console.log("🛠️ [Inspection] Initializing Inspection Modal Events...");
+    inspectionModal = document.getElementById("inspectionModal");
+    const addBtn = document.getElementById("addInspectionBtn");
+    const closeBtn = document.getElementById("closeInspectionModal");
+
+    // Log element verification
+    console.log("   🔍 Inspection Elements:", { inspectionModal, addBtn, closeBtn });
+
+    if (!inspectionModal) {
+        console.error("   ❌ Inspection Modal NOT FOUND");
+        return;
+    }
+
+    if (addBtn) {
+        addBtn.onclick = () => openInspectionModal();
+    }
+    if (closeBtn) closeBtn.onclick = closeInspectionModal;
+
+    window.addEventListener("click", (e) => {
+        if (e.target === inspectionModal) closeInspectionModal();
+    });
+
+    const form = document.getElementById("inspectionForm");
+    if (form) {
+        form.addEventListener("submit", handleInspectionFormSubmit);
+    }
+
+    // Development Selection Change Listener
+    const devSelect = document.getElementById("inspDevelopment");
+    if (devSelect) {
+        devSelect.addEventListener("change", fetchPlotsForDevelopment);
+    }
+}
+
+/**
+ * Open Inspection Modal
+ */
+function openInspectionModal() {
+    if (!inspectionModal) return;
+
+    // Reset Form
+    const form = document.getElementById("inspectionForm");
+    if (form) form.reset();
+    document.getElementById("inspUploadStatus").textContent = "";
+
+    // Show Modal
+    inspectionModal.style.display = "flex";
+    setTimeout(() => {
+        inspectionModal.classList.add("active");
+    }, 10);
+
+    // Fetch Developments to populate dropdown
+    fetchDevelopments();
+}
+
+/**
+ * Close Inspection Modal
+ */
+function closeInspectionModal() {
+    if (!inspectionModal) return;
+    inspectionModal.classList.remove("active");
+    setTimeout(() => {
+        if (!inspectionModal.classList.contains("active")) {
+            inspectionModal.style.display = "none";
+        }
+    }, 400);
+}
+
+/**
+ * Fetch Developments for Company
+ */
+async function fetchDevelopments() {
+    const devSelect = document.getElementById("inspDevelopment");
+    if (!devSelect) return;
+
+    devSelect.innerHTML = '<option value="">Loading...</option>';
+
+    try {
+        let q = collection(db, "Developments");
+        if (currentUserCompany) {
+            // Ensure currentUserCompany is a reference or use ID comparison depending on your schema
+            // If currentUserCompany is an object/doc ref:
+            q = query(q, where("company", "==", currentUserCompany));
+        }
+
+        const snapshot = await getDocs(q);
+        devSelect.innerHTML = '<option value="">Select Development</option>';
+
+        snapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            const option = document.createElement("option");
+            option.value = docSnap.id;
+            option.textContent = data.title || "Untitled Development";
+            devSelect.appendChild(option);
+        });
+    } catch (err) {
+        console.error("Error fetching developments:", err);
+        devSelect.innerHTML = '<option value="">Error loading</option>';
+    }
+}
+
+/**
+ * Fetch Plots based on selected Development
+ */
+async function fetchPlotsForDevelopment() {
+    const devId = document.getElementById("inspDevelopment").value;
+    const plotSelect = document.getElementById("inspPlot");
+
+    if (!plotSelect) return;
+
+    plotSelect.innerHTML = '<option value="">Loading...</option>';
+    plotSelect.disabled = true;
+
+    if (!devId) {
+        plotSelect.innerHTML = '<option value="">Select Plot</option>';
+        return;
+    }
+
+    try {
+        const devRef = doc(db, "Developments", devId);
+        const q = query(collection(db, "Plots"), where("development", "==", devRef));
+
+        const snapshot = await getDocs(q);
+        plotSelect.innerHTML = '<option value="">Select Plot</option>';
+        plotSelect.disabled = false;
+
+        snapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            const option = document.createElement("option");
+            option.value = docSnap.id;
+            option.textContent = `Plot ${data.number || data.title || "Untitled"}`;
+            plotSelect.appendChild(option);
+        });
+
+    } catch (err) {
+        console.error("Error fetching plots:", err);
+        plotSelect.innerHTML = '<option value="">Error loading</option>';
+    }
+}
+
+/**
+ * Handle Inspection Form Submit
+ */
+async function handleInspectionFormSubmit(e) {
+    e.preventDefault();
+    const submitBtn = document.getElementById("inspSubmitBtn");
+    const status = document.getElementById("inspUploadStatus");
+
+    submitBtn.disabled = true;
+    status.textContent = "Creating Inspection Report...";
+
+    try {
+        const developmentId = document.getElementById("inspDevelopment").value;
+        const plotId = document.getElementById("inspPlot").value;
+        const title = document.getElementById("inspTitle").value;
+        const note = document.getElementById("inspNote").value;
+        const files = document.getElementById("inspMedia").files;
+
+        // 1. Upload Images
+        const mediaUrls = [];
+        if (files.length > 0) {
+            status.textContent = `Uploading ${files.length} images...`;
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const resizedBlob = await compressAndConvertToWebP(file, 1000);
+                const storageRef = ref(storage, `inspections/${Date.now()}_${i}.webp`);
+                await uploadBytes(storageRef, resizedBlob);
+                const url = await getDownloadURL(storageRef);
+                mediaUrls.push(url);
+            }
+        }
+
+        // 2. Create Document
+        const docData = {
+            title: title,
+            development: doc(db, "Developments", developmentId),
+            plot: doc(db, "Plots", plotId),
+            note: note,
+            media: mediaUrls,
+            status: "Pending", // Default status
+            created_at: serverTimestamp(),
+            created_by: doc(db, "Users", currentUserId)
+        };
+
+        await addDoc(collection(db, "Inspections"), docData);
+
+        status.textContent = "✅ Inspection Created Successfully!";
+        setTimeout(() => {
+            closeInspectionModal();
+            status.textContent = "";
+            submitBtn.disabled = false;
+        }, 1500);
+
+    } catch (err) {
+        console.error("Inspection Creation Error:", err);
+        status.textContent = "Error: " + err.message;
+        submitBtn.disabled = false;
+    }
+}

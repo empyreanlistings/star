@@ -147,6 +147,16 @@ function initKaiAndIslaGallery() {
     lightbox.classList.add("open");
     lightbox.removeAttribute("inert");
     document.body.style.overflow = "hidden";
+
+    // Ensure state is set if opened directly (fallback)
+    if (!window.KaiGalleryState.items.length) {
+      const gallery = item.closest('.mixed-gallery') || document.querySelector('.mixed-gallery');
+      if (gallery) {
+        const visibleItems = Array.from(gallery.querySelectorAll(".gallery-item")).filter(el => getComputedStyle(el).display !== "none");
+        window.KaiGalleryState.items = visibleItems;
+        window.KaiGalleryState.index = visibleItems.indexOf(item);
+      }
+    }
   }
 
   // 4. Global Lightbox Controls (Bind only once)
@@ -220,23 +230,24 @@ if (scrollContainer && prevBtn && nextBtn) {
   };
 
   prevBtn.addEventListener("click", () => {
-    const buffer = 10;
-    if (scrollContainer.scrollLeft <= buffer) {
-      // Loop to end
-      scrollContainer.scrollTo({ left: scrollContainer.scrollWidth, behavior: "smooth" });
+    const amount = getScrollAmount();
+    if (scrollContainer.scrollLeft <= 5) {
+      // Jump to end instant
+      scrollContainer.scrollTo({ left: scrollContainer.scrollWidth, behavior: "auto" });
+      // Optional: smooth scroll back a bit to simulate 'arrival'
     } else {
-      scrollContainer.scrollBy({ left: -getScrollAmount(), behavior: "smooth" });
+      scrollContainer.scrollBy({ left: -amount, behavior: "smooth" });
     }
   });
 
   nextBtn.addEventListener("click", () => {
-    const buffer = 10;
-    const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
-    if (scrollContainer.scrollLeft >= maxScroll - buffer) {
-      // Loop to start
-      scrollContainer.scrollTo({ left: 0, behavior: "smooth" });
+    const amount = getScrollAmount();
+    // Check if we are close to end (allow small buffer)
+    if (scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 5) {
+      // Jump to start instant
+      scrollContainer.scrollTo({ left: 0, behavior: "auto" });
     } else {
-      scrollContainer.scrollBy({ left: getScrollAmount(), behavior: "smooth" });
+      scrollContainer.scrollBy({ left: amount, behavior: "smooth" });
     }
   });
 
