@@ -1681,7 +1681,8 @@ async function handlePalawanGalleryFormSubmit(e) {
 function initInspectionModalEvents() {
     console.log("🛠️ [Inspection] Initializing Inspection Modal Events...");
     inspectionModal = document.getElementById("inspectionModal");
-    const addBtn = document.getElementById("addInspectionBtn");
+    // "addInspectionBtn" was missing. We use the navbar one "addInspectionNavbarBtn"
+    const addBtn = document.getElementById("addInspectionNavbarBtn");
     const closeBtn = document.getElementById("closeInspectionModal");
 
     // Log element verification
