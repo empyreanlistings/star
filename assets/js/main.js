@@ -876,17 +876,27 @@ function initPropertyModal() {
       }
     }, true);
 
+    // Detect Mobile
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
     // ACTION HANDLERS
 
     // 1. Defaut Mail App
     emailDefaultBtn.onclick = () => {
-      if (currentMailto) {
-        window.location.href = currentMailto;
-        setTimeout(closeEmailModal, 500);
-      }
+      if (!currentMailto) return;
+
+      // On mobile, a direct click on a hidden anchor is often more reliable
+      const link = document.createElement('a');
+      link.href = currentMailto;
+      link.target = '_self';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setTimeout(closeEmailModal, 800);
     };
 
-    // 2. Gmail Web (New Tab)
+    // 2. Gmail (Handles app vs web better)
     emailGmailBtn.onclick = () => {
       if (!currentMailto) return;
 
@@ -898,27 +908,38 @@ function initPropertyModal() {
       const cc = params.get("cc") || "";
       const body = params.get("body") || "";
 
-      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&cc=${encodeURIComponent(cc)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-      window.open(gmailUrl, '_blank');
+      if (isMobile) {
+        // Try to trigger the app if possible, or stay with mailto but specifically for Gmail
+        // Most mobile OSs will handle a standard mailto better if we don't force a URL
+        // But for "Gmail" button specifically, we'll try the web approach which often redirects to app
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&cc=${encodeURIComponent(cc)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.open(gmailUrl, '_blank');
+      } else {
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&cc=${encodeURIComponent(cc)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.open(gmailUrl, '_blank');
+      }
       closeEmailModal();
     };
 
     // 3. Copy Email
     emailCopyBtn.onclick = async () => {
       if (!currentMailto) return;
-      // Extract just the email address (ignore subject/cc for clipboard)
       const email = currentMailto.split('?')[0].replace("mailto:", "");
 
       try {
         await navigator.clipboard.writeText(email);
         emailCopyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        setTimeout(() => {
-          closeEmailModal();
-        }, 1200);
+        setTimeout(closeEmailModal, 1200);
       } catch (err) {
         console.error('Failed to copy', err);
-        prompt("Copy email manually:", email);
+        const input = document.createElement('input');
+        input.value = email;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        emailCopyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        setTimeout(closeEmailModal, 1200);
       }
     };
   }

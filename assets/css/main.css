@@ -5799,7 +5799,8 @@ footer p {
 }
 
 .whatsapp-fab,
-.messenger-fab {
+.messenger-fab,
+.telegram-fab {
   right: 24px;
   bottom: 24px;
   width: 62px;
@@ -5844,9 +5845,23 @@ footer p {
   /* Keep white on hover */
 }
 
+.telegram-fab {
+  right: 168px;
+  background: #0088cc;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.telegram-fab:hover {
+  background: #006699;
+  transform: translateY(-6px) scale(1.08);
+  box-shadow: 0 16px 40px rgba(0, 136, 204, 0.5);
+  color: #fff !important;
+}
+
 /* LIGHT THEME OVERRIDES */
 html[data-theme="light"] .whatsapp-fab,
-html[data-theme="light"] .messenger-fab {
+html[data-theme="light"] .messenger-fab,
+html[data-theme="light"] .telegram-fab {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   color: #fff !important;
   /* enforce white in light mode */
@@ -5866,7 +5881,8 @@ html[data-theme="light"] .messenger-fab:hover {
 @media (max-width: 480px) {
 
   .whatsapp-fab,
-  .messenger-fab {
+  .messenger-fab,
+  .telegram-fab {
     width: 56px;
     height: 56px;
     font-size: 28px;
