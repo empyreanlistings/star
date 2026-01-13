@@ -751,7 +751,6 @@ html[data-theme="light"] .container-glass:hover {
 .property-gallery-filters>*,
 .gallery-filters>*,
 .gallery-type-filters>* {
-  display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -972,7 +971,6 @@ html[data-theme="light"] .how-it-works-nav .nav-btn.active {
   align-items: center;
   justify-content: center;
   gap: 20px;
-  margin-bottom: 2rem;
 }
 
 .status-filters,
@@ -1140,7 +1138,7 @@ html[data-theme="light"] .how-it-works-nav .nav-btn.active {
 .price-label,
 #priceRangeValue,
 #dashPriceRangeValue {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   letter-spacing: 0.8px;
   text-transform: uppercase;
