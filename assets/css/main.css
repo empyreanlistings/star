@@ -773,7 +773,8 @@ html[data-theme="light"] .container-glass:hover {
 }
 
 /* Vertical Dividers (30px) for all Filters */
-.property-gallery-filters>*::after,
+/* Vertical Dividers (30px) for all Filters */
+.property-gallery-filters>*:not(:last-child)::after,
 .gallery-filters>*::after,
 .gallery-type-filters>*::after {
   content: '';
@@ -786,7 +787,7 @@ html[data-theme="light"] .container-glass:hover {
   pointer-events: none;
 }
 
-[data-theme="light"] .property-gallery-filters>*::after,
+[data-theme="light"] .property-gallery-filters>*:not(:last-child)::after,
 [data-theme="light"] .gallery-filters>*::after,
 [data-theme="light"] .gallery-type-filters>*::after {
   background-color: rgba(0, 0, 0, 0.1);
