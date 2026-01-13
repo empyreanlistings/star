@@ -1688,13 +1688,21 @@ function initInspectionModalEvents() {
     console.log("   🔍 Inspection Elements:", { inspectionModal, addBtn, closeBtn });
 
     if (!inspectionModal) {
-        console.error("   ❌ Inspection Modal NOT FOUND");
+        console.error("   ❌ Inspection Modal NOT FOUND in DOM");
         return;
     }
 
     if (addBtn) {
-        addBtn.onclick = () => openInspectionModal();
+        console.log("   ✅ Add Inspection Button Found. Attaching listener.");
+        addBtn.onclick = (e) => {
+            console.log("   🖱️ Add Inspection Button Clicked!");
+            e.preventDefault(); // Prevent default link behavior if it's an <a> tag
+            openInspectionModal();
+        };
+    } else {
+        console.warn("   ⚠️ Add Inspection Button NOT FOUND");
     }
+
     if (closeBtn) closeBtn.onclick = closeInspectionModal;
 
     window.addEventListener("click", (e) => {
@@ -1711,23 +1719,38 @@ function initInspectionModalEvents() {
     if (devSelect) {
         devSelect.addEventListener("change", fetchPlotsForDevelopment);
     }
+
+    // Check if modal is hidden by CSS by default
+    const style = window.getComputedStyle(inspectionModal);
+    console.log("   🎨 Modal Computed Style (Display):", style.display);
 }
 
 /**
  * Open Inspection Modal
  */
 function openInspectionModal() {
-    if (!inspectionModal) return;
+    console.log("   🔓 openInspectionModal() called.");
+    if (!inspectionModal) {
+        console.error("   ❌ Cannot open modal: inspectionModal is null");
+        return;
+    }
 
     // Reset Form
     const form = document.getElementById("inspectionForm");
     if (form) form.reset();
-    document.getElementById("inspUploadStatus").textContent = "";
+    const status = document.getElementById("inspUploadStatus");
+    if (status) status.textContent = "";
 
     // Show Modal
     inspectionModal.style.display = "flex";
+    console.log("   ➡️ Set display to flex. Current style:", inspectionModal.style.display);
+
+    // Force reflow
+    void inspectionModal.offsetWidth;
+
     setTimeout(() => {
         inspectionModal.classList.add("active");
+        console.log("   ➡️ Added 'active' class.");
     }, 10);
 
     // Fetch Developments to populate dropdown
