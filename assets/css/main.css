@@ -876,7 +876,7 @@ body {
 @keyframes slideInFromTop {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-10px);
   }
 
   to {
@@ -1877,15 +1877,10 @@ html[data-theme="light"] .menu-overlay {
 }
 
 .btn-add-icon:hover {
-  transform: scale(1.1);
   /* Removed translateY */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
-.btn-add-icon:active {
-  transform: scale(0.95);
-  /* Removed translateY */
-}
 
 /* Action Buttons */
 .top-bar a i {
