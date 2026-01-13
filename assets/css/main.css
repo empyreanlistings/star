@@ -1838,6 +1838,16 @@ html[data-theme="light"] .top-bar a i {
   color: #0e63d8 !important;
 }
 
+/* —————— TELEGRAM OVERRIDES (ALWAYS BLUE) —————— */
+.top-bar a.telegram-link,
+.top-bar a.telegram-link i {
+  color: #0088cc !important;
+}
+
+.top-bar a.telegram-link:hover {
+  color: #007ab8 !important;
+}
+
 /* ============================== HIDE TOP BAR ON SMALL SCREENS ============================== */
 @media (max-width: 768px) {
   .top-bar {
