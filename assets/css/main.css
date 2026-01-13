@@ -988,7 +988,11 @@ html[data-theme="light"] .how-it-works-nav .nav-btn.active {
 }
 
 /* Explicit Divider for Status Group */
-.status-filters::after {
+/* Explicit Divider for Status Group - REMOVED (Handled by container) */
+
+/* Dividers between items INSIDE the groups */
+.status-filters>*:not(:last-child)::after,
+.type-filters>*:not(:last-child)::after {
   content: '';
   display: block;
   width: 1px;
@@ -997,6 +1001,11 @@ html[data-theme="light"] .how-it-works-nav .nav-btn.active {
   margin-left: 15px;
   /* Space from last button */
   pointer-events: none;
+}
+
+[data-theme="light"] .status-filters>*:not(:last-child)::after,
+[data-theme="light"] .type-filters>*:not(:last-child)::after {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="light"] .status-filters::after {
