@@ -712,6 +712,7 @@ html[data-theme="light"] .container-glass:hover {
 }
 
 /* ============================== PROPERTY FILTER CONTAINER ============================== */
+/* ============================== PROPERTY FILTER CONTAINER ============================== */
 .property-filters-container {
   display: flex;
   flex-wrap: wrap;
@@ -719,6 +720,21 @@ html[data-theme="light"] .container-glass:hover {
   justify-content: center;
   gap: 12px;
   margin: 30px 0 40px;
+}
+
+/* Divider between Filter Group and Pricing Group */
+.property-filters-container>*:not(:last-child)::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 20px;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin-left: 15px;
+  pointer-events: none;
+}
+
+[data-theme="light"] .property-filters-container>*:not(:last-child)::after {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 /* ============================== PROPERTY & GALLERY FILTER CHIPS — BASE ============================== */
@@ -763,7 +779,8 @@ html[data-theme="light"] .container-glass:hover {
   content: '';
   display: block;
   width: 1px;
-  height: 30px;
+  height: 20px;
+  /* Reduced height for elegance */
   background-color: rgba(255, 255, 255, 0.2);
   margin-left: 15px;
   pointer-events: none;
@@ -966,11 +983,12 @@ html[data-theme="light"] .how-it-works-nav .nav-btn.active {
 
 .status-filters {
   padding-right: 20px;
-  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  border-right: none;
 }
 
 [data-theme="light"] .status-filters {
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: none;
+  /* Removed redundant border-right causing double divider */
 }
 
 .filter-toggle,
@@ -988,8 +1006,8 @@ html[data-theme="light"] .how-it-works-nav .nav-btn.active {
 }
 
 .filter-toggle.active {
-  color: var(--accent) !important;
-  text-shadow: 0.5px 0 0 currentColor, -0.2px 0 0 currentColor;
+  color: var(--white) !important;
+  font-weight: 700;
 }
 
 /* Base style for for-sale/for-lease indicators if needed */
@@ -1027,8 +1045,8 @@ html[data-theme="light"] .how-it-works-nav .nav-btn.active {
   background: transparent;
   border-color: transparent;
   color: var(--white);
-  /* Use text-shadow to simulate weight without shifting layout */
-  text-shadow: 0.5px 0 0 currentColor, -0.2px 0 0 currentColor;
+  font-weight: 700;
+  text-shadow: none;
 }
 
 /* ============================== FILTER CHIPS — LIGHT MODE ============================== */
@@ -1124,6 +1142,7 @@ html[data-theme="light"] .how-it-works-nav .nav-btn.active {
   display: flex;
   align-items: center;
   gap: 6px;
+  line-height: inherit;
 }
 
 /* ============================== SLIDER — BASE ============================== */
