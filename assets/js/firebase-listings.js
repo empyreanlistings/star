@@ -275,6 +275,7 @@ function createPropertyCard(data) {
 
   // Data attributes for filters and modal
   card.dataset.category = category;
+  card.dataset.status = (data.status || "").toLowerCase(); // New status filter
   card.dataset.price = price;
   card.dataset.type = type;
   card.dataset.beds = beds;

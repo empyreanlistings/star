@@ -5,7 +5,7 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=2.56">
+    <link rel="stylesheet" href="assets/css/main.css?v=2.57">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
@@ -47,6 +47,9 @@
                      Let's handle logo swap in JS or Filter -->
         </div>
         <div class="user-info">
+            <button id="addInspectionNavbarBtn" class="btn-add-nav" title="Add New Inspection">
+                <i class="fas fa-file-medical"></i> <span>Add Inspection</span>
+            </button>
             <button id="themeToggleDash" class="theme-toggle" aria-label="Toggle Theme">
                 <i class="theme-icon fas fa-moon"></i>
             </button>
@@ -449,14 +452,73 @@
         </div>
     </div>
 
+    <!-- Inspection Modal -->
+    <div id="inspectionModal" class="modal-overlay premium-modal">
+        <div class="modal-content">
+            <span id="closeInspectionModal" class="close-modal">&times;</span>
+            <h3 id="inspectionModalTitle" class="modal-title">New Inspection</h3>
+            <form id="inspectionForm">
+                <input type="hidden" id="inspectionId">
+                <div class="form-group">
+                    <label>Inspection Name</label>
+                    <input type="text" id="inspName" class="form-control" required
+                        placeholder="e.g. Final Walkthrough - Unit A">
+                </div>
+
+                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div>
+                        <label>Development</label>
+                        <select id="inspDevelopment" class="form-control" required>
+                            <option value="">Select Development...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Plot / Unit</label>
+                        <select id="inspPlot" class="form-control" required disabled>
+                            <option value="">Select Plot...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Inspection Tags (comma separated)</label>
+                    <input type="text" id="inspTags" class="form-control"
+                        placeholder="e.g. structural, electric, plumbing">
+                </div>
+
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="inspNotes" class="form-control" rows="4"
+                        placeholder="Enter inspection details and observations..."></textarea>
+                </div>
+
+                <div class="form-group" style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
+                    <input type="checkbox" id="inspPrivate" style="width:auto;margin:0;">
+                    <label for="inspPrivate" style="margin:0;cursor:pointer;font-size:0.9rem;">Mark as Private</label>
+                </div>
+
+                <div class="form-group">
+                    <label>Media Gallery (Photos)</label>
+                    <input type="file" id="inspMedia" class="form-control" multiple accept="image/*">
+                </div>
+                <div id="inspectionGalleryPreview" class="gallery-preview-grid" style="margin-bottom:1rem;"></div>
+
+                <button type="submit" id="inspSubmitBtn" class="btn-add" style="width:100%;margin-top:1rem;">Create
+                    Inspection</button>
+                <div id="inspUploadStatus" style="margin-top:0.5rem;text-align:center;font-size:0.9rem;opacity:0.8;">
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Property Modal == [DYNAMIC COMPONENT] -->
     <div id="propertymodal-placeholder"></div>
 
     <!-- Scripts -->
     <script src="assets/js/nav.js" defer></script>
-    <script src="assets/js/snackbar.js?v=2.56"></script>
-    <script src="assets/js/main.js?v=2.56" defer></script>
-    <script type="module" src="assets/js/admin-dashboard.js?v=2.56"></script>
+    <script src="assets/js/snackbar.js?v=2.57"></script>
+    <script src="assets/js/main.js?v=2.57" defer></script>
+    <script type="module" src="assets/js/admin-dashboard.js?v=2.57"></script>
 
 </body>
 

@@ -7,10 +7,16 @@
 
   <div class="property-filters-container">
     <div class="property-gallery-filters" role="group" aria-label="Property type filters">
-      <button class="filter active" data-filter="all" type="button">ALL</button>
-      <button class="filter" data-filter="land" type="button">LAND</button>
-      <button class="filter" data-filter="residential" type="button">RESIDENTIAL</button>
-      <button class="filter" data-filter="commercial" type="button">COMMERCIAL</button>
+      <div class="status-filters">
+        <button class="filter-toggle" data-status="for-sale" type="button">FOR SALE</button>
+        <button class="filter-toggle" data-status="for-lease" type="button">FOR LEASE</button>
+      </div>
+      <div class="type-filters">
+        <button class="filter active" data-filter="all" type="button">ALL</button>
+        <button class="filter" data-filter="land" type="button">LAND</button>
+        <button class="filter" data-filter="residential" type="button">RESIDENTIAL</button>
+        <button class="filter" data-filter="commercial" type="button">COMMERCIAL</button>
+      </div>
     </div>
 
     <div class="price-filter-inline">

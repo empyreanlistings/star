@@ -186,6 +186,9 @@ function initPropertyFilters() {
   if (!window.activeListingCategory) {
     window.activeListingCategory = "all";
   }
+  if (!window.activeListingStatuses) {
+    window.activeListingStatuses = [];
+  }
   let isAnimating = false;
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -232,6 +235,22 @@ function initPropertyFilters() {
     rangeEl.style.width = `${percentMax - percentMin}%`;
   };
 
+  // Toggle Status Filter
+  const statusButtons = section.querySelectorAll(".filter-toggle");
+  statusButtons.forEach(btn => {
+    btn.onclick = () => {
+      const status = btn.dataset.status;
+      if (window.activeListingStatuses.includes(status)) {
+        window.activeListingStatuses = window.activeListingStatuses.filter(s => s !== status);
+        btn.classList.remove("active");
+      } else {
+        window.activeListingStatuses.push(status);
+        btn.classList.add("active");
+      }
+      applyFilters();
+    };
+  });
+
   function applyFilters(animate = true, e = null) {
     if (isAnimating && animate) return;
     if (animate) isAnimating = true;
@@ -246,10 +265,14 @@ function initPropertyFilters() {
 
     cards.forEach(card => {
       const category = card.dataset.category || "all";
+      const status = card.dataset.status || "";
       const price = +card.dataset.price || 0;
+
       const categoryMatch = window.activeListingCategory === "all" || category.toLowerCase() === window.activeListingCategory.toLowerCase();
+      const statusMatch = window.activeListingStatuses.length === 0 || window.activeListingStatuses.includes(status.toLowerCase());
       const priceMatch = (price >= min && price <= max) || (!price && min === 0);
-      const shouldShow = categoryMatch && priceMatch;
+
+      const shouldShow = categoryMatch && statusMatch && priceMatch;
       const isCurrentlyVisible = card.style.display !== "none";
 
       if (shouldShow && !isCurrentlyVisible) {
@@ -365,9 +388,11 @@ function initPropertyFilters() {
 
   cards.forEach(card => {
     const category = card.dataset.category || "all";
+    const status = card.dataset.status || "";
     const price = +card.dataset.price || 0;
     const { min, max } = clampSliders();
-    const show = (window.activeListingCategory === "all" || category.toLowerCase() === window.activeListingCategory.toLowerCase()) && (price >= min && price <= max);
+    const statusMatch = window.activeListingStatuses.length === 0 || window.activeListingStatuses.includes(status.toLowerCase());
+    const show = (window.activeListingCategory === "all" || category.toLowerCase() === window.activeListingCategory.toLowerCase()) && statusMatch && (price >= min && price <= max);
     card.style.display = show ? "" : "none";
     card.style.opacity = show ? 1 : 0;
     card.classList.toggle("filtered-out", !show);
@@ -1642,7 +1667,9 @@ function initLb() {
     if (!src) return;
     img.src = src;
     lb.classList.add("open");
-    document.body.style.overflow = "hidden"; // Lock scroll
+    // Ensure body scroll lock works with previous logic
+    if (window.lockScroll) window.lockScroll();
+    else document.body.style.overflow = "hidden";
   };
 
   const closeLb = () => {

@@ -30,6 +30,8 @@ let galleryModal;
 let isGalleryEditMode = false;
 let palawanGalleryModal;
 let isPalawanGalleryEditMode = false;
+let inspectionModal;
+let currentInspectionGallery = [];
 
 // Global Data Store for Filtering
 let allListings = [];
@@ -51,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Admin Dashboard Initializing...");
     modal = document.getElementById("listingModal");
     galleryModal = document.getElementById("galleryModal");
+    inspectionModal = document.getElementById("inspectionModal");
 
     // Use Firebase Auth to check user and fetch company
     auth.onAuthStateChanged(async (user) => {
@@ -71,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
             initModalEvents();
             initGalleryModalEvents();
             initPalawanGalleryModalEvents();
+            initInspectionModalEvents();
             initPropertyModalEvents();
             initLocationPicker(); // Initialize Google Maps Places Autocomplete
 
