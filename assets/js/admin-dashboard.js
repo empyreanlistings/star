@@ -391,6 +391,13 @@ function initLocationPicker() {
     const input = document.getElementById('locationSearch');
     if (!input) return;
 
+    if (typeof google === 'undefined' || !google.maps || !google.maps.places) {
+        console.warn("Google Maps API not loaded yet. Waiting...");
+        // API callback will handle this, or we can retry
+        window.initMapCallback = initLocationPicker;
+        return;
+    }
+
     try {
         const autocomplete = new google.maps.places.Autocomplete(input, {
             types: ['geocode', 'establishment']
