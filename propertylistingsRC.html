@@ -7,16 +7,18 @@
 
   <div class="property-filters-container">
     <div class="property-gallery-filters" role="group" aria-label="Property type filters">
-      <div class="status-filters">
-        <button class="filter-toggle" data-status="for-sale" type="button">FOR SALE</button>
-        <button class="filter-toggle" data-status="for-lease" type="button">FOR LEASE</button>
-      </div>
-      <div class="type-filters">
-        <button class="filter active" data-filter="all" type="button">ALL</button>
-        <button class="filter" data-filter="land" type="button">LAND</button>
-        <button class="filter" data-filter="residential" type="button">RESIDENTIAL</button>
-        <button class="filter" data-filter="commercial" type="button">COMMERCIAL</button>
-      </div>
+      <button class="filter-toggle" data-status="for-sale" type="button">FOR SALE</button>
+      <button class="filter-toggle" data-status="for-lease" type="button">FOR LEASE</button>
+      <!-- Divider will be auto-handled by CSS if flat structure is used, or we keep groups if desired. 
+           User wants "dashboard style". Dashboard uses flat list. 
+           Let's use a flat list but with a visual separator class if needed. 
+           Actually, the user liked the "groups" conceptually but wanted the STYLE of the dashboard.
+           The dashboard styles .filter buttons simply. 
+           Let's flattening it to: -->
+      <button class="filter active" data-filter="all" type="button">ALL</button>
+      <button class="filter" data-filter="land" type="button">LAND</button>
+      <button class="filter" data-filter="residential" type="button">RESIDENTIAL</button>
+      <button class="filter" data-filter="commercial" type="button">COMMERCIAL</button>
     </div>
 
     <div class="price-filter-inline">

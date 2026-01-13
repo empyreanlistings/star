@@ -980,34 +980,23 @@ html[data-theme="light"] .how-it-works-nav .nav-btn.active {
   align-items: center;
 }
 
-.status-filters {
-  padding-right: 0;
-  border-right: none;
-}
-
-/* Explicit Divider for Status Group */
-/* Explicit Divider for Status Group - REMOVED (Handled by container) */
-
-/* Dividers between items INSIDE the groups */
-.status-filters>*:not(:last-child)::after,
-.type-filters>*:not(:last-child)::after {
+/* Dividers for Flat Property Filters */
+.property-gallery-filters>*:not(:last-child)::after {
   content: '';
   display: block;
   width: 1px;
   height: 20px;
   background-color: rgba(255, 255, 255, 0.2);
   margin-left: 15px;
-  /* Space from last button */
   pointer-events: none;
 }
 
-[data-theme="light"] .status-filters>*:not(:last-child)::after,
-[data-theme="light"] .type-filters>*:not(:last-child)::after {
+[data-theme="light"] .property-gallery-filters>*:not(:last-child)::after {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-[data-theme="light"] .status-filters::after {
-  background-color: rgba(0, 0, 0, 0.1);
+.filter-toggle:last-of-type {
+  margin-right: 15px;
 }
 
 .filter-toggle,

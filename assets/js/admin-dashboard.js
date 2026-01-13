@@ -1877,4 +1877,15 @@ async function handleInspectionFormSubmit(e) {
         status.textContent = "Error: " + err.message;
         submitBtn.disabled = false;
     }
-}
+    // Make initMapCallback available globally
+    window.initMapCallback = function () {
+        console.log("🗺️ Google Maps API Loaded Callback");
+        if (typeof initLocationPicker === 'function') {
+            initLocationPicker();
+        } else {
+            // Retry if script isn't fully parsed yet
+            setTimeout(() => {
+                if (typeof initLocationPicker === 'function') initLocationPicker();
+            }, 500);
+        }
+    };
