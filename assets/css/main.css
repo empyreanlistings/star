@@ -5050,15 +5050,25 @@ html[data-theme="dark"] #works-lightbox .lightbox-arrow {
   inset: 0;
   pointer-events: none;
   /* ← THIS IS THE FIX – clicks go through to .gallery-item */
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, transparent 60%);
+  /* Dark Mode Improved Contrast: Darker (0.9) and Taller (80%) */
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, transparent 80%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  /* Tightened layout */
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
   padding: 20px;
   color: white;
   opacity: 0;
   transition: opacity 0.35s ease, transform 0.35s ease;
   transform: translateY(10px);
+}
+
+/* Light Mode Override: Keep original styling as requested */
+html[data-theme="light"] .gallery-overlay {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, transparent 60%);
 }
 
 .mixed-gallery .gallery-item:hover .gallery-overlay {

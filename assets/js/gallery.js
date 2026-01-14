@@ -166,8 +166,11 @@ function initKaiAndIslaGallery() {
     lightbox.dataset.initializedNav = "true";
 
     lightbox.addEventListener("click", e => {
-      if (e.target.classList.contains("lightbox-prev")) navigateLightbox(-1);
-      else if (e.target.classList.contains("lightbox-next")) navigateLightbox(1);
+      const prevBtn = e.target.closest(".lightbox-prev");
+      const nextBtn = e.target.closest(".lightbox-next");
+
+      if (prevBtn) navigateLightbox(-1);
+      else if (nextBtn) navigateLightbox(1);
       else if (e.target === lightbox || e.target.id.includes("-img")) {
         lightbox.classList.remove("open");
         lightbox.setAttribute("inert", "");
