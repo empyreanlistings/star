@@ -5,7 +5,7 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=2.65.3">
+    <link rel="stylesheet" href="assets/css/main.css?v=2.65.4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
@@ -47,6 +47,10 @@
                      Let's handle logo swap in JS or Filter -->
         </div>
         <div class="user-info">
+            <button id="addEnquiryNavbarBtn" class="btn-add-nav" title="Add New Enquiry"
+                style="background: var(--accent); color: black;">
+                <i class="fas fa-comment-dots"></i> <span>Add Enquiry</span>
+            </button>
             <button id="addInspectionNavbarBtn" class="btn-add-nav" title="Add New Inspection">
                 <i class="fas fa-file-medical"></i> <span>Add Inspection</span>
             </button>
@@ -511,13 +515,89 @@
         </div>
     </div>
 
+    <!-- Enquiry Modal -->
+    <div id="enquiryModal" class="modal-overlay premium-modal">
+        <div class="modal-content">
+            <span id="closeEnquiryModal" class="close-modal">&times;</span>
+            <h3 id="enquiryModalTitle" class="modal-title">Manually Add Enquiry</h3>
+            <form id="enquiryForm">
+                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div>
+                        <label>Name</label>
+                        <input type="text" id="enqName" class="form-control" placeholder="John Doe">
+                    </div>
+                    <div>
+                        <label>Email</label>
+                        <input type="email" id="enqEmail" class="form-control" placeholder="john@example.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" id="enqPhone" class="form-control" placeholder="+123456789">
+                </div>
+
+                <!-- Toggles -->
+                <div class="form-group" style="display:flex; flex-wrap:wrap; gap:1.5rem; margin-top:1rem;">
+                    <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                        <input type="checkbox" id="enqResponded">
+                        Responded
+                    </label>
+                    <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                        <input type="checkbox" id="enqOffPlan" checked>
+                        Off-Plan Interest
+                    </label>
+                    <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                        <input type="checkbox" id="enqCustomBuild">
+                        Custom Build
+                    </label>
+                </div>
+
+                <!-- Sources -->
+                <div class="form-group">
+                    <label>Source (Select all that apply)</label>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem; margin-top:0.5rem;">
+                        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                            <input type="checkbox" id="srcWebsite" checked> Website
+                        </label>
+                        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                            <input type="checkbox" id="srcFacebook"> Facebook
+                        </label>
+                        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                            <input type="checkbox" id="srcInstagram"> Instagram
+                        </label>
+                        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                            <input type="checkbox" id="srcTiktok"> TikTok
+                        </label>
+                        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                            <input type="checkbox" id="srcWordOfMouth"> Word of Mouth
+                        </label>
+                        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                            <input type="checkbox" id="srcDirectContact"> Direct Contact
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Comments / Notes</label>
+                    <textarea id="enqComments" class="form-control" rows="3"
+                        placeholder="Additional details..."></textarea>
+                </div>
+
+                <button type="submit" id="enqSubmitBtn" class="btn-add" style="width:100%;margin-top:1rem;">Add
+                    Enquiry</button>
+                <div id="enqStatus" style="margin-top:0.5rem;text-align:center;font-size:0.9rem;opacity:0.8;"></div>
+            </form>
+        </div>
+    </div>
+
     <!-- Property Modal == [DYNAMIC COMPONENT] -->
     <div id="propertymodal-placeholder"></div>
 
     <!-- Scripts -->
     <script src="assets/js/nav.js" defer></script>
-    <script src="assets/js/snackbar.js?v=2.65.3"></script>
-    <script src="assets/js/main.js?v=2.65.3" defer></script>
+    <script src="assets/js/snackbar.js?v=2.65.4"></script>
+    <script src="assets/js/main.js?v=2.65.4" defer></script>
     <!-- Google Maps API -->
     <!-- Google Maps API -->
     <script async defer

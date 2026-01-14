@@ -47,14 +47,16 @@
     })();
   </script>
 
-  <!-- MailerLite Universal -->
-  <script>
-    (function (w, d, e, u, f, l, n) {
-      w[f] = w[f] || function () { (w[f].q = w[f].q || []).push(arguments); };
-      l = d.createElement(e); l.async = 1; l.src = u;
-      n = d.getElementsByTagName(e)[0]; n.parentNode.insertBefore(l, n);
-    })(window, document, 'script', 'https://assets.mailerlite.com/js/universal.js', 'ml');
-    ml('account', '1969000');
+  <!-- MailerLite Universal (Kept for reference or removed if strictly replacing functionality) -->
+  <!-- Replaced with custom Firebase Enquiry logic below -->
+
+  <!-- Firebase Enquiries -->
+  <script type="module">
+    import { initWebsiteEnquiryLogic } from './assets/js/firebase-enquiries.js';
+
+    window.addEventListener("componentLoaded", () => {
+      initWebsiteEnquiryLogic();
+    });
   </script>
 </head>
 
@@ -164,8 +166,8 @@
   <script src="assets/js/gallery.js" defer></script>
   <script src="assets/js/animations.js" defer></script>
   <!-- <script src="assets/js/cards.js" defer></script> REMOVED to disable expansion -->
-  <script src="assets/js/snackbar.js?v=2.65.3"></script>
-  <script src="assets/js/main.js?v=2.65.3" defer></script>
+  <script src="assets/js/snackbar.js?v=2.65.4"></script>
+  <script src="assets/js/main.js?v=2.65.4" defer></script>
 
   <!-- MailerLite Universal -->
   <script>

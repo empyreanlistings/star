@@ -1044,7 +1044,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=2.65.3`);
+    const response = await fetch(`${componentPath}?v=2.65.4`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;

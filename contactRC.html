@@ -48,42 +48,21 @@
       <div class="newsletter-content-outside" style="padding: 24px 30px 0 30px;">
         <h2 style="line-height: 1.1">Subscribe now to save up to 5% off your next home!!!</h2>
       </div>
-      <div id="mlb2-34337454" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-34337454">
-        <div class="ml-form-align-center ">
-          <div class="ml-form-embedWrapper embedForm">
-            <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
-              <form class="ml-block-form"
-                action="https://assets.mailerlite.com/jsonp/1969000/forms/173166188080137253/subscribe" data-code=""
-                method="post" target="_blank">
-                <div class="ml-form-formContent">
-                  <div class="ml-form-fieldRow ml-last-item">
-                    <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
-                      <input aria-label="email" aria-required="true" type="email" class="form-control" data-inputmask=""
-                        name="fields[email]" placeholder="Email" autocomplete="email">
-                    </div>
-                  </div>
-                </div>
 
-                <input type="hidden" name="ml-submit" value="1">
-
-                <div class="ml-form-embedSubmit">
-                  <button type="submit" class="primary btn">Subscribe</button>
-                  <button disabled="disabled" style="display: none;" type="button" class="loading">
-                    <div class="ml-form-embedSubmitLoad"></div>
-                    <span class="sr-only">Loading...</span>
-                  </button>
-                </div>
-                <input type="hidden" name="anticsrf" value="true">
-              </form>
-            </div>
-
-            <div class="ml-form-successBody row-success" style="display: none">
-              <div class="ml-form-successContent">
-                <h2>Thank you!</h2>
-                <h3>You have successfully joined our subscriber list.</h3>
-              </div>
-            </div>
+      <!-- Custom Enquiry Form -->
+      <div id="enquiryFormContainer" class="ml-form-embedContainer" style="padding: 20px 30px 30px;">
+        <form id="websiteEnquiryForm" class="custom-enquiry-form">
+          <div class="form-group">
+            <input type="email" id="websiteEmail" class="form-control" placeholder="Email" required
+              style="height: 50px; border-radius: 8px; border: 1px solid #ccc; padding: 0 15px; width: 100%; margin-bottom: 15px;">
           </div>
+          <button type="submit" class="primary btn" id="websiteSubmitBtn" style="width: 100%;">Subscribe</button>
+        </form>
+
+        <!-- Success Message (Hidden by default) -->
+        <div id="enquirySuccessMsg" style="display: none; text-align: center; color: var(--text);">
+          <h2 style="color: var(--accent); margin-bottom: 10px;">Thank you!</h2>
+          <h3 style="font-size: 1.1rem; opacity: 0.8;">You have successfully joined our subscriber list.</h3>
         </div>
       </div>
     </div>

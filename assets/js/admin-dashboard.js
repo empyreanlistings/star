@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, collection, getDocs, deleteDoc, doc, addDoc, getDoc, updateDoc, query, where, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { submitManualEnquiry } from "./firebase-enquiries.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyArViUzMduVitt8FJDrSVPC_IQTeQrDFX4",
@@ -76,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
             initPalawanGalleryModalEvents();
             initInspectionModalEvents();
             initPropertyModalEvents();
+            initEnquiryModalEvents(); // Added Enquiry Logic
             initLocationPicker(); // Initialize Google Maps Places Autocomplete
 
             // 2. Fetch user's company and RE-INIT sync with filter
@@ -648,6 +650,96 @@ function closeModal() {
 // GALLERY UPLOAD LOGIC
 // =============================================================================
 let currentGalleryState = []; // Stores mixed array of Strings (URLs) and File objects
+// =============================================================================
+// ENQUIRY MODAL LOGIC
+// =============================================================================
+let enquiryModal;
+
+function initEnquiryModalEvents() {
+    enquiryModal = document.getElementById("enquiryModal");
+    const addBtn = document.getElementById("addEnquiryNavbarBtn");
+    const closeBtn = document.getElementById("closeEnquiryModal");
+    const form = document.getElementById("enquiryForm");
+
+    if (addBtn) addBtn.onclick = openEnquiryModal;
+    if (closeBtn && enquiryModal) {
+        closeBtn.onclick = () => {
+            enquiryModal.classList.remove("active");
+            setTimeout(() => enquiryModal.style.display = "none", 300);
+        };
+    }
+
+    if (enquiryModal) {
+        window.addEventListener("click", (e) => {
+            if (e.target === enquiryModal) {
+                enquiryModal.classList.remove("active");
+                setTimeout(() => enquiryModal.style.display = "none", 300);
+            }
+        });
+    }
+
+    if (form) {
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById("enqSubmitBtn");
+            const statusDiv = document.getElementById("enqStatus");
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Adding...";
+            statusDiv.textContent = "";
+
+            // Gather Data
+            const data = {
+                name: document.getElementById("enqName").value,
+                email: document.getElementById("enqEmail").value,
+                phone: document.getElementById("enqPhone").value,
+                responded: document.getElementById("enqResponded").checked,
+                off_plan: document.getElementById("enqOffPlan").checked,
+                custom_build: document.getElementById("enqCustomBuild").checked,
+                via_website: document.getElementById("srcWebsite").checked,
+                via_facebook: document.getElementById("srcFacebook").checked,
+                via_instagram: document.getElementById("srcInstagram").checked,
+                via_tiktok: document.getElementById("srcTiktok").checked,
+                via_word_of_mouth: document.getElementById("srcWordOfMouth").checked,
+                via_direct_contact: document.getElementById("srcDirectContact").checked,
+                comments: document.getElementById("enqComments").value
+            };
+
+            try {
+                await submitManualEnquiry(data);
+                statusDiv.textContent = "✅ Enquiry Added!";
+                statusDiv.style.color = "lightgreen";
+                setTimeout(() => {
+                    enquiryModal.classList.remove("active");
+                    setTimeout(() => enquiryModal.style.display = "none", 300);
+                    form.reset();
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Add Enquiry";
+                    statusDiv.textContent = "";
+                }, 1500);
+            } catch (err) {
+                console.error(err);
+                statusDiv.textContent = "❌ Error: " + err.message;
+                statusDiv.style.color = "red";
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Add Enquiry";
+            }
+        });
+    }
+}
+
+function openEnquiryModal() {
+    if (!enquiryModal) return;
+    const form = document.getElementById("enquiryForm");
+    if (form) form.reset();
+
+    // Set defaults
+    document.getElementById("enqOffPlan").checked = true;
+    document.getElementById("srcWebsite").checked = true;
+
+    enquiryModal.style.display = "flex";
+    setTimeout(() => enquiryModal.classList.add("active"), 10);
+}
 
 function initGalleryLogic() {
     const galleryInput = document.getElementById("propGallery");

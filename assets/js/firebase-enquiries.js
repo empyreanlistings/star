@@ -1,0 +1,194 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyArViUzMduVitt8FJDrSVPC_IQTeQrDFX4",
+    authDomain: "kaiandisla-rulryn.firebaseapp.com",
+    projectId: "kaiandisla-rulryn",
+    storageBucket: "kaiandisla-rulryn.firebasestorage.app",
+    messagingSenderId: "155934228174",
+    appId: "1:155934228174:web:a4bcdc4b9702980c4e1a9f"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const ENQUIRY_CACHE_KEY = "kai_isla_enquiry_submitted";
+
+/**
+ * Checks if the user has already submitted an enquiry from this browser.
+ * @returns {boolean}
+ */
+export function hasSubmittedEnquiry() {
+    return localStorage.getItem(ENQUIRY_CACHE_KEY) === "true";
+}
+
+/**
+ * Marks the user as having submitted an enquiry.
+ */
+function markAsSubmitted() {
+    localStorage.setItem(ENQUIRY_CACHE_KEY, "true");
+}
+
+/**
+ * Submits a basic enquiry from the Website (Frontend).
+ * Hardcodes specific fields as per requirements.
+ * @param {string} email
+ * @returns {Promise<string>} Document ID
+ */
+export async function submitWebsiteEnquiry(email) {
+    if (hasSubmittedEnquiry()) {
+        throw new Error("You have already subscribed!");
+    }
+
+    const enquiryData = {
+        email: email,
+        created_at: serverTimestamp(),
+        responded: false,
+        off_plan: true,
+        custom_build: false,
+        via_website: true,
+        via_facebook: false,
+        via_instagram: false,
+        via_tiktok: false,
+        via_word_of_mouth: false,
+        via_direct_contact: false,
+        name: "", // Not collected on front-end form
+        phone_number: "", // Not collected on front-end form
+        comments: [], // Initialize empty
+        source: "website_early_bird" // Internal tracker
+    };
+
+    try {
+        const docRef = await addDoc(collection(db, "Enquiries"), enquiryData);
+        markAsSubmitted();
+        console.log("✅ Enquiry submitted:", docRef.id);
+        return docRef.id;
+    } catch (e) {
+        console.error("Error adding enquiry: ", e);
+        throw e;
+    }
+}
+
+/**
+ * Submits a manual enquiry from the Admin Dashboard.
+ * Allows full control over all fields.
+ * @param {Object} data - Form data object
+ * @returns {Promise<string>} Document ID
+ */
+export async function submitManualEnquiry(data) {
+    // Validate required
+    if (!data.name && !data.email) {
+        throw new Error("Name or Email is required.");
+    }
+
+    const enquiryData = {
+        created_at: serverTimestamp(),
+        name: data.name || "",
+        email: data.email || "",
+        phone_number: data.phone || "",
+        responded: data.responded === true, // Default false usually
+        off_plan: data.off_plan !== false, // Default true usually
+        custom_build: data.custom_build === true,
+
+        // Sources
+        via_website: data.via_website === true,
+        via_facebook: data.via_facebook === true,
+        via_instagram: data.via_instagram === true,
+        via_tiktok: data.via_tiktok === true,
+        via_word_of_mouth: data.via_word_of_mouth === true,
+        via_direct_contact: data.via_direct_contact === true,
+
+        comments: data.comments ? [{
+            text: data.comments,
+            timestamp: new Date().toISOString(),
+            author: "admin_initial"
+        }] : []
+    };
+
+    try {
+        const docRef = await addDoc(collection(db, "Enquiries"), enquiryData);
+        console.log("✅ Manual enquiry submitted:", docRef.id);
+        return docRef.id;
+    } catch (e) {
+        console.error("Error adding manual enquiry: ", e);
+        throw e;
+    }
+}
+
+// Global exposure for non-module usage if needed (though we'll try to use modules)
+window.submitWebsiteEnquiry = submitWebsiteEnquiry;
+window.submitManualEnquiry = submitManualEnquiry;
+window.hasSubmittedEnquiry = hasSubmittedEnquiry;
+
+/**
+ * Validates email format
+ */
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+/**
+ * Initializes the frontend enquiry form.
+ * Should be called after the component is loaded.
+ */
+export function initWebsiteEnquiryLogic() {
+    console.log("🛠️ [Enquiry] Initializing website enquiry logic...");
+    const form = document.getElementById("websiteEnquiryForm");
+    const container = document.getElementById("enquiryFormContainer");
+    const successMsg = document.getElementById("enquirySuccessMsg");
+    const btn = document.getElementById("websiteSubmitBtn");
+
+    // 1. Check if already submitted
+    if (hasSubmittedEnquiry()) {
+        if (form) form.style.display = "none";
+        if (successMsg) successMsg.style.display = "block";
+        return;
+    }
+
+    if (!form || !btn) {
+        // If not found, it might be because the component hasn't loaded yet.
+        // The event listener in index.html should handle this retry/wait.
+        // console.warn("Enquiry form not found in DOM");
+        return;
+    }
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById("websiteEmail");
+        const email = emailInput ? emailInput.value.trim() : "";
+
+        if (!email || !isValidEmail(email)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+
+        try {
+            btn.disabled = true;
+            btn.textContent = "Submitting...";
+
+            await submitWebsiteEnquiry(email);
+
+            // Show Success
+            form.style.display = "none";
+            if (successMsg) successMsg.style.display = "block";
+
+        } catch (err) {
+            console.error(err);
+            btn.disabled = false;
+            btn.textContent = "Subscribe";
+            if (err.message.includes("already subscribed")) {
+                form.style.display = "none";
+                if (successMsg) successMsg.style.display = "block";
+            } else {
+                alert("Something went wrong. Please try again.");
+            }
+        }
+    });
+}
+
