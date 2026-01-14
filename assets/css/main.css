@@ -1539,6 +1539,13 @@ html[data-theme="light"] .theme-toggle .theme-icon {
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
+/* FIX: Prevent button movement on hover/active to match dashboard icon */
+.nav-right .theme-toggle:hover,
+.nav-right .theme-toggle:active,
+.nav-right .theme-toggle:focus {
+  transform: none !important;
+}
+
 /* During icon change */
 .theme-toggle.fading .theme-icon {
   opacity: 0;
