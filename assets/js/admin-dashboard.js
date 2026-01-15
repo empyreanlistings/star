@@ -706,6 +706,28 @@ function initEnquiryModalEvents() {
                 setTimeout(() => enquiryModal.style.display = "none", 300);
             }
         });
+
+        // Visibility Logic for Telegram Link
+        const sourceRadios = enquiryModal.querySelectorAll('input[name="enqSource"]');
+        const telegramLinkContainer = document.getElementById("telegramLinkContainer");
+        sourceRadios.forEach(radio => {
+            radio.addEventListener("change", () => {
+                if (telegramLinkContainer) {
+                    telegramLinkContainer.style.display = (radio.value === "telegram" && radio.checked) ? "block" : "none";
+                }
+            });
+        });
+
+        // Visibility Logic for Parking Spaces
+        const parkingCheckbox = document.getElementById("enqHasParking");
+        const parkingSpacesContainer = document.getElementById("parkingSpacesContainer");
+        if (parkingCheckbox) {
+            parkingCheckbox.addEventListener("change", () => {
+                if (parkingSpacesContainer) {
+                    parkingSpacesContainer.style.display = parkingCheckbox.checked ? "block" : "none";
+                }
+            });
+        }
     }
 
     if (form) {
@@ -719,6 +741,19 @@ function initEnquiryModalEvents() {
             statusDiv.textContent = "";
 
             // Gather Data
+            const forSale = document.getElementById("enqListingForSale").checked;
+            const forLease = document.getElementById("enqListingForLease").checked;
+
+            if (!forSale && !forLease) {
+                statusDiv.textContent = "⚠️ Select at least one Listing Type.";
+                statusDiv.style.color = "orange";
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Add Enquiry";
+                return;
+            }
+
+            const sourceRadio = document.querySelector('input[name="enqSource"]:checked');
+
             const data = {
                 name: document.getElementById("enqName").value,
                 email: document.getElementById("enqEmail").value,
@@ -726,12 +761,25 @@ function initEnquiryModalEvents() {
                 responded: document.getElementById("enqResponded").checked,
                 off_plan: document.getElementById("enqOffPlan").checked,
                 custom_build: document.getElementById("enqCustomBuild").checked,
-                via_website: document.getElementById("srcWebsite").checked,
-                via_facebook: document.getElementById("srcFacebook").checked,
-                via_instagram: document.getElementById("srcInstagram").checked,
-                via_tiktok: document.getElementById("srcTiktok").checked,
-                via_word_of_mouth: document.getElementById("srcWordOfMouth").checked,
-                via_direct_contact: document.getElementById("srcDirectContact").checked,
+
+                // New Fields
+                listing_for_sale: forSale,
+                listing_for_lease: forLease,
+                property_type: document.getElementById("enqPropType").value,
+                has_parking: document.getElementById("enqHasParking").checked,
+                parking_spaces: document.getElementById("enqParkingSpaces").value || 0,
+                furnished: document.getElementById("enqFurnished").checked,
+                balcony: document.getElementById("enqBalcony").checked,
+                floor_number: document.getElementById("enqFloorNumber").value,
+                unit_number: document.getElementById("enqUnitNumber").value,
+                area: document.getElementById("enqArea").value,
+                selling_price: document.getElementById("enqSellingPrice").value,
+                lease_price: document.getElementById("enqLeasePrice").value,
+
+                // Source
+                source: sourceRadio ? sourceRadio.value : "manual",
+                telegram_link: document.getElementById("enqTelegramLink").value,
+
                 comments: document.getElementById("enqComments").value
             };
 
@@ -766,6 +814,12 @@ function openEnquiryModal() {
     // Set defaults
     document.getElementById("enqOffPlan").checked = true;
     document.getElementById("srcWebsite").checked = true;
+
+    // Hide conditional containers
+    const telegramLinkContainer = document.getElementById("telegramLinkContainer");
+    if (telegramLinkContainer) telegramLinkContainer.style.display = "none";
+    const parkingSpacesContainer = document.getElementById("parkingSpacesContainer");
+    if (parkingSpacesContainer) parkingSpacesContainer.style.display = "none";
 
     enquiryModal.style.display = "flex";
     setTimeout(() => enquiryModal.classList.add("active"), 10);

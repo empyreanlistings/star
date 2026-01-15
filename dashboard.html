@@ -5,7 +5,7 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=2.83">
+    <link rel="stylesheet" href="assets/css/main.css?v=2.84">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
@@ -592,17 +592,106 @@
                     <input type="text" id="enqPhone" class="form-control" placeholder="+123456789">
                 </div>
 
-                <!-- Toggles -->
-                <div class="form-group" style="display:flex; flex-wrap:wrap; gap:1.5rem; margin-top:1rem;">
-                    <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                <!-- Listing Type -->
+                <div class="form-group" style="margin-top:1rem;">
+                    <label>Listing Type (Select at least one)</label>
+                    <div style="display:flex; gap:1.5rem; margin-top:0.5rem;">
+                        <label
+                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
+                            <input type="checkbox" id="enqListingForSale" value="for_sale"> For Sale
+                        </label>
+                        <label
+                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
+                            <input type="checkbox" id="enqListingForLease" value="for_lease"> For Lease
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Property Details -->
+                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
+                    <div>
+                        <label>Property Type</label>
+                        <select id="enqPropType" class="form-control">
+                            <option value="">Select Type...</option>
+                            <option value="condo">Condo</option>
+                            <option value="duplex">Duplex</option>
+                            <option value="house_lot">House & lot</option>
+                            <option value="lot_only">Lot only</option>
+                            <option value="villa">Villa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Features</label>
+                        <div style="display:flex; flex-wrap:wrap; gap:1rem; margin-top:0.5rem;">
+                            <label
+                                style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; font-size:0.9rem;">
+                                <input type="checkbox" id="enqFurnished"> Furnished
+                            </label>
+                            <label
+                                style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; font-size:0.9rem;">
+                                <input type="checkbox" id="enqBalcony"> Balcony
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                    <div style="display:flex; align-items:center; gap:0.5rem;">
+                        <div style="flex:1;">
+                            <label
+                                style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal; margin-bottom: 5px;">
+                                <input type="checkbox" id="enqHasParking"> Parking
+                            </label>
+                            <div id="parkingSpacesContainer" style="display:none;">
+                                <input type="number" id="enqParkingSpaces" class="form-control" placeholder="Spaces"
+                                    min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <!-- Column padding/alignment -->
+                    </div>
+                </div>
+
+                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                    <div>
+                        <label>Floor Number</label>
+                        <input type="text" id="enqFloorNumber" class="form-control" placeholder="e.g. 5">
+                    </div>
+                    <div>
+                        <label>Unit Number</label>
+                        <input type="text" id="enqUnitNumber" class="form-control" placeholder="e.g. 502">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Area / Neighborhood</label>
+                    <input type="text" id="enqArea" class="form-control" placeholder="e.g. El Nido">
+                </div>
+
+                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                    <div>
+                        <label>Selling Price (PHP)</label>
+                        <input type="number" id="enqSellingPrice" class="form-control" placeholder="₱">
+                    </div>
+                    <div>
+                        <label>Lease Price (PHP)</label>
+                        <input type="number" id="enqLeasePrice" class="form-control" placeholder="₱">
+                    </div>
+                </div>
+
+                <!-- Toggles (existing) -->
+                <div class="form-group"
+                    style="display:flex; flex-wrap:wrap; gap:1.5rem; margin-top:1rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem;">
+                    <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
                         <input type="checkbox" id="enqResponded">
                         Responded
                     </label>
-                    <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                    <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
                         <input type="checkbox" id="enqOffPlan" checked>
                         Off-Plan Interest
                     </label>
-                    <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                    <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
                         <input type="checkbox" id="enqCustomBuild">
                         Custom Build
                     </label>
@@ -610,27 +699,50 @@
 
                 <!-- Sources -->
                 <div class="form-group">
-                    <label>Source (Select all that apply)</label>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem; margin-top:0.5rem;">
-                        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
-                            <input type="checkbox" id="srcWebsite" checked> Website
+                    <label>Source (Select One)</label>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:0.5rem; margin-top:0.5rem;">
+                        <label
+                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
+                            <input type="radio" name="enqSource" value="website" id="srcWebsite" checked> Website
                         </label>
-                        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
-                            <input type="checkbox" id="srcFacebook"> Facebook
+                        <label
+                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
+                            <input type="radio" name="enqSource" value="facebook" id="srcFacebook"> Facebook
                         </label>
-                        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
-                            <input type="checkbox" id="srcInstagram"> Instagram
+                        <label
+                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
+                            <input type="radio" name="enqSource" value="instagram" id="srcInstagram"> Instagram
                         </label>
-                        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
-                            <input type="checkbox" id="srcTiktok"> TikTok
+                        <label
+                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
+                            <input type="radio" name="enqSource" value="tiktok" id="srcTiktok"> TikTok
                         </label>
-                        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
-                            <input type="checkbox" id="srcWordOfMouth"> Word of Mouth
+                        <label
+                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
+                            <input type="radio" name="enqSource" value="viber" id="srcViber"> Viber
                         </label>
-                        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
-                            <input type="checkbox" id="srcDirectContact"> Direct Contact
+                        <label
+                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
+                            <input type="radio" name="enqSource" value="messenger" id="srcMessenger"> Messenger
+                        </label>
+                        <label
+                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
+                            <input type="radio" name="enqSource" value="telegram" id="srcTelegram"> Telegram
+                        </label>
+                        <label
+                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
+                            <input type="radio" name="enqSource" value="word_of_mouth" id="srcWordOfMouth"> Word/Mouth
+                        </label>
+                        <label
+                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
+                            <input type="radio" name="enqSource" value="direct_contact" id="srcDirectContact"> Direct
                         </label>
                     </div>
+                </div>
+
+                <div id="telegramLinkContainer" style="display:none; margin-bottom: 1rem;">
+                    <label>Telegram Link</label>
+                    <input type="text" id="enqTelegramLink" class="form-control" placeholder="https://t.me/username">
                 </div>
 
                 <div class="form-group">
@@ -649,14 +761,14 @@
     <!-- Property Modal == [DYNAMIC COMPONENT] -->
     <div id="propertymodal-placeholder"></div>
 
-    <script src="assets/js/nav.js?v=2.83" defer></script>
-    <script src="assets/js/snackbar.js?v=2.83"></script>
-    <script src="assets/js/main.js?v=2.83" defer></script>
+    <script src="assets/js/nav.js?v=2.84" defer></script>
+    <script src="assets/js/snackbar.js?v=2.84"></script>
+    <script src="assets/js/main.js?v=2.84" defer></script>
     <!-- Google Maps API -->
     <!-- Google Maps API -->
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBskYGOCldwNxevKvAfJaVvy9_8Mjfv22Q&libraries=places&callback=initMapCallback"></script>
-    <script type="module" src="assets/js/admin-dashboard.js?v=2.83"></script>
+    <script type="module" src="assets/js/admin-dashboard.js?v=2.84"></script>
 
 </body>
 

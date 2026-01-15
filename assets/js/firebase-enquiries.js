@@ -92,17 +92,33 @@ export async function submitManualEnquiry(data) {
         name: data.name || "",
         email: data.email || "",
         phone_number: data.phone || "",
-        responded: data.responded === true, // Default false usually
-        off_plan: data.off_plan !== false, // Default true usually
+        responded: data.responded === true,
+        off_plan: data.off_plan !== false,
         custom_build: data.custom_build === true,
 
-        // Sources
-        via_website: data.via_website === true,
-        via_facebook: data.via_facebook === true,
-        via_instagram: data.via_instagram === true,
-        via_tiktok: data.via_tiktok === true,
-        via_word_of_mouth: data.via_word_of_mouth === true,
-        via_direct_contact: data.via_direct_contact === true,
+        // New Detailed Fields
+        listing_for_sale: data.listing_for_sale === true,
+        listing_for_lease: data.listing_for_lease === true,
+        property_type: data.property_type || "",
+        has_parking: data.has_parking === true,
+        parking_spaces: parseInt(data.parking_spaces) || 0,
+        furnished: data.furnished === true,
+        balcony: data.balcony === true,
+        floor_number: data.floor_number || "",
+        unit_number: data.unit_number || "",
+        area: data.area || "",
+        selling_price: parseFloat(data.selling_price) || 0,
+        lease_price: parseFloat(data.lease_price) || 0,
+
+        // Source Logic
+        source: data.source || "manual",
+        telegram_link: data.telegram_link || "",
+
+        // Legacy compatibility / defaults for frontend filters if any
+        via_website: data.source === "website",
+        via_facebook: data.source === "facebook",
+        via_instagram: data.source === "instagram",
+        via_tiktok: data.source === "tiktok",
 
         comments: data.comments ? [{
             text: data.comments,
