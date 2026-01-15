@@ -1019,6 +1019,9 @@ function initializeApp() {
     }
     // Re-init header logic after dynamic load
     if (typeof initHeader !== 'undefined') initHeader();
+    // Sync theme UI (icons/logos) for new header elements
+    const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
+    if (window.syncThemeUI) window.syncThemeUI(currentTheme);
     console.log("✅ Header Loaded & Unwrapped");
   });
   loadComponent("#homebuyer-placeholder", "homebuyerRC.html", () => {
@@ -1053,7 +1056,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=2.73`);
+    const response = await fetch(`${url}?v=2.74`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
@@ -1079,49 +1082,52 @@ function applySavedTheme() {
   document.documentElement.setAttribute("data-theme", theme);
 }
 
+window.syncThemeUI = function (theme) {
+  // 1. Update Icons
+  document.querySelectorAll(".theme-toggle .theme-icon").forEach(icon => {
+    icon.className = theme === "dark" ? "theme-icon fas fa-sun" : "theme-icon fas fa-moon";
+  });
+
+  // 2. Update Logos
+  const logos = {
+    light: "images/logo2-light.png",
+    dark: "images/logo2-dark.png"
+  };
+
+  // Main nav logo
+  const navLogo = document.querySelector(".logo-container img");
+  if (navLogo) navLogo.src = theme === "dark" ? logos.light : logos.dark;
+
+  // Dashboard logo
+  const dashLogo = document.getElementById("dashLogo");
+  if (dashLogo) dashLogo.src = theme === "dark" ? logos.light : logos.dark;
+
+  // Mobile menu logo
+  const mobileLogo = document.querySelector(".mobile-menu img");
+  if (mobileLogo) mobileLogo.src = theme === "dark" ? logos.light : logos.dark;
+};
+
 function bindThemeToggles() {
   if (document.documentElement.dataset.themeBound) return;
   document.documentElement.dataset.themeBound = "true";
 
-  const syncUI = (theme) => {
-    // 1. Update Icons
-    document.querySelectorAll(".theme-toggle .theme-icon").forEach(icon => {
-      icon.className = theme === "dark" ? "theme-icon fas fa-sun" : "theme-icon fas fa-moon";
-    });
-
-    // 2. Update Logos
-    const logos = {
-      light: "images/logo2-light.png",
-      dark: "images/logo2-dark.png"
-    };
-
-    // Main nav logo
-    const navLogo = document.querySelector(".logo-container img");
-    if (navLogo) navLogo.src = theme === "dark" ? logos.light : logos.dark;
-
-    // Dashboard logo
-    const dashLogo = document.getElementById("dashLogo");
-    if (dashLogo) dashLogo.src = theme === "dark" ? logos.light : logos.dark;
-
-    // Mobile menu logo
-    const mobileLogo = document.querySelector(".mobile-menu img");
-    if (mobileLogo) mobileLogo.src = theme === "dark" ? logos.light : logos.dark;
-  };
-
   // Initial sync
-  syncUI(document.documentElement.getAttribute("data-theme") || "dark");
+  const initialTheme = document.documentElement.getAttribute("data-theme") || localStorage.getItem("theme") || "dark";
+  window.syncThemeUI(initialTheme);
 
-  document.querySelectorAll(".theme-toggle").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const current = document.documentElement.getAttribute("data-theme") || "dark";
-      const next = current === "dark" ? "light" : "dark";
+  // Use event delegation for dynamic theme toggles
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".theme-toggle");
+    if (!btn) return;
 
-      document.documentElement.setAttribute("data-theme", next);
-      localStorage.setItem("theme", next);
+    const current = document.documentElement.getAttribute("data-theme") || "dark";
+    const next = current === "dark" ? "light" : "dark";
 
-      syncUI(next);
-      document.dispatchEvent(new CustomEvent("themechange", { detail: next }));
-    });
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
+
+    window.syncThemeUI(next);
+    document.dispatchEvent(new CustomEvent("themechange", { detail: next }));
   });
 }
 
