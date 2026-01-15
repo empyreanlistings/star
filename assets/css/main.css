@@ -4467,7 +4467,8 @@ details {
   padding: 40px 20px 0px 20px;
   scroll-padding-left: 40px;
   /* scroll-snap-type removed to fix jitter/flicker during infinite loop jumps */
-  scroll-snap-type: none;
+  scroll-snap-type: none !important;
+  scroll-behavior: auto !important;
   scrollbar-width: none;
   /* Firefox */
   -ms-overflow-style: none;
@@ -5136,21 +5137,18 @@ html[data-theme="dark"] #works-lightbox .lightbox-arrow {
   transform: translateY(10px);
 }
 
-/* Force white text even in light mode for all gallery overlays */
-.gallery-overlay h1,
-.gallery-overlay h2,
-.gallery-overlay h3,
-.gallery-overlay h4,
-.gallery-overlay h5,
-.gallery-overlay h6,
-.gallery-overlay p,
-.gallery-overlay span,
-.gallery-overlay a {
+/* Force white text even in light mode for all gallery overlays with high specificity */
+.mixed-gallery .gallery-overlay h3,
+.mixed-gallery .gallery-overlay p,
+.mixed-gallery .gallery-overlay span,
+.palawan-gallery .gallery-overlay h3,
+.palawan-gallery .gallery-overlay p,
+.palawan-gallery .gallery-overlay span {
   color: var(--white) !important;
 }
 
-.gallery-overlay h3,
-.gallery-overlay p {
+.mixed-gallery .gallery-overlay h3,
+.mixed-gallery .gallery-overlay p {
   color: var(--white) !important;
   margin: 0;
 }
