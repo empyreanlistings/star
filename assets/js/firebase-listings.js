@@ -334,9 +334,17 @@ function createPropertyCard(data) {
   const heartIcon = hasLiked ? 'fas fa-heart' : 'far fa-heart';
   const likedClass = hasLiked ? 'liked' : '';
 
+  // Mock Nav Arrows for "just for show" if multiple images exist
+  const hasMultipleImages = media.images && media.images.length > 1;
+  const mockNavHTML = hasMultipleImages ? `
+    <div class="mock-nav prev"><i class="fas fa-chevron-left"></i></div>
+    <div class="mock-nav next"><i class="fas fa-chevron-right"></i></div>
+  ` : '';
+
   card.innerHTML = `
         <div class="property-image">
           <img src="${imageSrc}" alt="${title}" loading="lazy">
+          ${mockNavHTML}
           ${logoHTML}
           <button class="grid-like-btn ${likedClass}" data-id="${data.id}" aria-label="Like Property">
             <i class="${heartIcon}"></i>

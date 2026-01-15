@@ -990,12 +990,17 @@ html[data-theme="light"] .how-it-works-nav .nav-btn.active {
 }
 
 .filter-toggle.active {
-  color: var(--white) !important;
+  color: var(--text) !important;
   font-weight: 700;
 }
 
+[data-theme="light"] .filter-toggle.active {
+  color: #0b0f1a !important;
+}
+
 /* Base style for for-sale/for-lease indicators if needed */
-.filter-toggle.active::after {
+.filter-toggle.active::after,
+.property-gallery-filters .filter.active::after {
   content: '';
   position: absolute;
   bottom: -4px;
@@ -2631,6 +2636,48 @@ html[data-theme="light"] .property-card:hover {
 
 .property-card:hover .property-image img {
   transform: scale(1.05);
+}
+
+/* Mock Nav Arrows for "just for show" */
+.property-image .mock-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 12px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.property-card:hover .property-image .mock-nav {
+  opacity: 1;
+}
+
+.property-image .mock-nav.prev {
+  left: 12px;
+}
+
+.property-image .mock-nav.next {
+  right: 12px;
+}
+
+.property-card:hover .property-image .mock-nav.prev {
+  left: 15px;
+}
+
+.property-card:hover .property-image .mock-nav.next {
+  right: 15px;
 }
 
 /* ============================== LOGO ============================== */
