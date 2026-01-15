@@ -1011,7 +1011,16 @@ function initializeApp() {
   if (typeof initPalawanGallery !== 'undefined') safeInit("Palawan Gallery (Scroll/Lightbox)", initPalawanGallery);
   // Lightbox handled in gallery.js
   if (typeof initCalendly !== 'undefined') safeInit("Calendly", initCalendly);
-  // Load components independently to prevent blocking
+  loadComponent("#header-placeholder", "header.html", () => {
+    // Unwrap the header to ensure it sits directly on the body for full width
+    const placeholder = document.getElementById("header-placeholder");
+    if (placeholder && placeholder.firstElementChild) {
+      placeholder.replaceWith(...placeholder.childNodes);
+    }
+    // Re-init header logic after dynamic load
+    if (typeof initHeader !== 'undefined') initHeader();
+    console.log("✅ Header Loaded & Unwrapped");
+  });
   loadComponent("#homebuyer-placeholder", "homebuyerRC.html", () => {
     if (typeof initHowItWorks !== 'undefined') safeInit("How It Works", initHowItWorks);
   });
@@ -1028,7 +1037,7 @@ function initializeApp() {
     // Unwrap the footer to ensure it sits directly on the body for full width
     const placeholder = document.getElementById("footer-placeholder");
     if (placeholder && placeholder.firstElementChild) {
-      placeholder.replaceWith(placeholder.firstElementChild);
+      placeholder.replaceWith(...placeholder.childNodes);
     }
     console.log("✅ Footer Loaded & Unwrapped");
   });
@@ -1044,7 +1053,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=2.65.4`);
+    const response = await fetch(`${url}?v=2.73`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;

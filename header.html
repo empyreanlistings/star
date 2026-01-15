@@ -1,11 +1,17 @@
 <div id="topBar" class="top-bar">
-  <a href="tel:+639762746031"><i class="fas fa-phone" aria-hidden="true"></i> +63 976 274 6031</a>
-  <a href="mailto:info@kaiandisla.com"><i class="fas fa-envelope" aria-hidden="true"></i> info@kaiandisla.com</a>
-  <a href="https://www.facebook.com/profile.php?id=61578042606158" target="_blank" rel="noopener" class="facebook-link">
-    <a href="https://t.me/kaiandisla" target="_blank" rel="noopener" class="telegram-link">
-
+  <div class="top-bar-left">
+    <a href="tel:+639762746031"><i class="fas fa-phone" aria-hidden="true"></i> +63 976 274 6031</a>
+    <a href="mailto:info@kaiandisla.com"><i class="fas fa-envelope" aria-hidden="true"></i> info@kaiandisla.com</a>
+  </div>
+  <div class="top-bar-right">
+    <a href="https://www.facebook.com/profile.php?id=61578042606158" target="_blank" rel="noopener"
+      class="facebook-link">
       <i class="fab fa-facebook-f" aria-hidden="true"></i> kaiandisla
     </a>
+    <a href="https://t.me/kaiandisla" target="_blank" rel="noopener" class="telegram-link">
+      <i class="fab fa-telegram-plane" aria-hidden="true"></i> Telegram (Kai)
+    </a>
+  </div>
 </div>
 <nav aria-label="Main navigation">
   <a href="index.html#home" class="logo-container">
@@ -13,7 +19,7 @@
   </a>
   <ul class="nav-links" role="menubar">
     <li><a href="index.html#listings" role="menuitem">PROPERTY FOR SALE</a></li>
-    <li><a href="index.html#how-it-works" role="menuitem">PARADISE LIFE HOME BUYER</a></li>
+    <li><a href="index.html#how-it-works" role="menuitem">THE COMPLETE PROPERTY SOLUTION</a></li>
     <li><a href="index.html#palawan" role="menuitem">MOVE TO PALAWAN</a></li>
     <li><a href="index.html#services" role="menuitem">SERVICES</a></li>
     <li><a href="index.html#about" role="menuitem">ABOUT</a></li>
@@ -21,6 +27,17 @@
     <li><a href="dashboard.html" id="navSignInLink" target="_blank" rel="noopener" role="menuitem">SIGN-IN</a></li>
   </ul>
   <div class="nav-right">
+    <!-- Dashboard Icon (Shown for admins or when logged out as login entry) -->
+    <a href="dashboard.html" id="navDashboardLink" class="nav-icon-link" aria-label="Dashboard">
+      <i class="fas fa-th-large"></i>
+    </a>
+
+    <!-- User Avatar (Shown when signed in) -->
+    <a href="profile.html" id="navAvatarLink" class="nav-avatar" aria-label="My Profile" style="display:none;">
+      <i id="navDashboardIcon" class="fas fa-user-circle" style="display:none;"></i>
+      <img id="navAvatarImg" src="images/logo.png" alt="User" style="display:none;">
+    </a>
+
     <!-- Light / Dark Mode Toggle -->
     <button class="theme-toggle" aria-label="Toggle dark/light theme">
       <i class="theme-icon fas fa-moon"></i> <!-- Moon = dark mode -->
@@ -39,7 +56,7 @@
     <img src="images/logo2-light.png" alt="Kai & Isla Logo" width="180" height="60">
   </a>
   <a href="index.html#listings"> PROPERTY FOR SALE</a>
-  <a href="index.html#how-it-works"> PARADISE LIFE HOME BUYER</a>
+  <a href="index.html#how-it-works"> THE COMPLETE PROPERTY SOLUTION</a>
   <a href="index.html#palawan"> MOVE TO PALAWAN</a>
   <a href="index.html#services"> SERVICES</a>
   <a href="index.html#about"> ABOUT</a>

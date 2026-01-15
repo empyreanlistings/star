@@ -723,18 +723,13 @@ html[data-theme="light"] .container-glass:hover {
 }
 
 /* Divider between Filter Group and Pricing Group */
+/* Vertical Dividers for property filters container groups - REMOVED per user request */
 .property-filters-container>*:not(:last-child)::after {
-  content: '';
-  display: block;
-  width: 1px;
-  height: 20px;
-  background-color: rgba(255, 255, 255, 0.2);
-  margin-left: 15px;
-  pointer-events: none;
+  display: none;
 }
 
 [data-theme="light"] .property-filters-container>*:not(:last-child)::after {
-  background-color: rgba(0, 0, 0, 0.1);
+  display: none;
 }
 
 /* ============================== PROPERTY & GALLERY FILTER CHIPS — BASE ============================== */
@@ -1893,14 +1888,20 @@ html[data-theme="light"] .menu-overlay {
   color: #fff;
   font-size: 13px;
   line-height: 1;
-  padding: 8px 0;
+  padding: 8px 5%;
   z-index: 10001;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 28px;
+  justify-content: space-between;
   transition: transform 0.3s ease, opacity 0.3s ease, background 0.5s ease, box-shadow 0.3s ease;
   background: rgba(0, 0, 0, 0.9);
+}
+
+.top-bar-left,
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 28px;
 }
 
 .top-bar.hidden {
@@ -1913,7 +1914,7 @@ html[data-theme="light"] .menu-overlay {
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 8px;
   transition: color .3s ease, transform .3s ease;
 }
 
