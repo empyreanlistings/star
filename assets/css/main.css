@@ -3673,8 +3673,8 @@ html[data-theme="light"] .card:not(.full-width)::before {
   }
 
   .card.full-width .card-content {
-    padding: 28px;
-    margin: 20px;
+    padding: 30px;
+    margin: 30px;
     max-width: calc(100% - 40px);
   }
 
