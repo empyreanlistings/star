@@ -1056,7 +1056,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=2.74`);
+    const response = await fetch(`${url}?v=2.75`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
@@ -1228,7 +1228,6 @@ function initPalawanGallery() {
   items.forEach((item, i) => {
     const imgEl = item.querySelector("img");
     if (imgEl) {
-      imgEl.style.cursor = "zoom-in";
       imgEl.addEventListener("click", () => open(i));
     }
   });

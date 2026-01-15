@@ -4473,7 +4473,6 @@ details {
   /* IE/Edge */
   /* Momentum scrolling */
   -webkit-overflow-scrolling: touch;
-  cursor: grab;
 }
 
 /* Fallback for smaller screens regarding padding */
@@ -4483,8 +4482,23 @@ details {
   }
 }
 
-.palawan-gallery:active {
-  cursor: grabbing;
+.palawan-gallery:active {}
+
+/* Custom Scroll Cursors - Scroll Icons */
+.palawan-gallery.cursor-prev {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));"><circle cx="12" cy="12" r="10"></circle><polyline points="12 8 8 12 12 16"></polyline><line x1="16" y1="12" x2="8" y2="12"></line></svg>') 24 24, w-resize;
+}
+
+.palawan-gallery.cursor-next {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>') 24 24, e-resize;
+}
+
+.palawan-gallery .gallery-item {
+  cursor: inherit;
+}
+
+.palawan-gallery .gallery-item img {
+  cursor: inherit;
 }
 
 .palawan-gallery::-webkit-scrollbar {
@@ -4533,8 +4547,12 @@ details {
 .palawan-gallery .gallery-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  /* 50% opacity black */
+  background: linear-gradient(to top,
+      rgba(0, 0, 0, 0.95) 0%,
+      rgba(0, 0, 0, 0.8) 40%,
+      rgba(0, 0, 0, 0.4) 70%,
+      rgba(0, 0, 0, 0) 100%);
+  /* Darker gradient for better contrast */
   display: flex;
   flex-direction: column;
   justify-content: flex-end;

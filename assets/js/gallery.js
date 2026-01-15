@@ -212,55 +212,110 @@ function initKaiAndIslaGallery() {
   }
 }
 
-// 5. Horizontal Scroll Logic (Apple-style)
-const scrollWrapper = document.querySelector(".palawan-gallery-wrapper");
-const scrollContainer = document.querySelector(".palawan-gallery");
-const prevBtn = document.querySelector(".scroll-arrow.scroll-prev");
-const nextBtn = document.querySelector(".scroll-arrow.scroll-next");
+// 5. Horizontal Scroll Logic (Apple-style + Infinite Loop)
+window.initPalawanGalleryScroll = function () {
+  const scrollWrapper = document.querySelector(".palawan-gallery-wrapper");
+  const scrollContainer = document.querySelector(".palawan-gallery");
+  const prevBtn = document.querySelector(".scroll-arrow.scroll-prev");
+  const nextBtn = document.querySelector(".scroll-arrow.scroll-next");
 
-if (scrollContainer && prevBtn && nextBtn) {
-  const updateArrows = () => {
-    // Keep both arrows visible for looping
-    prevBtn.classList.add("visible");
-    nextBtn.classList.add("visible");
-  };
+  if (!scrollContainer || !prevBtn || !nextBtn) return;
+
+  const originalItems = Array.from(scrollContainer.querySelectorAll(".gallery-item:not(.is-clone)"));
+  if (originalItems.length < 3) return;
+
+  // Clone items for infinite loop
+  const clonesCount = 4; // Clone 4 items on each side
+  const firstClones = originalItems.slice(0, clonesCount).map(item => item.cloneNode(true));
+  const lastClones = originalItems.slice(-clonesCount).map(item => item.cloneNode(true));
+
+  // Mark clones
+  firstClones.forEach(el => el.classList.add('is-clone'));
+  lastClones.forEach(el => el.classList.add('is-clone'));
+
+  // Clear and Re-append with clones
+  scrollContainer.innerHTML = "";
+  lastClones.forEach(clone => scrollContainer.appendChild(clone));
+  originalItems.forEach(item => scrollContainer.appendChild(item));
+  firstClones.forEach(clone => scrollContainer.appendChild(clone));
 
   const getScrollAmount = () => {
-    const style = getComputedStyle(scrollWrapper);
+    const style = getComputedStyle(scrollWrapper || document.documentElement);
     const w = parseInt(style.getPropertyValue('--card-width')) || 380;
     const g = parseInt(style.getPropertyValue('--gap')) || 24;
     return w + g;
   };
 
-  prevBtn.addEventListener("click", () => {
+  // Jump to actual start (past clones)
+  const jumpToStart = () => {
     const amount = getScrollAmount();
-    if (scrollContainer.scrollLeft <= 5) {
-      // Jump to end instant
-      scrollContainer.scrollTo({ left: scrollContainer.scrollWidth, behavior: "auto" });
-      // Optional: smooth scroll back a bit to simulate 'arrival'
-    } else {
-      scrollContainer.scrollBy({ left: -amount, behavior: "smooth" });
-    }
-  });
+    scrollContainer.scrollLeft = amount * clonesCount;
+  };
 
-  nextBtn.addEventListener("click", () => {
-    const amount = getScrollAmount();
-    // Check if we are close to end (allow small buffer)
-    if (scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 5) {
-      // Jump to start instant
-      scrollContainer.scrollTo({ left: 0, behavior: "auto" });
-    } else {
-      scrollContainer.scrollBy({ left: amount, behavior: "smooth" });
-    }
-  });
+  // Initial position
+  requestAnimationFrame(jumpToStart);
 
+  // Seamless Wrap Logic
   scrollContainer.addEventListener("scroll", () => {
-    window.requestAnimationFrame(updateArrows);
+    const scrollLeft = scrollContainer.scrollLeft;
+    const amount = getScrollAmount();
+    const realWidth = amount * originalItems.length;
+    const clonesWidth = amount * clonesCount;
+
+    if (scrollLeft < clonesWidth - amount) {
+      // Jump to End
+      scrollContainer.scrollLeft = scrollLeft + realWidth;
+    } else if (scrollLeft > clonesWidth + realWidth) {
+      // Jump to Start
+      scrollContainer.scrollLeft = scrollLeft - realWidth;
+    }
   }, { passive: true });
 
-  setTimeout(updateArrows, 100);
-  window.addEventListener("resize", updateArrows);
-}
+  // Cursor and Click Logic
+  scrollContainer.addEventListener("mousemove", (e) => {
+    const rect = scrollContainer.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    if (x < rect.width / 2) {
+      scrollContainer.classList.add("cursor-prev");
+      scrollContainer.classList.remove("cursor-next");
+    } else {
+      scrollContainer.classList.add("cursor-next");
+      scrollContainer.classList.remove("cursor-prev");
+    }
+  });
+
+  scrollContainer.addEventListener("mouseleave", () => {
+    scrollContainer.classList.remove("cursor-prev", "cursor-next");
+  });
+
+  scrollContainer.addEventListener("click", (e) => {
+    if (e.target.closest('.gallery-item')) return;
+    const rect = scrollContainer.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    if (x < rect.width / 2) prevBtn.click();
+    else nextBtn.click();
+  });
+
+  prevBtn.addEventListener("click", (e) => {
+    e?.stopPropagation();
+    scrollContainer.scrollBy({ left: -getScrollAmount(), behavior: "smooth" });
+  });
+
+  nextBtn.addEventListener("click", (e) => {
+    e?.stopPropagation();
+    scrollContainer.scrollBy({ left: getScrollAmount(), behavior: "smooth" });
+  });
+
+  // Highlight active link or update arrows (loop is always visible)
+  const updateArrows = () => {
+    prevBtn.classList.add("visible");
+    nextBtn.classList.add("visible");
+  };
+  updateArrows();
+};
+
+// Start scroll logic
+window.initPalawanGalleryScroll();
 
 
 // Auto-init REMOVED to prevent duplicate calls
