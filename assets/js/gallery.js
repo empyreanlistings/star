@@ -95,7 +95,7 @@ function initKaiAndIslaGallery() {
         noResults.innerHTML = `
           <div class="property-image" style="background:var(--glass-bg);display:flex;align-items:center;justify-content:center;height:240px;flex-direction:column;gap:16px;">
               <i class="fas fa-search" style="font-size:48px;color:var(--text);opacity:0.3;"></i>
-              <h4 style="margin:0; opacity:0.8;">Nothing here. Try updating your filters</h4>
+              <h4 style="margin:0; opacity:0.8; padding:20px; text-align:center;">Nothing here. Try updating your filters</h4>
           </div>
         `;
         gallery.appendChild(noResults);
