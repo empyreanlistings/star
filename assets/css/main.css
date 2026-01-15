@@ -771,21 +771,10 @@ html[data-theme="light"] .container-glass:hover {
 .property-gallery-filters>*:not(:last-child)::after,
 .gallery-filters>*::after,
 .gallery-type-filters>*::after {
-  content: '';
-  display: block;
-  width: 1px;
-  height: 20px;
-  /* Reduced height for elegance */
-  background-color: rgba(255, 255, 255, 0.2);
-  margin-left: 15px;
-  pointer-events: none;
+  display: none;
 }
 
-[data-theme="light"] .property-gallery-filters>*:not(:last-child)::after,
-[data-theme="light"] .gallery-filters>*::after,
-[data-theme="light"] .gallery-type-filters>*::after {
-  background-color: rgba(0, 0, 0, 0.1);
-}
+/* Light mode divider override - Removed */
 
 /* HOW IT WORKS NAV */
 .how-it-works-nav {
@@ -975,20 +964,12 @@ html[data-theme="light"] .how-it-works-nav .nav-btn.active {
   align-items: center;
 }
 
-/* Dividers for Flat Property Filters */
+/* Dividers for Flat Property Filters - Removed */
 .property-gallery-filters>*:not(:last-child)::after {
-  content: '';
-  display: block;
-  width: 1px;
-  height: 20px;
-  background-color: rgba(255, 255, 255, 0.2);
-  margin-left: 15px;
-  pointer-events: none;
+  display: none;
 }
 
-[data-theme="light"] .property-gallery-filters>*:not(:last-child)::after {
-  background-color: rgba(0, 0, 0, 0.1);
-}
+/* Light mode divider override - Removed */
 
 .filter-toggle:last-of-type {
   margin-right: 15px;
