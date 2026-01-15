@@ -126,10 +126,7 @@ function initAuth() {
                     if (avatarImg) {
                         avatarImg.src = url;
                         avatarImg.style.display = "block";
-                        avatarImg.style.opacity = "0";
-                        avatarImg.onload = () => {
-                            avatarImg.style.opacity = "1";
-                        };
+                        // Removed delayed fade-in logic for instant cache rendering
                         avatarImg.onerror = () => {
                             avatarImg.style.display = "none";
                             if (profileIcon) {
@@ -165,6 +162,12 @@ function initAuth() {
 
             // Initial Dashboard visibility from cache or default
             const dashLink = document.getElementById("navDashboardLink");
+            const navSignInLink = document.getElementById("navSignInLink");
+            const navSignInMobile = document.querySelector(".navSignInLinkMobile");
+
+            if (navSignInLink) navSignInLink.style.display = "none";
+            if (navSignInMobile) navSignInMobile.style.display = "none";
+
             if (dashLink) {
                 if (isProfile) {
                     dashLink.style.display = "none";
@@ -279,9 +282,14 @@ function initAuth() {
             // Reset Nav on Logout 
             const dashLink = document.getElementById("navDashboardLink");
             const avatarLink = document.getElementById("navAvatarLink");
+            const navSignInLink = document.getElementById("navSignInLink");
+            const navSignInMobile = document.querySelector(".navSignInLinkMobile");
+
+            if (navSignInLink) navSignInLink.style.display = "inline-flex";
+            if (navSignInMobile) navSignInMobile.style.display = "block";
+
             if (dashLink) {
-                dashLink.style.display = "inline-flex";
-                dashLink.href = "dashboard.html";
+                dashLink.style.display = "none";
             }
             if (avatarLink) avatarLink.style.display = "none";
         }

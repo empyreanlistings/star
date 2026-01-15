@@ -5444,8 +5444,8 @@ html[data-theme="light"] .contact-card {
 }
 
 .contact-card:not(.contact-card-premium):not(.contact-map):hover {
-  transform: translateY(-10px);
-  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.75);
+  transform: none;
+  box-shadow: var(--shadow-lg);
 }
 
 html[data-theme="light"] .contact-card:not(.contact-card-premium):not(.contact-card-map):hover {
@@ -5476,8 +5476,8 @@ html[data-theme="light"] .contact-card:not(.contact-card-premium):not(.contact-c
 }
 
 .newsletter-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35), inset 0 2px 8px rgba(255, 255, 255, 0.15);
+  transform: none;
+  box-shadow: var(--shadow-lg);
 }
 
 .newsletter-card .ml-form-embedWrapper {
@@ -6079,8 +6079,8 @@ html[data-theme="light"] .messenger-fab:hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
-  transition: opacity 1s ease;
+  border-radius: 50%;
+  display: block;
 }
 
 .nav-avatar:hover,
@@ -8109,6 +8109,13 @@ html[data-theme="light"] .payment-table td {
   opacity: 1;
   border-color: var(--accent);
   color: var(--accent);
+}
+
+/* Hide search FAB on mobile */
+@media (max-width: 1024px) {
+  .search-fab {
+    display: none !important;
+  }
 }
 
 .search-container {

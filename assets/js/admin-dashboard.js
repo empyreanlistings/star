@@ -112,7 +112,7 @@ function initGlobalDelegation() {
         }
 
         // 3. Modal Triggers Delegation
-        if (target.closest("#addEnquiryBtn") || target.closest("#addEnquiryNavbarBtn")) {
+        if (target.closest("#addEnquiryBtn")) {
             console.log("🖱️ [Global] Add Enquiry button clicked");
             if (typeof openEnquiryModal === 'function') openEnquiryModal();
             return;
