@@ -1390,6 +1390,50 @@ nav .logo-container img {
 
 #userEmail {
   padding-right: 15px;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* Premium Nav Icon Style Fix */
+.nav-icon-link,
+.theme-toggle,
+.menu-toggle {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--white);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.nav-icon-link:hover,
+.theme-toggle:hover,
+.menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme="light"] .nav-icon-link,
+html[data-theme="light"] .theme-toggle,
+html[data-theme="light"] .menu-toggle {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: var(--black);
+}
+
+html[data-theme="light"] .nav-icon-link:hover,
+html[data-theme="light"] .theme-toggle:hover,
+html[data-theme="light"] .menu-toggle:hover {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.12);
 }
 
 nav ul {
@@ -6392,6 +6436,26 @@ td img {
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+/* Dashboard Table Refinements */
+.listings-table-container table {
+  table-layout: fixed;
+  width: 100% !important;
+}
+
+.listings-table-container td:last-child {
+  white-space: nowrap !important;
+  text-align: right;
+}
+
+.source-icon {
+  font-size: 1.25rem !important;
+}
+
+.featured-star {
+  color: #d4af37 !important;
+  font-size: 1.1rem;
 }
 
 .status-active {

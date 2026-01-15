@@ -5,7 +5,7 @@
     <title>My Profile - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=2.47">
+    <link rel="stylesheet" href="assets/css/main.css?v=2.70">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap"
@@ -43,13 +43,16 @@
                 <img src="images/logo2-dark.png" alt="Kai & Isla" id="dashLogo">
             </a>
         </div>
-        <div class="user-info">
+        <div class="nav-right">
+            <a href="dashboard.html" class="nav-icon-link" title="Dashboard">
+                <i class="fas fa-th-large"></i>
+            </a>
             <button id="themeToggleDash" class="theme-toggle" aria-label="Toggle Theme">
                 <i class="theme-icon fas fa-moon"></i>
             </button>
-            <span id="userEmail" style="color:var(--dash-text);font-size:0.9rem;"></span>
-            <button id="logoutBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> <span
-                    class="logout-text">Logout</span></button>
+            <button id="logoutBtn" class="nav-icon-link" title="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
         </div>
     </header>
 

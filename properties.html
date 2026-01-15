@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Kai & Isla — Quality Homes in Palawan</title>
-  <meta name="description" content="Boutique property development in Palawan. Modern, eco-luxury homes with turn-key, off-grid, and custom build options.">
+  <meta name="description"
+    content="Boutique property development in Palawan. Modern, eco-luxury homes with turn-key, off-grid, and custom build options.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/main.css?v=2.42">
+  <link rel="stylesheet" href="assets/css/main.css?v=2.70">
 </head>
+
 <body data-theme="dark">
 
   <!-- DARK OVERLAY — Click to close menu -->
@@ -40,12 +43,15 @@
     </ul>
     <!-- RIGHT: Theme Toggle + Hamburger in ROW -->
     <div class="nav-right">
+      <a href="dashboard.html" id="navDashboardLink" class="nav-icon-link" aria-label="Dashboard">
+        <i class="fas fa-th-large"></i>
+      </a>
       <button class="theme-toggle" aria-label="Toggle theme" onclick="toggleTheme()">
-        <i class="fas fa-sun"></i>
+        <i class="theme-icon fas fa-sun"></i>
       </button>
-      <div class="menu-toggle" id="menu-toggle">
-        <span></span><span></span><span></span>
-      </div>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Open mobile menu">
+        <i class="fas fa-bars"></i>
+      </button>
     </div>
   </nav>
 
@@ -91,7 +97,7 @@
             <img src="images/logo2-dark.png" alt="Kai & Isla Logo">
           </div>
         </div>
-                <div class="property-info primary">
+        <div class="property-info primary">
           <span class="property-location">#2, Bucana (Duli), El Nido</span>
           <span class="property-price">₱10.6m</span>
         </div>
@@ -108,7 +114,7 @@
             <img src="images/logo2-dark.png" alt="Kai & Isla Logo">
           </div>
         </div>
-                <div class="property-info primary">
+        <div class="property-info primary">
           <span class="property-location">#3, Bucana (Duli), El Nido</span>
           <span class="property-price">₱10.6m</span>
         </div>
@@ -125,7 +131,7 @@
             <img src="images/logo2-dark.png" alt="Kai & Isla Logo">
           </div>
         </div>
-                <div class="property-info primary">
+        <div class="property-info primary">
           <span class="property-location">#4, Bucana (Duli), El Nido</span>
           <span class="property-price">₱10.6m</span>
         </div>
@@ -163,7 +169,7 @@
           <span class="property-location">47,000sqm</span>
         </div>
       </div>
-         <!-- PROPERTY 5 -->
+      <!-- PROPERTY 5 -->
       <div class="property-card animate-on-scroll">
         <div class="property-image">
           <img src="images/pic1.jpg" alt="Off-grid villa in Taytay" loading="lazy">
@@ -192,7 +198,7 @@
           <span class="property-location">47,000sqm</span>
         </div>
       </div>
-         <!-- PROPERTY 5 -->
+      <!-- PROPERTY 5 -->
       <div class="property-card animate-on-scroll">
         <div class="property-image">
           <img src="images/pic1.jpg" alt="Off-grid villa in Taytay" loading="lazy">
@@ -221,7 +227,7 @@
           <span class="property-location">47,000sqm</span>
         </div>
       </div>
-         <!-- PROPERTY 5 -->
+      <!-- PROPERTY 5 -->
       <div class="property-card animate-on-scroll">
         <div class="property-image">
           <img src="images/pic1.jpg" alt="Off-grid villa in Taytay" loading="lazy">
@@ -253,20 +259,20 @@
     </div>
 
     <!-- PROPERTY MODAL -->
-<div class="modal-overlay" id="modalOverlay"></div>
-<div class="property-modal" id="propertyModal">
-  <div class="modal-content">
-    <img id="modalImage" class="modal-image" alt="Property">
-    <div class="modal-info primary">
-      <span id="modalLocation"></span>
-      <span id="modalPrice"></span>
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="property-modal" id="propertyModal">
+      <div class="modal-content">
+        <img id="modalImage" class="modal-image" alt="Property">
+        <div class="modal-info primary">
+          <span id="modalLocation"></span>
+          <span id="modalPrice"></span>
+        </div>
+        <div class="modal-info">
+          <span id="modalType"></span>
+          <span id="modalSize"></span>
+        </div>
+      </div>
     </div>
-    <div class="modal-info">
-      <span id="modalType"></span>
-      <span id="modalSize"></span>
-    </div>
-  </div>
-</div>
 
   </section>
 
@@ -285,7 +291,8 @@
           <input type="text" placeholder="Country of residence" class="input-field country-field">
           <div class="privacy-checkbox">
             <input type="checkbox" id="privacy-agree" class="checkbox">
-            <label for="privacy-agree" class="privacy-label">I have read and authorise the use of my personal data for the purposes described in Kai & Isla Privacy Policy.</label>
+            <label for="privacy-agree" class="privacy-label">I have read and authorise the use of my personal data for
+              the purposes described in Kai & Isla Privacy Policy.</label>
           </div>
           <button type="submit" class="btn btn--accent">Subscribe</button>
         </form>
@@ -306,164 +313,167 @@
   <!-- FOOTER -->
   <footer>
     <p>© 2025 Kai & Isla Development Corporation.</p>
-      <li><a href="https://kaiandisla.com" target="_blank">CLIENT PORTAL</a></li>
+    <li><a href="https://kaiandisla.com" target="_blank">CLIENT PORTAL</a></li>
   </footer>
 
   <!-- FLOATING BUTTONS -->
-  <a class="whatsapp-fab" href="https://wa.me/639762746031" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+  <a class="whatsapp-fab" href="https://wa.me/639762746031" target="_blank" rel="noopener noreferrer"
+    aria-label="WhatsApp">
     <i class="fab fa-whatsapp"></i>
   </a>
-  <a class="messenger-fab" href="https://www.facebook.com/profile.php?id=61578042606158" target="_blank" rel="noopener noreferrer" aria-label="Messenger">
+  <a class="messenger-fab" href="https://www.facebook.com/profile.php?id=61578042606158" target="_blank"
+    rel="noopener noreferrer" aria-label="Messenger">
     <i class="fab fa-facebook-messenger"></i>
   </a>
 
   <!-- SCRIPTS -->
   <script>
-  // THEME TOGGLE
-  function toggleTheme() {
-    const body = document.body;
-    const currentTheme = body.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    body.setAttribute('data-theme', newTheme);
-    const logo = document.querySelector('.logo-container img');
-    if (newTheme === 'light') {
-      logo.src = 'images/logo2-dark.png';
-      logo.alt = 'Kai & Isla Logo (Dark)';
-    } else {
-      logo.src = 'images/logo2-light.png';
-      logo.alt = 'Kai & Isla Logo (Light)';
+    // THEME TOGGLE
+    function toggleTheme() {
+      const body = document.body;
+      const currentTheme = body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', newTheme);
+      const logo = document.querySelector('.logo-container img');
+      if (newTheme === 'light') {
+        logo.src = 'images/logo2-dark.png';
+        logo.alt = 'Kai & Isla Logo (Dark)';
+      } else {
+        logo.src = 'images/logo2-light.png';
+        logo.alt = 'Kai & Isla Logo (Light)';
+      }
+      const themeBtn = document.querySelector('.theme-toggle i');
+      themeBtn.classList.toggle('fa-sun', newTheme === 'dark');
+      themeBtn.classList.toggle('fa-moon', newTheme === 'light');
     }
-    const themeBtn = document.querySelector('.theme-toggle i');
-    themeBtn.classList.toggle('fa-sun', newTheme === 'dark');
-    themeBtn.classList.toggle('fa-moon', newTheme === 'light');
-  }
 
-  // MOBILE MENU
-  const menuToggle = document.getElementById('menu-toggle');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const menuOverlay = document.getElementById('menuOverlay');
+    // MOBILE MENU
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuOverlay = document.getElementById('menuOverlay');
 
-  function openMenu() {
-    menuToggle.classList.add('active');
-    mobileMenu.classList.add('open');
-    menuOverlay.classList.add('active');
-    document.body.classList.add('menu-open');
-  }
-
-  function closeMenu() {
-    menuToggle.classList.remove('active');
-    mobileMenu.classList.remove('open');
-    menuOverlay.classList.remove('active');
-    document.body.classList.remove('menu-open');
-  }
-
-  menuToggle.addEventListener('click', e => {
-    e.stopPropagation();
-    menuToggle.classList.contains('active') ? closeMenu() : openMenu();
-  });
-
-  document.querySelectorAll('#mobileMenu a').forEach(link => link.addEventListener('click', closeMenu));
-  menuOverlay.addEventListener('click', closeMenu);
-  mobileMenu.addEventListener('click', e => {
-    if (e.target === mobileMenu || e.target.matches('.mobile-menu::before')) closeMenu();
-  });
-
-  // PROPERTY MODAL
-  const modal = document.getElementById('propertyModal');
-  const modalOverlay = document.getElementById('modalOverlay');
-  const modalImg = document.getElementById('modalImage');
-  const modalLocation = document.getElementById('modalLocation');
-  const modalPrice = document.getElementById('modalPrice');
-  const modalType = document.getElementById('modalType');
-  const modalSize = document.getElementById('modalSize');
-
-  function openModal(card) {
-    const img = card.querySelector('.property-image img').src;
-    const location = card.querySelector('.property-location').textContent;
-    const price = card.querySelector('.property-price').textContent;
-    const type = card.querySelectorAll('.property-info')[1].querySelector('.property-location').textContent;
-    const size = card.querySelectorAll('.property-info')[1].querySelectorAll('.property-location')[1].textContent;
-
-    modalImg.src = img;
-    modalLocation.textContent = location;
-    modalPrice.textContent = price;
-    modalType.textContent = type;
-    modalSize.textContent = size;
-
-    modal.classList.add('open');
-    modalOverlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal() {
-    modal.classList.remove('open');
-    modalOverlay.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  // Open modal on card click
-  document.querySelectorAll('.property-card').forEach(card => {
-    card.addEventListener('click', () => openModal(card));
-  });
-
-  // Close modal
-  modalOverlay.addEventListener('click', closeModal);
-  modal.addEventListener('click', e => {
-    if (e.target === modal || e.target.matches('.property-modal::before')) closeModal();
-  });
-
-  // SCROLL ANIMATIONS
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => entry.target.classList.toggle('in-view', entry.isIntersecting));
-  }, { threshold: 0.15 });
-  document.querySelectorAll('.animate-on-scroll').forEach(el => io.observe(el));
-
-  // HERO CAROUSEL
-  (function() {
-    const slides = document.querySelectorAll('.hero-slide');
-    let current = 0;
-    const delay = 5000;
-    let intervalId = null;
-    function showSlide(idx) {
-      slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    function openMenu() {
+      menuToggle.classList.add('active');
+      mobileMenu.classList.add('open');
+      menuOverlay.classList.add('active');
+      document.body.classList.add('menu-open');
     }
-    function nextSlide() {
-      current = (current + 1) % slides.length;
-      showSlide(current);
+
+    function closeMenu() {
+      menuToggle.classList.remove('active');
+      mobileMenu.classList.remove('open');
+      menuOverlay.classList.remove('active');
+      document.body.classList.remove('menu-open');
     }
-    function startCarousel() {
-      if (!intervalId) intervalId = setInterval(nextSlide, delay);
-    }
-    function stopCarousel() {
-      if (intervalId) { clearInterval(intervalId); intervalId = null; }
-    }
-    startCarousel();
-    const carousel = document.querySelector('.hero-carousel');
-    ['mouseenter','focusin','touchstart'].forEach(evt => carousel.addEventListener(evt, stopCarousel));
-    ['mouseleave','focusout','touchend'].forEach(evt => carousel.addEventListener(evt, startCarousel));
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden') stopCarousel();
-      else startCarousel();
+
+    menuToggle.addEventListener('click', e => {
+      e.stopPropagation();
+      menuToggle.classList.contains('active') ? closeMenu() : openMenu();
     });
-    window.addEventListener('blur', stopCarousel);
-    window.addEventListener('focus', startCarousel);
-  })();
 
-  // NAVBAR SCROLL
-  let lastScroll = 0;
-  const topBar = document.getElementById('topBar');
-  const navBar = document.querySelector('nav');
-  window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    if (currentScroll > lastScroll && currentScroll > 50) {
-      topBar.classList.add('hidden');
-      navBar.style.top = '0';
-    } else {
-      topBar.classList.remove('hidden');
-      navBar.style.top = '30px';
+    document.querySelectorAll('#mobileMenu a').forEach(link => link.addEventListener('click', closeMenu));
+    menuOverlay.addEventListener('click', closeMenu);
+    mobileMenu.addEventListener('click', e => {
+      if (e.target === mobileMenu || e.target.matches('.mobile-menu::before')) closeMenu();
+    });
+
+    // PROPERTY MODAL
+    const modal = document.getElementById('propertyModal');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalImg = document.getElementById('modalImage');
+    const modalLocation = document.getElementById('modalLocation');
+    const modalPrice = document.getElementById('modalPrice');
+    const modalType = document.getElementById('modalType');
+    const modalSize = document.getElementById('modalSize');
+
+    function openModal(card) {
+      const img = card.querySelector('.property-image img').src;
+      const location = card.querySelector('.property-location').textContent;
+      const price = card.querySelector('.property-price').textContent;
+      const type = card.querySelectorAll('.property-info')[1].querySelector('.property-location').textContent;
+      const size = card.querySelectorAll('.property-info')[1].querySelectorAll('.property-location')[1].textContent;
+
+      modalImg.src = img;
+      modalLocation.textContent = location;
+      modalPrice.textContent = price;
+      modalType.textContent = type;
+      modalSize.textContent = size;
+
+      modal.classList.add('open');
+      modalOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
     }
-    lastScroll = currentScroll;
-  });
-</script>
+
+    function closeModal() {
+      modal.classList.remove('open');
+      modalOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Open modal on card click
+    document.querySelectorAll('.property-card').forEach(card => {
+      card.addEventListener('click', () => openModal(card));
+    });
+
+    // Close modal
+    modalOverlay.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => {
+      if (e.target === modal || e.target.matches('.property-modal::before')) closeModal();
+    });
+
+    // SCROLL ANIMATIONS
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => entry.target.classList.toggle('in-view', entry.isIntersecting));
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.animate-on-scroll').forEach(el => io.observe(el));
+
+    // HERO CAROUSEL
+    (function () {
+      const slides = document.querySelectorAll('.hero-slide');
+      let current = 0;
+      const delay = 5000;
+      let intervalId = null;
+      function showSlide(idx) {
+        slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+      }
+      function nextSlide() {
+        current = (current + 1) % slides.length;
+        showSlide(current);
+      }
+      function startCarousel() {
+        if (!intervalId) intervalId = setInterval(nextSlide, delay);
+      }
+      function stopCarousel() {
+        if (intervalId) { clearInterval(intervalId); intervalId = null; }
+      }
+      startCarousel();
+      const carousel = document.querySelector('.hero-carousel');
+      ['mouseenter', 'focusin', 'touchstart'].forEach(evt => carousel.addEventListener(evt, stopCarousel));
+      ['mouseleave', 'focusout', 'touchend'].forEach(evt => carousel.addEventListener(evt, startCarousel));
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') stopCarousel();
+        else startCarousel();
+      });
+      window.addEventListener('blur', stopCarousel);
+      window.addEventListener('focus', startCarousel);
+    })();
+
+    // NAVBAR SCROLL
+    let lastScroll = 0;
+    const topBar = document.getElementById('topBar');
+    const navBar = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      if (currentScroll > lastScroll && currentScroll > 50) {
+        topBar.classList.add('hidden');
+        navBar.style.top = '0';
+      } else {
+        topBar.classList.remove('hidden');
+        navBar.style.top = '30px';
+      }
+      lastScroll = currentScroll;
+    });
+  </script>
 </body>
+
 </html>

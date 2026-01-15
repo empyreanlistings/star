@@ -69,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
             initAdminListingsSync();
             initGallerySync();
             initPalawanGallerySync();
+            initEnquirySync();
 
             // Initialize filters & events
             initDashboardFilters();
@@ -77,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
             initPalawanGalleryModalEvents();
             initInspectionModalEvents();
             initPropertyModalEvents();
-            initEnquiryModalEvents(); // Added Enquiry Logic
+            initEnquiryModalEvents(); // Keep but triggers moved to global
             initLocationPicker(); // Initialize Google Maps Places Autocomplete
 
             // 2. Fetch user's company and RE-INIT sync with filter
@@ -108,6 +109,19 @@ function initGlobalDelegation() {
                 handleDuplicate(e);
             }
             return; // Stop here if it was an action button
+        }
+
+        // 3. Modal Triggers Delegation
+        if (target.closest("#addEnquiryBtn") || target.closest("#addEnquiryNavbarBtn")) {
+            console.log("🖱️ [Global] Add Enquiry button clicked");
+            if (typeof openEnquiryModal === 'function') openEnquiryModal();
+            return;
+        }
+
+        if (target.closest("#addListingBtn")) {
+            console.log("🖱️ [Global] Add Listing button clicked");
+            if (typeof openModal === 'function') openModal(false); // false = not edit mode
+            return;
         }
 
         // 2. Row Click Delegation (View Property)
@@ -278,7 +292,20 @@ function renderAdminTable(listings) {
         const id = data.id;
         const title = data.title || "Untitled";
         const thumbnail = data.media?.thumbnail || "images/coming-soon.webp";
-        const price = data.price ? `₱${Number(data.price).toLocaleString()}` : "TBC";
+
+        // Abbreviate Price
+        let price = "TBC";
+        if (data.price) {
+            const numPrice = Number(data.price);
+            if (numPrice >= 1000000) {
+                price = `₱${(numPrice / 1000000).toFixed(1)}m`;
+            } else if (numPrice >= 1000) {
+                price = `₱${(numPrice / 1000).toFixed(1)}k`;
+            } else {
+                price = `₱${numPrice.toLocaleString()}`;
+            }
+        }
+
         const status = data.status || "-";
         const category = data.category || "All";
         const shortDesc = data.content?.short_description || "";
@@ -299,24 +326,24 @@ function renderAdminTable(listings) {
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td>
+            <td style="width: 80px;">
                 <div class="thumb-wrapper">
                     <img src="${thumbnail}" alt="thumb">
                     ${galleryCount > 0 ? `<span class="gallery-badge" title="${galleryCount} more images">${galleryCount}</span>` : ''}
                 </div>
             </td>
-            <td>
+            <td style="min-width: 250px;">
                 <strong>${title}</strong><br>
                 <small style="opacity: 0.7;">${shortDesc}</small>
             </td>
-            <td><span style="text-transform: capitalize;">${status.replace('_', ' ')}</span></td>
-            <td>${price}</td>
-            <td><span class="status-badge status-active">${category.toUpperCase()}</span></td>
-            <td style="text-align:center;">${sourceHtml}</td>
-            <td style="text-align:center;">${data.featured ? '<i class="fas fa-star" style="color:var(--accent);"></i>' : ''}</td>
-            <td style="text-align:center;">${data.visits || 0}</td>
-            <td style="text-align:center;">${data.likes || 0}</td>
-            <td>
+            <td style="width: 100px;"><span style="text-transform: capitalize;">${status.replace('_', ' ')}</span></td>
+            <td style="width: 100px;">${price}</td>
+            <td style="width: 120px;"><span class="status-badge status-active">${category.toUpperCase()}</span></td>
+            <td style="width: 60px; text-align:center;">${sourceHtml}</td>
+            <td style="width: 60px; text-align:center;">${data.featured ? '<i class="fas fa-star featured-star"></i>' : ''}</td>
+            <td style="width: 60px; text-align:center;">${data.visits || 0}</td>
+            <td style="width: 60px; text-align:center;">${data.likes || 0}</td>
+            <td style="width: 140px; white-space: nowrap;">
                 <button class="action-btn edit" data-id="${id}" title="Edit"><i class="fas fa-pen"></i></button>
                 <button class="action-btn duplicate" data-id="${id}" title="Duplicate / Copy"><i class="fas fa-copy"></i></button>
                 <button class="action-btn delete" data-id="${id}" title="Delete"><i class="fas fa-trash"></i></button>
@@ -657,11 +684,10 @@ let enquiryModal;
 
 function initEnquiryModalEvents() {
     enquiryModal = document.getElementById("enquiryModal");
-    const addBtn = document.getElementById("addEnquiryNavbarBtn");
     const closeBtn = document.getElementById("closeEnquiryModal");
     const form = document.getElementById("enquiryForm");
 
-    if (addBtn) addBtn.onclick = openEnquiryModal;
+    // Close buttons logic remains the same
     if (closeBtn && enquiryModal) {
         closeBtn.onclick = () => {
             enquiryModal.classList.remove("active");
@@ -2007,3 +2033,127 @@ window.initMapCallback = function () {
         }, 500);
     }
 };
+
+// =============================================================================
+// ENQUIRIES SYNC & RENDERING
+// =============================================================================
+let allEnquiries = [];
+let enquiryPage = 1;
+const enquiriesPerPage = 10;
+let activeEnquiryListener = null;
+
+function initEnquirySync() {
+    const tbody = document.getElementById("enquiriesTableBody");
+    if (!tbody) return;
+
+    if (activeEnquiryListener) {
+        activeEnquiryListener();
+        activeEnquiryListener = null;
+    }
+
+    console.log("📡 [Firebase] Connecting to real-time enquiries sync...");
+    const q = query(collection(db, "Enquiries")); // Sort by date later if needed
+
+    activeEnquiryListener = onSnapshot(q, (snapshot) => {
+        allEnquiries = snapshot.docs.map(docSnap => ({
+            id: docSnap.id,
+            ...docSnap.data()
+        }));
+
+        // Sort by created_at descending (newest first)
+        allEnquiries.sort((a, b) => {
+            const dateA = a.created_at?.toDate ? a.created_at.toDate() : new Date(0);
+            const dateB = b.created_at?.toDate ? b.created_at.toDate() : new Date(0);
+            return dateB - dateA;
+        });
+
+        console.log(`🔥 [Firebase] Enquiries sync received: ${allEnquiries.length} items`);
+        renderEnquiryTable();
+    });
+}
+
+function renderEnquiryTable() {
+    const tbody = document.getElementById("enquiriesTableBody");
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    if (allEnquiries.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;opacity:0.6;">No enquiries found.</td></tr>';
+        return;
+    }
+
+    // Pagination
+    const totalRecords = allEnquiries.length;
+    const startIndex = (enquiryPage - 1) * enquiriesPerPage;
+    const endIndex = startIndex + enquiriesPerPage;
+    const paginated = allEnquiries.slice(startIndex, endIndex);
+
+    paginated.forEach(enq => {
+        const date = enq.created_at?.toDate ? enq.created_at.toDate().toLocaleString() : "N/A";
+        const name = enq.name || "Anonymous";
+        const contact = `<div>${enq.email || "No Email"}</div><small>${enq.phone_number || ""}</small>`;
+
+        // Construct Source/Details string
+        const sources = [];
+        if (enq.via_website) sources.push("Website");
+        if (enq.via_facebook) sources.push("Facebook");
+        if (enq.via_instagram) sources.push("Instagram");
+        if (enq.via_tiktok) sources.push("TikTok");
+        if (enq.via_word_of_mouth) sources.push("Word of Mouth");
+        if (enq.via_direct_contact) sources.push("Direct");
+
+        const details = `
+            <div style="font-size:0.85rem;">
+                <strong>Source:</strong> ${sources.join(", ") || "Unknown"}<br>
+                ${enq.off_plan ? '• Off-Plan ' : ''}
+                ${enq.custom_build ? '• Custom Build ' : ''}
+            </div>
+            ${enq.comments?.length > 0 ? `<small style="display:block;margin-top:4px;opacity:0.8;">Latest: ${enq.comments[0].text}</small>` : ''}
+        `;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${date}</td>
+            <td><strong>${name}</strong></td>
+            <td>${contact}</td>
+            <td>${details}</td>
+            <td>
+                <span class="status-badge ${enq.responded ? 'status-active' : 'status-draft'}">
+                    ${enq.responded ? 'Responded' : 'Pending'}
+                </span>
+            </td>
+            <td>
+                <button class="action-btn toggle-responded" data-id="${enq.id}" title="Toggle Responded Status">
+                    <i class="fas ${enq.responded ? 'fa-undo' : 'fa-check'}"></i>
+                </button>
+                <button class="action-btn delete-enquiry" data-id="${enq.id}" title="Delete"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    renderTablePagination("enquiriesPagination", totalRecords, enquiriesPerPage, enquiryPage, (newPage) => {
+        enquiryPage = newPage;
+        renderEnquiryTable();
+    });
+
+    // Action Handlers
+    tbody.querySelectorAll(".toggle-responded").forEach(btn => {
+        btn.onclick = async (e) => {
+            e.stopPropagation();
+            const id = btn.dataset.id;
+            const enq = allEnquiries.find(x => x.id === id);
+            await updateDoc(doc(db, "Enquiries", id), { responded: !enq.responded });
+        };
+    });
+
+    tbody.querySelectorAll(".delete-enquiry").forEach(btn => {
+        btn.onclick = async (e) => {
+            e.stopPropagation();
+            if (confirm("Delete this enquiry?")) {
+                await deleteDoc(doc(db, "Enquiries", btn.dataset.id));
+            }
+        };
+    });
+}
