@@ -255,18 +255,19 @@ window.initPalawanGalleryScroll = function () {
   // Initial position
   requestAnimationFrame(jumpToStart);
 
-  // Seamless Wrap Logic
+  // Seamless Wrap Logic with Buffer
   scrollContainer.addEventListener("scroll", () => {
     const scrollLeft = scrollContainer.scrollLeft;
     const amount = getScrollAmount();
     const realWidth = amount * originalItems.length;
     const clonesWidth = amount * clonesCount;
+    const buffer = amount * 0.5; // Half-card buffer to trigger jump early
 
-    if (scrollLeft < clonesWidth - amount) {
-      // Jump to End
+    if (scrollLeft < buffer) {
+      // Near clones start (left edge) -> jump to same position in real set
       scrollContainer.scrollLeft = scrollLeft + realWidth;
-    } else if (scrollLeft > clonesWidth + realWidth) {
-      // Jump to Start
+    } else if (scrollLeft > realWidth + clonesWidth - buffer) {
+      // Near clones end (right edge) -> jump back to real set
       scrollContainer.scrollLeft = scrollLeft - realWidth;
     }
   }, { passive: true });

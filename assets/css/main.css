@@ -4466,7 +4466,8 @@ details {
   /* Start items 40px from edge, but allow scrolling to edges */
   padding: 40px 20px 0px 20px;
   scroll-padding-left: 40px;
-  scroll-snap-type: x mandatory;
+  /* scroll-snap-type removed to fix jitter/flicker during infinite loop jumps */
+  scroll-snap-type: none;
   scrollbar-width: none;
   /* Firefox */
   -ms-overflow-style: none;
@@ -4509,7 +4510,8 @@ details {
   flex: 0 0 var(--card-width);
   height: var(--card-height);
   width: var(--card-width);
-  scroll-snap-align: center;
+  /* scroll-snap-align removed to fix jitter */
+  scroll-snap-align: none;
   position: relative;
   border-radius: 20px;
   /* Slightly softer curve like Apple */
@@ -5132,6 +5134,19 @@ html[data-theme="dark"] #works-lightbox .lightbox-arrow {
   opacity: 0;
   transition: opacity 0.35s ease, transform 0.35s ease;
   transform: translateY(10px);
+}
+
+/* Force white text even in light mode for all gallery overlays */
+.gallery-overlay h1,
+.gallery-overlay h2,
+.gallery-overlay h3,
+.gallery-overlay h4,
+.gallery-overlay h5,
+.gallery-overlay h6,
+.gallery-overlay p,
+.gallery-overlay span,
+.gallery-overlay a {
+  color: var(--white) !important;
 }
 
 .gallery-overlay h3,
