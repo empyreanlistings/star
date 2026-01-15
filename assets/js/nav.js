@@ -191,10 +191,21 @@ function initHeader() {
   // ANCHOR NAV
   // ================================================================
   document.addEventListener("click", e => {
-    const link = e.target.closest('a[href^="#"]');
+    const link = e.target.closest('a');
     if (!link) return;
 
-    const hash = link.getAttribute("href");
+    let href = link.getAttribute("href");
+    if (!href || !href.includes("#")) return;
+
+    // Handle both "#hash" and "index.html#hash"
+    const parts = href.split("#");
+    const page = parts[0];
+    const hash = "#" + parts[1];
+
+    // If it's a different page (not index.html on index.html), let it through
+    const isHomePage = window.location.pathname === "/" || window.location.pathname.endsWith("index.html");
+    if (page && page !== "index.html" && !(isHomePage && page === "")) return;
+
     const target = document.querySelector(hash);
     if (!target) return;
 

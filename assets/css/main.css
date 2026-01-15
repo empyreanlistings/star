@@ -1394,7 +1394,6 @@ nav .logo-container img {
 .theme-toggle,
 .menu-toggle {
   display: flex;
-  /* Changed from !important to allow hiding */
   align-items: center;
   justify-content: center;
   width: 40px;
@@ -1420,7 +1419,6 @@ nav .logo-container img {
 .menu-toggle:hover {
   background: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
@@ -1888,11 +1886,12 @@ html[data-theme="light"] .menu-overlay {
   color: #fff;
   font-size: 13px;
   line-height: 1;
-  padding: 8px 5%;
+  padding: 8px 0;
   z-index: 10001;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 40px;
   transition: transform 0.3s ease, opacity 0.3s ease, background 0.5s ease, box-shadow 0.3s ease;
   background: rgba(0, 0, 0, 0.9);
 }
@@ -6173,7 +6172,7 @@ body.dashboard-page::before {
   background: none;
   border: 1px solid var(--dash-border);
   padding: 0.5rem 1rem;
-  border-radius: 50px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
   color: var(--dash-text);
@@ -6339,57 +6338,41 @@ table {
 }
 
 /* Fixed column widths to prevent layout jumping */
-th:nth-child(1),
-td:nth-child(1) {
+.listings-table-container th:nth-child(1),
+.listings-table-container td:nth-child(1) {
   width: 80px;
 }
 
-/* Image */
-th:nth-child(2),
-td:nth-child(2) {
+/* Property Name in Listings */
+#listingsTableContainer th:nth-child(2),
+#listingsTableContainer td:nth-child(2) {
+  min-width: 200px;
   width: auto;
 }
 
-/* Property */
-th:nth-child(3),
-td:nth-child(3) {
+/* Details in Enquiries */
+#enquiriesSection th:nth-child(3),
+#enquiriesSection td:nth-child(3) {
+  width: 180px;
+  /* Email / Phone */
+}
+
+#enquiriesSection th:nth-child(4),
+#enquiriesSection td:nth-child(4) {
+  min-width: 300px;
+  width: auto;
+  /* Details */
+}
+
+/* Other columns */
+.listings-table-container th:nth-child(5),
+.listings-table-container td:nth-child(5) {
   width: 120px;
 }
 
-/* Type */
-th:nth-child(4),
-td:nth-child(4) {
-  width: 120px;
-}
-
-/* Price */
-th:nth-child(5),
-td:nth-child(5) {
-  width: 120px;
-}
-
-/* Category */
-th:nth-child(6),
-td:nth-child(6) {
-  width: 80px;
-}
-
-/* Featured */
-th:nth-child(7),
-td:nth-child(7) {
-  width: 80px;
-}
-
-/* Visits */
-th:nth-child(8),
-td:nth-child(8) {
-  width: 80px;
-}
-
-/* Likes */
-th:nth-child(9),
-td:nth-child(9) {
-  width: 140px;
+.listings-table-container th:nth-child(6),
+.listings-table-container td:nth-child(6) {
+  width: 100px;
 }
 
 /* Actions */
