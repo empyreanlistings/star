@@ -7411,6 +7411,17 @@ html[data-theme="light"] .close-modal:hover {
     -webkit-backdrop-filter: blur(8px) saturate(1.2) !important;
   }
 
+  /* Remove border and shadow from container-glass on mobile */
+  .container-glass {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Set margin for contact-cards-grid on mobile */
+  .contact-cards-grid {
+    margin: 10px !important;
+  }
+
   /* 2. Disable expensive radial-gradient animations on mobile */
   .inner_container_palawan::before,
   .logo-halo::before,
