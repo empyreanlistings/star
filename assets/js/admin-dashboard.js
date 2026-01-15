@@ -651,6 +651,39 @@ async function handleEdit(e) {
                 featuresInput.value = Array.isArray(features) ? features.join(", ") : "";
             }
 
+            // New Detailed Fields
+            const saleCheck = document.getElementById("propListingForSale");
+            if (saleCheck) saleCheck.checked = !!data.listing_for_sale;
+            const leaseCheck = document.getElementById("propListingForLease");
+            if (leaseCheck) leaseCheck.checked = !!data.listing_for_lease;
+
+            setField("propLeasePrice", data.lease_price);
+            setField("propFloorNumber", data.floor_number);
+            setField("propUnitNumber", data.unit_number);
+            setField("propParkingSpaces", data.parking_spaces);
+
+            const parkingCheck = document.getElementById("propHasParking");
+            if (parkingCheck) {
+                parkingCheck.checked = !!data.has_parking;
+                const pcont = document.getElementById("propParkingSpacesContainer");
+                if (pcont) pcont.style.display = parkingCheck.checked ? "block" : "none";
+            }
+
+            const furnishedCheck = document.getElementById("propFurnished");
+            if (furnishedCheck) furnishedCheck.checked = !!data.furnished;
+            const balconyCheck = document.getElementById("propBalcony");
+            if (balconyCheck) balconyCheck.checked = !!data.balcony;
+
+            // Lead Source (Updated for standardized radios)
+            const source = data.source || (data.whatsapp ? "whatsapp" : (data.telegram ? "telegram" : "user"));
+            const sourceRadio = document.querySelector(`input[name="leadSource"][value="${source}"]`);
+            if (sourceRadio) {
+                sourceRadio.checked = true;
+                const tcont = document.getElementById("telegramLinkContainerMain");
+                if (tcont) tcont.style.display = (source === "telegram") ? "block" : "none";
+            }
+            setField("propTelegramLink", data.telegram_link);
+
             // Populate Gallery
             const allImages = data.media?.images || [];
             const thumb = data.media?.thumbnail;
@@ -901,6 +934,28 @@ function initModalEvents() {
     }
 
     initGalleryLogic();
+
+    // Visibility Logic for Telegram Link (Listing Modal)
+    const sourceRadios = modal.querySelectorAll('input[name="leadSource"]');
+    const telegramLinkContainerMain = document.getElementById("telegramLinkContainerMain");
+    sourceRadios.forEach(radio => {
+        radio.addEventListener("change", () => {
+            if (telegramLinkContainerMain) {
+                telegramLinkContainerMain.style.display = (radio.value === "telegram" && radio.checked) ? "block" : "none";
+            }
+        });
+    });
+
+    // Visibility Logic for Parking Spaces (Listing Modal)
+    const parkingCheckboxMain = document.getElementById("propHasParking");
+    const parkingSpacesContainerMain = document.getElementById("propParkingSpacesContainer");
+    if (parkingCheckboxMain) {
+        parkingCheckboxMain.addEventListener("change", () => {
+            if (parkingSpacesContainerMain) {
+                parkingSpacesContainerMain.style.display = parkingCheckboxMain.checked ? "block" : "none";
+            }
+        });
+    }
 }
 
 function openModal(edit = false) {
@@ -929,6 +984,12 @@ function openModal(edit = false) {
     form.reset();
     currentGalleryState = []; // Reset gallery
     updateGalleryPreview();
+
+    // Reset Hidden Conditional Containers
+    const telegramLinkContainerMain = document.getElementById("telegramLinkContainerMain");
+    if (telegramLinkContainerMain) telegramLinkContainerMain.style.display = "none";
+    const parkingSpacesContainerMain = document.getElementById("propParkingSpacesContainer");
+    if (parkingSpacesContainerMain) parkingSpacesContainerMain.style.display = "none";
 
     // Reset Hidden Location Fields
     const lat = document.getElementById('locLat');
@@ -970,24 +1031,51 @@ async function handleFormSubmit(e) {
     try {
         console.log("💾 [Submit] Starting form submission...");
 
-        // Lead Source Logic
-        const leadSource = document.querySelector('input[name="leadSource"]:checked')?.value;
-        const isWhatsapp = leadSource === "whatsapp";
-        const isTelegram = leadSource === "telegram";
+        // Lead Source Logic (Standardized)
+        const sourceRadio = document.querySelector('input[name="leadSource"]:checked');
+        const source = sourceRadio ? sourceRadio.value : "user";
+        const telegramLink = document.getElementById("propTelegramLink").value;
+
+        // Listing Type Validation
+        const forSale = document.getElementById("propListingForSale").checked;
+        const forLease = document.getElementById("propListingForLease").checked;
+
+        if (!forSale && !forLease) {
+            statusDiv.textContent = "⚠️ Select at least one Listing Type.";
+            statusDiv.style.color = "orange";
+            submitBtn.disabled = false;
+            return;
+        }
 
         // Prepare Data Object (Base)
         let docData = {
             title: document.getElementById("propTitle").value,
             slug: document.getElementById("propSlug").value || document.getElementById("propTitle").value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
-            price: Number(document.getElementById("propPrice").value),
+            price: Number(document.getElementById("propPrice").value), // Selling Price
+            lease_price: Number(document.getElementById("propLeasePrice").value) || 0,
             currency: document.getElementById("propCurrency").value,
             type: document.getElementById("propType").value,
             category: document.getElementById("propCategory").value,
             status: document.getElementById("propStatus").value,
             featured: document.getElementById("propFeatured").checked,
             display: document.getElementById("propDisplay").checked,
-            whatsapp: isWhatsapp,
-            telegram: isTelegram,
+
+            // New Detailed Fields
+            listing_for_sale: forSale,
+            listing_for_lease: forLease,
+            floor_number: document.getElementById("propFloorNumber").value,
+            unit_number: document.getElementById("propUnitNumber").value,
+
+            has_parking: document.getElementById("propHasParking").checked,
+            parking_spaces: parseInt(document.getElementById("propParkingSpaces").value) || 0,
+            furnished: document.getElementById("propFurnished").checked,
+            balcony: document.getElementById("propBalcony").checked,
+
+            // Lead Source
+            source: source,
+            telegram_link: telegramLink,
+            whatsapp: source === "whatsapp", // legacy comp
+            telegram: source === "telegram", // legacy comp
             location: {
                 display: document.getElementById("locationSearch").value,
                 area: document.getElementById("locArea").value,
