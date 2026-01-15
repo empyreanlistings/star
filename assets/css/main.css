@@ -1398,7 +1398,8 @@ nav .logo-container img {
 .nav-icon-link,
 .theme-toggle,
 .menu-toggle {
-  display: flex !important;
+  display: flex;
+  /* Changed from !important to allow hiding */
   align-items: center;
   justify-content: center;
   width: 40px;
@@ -1410,6 +1411,13 @@ nav .logo-container img {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   text-decoration: none;
+}
+
+/* Hide mobile menu toggle on desktop */
+@media (min-width: 1025px) {
+  .menu-toggle {
+    display: none !important;
+  }
 }
 
 .nav-icon-link:hover,

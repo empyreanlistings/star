@@ -46,20 +46,13 @@
                      In dark mode, header is dark, so dark logo might be lost. 
                      Let's handle logo swap in JS or Filter -->
         </div>
-        <div class="user-info">
-            <button id="addEnquiryNavbarBtn" class="btn-add-nav" title="Add New Enquiry"
-                style="background: var(--accent); color: black;">
-                <i class="fas fa-comment-dots"></i> <span>Add Enquiry</span>
-            </button>
-            <button id="addInspectionNavbarBtn" class="btn-add-nav" title="Add New Inspection">
-                <i class="fas fa-file-medical"></i> <span>Add Inspection</span>
-            </button>
+        <div class="nav-right">
             <button id="themeToggleDash" class="theme-toggle" aria-label="Toggle Theme">
                 <i class="theme-icon fas fa-moon"></i>
             </button>
             <a href="profile.html" id="navAvatarLink" class="nav-avatar" title="My Profile" style="display:none;">
-                <img id="navAvatarImg" src="images/logo.png" alt="Profile" style="display:none;">
                 <i id="navDashboardIcon" class="fas fa-user-circle" style="display:none;"></i>
+                <img id="navAvatarImg" src="images/logo.png" alt="User" style="display:none;">
             </a>
             <span id="userEmail" style="color:var(--dash-text);font-size:0.9rem;"></span>
             <button id="logoutBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> <span
