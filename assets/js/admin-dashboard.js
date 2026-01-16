@@ -24,6 +24,7 @@ console.log("Admin Dashboard Script Loaded");
 // Globals
 let isEditMode = false;
 let isInitialized = false;
+let modal;
 let currentUserCompany = null; // Store user's company reference
 let tempInspectionMedia = []; // Stores { type: 'existing'|'new', url: string, file: File }
 let inspectionCache = { developments: {}, plots: {} }; // Cache for names
