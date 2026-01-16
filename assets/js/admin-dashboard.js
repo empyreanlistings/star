@@ -91,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
             initEnquiryModalEvents(); // Keep but triggers moved to global
             initEnquiryDetailsModalEvents();
             initInspectionDetailsModalEvents();
+            initEditButtonFeedback(); // Added for user feedback on Edit actions
             initLocationPicker(); // Initialize Google Maps Places Autocomplete
 
             // 2. Fetch user's company and RE-INIT sync with filter
@@ -2788,7 +2789,13 @@ async function renderActivityComments(comments, containerId, documentType, docum
     container.innerHTML = "";
 
     // Render each top-level comment and its thread
-    for (const comment of topLevelComments) {
+    for (let i = 0; i < topLevelComments.length; i++) {
+        const comment = topLevelComments[i];
+        if (i > 0) {
+            const divider = document.createElement("div");
+            divider.className = "comment-divider";
+            container.appendChild(divider);
+        }
         await renderCommentThread(comment, repliesMap, container, documentType, documentId, 0);
     }
 
@@ -2813,8 +2820,10 @@ async function renderCommentThread(comment, repliesMap, container, documentType,
     const indentPx = depth * 40; // 40px indent per level
 
     const commentCard = document.createElement("div");
+    commentCard.className = "comment-item";
     commentCard.style.cssText = `background: rgba(255,255,255,0.05); border-radius:8px; padding:1rem; margin-bottom:0.75rem; margin-left:${indentPx}px; display:flex; gap:0.75rem;`;
     commentCard.dataset.commentId = comment.id;
+    commentCard.dataset.depth = depth;
 
     // Avatar
     const avatarHtml = user.avatar
@@ -2830,7 +2839,10 @@ async function renderCommentThread(comment, repliesMap, container, documentType,
                     <strong style="font-size:0.9rem;">${user.name}</strong>
                     <div style="font-size:0.75rem; opacity:0.6; margin-top:2px;">${timestamp}</div>
                 </div>
-                <div style="display:flex; gap:0.25rem;">
+                <div style="display:flex; gap:0.4rem; align-items: center;">
+                    <button class="comment-collapse-btn action-btn" data-id="${comment.id}" title="Collapse/Expand">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
                     ${comment.flagged ? '<span class="status-badge" style="background:orange; font-size:0.7rem; padding:2px 6px;">Flagged</span>' : ''}
                     <button class="action-btn flag-comment" data-id="${comment.id}" title="${comment.flagged ? 'Unflag' : 'Flag'}" style="padding:4px 6px;">
                         <i class="fas fa-flag" style="font-size:0.8rem;"></i>
@@ -2842,13 +2854,15 @@ async function renderCommentThread(comment, repliesMap, container, documentType,
                     ` : ''}
                 </div>
             </div>
-            <div style="font-size:0.9rem; line-height:1.5; word-wrap:break-word;">${comment.comment || ""}</div>
+            <div style="font-size:0.9rem; line-height:1.5; word-wrap:break-word;" class="comment-body">${comment.comment || ""}</div>
             ${comment.image ? `<img src="${comment.image}" style="max-width:200px; border-radius:4px; margin-top:0.5rem; cursor:pointer;" onclick="window.open('${comment.image}', '_blank')" alt="Comment attachment">` : ''}
-            ${depth < MAX_DEPTH ? `
-                <button class="reply-btn" data-comment-id="${comment.id}" data-user-name="${user.name}" style="margin-top:0.5rem; padding:0.25rem 0.5rem; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; color:inherit; cursor:pointer; font-size:0.8rem;">
-                    <i class="fas fa-reply"></i> Reply
-                </button>
-            ` : ''}
+            <div class="comment-actions" style="margin-top:0.5rem;">
+                ${depth < MAX_DEPTH ? `
+                    <button class="reply-btn" data-comment-id="${comment.id}" data-user-name="${user.name}" style="padding:0.25rem 0.5rem; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; color:inherit; cursor:pointer; font-size:0.8rem;">
+                        <i class="fas fa-reply"></i> Reply
+                    </button>
+                ` : ''}
+            </div>
         </div>
     `;
 
@@ -2899,6 +2913,40 @@ function attachCommentEventListeners(container, documentType, documentId) {
             showReplyInput(btn.dataset.commentId, btn.dataset.userName, documentType, documentId);
         };
     });
+
+    // Collapse buttons
+    container.querySelectorAll(".comment-collapse-btn").forEach(btn => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            const commentItem = btn.closest("[data-comment-id]");
+            if (commentItem) {
+                const isCollapsed = commentItem.classList.toggle("collapsed");
+                const icon = btn.querySelector("i");
+                if (icon) {
+                    icon.className = isCollapsed ? "fas fa-chevron-down" : "fas fa-chevron-up";
+                }
+
+                // Also hide children (replies)
+                let next = commentItem.nextElementSibling;
+                while (next && next.dataset.depth > commentItem.dataset.depth) {
+                    next.style.display = isCollapsed ? "none" : "flex";
+                    next = next.nextElementSibling;
+                }
+            }
+        };
+    });
+}
+
+// Add snackbar listeners for Edit buttons
+function initEditButtonFeedback() {
+    ['detEnqEditBtn', 'detInspEditBtn', 'listingEditBtn'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.addEventListener('click', () => {
+                showSnackbar("Edit mode enabled. Update fields and save changes.", "info");
+            });
+        }
+    });
 }
 
 /**
@@ -2912,7 +2960,7 @@ function showReplyInput(parentCommentId, parentUserName, documentType, documentI
     }
 
     // Find the parent comment card
-    const parentCard = document.querySelector(`[data-comment-id="${parentCommentId}"]`);
+    const parentCard = document.querySelector(`[data - comment - id="${parentCommentId}"]`);
     if (!parentCard) return;
 
     // Create reply input container
@@ -2921,7 +2969,7 @@ function showReplyInput(parentCommentId, parentUserName, documentType, documentI
     replyContainer.style.cssText = 'background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; margin-top:0.5rem; margin-left:40px;';
 
     replyContainer.innerHTML = `
-        <div style="margin-bottom:0.5rem; font-size:0.85rem; opacity:0.7;">Replying to @${parentUserName}</div>
+    < div style = "margin-bottom:0.5rem; font-size:0.85rem; opacity:0.7;" > Replying to @${parentUserName}</div >
         <textarea class="reply-textarea" placeholder="Write your reply..." 
             style="width:100%; min-height:60px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.5rem; color:inherit; font-family:inherit; resize:vertical;"></textarea>
         <div style="display:flex; gap:0.5rem; margin-top:0.5rem; align-items:center;">
@@ -2937,7 +2985,7 @@ function showReplyInput(parentCommentId, parentUserName, documentType, documentI
                 Cancel
             </button>
         </div>
-    `;
+`;
 
     // Insert after parent card
     parentCard.insertAdjacentElement('afterend', replyContainer);
@@ -2954,7 +3002,7 @@ function showReplyInput(parentCommentId, parentUserName, documentType, documentI
 
     fileInput.onchange = (e) => {
         if (e.target.files.length > 0) {
-            imagePreview.textContent = `📎 ${e.target.files[0].name}`;
+            imagePreview.textContent = `📎 ${e.target.files[0].name} `;
         } else {
             imagePreview.textContent = "";
         }
@@ -3001,7 +3049,7 @@ async function handleAddComment(documentType, documentId, commentText, imageFile
         // Upload image if provided
         if (imageFile) {
             const resizedBlob = await compressAndConvertToWebP(imageFile, 800);
-            const storageRef = ref(storage, `activity-comments/${Date.now()}_${imageFile.name.split('.')[0]}.webp`);
+            const storageRef = ref(storage, `activity - comments / ${Date.now()}_${imageFile.name.split('.')[0]}.webp`);
             await uploadBytes(storageRef, resizedBlob);
             imageUrl = await getDownloadURL(storageRef);
         }
