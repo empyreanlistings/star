@@ -49,8 +49,6 @@ let allPalawanGallery = [];
 let allInspections = [];
 let allEnquiries = [];
 let activeEnquiryListener = null;
-let allEnquiries = []; // Added missing declaration
-let activeEnquiryListener = null; // Added missing declaration
 
 // Filtering State
 let dashboardFilters = {
