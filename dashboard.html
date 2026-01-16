@@ -5,7 +5,7 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=2.86">
+    <link rel="stylesheet" href="assets/css/main.css?v=2.87">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
@@ -941,11 +941,32 @@
                     </div>
                 </div>
 
+
                 <div class="form-group">
-                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:4px;">Notes / Comment History</label>
-                    <div id="detEnqComments"
-                        style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; max-height: 150px; overflow-y: auto; font-size:0.9rem; line-height:1.5;">
-                        -
+                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:8px;">Activity Comments</label>
+
+                    <!-- Comments Feed -->
+                    <div id="detEnqCommentsContainer"
+                        style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; max-height: 300px; overflow-y: auto; margin-bottom:1rem;">
+                        <!-- Comments will be dynamically rendered here -->
+                    </div>
+
+                    <!-- Add Comment Form -->
+                    <div style="background: rgba(255,255,255,0.05); border-radius:8px; padding:1rem;">
+                        <textarea id="detEnqNewComment" placeholder="Add a comment..."
+                            style="width:100%; min-height:60px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.5rem; color:inherit; font-family:inherit; resize:vertical;"></textarea>
+                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem; align-items:center;">
+                            <input type="file" id="detEnqCommentImage" accept="image/*" style="display:none;">
+                            <button id="detEnqAttachImageBtn" class="action-btn" title="Attach Image"
+                                style="background:rgba(255,255,255,0.1);">
+                                <i class="fas fa-image"></i>
+                            </button>
+                            <span id="detEnqImagePreview" style="font-size:0.8rem; opacity:0.7;"></span>
+                            <button id="detEnqPostCommentBtn" class="btn-add"
+                                style="margin-left:auto; padding:0.5rem 1rem;">
+                                Post Comment
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1011,6 +1032,35 @@
                         <!-- Images will be injected here -->
                     </div>
                 </div>
+
+                <!-- Activity Comments Section -->
+                <div class="form-group" style="margin-top:1.5rem;">
+                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:8px;">Activity Comments</label>
+
+                    <!-- Comments Feed -->
+                    <div id="detInspCommentsContainer"
+                        style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; max-height: 300px; overflow-y: auto; margin-bottom:1rem;">
+                        <!-- Comments will be dynamically rendered here -->
+                    </div>
+
+                    <!-- Add Comment Form -->
+                    <div style="background: rgba(255,255,255,0.05); border-radius:8px; padding:1rem;">
+                        <textarea id="detInspNewComment" placeholder="Add a comment..."
+                            style="width:100%; min-height:60px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.5rem; color:inherit; font-family:inherit; resize:vertical;"></textarea>
+                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem; align-items:center;">
+                            <input type="file" id="detInspCommentImage" accept="image/*" style="display:none;">
+                            <button id="detInspAttachImageBtn" class="action-btn" title="Attach Image"
+                                style="background:rgba(255,255,255,0.1);">
+                                <i class="fas fa-image"></i>
+                            </button>
+                            <span id="detInspImagePreview" style="font-size:0.8rem; opacity:0.7;"></span>
+                            <button id="detInspPostCommentBtn" class="btn-add"
+                                style="margin-left:auto; padding:0.5rem 1rem;">
+                                Post Comment
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div style="margin-top:2rem; display:flex; gap:1rem;">
                 <button id="detInspEditBtn" class="btn-add" style="flex:1;">Edit Inspection</button>
@@ -1022,14 +1072,14 @@
     <!-- Property Modal == [DYNAMIC COMPONENT] -->
     <div id="propertymodal-placeholder"></div>
 
-    <script src="assets/js/nav.js?v=2.86" defer></script>
-    <script src="assets/js/snackbar.js?v=2.86"></script>
-    <script src="assets/js/main.js?v=2.86" defer></script>
+    <script src="assets/js/nav.js?v=2.87" defer></script>
+    <script src="assets/js/snackbar.js?v=2.87"></script>
+    <script src="assets/js/main.js?v=2.87" defer></script>
     <!-- Google Maps API -->
     <!-- Google Maps API -->
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBskYGOCldwNxevKvAfJaVvy9_8Mjfv22Q&libraries=places&callback=initMapCallback"></script>
-    <script type="module" src="assets/js/admin-dashboard.js?v=2.86"></script>
+    <script type="module" src="assets/js/admin-dashboard.js?v=2.87"></script>
 
 </body>
 

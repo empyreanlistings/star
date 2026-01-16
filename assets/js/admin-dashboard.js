@@ -36,6 +36,10 @@ let currentInspectionGallery = [];
 let enquiryDetailsModal;
 let inspectionDetailsModal;
 
+// Activity Comments
+let activeCommentsListener = null;
+let userAvatarCache = {}; // Cache for user avatars {userId: {name, avatar}}
+
 // Global Data Store for Filtering
 let allListings = [];
 let allGallery = [];
@@ -2501,18 +2505,41 @@ function openEnquiryDetailsModal(enq) {
     document.getElementById("detEnqOffPlan").style.display = enq.off_plan ? "block" : "none";
     document.getElementById("detEnqCustomBuild").style.display = enq.custom_build ? "block" : "none";
 
-    // Comments
-    const commentsDiv = document.getElementById("detEnqComments");
-    if (enq.comments && enq.comments.length > 0) {
-        commentsDiv.innerHTML = enq.comments.map(c => `
-            <div style="margin-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:4px;">
-                <div style="opacity:0.6; font-size:0.75rem;">${new Date(c.timestamp).toLocaleString()} by ${c.author}</div>
-                <div style="margin-top:2px;">${c.text}</div>
-            </div>
-        `).join("");
-    } else {
-        commentsDiv.textContent = "No comments yet.";
-    }
+    // Initialize Activity Comments
+    initCommentsListener("enquiry", enq.id, "detEnqCommentsContainer");
+
+    // Setup comment form event listeners
+    const attachImageBtn = document.getElementById("detEnqAttachImageBtn");
+    const fileInput = document.getElementById("detEnqCommentImage");
+    const imagePreview = document.getElementById("detEnqImagePreview");
+    const postBtn = document.getElementById("detEnqPostCommentBtn");
+    const textarea = document.getElementById("detEnqNewComment");
+
+    // Attach image button
+    attachImageBtn.onclick = () => fileInput.click();
+
+    // File input change
+    fileInput.onchange = (e) => {
+        if (e.target.files.length > 0) {
+            imagePreview.textContent = `📎 ${e.target.files[0].name}`;
+        } else {
+            imagePreview.textContent = "";
+        }
+    };
+
+    // Post comment button
+    postBtn.onclick = async () => {
+        const commentText = textarea.value.trim();
+        const imageFile = fileInput.files[0] || null;
+
+        if (commentText || imageFile) {
+            postBtn.disabled = true;
+            postBtn.textContent = "Posting...";
+            await handleAddComment("enquiry", enq.id, commentText, imageFile);
+            postBtn.disabled = false;
+            postBtn.textContent = "Post Comment";
+        }
+    };
 
     // Edit Button Data
     document.getElementById("detEnqEditBtn").dataset.id = enq.id;
@@ -2523,6 +2550,7 @@ function openEnquiryDetailsModal(enq) {
 
 function closeEnquiryDetailsModal() {
     if (!enquiryDetailsModal) return;
+    detachCommentsListener(); // Clean up comments listener
     enquiryDetailsModal.classList.remove("active");
     setTimeout(() => {
         if (!enquiryDetailsModal.classList.contains("active")) {
@@ -2602,6 +2630,42 @@ function openInspectionDetailsModal(insp) {
         mediaDiv.innerHTML = '<div style="grid-column: 1/-1; opacity:0.5; font-size:0.9rem;">No media attached.</div>';
     }
 
+    // Initialize Activity Comments
+    initCommentsListener("inspection", insp.id, "detInspCommentsContainer");
+
+    // Setup comment form event listeners
+    const attachImageBtn = document.getElementById("detInspAttachImageBtn");
+    const fileInput = document.getElementById("detInspCommentImage");
+    const imagePreview = document.getElementById("detInspImagePreview");
+    const postBtn = document.getElementById("detInspPostCommentBtn");
+    const textarea = document.getElementById("detInspNewComment");
+
+    // Attach image button
+    attachImageBtn.onclick = () => fileInput.click();
+
+    // File input change
+    fileInput.onchange = (e) => {
+        if (e.target.files.length > 0) {
+            imagePreview.textContent = `📎 ${e.target.files[0].name}`;
+        } else {
+            imagePreview.textContent = "";
+        }
+    };
+
+    // Post comment button
+    postBtn.onclick = async () => {
+        const commentText = textarea.value.trim();
+        const imageFile = fileInput.files[0] || null;
+
+        if (commentText || imageFile) {
+            postBtn.disabled = true;
+            postBtn.textContent = "Posting...";
+            await handleAddComment("inspection", insp.id, commentText, imageFile);
+            postBtn.disabled = false;
+            postBtn.textContent = "Post Comment";
+        }
+    };
+
     document.getElementById("detInspEditBtn").dataset.id = insp.id;
 
     inspectionDetailsModal.style.display = "flex";
@@ -2610,6 +2674,7 @@ function openInspectionDetailsModal(insp) {
 
 function closeInspectionDetailsModal() {
     if (!inspectionDetailsModal) return;
+    detachCommentsListener(); // Clean up comments listener
     inspectionDetailsModal.classList.remove("active");
     setTimeout(() => {
         if (!inspectionDetailsModal.classList.contains("active")) {
@@ -2630,5 +2695,279 @@ async function handleEditEnquiry(id) {
     console.log("Editing Enquiry:", id);
     // [TODO] Implement Enquiry Editing if needed
     alert("Enquiry Editing coming soon! For now, view details or delete.");
+}
+
+
+/**
+ * ========================================
+ * ACTIVITY COMMENTS SYSTEM
+ * ========================================
+ */
+
+/**
+ * Fetch User Avatar and Name from Users collection
+ * @param {DocumentReference} userRef - Firestore reference to Users document
+ * @returns {Promise<{name: string, avatar: string}>}
+ */
+async function fetchUserAvatar(userRef) {
+    if (!userRef || !userRef.id) {
+        return { name: "Unknown User", avatar: "" };
+    }
+
+    const userId = userRef.id;
+
+    // Check cache first
+    if (userAvatarCache[userId]) {
+        return userAvatarCache[userId];
+    }
+
+    try {
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const result = {
+                name: userData.name || userData.displayName || "User",
+                avatar: userData.avatar || userData.photoURL || ""
+            };
+            // Cache the result
+            userAvatarCache[userId] = result;
+            return result;
+        }
+    } catch (err) {
+        console.error("Error fetching user avatar:", err);
+    }
+
+    return { name: "Unknown User", avatar: "" };
+}
+
+/**
+ * Render Activity Comments
+ * @param {Array} comments - Array of comment objects
+ * @param {string} containerId - ID of the container to render comments in
+ * @param {string} documentType - "enquiry" or "inspection"
+ * @param {string} documentId - ID of the parent document
+ */
+async function renderActivityComments(comments, containerId, documentType, documentId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    if (!comments || comments.length === 0) {
+        container.innerHTML = '<div style="text-align:center; opacity:0.5; padding:2rem;">No comments yet. Be the first to comment!</div>';
+        return;
+    }
+
+    // Filter out trashed comments
+    const activeComments = comments.filter(c => !c.trash);
+
+    if (activeComments.length === 0) {
+        container.innerHTML = '<div style="text-align:center; opacity:0.5; padding:2rem;">No comments yet. Be the first to comment!</div>';
+        return;
+    }
+
+    // Sort by date (newest first)
+    activeComments.sort((a, b) => {
+        const dateA = a.added_at?.toDate ? a.added_at.toDate() : new Date(0);
+        const dateB = b.added_at?.toDate ? b.added_at.toDate() : new Date(0);
+        return dateB - dateA;
+    });
+
+    container.innerHTML = "";
+
+    for (const comment of activeComments) {
+        const user = await fetchUserAvatar(comment.added_by);
+        const timestamp = comment.added_at?.toDate ? comment.added_at.toDate().toLocaleString() : "Unknown date";
+
+        const commentCard = document.createElement("div");
+        commentCard.style.cssText = "background: rgba(255,255,255,0.05); border-radius:8px; padding:1rem; margin-bottom:0.75rem; display:flex; gap:0.75rem;";
+
+        // Avatar
+        const avatarHtml = user.avatar
+            ? `<img src="${user.avatar}" style="width:40px; height:40px; border-radius:50%; object-fit:cover; flex-shrink:0;" alt="${user.name}">`
+            : `<div style="width:40px; height:40px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0;">${user.name.charAt(0).toUpperCase()}</div>`;
+
+        // Build comment HTML
+        commentCard.innerHTML = `
+            ${avatarHtml}
+            <div style="flex:1; min-width:0;">
+                <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:0.25rem;">
+                    <div>
+                        <strong style="font-size:0.9rem;">${user.name}</strong>
+                        <div style="font-size:0.75rem; opacity:0.6; margin-top:2px;">${timestamp}</div>
+                    </div>
+                    <div style="display:flex; gap:0.25rem;">
+                        ${comment.flagged ? '<span class="status-badge" style="background:orange; font-size:0.7rem; padding:2px 6px;">Flagged</span>' : ''}
+                        ${currentUserId === comment.added_by?.id || true ? `
+                            <button class="action-btn flag-comment" data-id="${comment.id}" title="${comment.flagged ? 'Unflag' : 'Flag'}" style="padding:4px 6px;">
+                                <i class="fas fa-flag" style="font-size:0.8rem;"></i>
+                            </button>
+                            <button class="action-btn delete-comment" data-id="${comment.id}" data-type="${documentType}" title="Delete" style="padding:4px 6px;">
+                                <i class="fas fa-trash" style="font-size:0.8rem;"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+                <div style="font-size:0.9rem; line-height:1.5; word-wrap:break-word;">${comment.comment || ""}</div>
+                ${comment.image ? `<img src="${comment.image}" style="max-width:200px; border-radius:4px; margin-top:0.5rem; cursor:pointer;" onclick="window.open('${comment.image}', '_blank')" alt="Comment attachment">` : ''}
+            </div>
+        `;
+
+        container.appendChild(commentCard);
+    }
+
+    // Attach event listeners for flag/delete
+    container.querySelectorAll(".flag-comment").forEach(btn => {
+        btn.onclick = async (e) => {
+            e.stopPropagation();
+            await handleFlagComment(btn.dataset.id);
+        };
+    });
+
+    container.querySelectorAll(".delete-comment").forEach(btn => {
+        btn.onclick = async (e) => {
+            e.stopPropagation();
+            if (confirm("Delete this comment?")) {
+                await handleDeleteComment(btn.dataset.id, btn.dataset.type, documentId);
+            }
+        };
+    });
+}
+
+/**
+ * Handle Adding a New Comment
+ * @param {string} documentType - "enquiry" or "inspection"
+ * @param {string} documentId - ID of the parent document
+ * @param {string} commentText - The comment text
+ * @param {File} imageFile - Optional image file
+ */
+async function handleAddComment(documentType, documentId, commentText, imageFile = null) {
+    if (!commentText.trim()) {
+        alert("Please enter a comment.");
+        return;
+    }
+
+    try {
+        let imageUrl = null;
+
+        // Upload image if provided
+        if (imageFile) {
+            const resizedBlob = await compressAndConvertToWebP(imageFile, 800);
+            const storageRef = ref(storage, `activity-comments/${Date.now()}_${imageFile.name.split('.')[0]}.webp`);
+            await uploadBytes(storageRef, resizedBlob);
+            imageUrl = await getDownloadURL(storageRef);
+        }
+
+        // Create parent document reference
+        const parentRef = doc(db, documentType === "enquiry" ? "Enquiries" : "Inspections", documentId);
+        const userRef = doc(db, "Users", currentUserId);
+
+        // Create comment document
+        const commentData = {
+            added_by: userRef,
+            added_at: serverTimestamp(),
+            comment: commentText,
+            flagged: false,
+            trash: false,
+            parent_document: parentRef,
+            document_type: documentType
+        };
+
+        if (imageUrl) {
+            commentData.image = imageUrl;
+        }
+
+        await addDoc(collection(db, "activityComments"), commentData);
+
+        // Clear form
+        const textareaId = documentType === "enquiry" ? "detEnqNewComment" : "detInspNewComment";
+        const previewId = documentType === "enquiry" ? "detEnqImagePreview" : "detInspImagePreview";
+        const fileInputId = documentType === "enquiry" ? "detEnqCommentImage" : "detInspCommentImage";
+
+        document.getElementById(textareaId).value = "";
+        document.getElementById(previewId).textContent = "";
+        document.getElementById(fileInputId).value = "";
+
+        console.log("Comment added successfully");
+    } catch (err) {
+        console.error("Error adding comment:", err);
+        alert("Failed to add comment: " + err.message);
+    }
+}
+
+/**
+ * Handle Flagging a Comment
+ * @param {string} commentId - ID of the comment to flag/unflag
+ */
+async function handleFlagComment(commentId) {
+    try {
+        const commentRef = doc(db, "activityComments", commentId);
+        const commentDoc = await getDoc(commentRef);
+
+        if (commentDoc.exists()) {
+            const currentFlag = commentDoc.data().flagged || false;
+            await updateDoc(commentRef, { flagged: !currentFlag });
+        }
+    } catch (err) {
+        console.error("Error flagging comment:", err);
+        alert("Failed to flag comment.");
+    }
+}
+
+/**
+ * Handle Deleting a Comment (Soft Delete)
+ * @param {string} commentId - ID of the comment to delete
+ * @param {string} documentType - "enquiry" or "inspection"
+ * @param {string} documentId - ID of the parent document
+ */
+async function handleDeleteComment(commentId, documentType, documentId) {
+    try {
+        const commentRef = doc(db, "activityComments", commentId);
+        // Soft delete
+        await updateDoc(commentRef, { trash: true });
+        console.log("Comment deleted successfully");
+    } catch (err) {
+        console.error("Error deleting comment:", err);
+        alert("Failed to delete comment.");
+    }
+}
+
+/**
+ * Initialize Real-time Comments Listener
+ * @param {string} documentType - "enquiry" or "inspection"
+ * @param {string} documentId - ID of the parent document
+ * @param {string} containerId - ID of the container to render comments in
+ */
+function initCommentsListener(documentType, documentId, containerId) {
+    // Detach previous listener if exists
+    if (activeCommentsListener) {
+        activeCommentsListener();
+        activeCommentsListener = null;
+    }
+
+    const parentRef = doc(db, documentType === "enquiry" ? "Enquiries" : "Inspections", documentId);
+    const q = query(
+        collection(db, "activityComments"),
+        where("parent_document", "==", parentRef)
+    );
+
+    activeCommentsListener = onSnapshot(q, (snapshot) => {
+        const comments = snapshot.docs.map(docSnap => ({
+            id: docSnap.id,
+            ...docSnap.data()
+        }));
+
+        renderActivityComments(comments, containerId, documentType, documentId);
+    }, (error) => {
+        console.error("Error in comments listener:", error);
+    });
+}
+
+/**
+ * Detach Comments Listener
+ */
+function detachCommentsListener() {
+    if (activeCommentsListener) {
+        activeCommentsListener();
+        activeCommentsListener = null;
+    }
 }
 
