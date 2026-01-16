@@ -6621,7 +6621,7 @@ td img {
 }
 
 .premium-modal.active {
-  opacity: 1;
+  opacity: 1 !important;
 }
 
 .premium-modal .modal-content {
