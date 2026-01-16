@@ -47,6 +47,19 @@
                      Let's handle logo swap in JS or Filter -->
         </div>
         <div class="nav-right">
+            <!-- Quick Actions -->
+            <div class="header-quick-actions" style="display: flex; gap: 8px; margin-right: 15px;">
+                <button id="addListingNavbarBtn" class="btn-add-icon" title="Add Listing">
+                    <i class="fas fa-home"></i><i class="fas fa-plus" style="font-size: 0.6rem;"></i>
+                </button>
+                <button id="addEnquiryNavbarBtn" class="btn-add-icon" title="Add Enquiry">
+                    <i class="fas fa-user-plus"></i>
+                </button>
+                <button id="addInspectionNavbarBtn" class="btn-add-icon" title="Add Inspection">
+                    <i class="fas fa-clipboard-check"></i>
+                </button>
+            </div>
+
             <button id="themeToggleDash" class="theme-toggle" aria-label="Toggle Theme">
                 <i class="theme-icon fas fa-moon"></i>
             </button>
@@ -718,6 +731,7 @@
             </h3>
             <form id="enquiryForm" style="display: contents;">
                 <div class="modal-body">
+                    <input type="hidden" id="enqId">
                     <div class="modal-grid">
                         <!-- Left Column -->
                         <div class="modal-column">
@@ -1166,7 +1180,7 @@
     <!-- Google Maps API -->
     <!-- Google Maps API -->
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBskYGOCldwNxevKvAfJaVvy9_8Mjfv22Q&libraries=places&callback=initMapCallback"></script>
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBskYGOCldwNxevKvAfJaVvy9_8Mjfv22Q&libraries=places&v=weekly&callback=initMapCallback"></script>
     <script type="module" src="assets/js/admin-dashboard.js?v=2.90"></script>
 
 </body>
