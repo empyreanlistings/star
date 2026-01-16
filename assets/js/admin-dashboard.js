@@ -1882,7 +1882,7 @@ function renderPalawanGalleryTable(gallery) {
                 <small style="opacity: 0.7;">${item.description || ""}</small>
             </td>
             <td style="text-align:center;">${item.display ? '<i class="fas fa-check" style="color:var(--accent);"></i>' : ''}</td>
-            <td>
+            <td style="text-align:center;">
                 <button class="action-btn edit-palawan-gallery" data-id="${item.id}" title="Edit"><i class="fas fa-pen"></i></button>
                 <button class="action-btn delete delete-palawan-gallery" data-id="${item.id}" title="Delete"><i class="fas fa-trash"></i></button>
             </td>
