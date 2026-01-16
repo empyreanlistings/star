@@ -177,14 +177,21 @@ function initGlobalDelegation() {
         // Enquiry Row Click (Details)
         const enqTr = target.closest("tr");
         if (enqTr && enqTr.closest("#enquiriesTableBody") && !target.closest("button") && !target.closest("a")) {
-            // We need the enquiry object. Since we don't have it direct, we can look it up or use data attribute.
-            // We can look up in allEnquiries array.
-            // Let's rely on finding it by some index or ID if we stored it?
-            // Or better, let renderEnquiryTable store data-id on TR.
             const enqId = enqTr.dataset.id;
             if (enqId && typeof allEnquiries !== 'undefined') {
                 const enq = allEnquiries.find(e => e.id === enqId);
                 if (enq) openEnquiryDetailsModal(enq);
+            }
+            return;
+        }
+
+        // Inspection Row Click (Details)
+        const inspTr = target.closest("tr");
+        if (inspTr && inspTr.closest("#inspectionsTableBody") && !target.closest("button") && !target.closest("a")) {
+            const inspId = inspTr.dataset.id;
+            if (inspId && typeof allInspections !== 'undefined') {
+                const insp = allInspections.find(i => i.id === inspId);
+                if (insp) openInspectionDetailsModal(insp);
             }
             return;
         }
@@ -2650,7 +2657,8 @@ function renderInspectionsTable() {
 
         const tr = document.createElement("tr");
         tr.style.cursor = "pointer";
-        tr.onclick = () => openInspectionDetailsModal(insp);
+        tr.dataset.id = insp.id; // Added for row click delegation
+        // tr.onclick = () => openInspectionDetailsModal(insp); // Handled via delegation
         tr.innerHTML = `
             <td style="width: 120px;">${date}</td>
             <td style="min-width: 200px;"><strong>${name}</strong></td>
@@ -2932,14 +2940,23 @@ function initInspectionDetailsModalEvents() {
 function openInspectionDetailsModal(insp) {
     if (!inspectionDetailsModal) return;
 
-    document.getElementById("detInspTitle").textContent = insp.title || "Unnamed Inspection";
-    document.getElementById("detInspDate").textContent = insp.created_at ? new Date(insp.created_at).toLocaleString() : "-";
+    document.getElementById("detInspTitle").textContent = insp.name || "Unnamed Inspection";
 
-    // References
-    const devId = (insp.development_id?.id || insp.development_id || "-").toUpperCase();
-    const plotId = (insp.plot_id?.id || insp.plot_id || "-").toUpperCase();
-    document.getElementById("detInspDev").textContent = devId;
-    document.getElementById("detInspPlot").textContent = plotId;
+    // Date formatting for Firestore Timestamps
+    let dateStr = "-";
+    if (insp.created_at && typeof insp.created_at.toDate === 'function') {
+        dateStr = insp.created_at.toDate().toLocaleString();
+    } else if (insp.created_at) {
+        dateStr = new Date(insp.created_at).toLocaleString();
+    }
+    document.getElementById("detInspDate").textContent = dateStr;
+
+    // References with Cache Resolution
+    const devId = (insp.development_id?.id || insp.development_id);
+    const plotId = (insp.plot_id?.id || insp.plot_id);
+
+    document.getElementById("detInspDev").textContent = inspectionCache.developments[devId] || devId || "-";
+    document.getElementById("detInspPlot").textContent = inspectionCache.plots[plotId] || plotId || "-";
 
     // Tags
     const tagsDiv = document.getElementById("detInspTags");
@@ -2952,8 +2969,8 @@ function openInspectionDetailsModal(insp) {
     // Status
     document.getElementById("detInspStatus").innerHTML = `<span class="status-badge ${insp.private ? 'status-draft' : 'status-active'}">${insp.private ? 'Private' : 'Public'}</span>`;
 
-    // Note
-    document.getElementById("detInspNote").textContent = insp.note || "No notes provided.";
+    // Notes (Fixed field name to insp.notes)
+    document.getElementById("detInspNote").textContent = insp.notes || "No notes provided.";
 
     // Media
     const mediaDiv = document.getElementById("detInspMedia");
