@@ -33,6 +33,8 @@ let palawanGalleryModal;
 let isPalawanGalleryEditMode = false;
 let inspectionModal;
 let currentInspectionGallery = [];
+let enquiryDetailsModal;
+let inspectionDetailsModal;
 
 // Global Data Store for Filtering
 let allListings = [];
@@ -56,6 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
     modal = document.getElementById("listingModal");
     galleryModal = document.getElementById("galleryModal");
     inspectionModal = document.getElementById("inspectionModal");
+    enquiryDetailsModal = document.getElementById("enquiryDetailsModal");
+    inspectionDetailsModal = document.getElementById("inspectionDetailsModal");
 
     // Use Firebase Auth to check user and fetch company
     auth.onAuthStateChanged(async (user) => {
@@ -81,6 +85,8 @@ document.addEventListener("DOMContentLoaded", () => {
             initInspectionModalEvents();
             initPropertyModalEvents();
             initEnquiryModalEvents(); // Keep but triggers moved to global
+            initEnquiryDetailsModalEvents();
+            initInspectionDetailsModalEvents();
             initLocationPicker(); // Initialize Google Maps Places Autocomplete
 
             // 2. Fetch user's company and RE-INIT sync with filter
@@ -2267,6 +2273,8 @@ function renderEnquiryTable() {
         `;
 
         const tr = document.createElement("tr");
+        tr.style.cursor = "pointer";
+        tr.onclick = () => openEnquiryDetailsModal(enq);
         tr.innerHTML = `
             <td>${date}</td>
             <td><strong>${name}</strong></td>
@@ -2370,6 +2378,8 @@ function renderInspectionsTable() {
         const statusClass = insp.private ? "status-draft" : "status-active";
 
         const tr = document.createElement("tr");
+        tr.style.cursor = "pointer";
+        tr.onclick = () => openInspectionDetailsModal(insp);
         tr.innerHTML = `
             <td style="width: 120px;">${date}</td>
             <td style="min-width: 200px;"><strong>${name}</strong></td>
@@ -2393,7 +2403,8 @@ function renderInspectionsTable() {
 
     // Action Handlers
     tbody.querySelectorAll(".edit-inspection").forEach(btn => {
-        btn.onclick = () => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
             // Re-use handleEdit style logic but for inspections if needed
             // For now, let's assume openInspectionModal handles it if we pass an ID
             handleEditInspection(btn.dataset.id);
@@ -2401,7 +2412,8 @@ function renderInspectionsTable() {
     });
 
     tbody.querySelectorAll(".delete-inspection").forEach(btn => {
-        btn.onclick = async () => {
+        btn.onclick = async (e) => {
+            e.stopPropagation();
             if (confirm("Delete this inspection report?")) {
                 try {
                     await deleteDoc(doc(db, "Inspections", btn.dataset.id));
@@ -2422,3 +2434,201 @@ async function handleEditInspection(id) {
     // However, I might need to implement the populating logic here or in openInspectionModal.
     // For now, I'll just log it.
 }
+
+/**
+ * Initialize Enquiry Details Modal Events
+ */
+function initEnquiryDetailsModalEvents() {
+    if (!enquiryDetailsModal) return;
+    const closeBtn = document.getElementById("closeEnquiryDetailsModal");
+    const closeBtnFooter = document.getElementById("detEnqCloseBtn");
+    const editBtn = document.getElementById("detEnqEditBtn");
+
+    if (closeBtn) closeBtn.onclick = closeEnquiryDetailsModal;
+    if (closeBtnFooter) closeBtnFooter.onclick = closeEnquiryDetailsModal;
+    if (editBtn) {
+        editBtn.onclick = () => {
+            const enqId = editBtn.dataset.id;
+            if (enqId) {
+                closeEnquiryDetailsModal();
+                handleEditEnquiry(enqId);
+            }
+        };
+    }
+
+    window.addEventListener("click", (e) => {
+        if (e.target === enquiryDetailsModal) closeEnquiryDetailsModal();
+    });
+}
+
+function openEnquiryDetailsModal(enq) {
+    if (!enquiryDetailsModal) return;
+
+    // Populate Fields
+    document.getElementById("detEnqName").textContent = enq.name || "Anonymous";
+    document.getElementById("detEnqDate").textContent = enq.created_at?.toDate ? enq.created_at.toDate().toLocaleString() : "N/A";
+    document.getElementById("detEnqEmail").textContent = enq.email || "No Email";
+    document.getElementById("detEnqPhone").textContent = enq.phone_number || "No Phone";
+
+    // Source & Status
+    document.getElementById("detEnqSource").textContent = enq.source?.toUpperCase() || "MANUAL";
+    const telLink = document.getElementById("detEnqTelegramLink");
+    if (enq.telegram_link) {
+        telLink.style.display = "block";
+        telLink.innerHTML = `<a href="${enq.telegram_link}" target="_blank">View Telegram Profile</a>`;
+    } else {
+        telLink.style.display = "none";
+    }
+
+    document.getElementById("detEnqStatus").innerHTML = `<span class="status-badge ${enq.responded ? 'status-active' : 'status-draft'}">${enq.responded ? 'Responded' : 'Pending'}</span>`;
+
+    // Property Requirements
+    document.getElementById("detEnqListingType").textContent = (enq.listing_for_sale ? "For Sale " : "") + (enq.listing_for_lease ? "For Lease" : "");
+    document.getElementById("detEnqPropType").textContent = enq.property_type?.toUpperCase() || "-";
+    document.getElementById("detEnqArea").textContent = enq.area || "-";
+    document.getElementById("detEnqUnitFloor").textContent = `Unit ${enq.unit_number || "-"} / Floor ${enq.floor_number || "-"}`;
+    document.getElementById("detEnqSellingPrice").textContent = enq.selling_price ? `₱ ${parseFloat(enq.selling_price).toLocaleString()}` : "-";
+    document.getElementById("detEnqLeasePrice").textContent = enq.lease_price ? `₱ ${parseFloat(enq.lease_price).toLocaleString()}` : "-";
+
+    // Features
+    const featuresDiv = document.getElementById("detEnqFeatures");
+    featuresDiv.innerHTML = "";
+    if (enq.has_parking) featuresDiv.innerHTML += `<span class="status-badge">Parking (${enq.parking_spaces || 0})</span>`;
+    if (enq.furnished) featuresDiv.innerHTML += `<span class="status-badge">Furnished</span>`;
+    if (enq.balcony) featuresDiv.innerHTML += `<span class="status-badge">Balcony</span>`;
+    if (featuresDiv.innerHTML === "") featuresDiv.textContent = "-";
+
+    document.getElementById("detEnqOffPlan").style.display = enq.off_plan ? "block" : "none";
+    document.getElementById("detEnqCustomBuild").style.display = enq.custom_build ? "block" : "none";
+
+    // Comments
+    const commentsDiv = document.getElementById("detEnqComments");
+    if (enq.comments && enq.comments.length > 0) {
+        commentsDiv.innerHTML = enq.comments.map(c => `
+            <div style="margin-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:4px;">
+                <div style="opacity:0.6; font-size:0.75rem;">${new Date(c.timestamp).toLocaleString()} by ${c.author}</div>
+                <div style="margin-top:2px;">${c.text}</div>
+            </div>
+        `).join("");
+    } else {
+        commentsDiv.textContent = "No comments yet.";
+    }
+
+    // Edit Button Data
+    document.getElementById("detEnqEditBtn").dataset.id = enq.id;
+
+    enquiryDetailsModal.style.display = "flex";
+    setTimeout(() => enquiryDetailsModal.classList.add("active"), 10);
+}
+
+function closeEnquiryDetailsModal() {
+    if (!enquiryDetailsModal) return;
+    enquiryDetailsModal.classList.remove("active");
+    setTimeout(() => {
+        if (!enquiryDetailsModal.classList.contains("active")) {
+            enquiryDetailsModal.style.display = "none";
+        }
+    }, 400);
+}
+
+/**
+ * Initialize Inspection Details Modal Events
+ */
+function initInspectionDetailsModalEvents() {
+    if (!inspectionDetailsModal) return;
+    const closeBtn = document.getElementById("closeInspectionDetailsModal");
+    const closeBtnFooter = document.getElementById("detInspCloseBtn");
+    const editBtn = document.getElementById("detInspEditBtn");
+
+    if (closeBtn) closeBtn.onclick = closeInspectionDetailsModal;
+    if (closeBtnFooter) closeBtnFooter.onclick = closeInspectionDetailsModal;
+    if (editBtn) {
+        editBtn.onclick = () => {
+            const inspId = editBtn.dataset.id;
+            if (inspId) {
+                closeInspectionDetailsModal();
+                handleEditInspection(inspId);
+            }
+        };
+    }
+
+    window.addEventListener("click", (e) => {
+        if (e.target === inspectionDetailsModal) closeInspectionDetailsModal();
+    });
+}
+
+function openInspectionDetailsModal(insp) {
+    if (!inspectionDetailsModal) return;
+
+    document.getElementById("detInspTitle").textContent = insp.title || "Unnamed Inspection";
+    document.getElementById("detInspDate").textContent = insp.created_at ? new Date(insp.created_at).toLocaleString() : "-";
+
+    // References
+    const devId = (insp.development_id?.id || insp.development_id || "-").toUpperCase();
+    const plotId = (insp.plot_id?.id || insp.plot_id || "-").toUpperCase();
+    document.getElementById("detInspDev").textContent = devId;
+    document.getElementById("detInspPlot").textContent = plotId;
+
+    // Tags
+    const tagsDiv = document.getElementById("detInspTags");
+    if (Array.isArray(insp.inspection_tags) && insp.inspection_tags.length > 0) {
+        tagsDiv.innerHTML = insp.inspection_tags.map(t => `<span class="status-badge">${t}</span>`).join("");
+    } else {
+        tagsDiv.textContent = "-";
+    }
+
+    // Status
+    document.getElementById("detInspStatus").innerHTML = `<span class="status-badge ${insp.private ? 'status-draft' : 'status-active'}">${insp.private ? 'Private' : 'Public'}</span>`;
+
+    // Note
+    document.getElementById("detInspNote").textContent = insp.note || "No notes provided.";
+
+    // Media
+    const mediaDiv = document.getElementById("detInspMedia");
+    mediaDiv.innerHTML = "";
+    if (insp.media && insp.media.length > 0) {
+        insp.media.forEach(url => {
+            const img = document.createElement("img");
+            img.src = url;
+            img.style.width = "100%";
+            img.style.height = "100px";
+            img.style.objectFit = "cover";
+            img.style.borderRadius = "4px";
+            img.style.cursor = "pointer";
+            img.onclick = () => window.open(url, "_blank");
+            mediaDiv.appendChild(img);
+        });
+    } else {
+        mediaDiv.innerHTML = '<div style="grid-column: 1/-1; opacity:0.5; font-size:0.9rem;">No media attached.</div>';
+    }
+
+    document.getElementById("detInspEditBtn").dataset.id = insp.id;
+
+    inspectionDetailsModal.style.display = "flex";
+    setTimeout(() => inspectionDetailsModal.classList.add("active"), 10);
+}
+
+function closeInspectionDetailsModal() {
+    if (!inspectionDetailsModal) return;
+    inspectionDetailsModal.classList.remove("active");
+    setTimeout(() => {
+        if (!inspectionDetailsModal.classList.contains("active")) {
+            inspectionDetailsModal.style.display = "none";
+        }
+    }, 400);
+}
+
+/**
+ * HandleEditEnquiry Helper (if not implemented)
+ */
+async function handleEditEnquiry(id) {
+    // For now, reuse existing openEnquiryModal and populate
+    // Note: Existing openEnquiryModal only handles ADDING.
+    // We need to implement EDITING logic for enquiries if desired.
+    // The user didn't specifically ask for Edit Enquiry yet, but I'll make the button trigger the modal.
+    // Actually, let's see if handleEditEnquiry exists.
+    console.log("Editing Enquiry:", id);
+    // [TODO] Implement Enquiry Editing if needed
+    alert("Enquiry Editing coming soon! For now, view details or delete.");
+}
+
