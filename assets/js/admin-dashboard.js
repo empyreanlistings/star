@@ -2741,7 +2741,7 @@ async function fetchUserAvatar(userRef) {
 }
 
 /**
- * Render Activity Comments
+ * Render Activity Comments with Threading Support
  * @param {Array} comments - Array of comment objects
  * @param {string} containerId - ID of the container to render comments in
  * @param {string} documentType - "enquiry" or "inspection"
@@ -2764,8 +2764,22 @@ async function renderActivityComments(comments, containerId, documentType, docum
         return;
     }
 
-    // Sort by date (newest first)
-    activeComments.sort((a, b) => {
+    // Separate top-level comments from replies
+    const topLevelComments = activeComments.filter(c => !c.parent_comment_id);
+    const repliesMap = {};
+
+    // Organize replies by parent comment ID
+    activeComments.forEach(c => {
+        if (c.parent_comment_id) {
+            if (!repliesMap[c.parent_comment_id]) {
+                repliesMap[c.parent_comment_id] = [];
+            }
+            repliesMap[c.parent_comment_id].push(c);
+        }
+    });
+
+    // Sort top-level comments by date (newest first)
+    topLevelComments.sort((a, b) => {
         const dateA = a.added_at?.toDate ? a.added_at.toDate() : new Date(0);
         const dateB = b.added_at?.toDate ? b.added_at.toDate() : new Date(0);
         return dateB - dateA;
@@ -2773,48 +2787,94 @@ async function renderActivityComments(comments, containerId, documentType, docum
 
     container.innerHTML = "";
 
-    for (const comment of activeComments) {
-        const user = await fetchUserAvatar(comment.added_by);
-        const timestamp = comment.added_at?.toDate ? comment.added_at.toDate().toLocaleString() : "Unknown date";
-
-        const commentCard = document.createElement("div");
-        commentCard.style.cssText = "background: rgba(255,255,255,0.05); border-radius:8px; padding:1rem; margin-bottom:0.75rem; display:flex; gap:0.75rem;";
-
-        // Avatar
-        const avatarHtml = user.avatar
-            ? `<img src="${user.avatar}" style="width:40px; height:40px; border-radius:50%; object-fit:cover; flex-shrink:0;" alt="${user.name}">`
-            : `<div style="width:40px; height:40px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0;">${user.name.charAt(0).toUpperCase()}</div>`;
-
-        // Build comment HTML
-        commentCard.innerHTML = `
-            ${avatarHtml}
-            <div style="flex:1; min-width:0;">
-                <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:0.25rem;">
-                    <div>
-                        <strong style="font-size:0.9rem;">${user.name}</strong>
-                        <div style="font-size:0.75rem; opacity:0.6; margin-top:2px;">${timestamp}</div>
-                    </div>
-                    <div style="display:flex; gap:0.25rem;">
-                        ${comment.flagged ? '<span class="status-badge" style="background:orange; font-size:0.7rem; padding:2px 6px;">Flagged</span>' : ''}
-                        ${currentUserId === comment.added_by?.id || true ? `
-                            <button class="action-btn flag-comment" data-id="${comment.id}" title="${comment.flagged ? 'Unflag' : 'Flag'}" style="padding:4px 6px;">
-                                <i class="fas fa-flag" style="font-size:0.8rem;"></i>
-                            </button>
-                            <button class="action-btn delete-comment" data-id="${comment.id}" data-type="${documentType}" title="Delete" style="padding:4px 6px;">
-                                <i class="fas fa-trash" style="font-size:0.8rem;"></i>
-                            </button>
-                        ` : ''}
-                    </div>
-                </div>
-                <div style="font-size:0.9rem; line-height:1.5; word-wrap:break-word;">${comment.comment || ""}</div>
-                ${comment.image ? `<img src="${comment.image}" style="max-width:200px; border-radius:4px; margin-top:0.5rem; cursor:pointer;" onclick="window.open('${comment.image}', '_blank')" alt="Comment attachment">` : ''}
-            </div>
-        `;
-
-        container.appendChild(commentCard);
+    // Render each top-level comment and its thread
+    for (const comment of topLevelComments) {
+        await renderCommentThread(comment, repliesMap, container, documentType, documentId, 0);
     }
 
-    // Attach event listeners for flag/delete
+    // Attach event listeners
+    attachCommentEventListeners(container, documentType, documentId);
+}
+
+/**
+ * Recursively render a comment and its replies
+ * @param {Object} comment - Comment object
+ * @param {Object} repliesMap - Map of parent comment IDs to their replies
+ * @param {HTMLElement} container - Container element
+ * @param {string} documentType - "enquiry" or "inspection"
+ * @param {string} documentId - ID of the parent document
+ * @param {number} depth - Current nesting depth
+ */
+async function renderCommentThread(comment, repliesMap, container, documentType, documentId, depth) {
+    const MAX_DEPTH = 4;
+    const user = await fetchUserAvatar(comment.added_by);
+    const timestamp = comment.added_at?.toDate ? comment.added_at.toDate().toLocaleString() : "Unknown date";
+
+    const indentPx = depth * 40; // 40px indent per level
+
+    const commentCard = document.createElement("div");
+    commentCard.style.cssText = `background: rgba(255,255,255,0.05); border-radius:8px; padding:1rem; margin-bottom:0.75rem; margin-left:${indentPx}px; display:flex; gap:0.75rem;`;
+    commentCard.dataset.commentId = comment.id;
+
+    // Avatar
+    const avatarHtml = user.avatar
+        ? `<img src="${user.avatar}" style="width:40px; height:40px; border-radius:50%; object-fit:cover; flex-shrink:0;" alt="${user.name}">`
+        : `<div style="width:40px; height:40px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0;">${user.name.charAt(0).toUpperCase()}</div>`;
+
+    // Build comment HTML
+    commentCard.innerHTML = `
+        ${avatarHtml}
+        <div style="flex:1; min-width:0;">
+            <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:0.25rem;">
+                <div>
+                    <strong style="font-size:0.9rem;">${user.name}</strong>
+                    <div style="font-size:0.75rem; opacity:0.6; margin-top:2px;">${timestamp}</div>
+                </div>
+                <div style="display:flex; gap:0.25rem;">
+                    ${comment.flagged ? '<span class="status-badge" style="background:orange; font-size:0.7rem; padding:2px 6px;">Flagged</span>' : ''}
+                    <button class="action-btn flag-comment" data-id="${comment.id}" title="${comment.flagged ? 'Unflag' : 'Flag'}" style="padding:4px 6px;">
+                        <i class="fas fa-flag" style="font-size:0.8rem;"></i>
+                    </button>
+                    ${currentUserId === comment.added_by?.id ? `
+                        <button class="action-btn delete-comment" data-id="${comment.id}" data-type="${documentType}" title="Delete" style="padding:4px 6px;">
+                            <i class="fas fa-trash" style="font-size:0.8rem;"></i>
+                        </button>
+                    ` : ''}
+                </div>
+            </div>
+            <div style="font-size:0.9rem; line-height:1.5; word-wrap:break-word;">${comment.comment || ""}</div>
+            ${comment.image ? `<img src="${comment.image}" style="max-width:200px; border-radius:4px; margin-top:0.5rem; cursor:pointer;" onclick="window.open('${comment.image}', '_blank')" alt="Comment attachment">` : ''}
+            ${depth < MAX_DEPTH ? `
+                <button class="reply-btn" data-comment-id="${comment.id}" data-user-name="${user.name}" style="margin-top:0.5rem; padding:0.25rem 0.5rem; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; color:inherit; cursor:pointer; font-size:0.8rem;">
+                    <i class="fas fa-reply"></i> Reply
+                </button>
+            ` : ''}
+        </div>
+    `;
+
+    container.appendChild(commentCard);
+
+    // Render replies recursively
+    const replies = repliesMap[comment.id] || [];
+    if (replies.length > 0) {
+        // Sort replies by date (oldest first for replies)
+        replies.sort((a, b) => {
+            const dateA = a.added_at?.toDate ? a.added_at.toDate() : new Date(0);
+            const dateB = b.added_at?.toDate ? b.added_at.toDate() : new Date(0);
+            return dateA - dateB;
+        });
+
+        for (const reply of replies) {
+            await renderCommentThread(reply, repliesMap, container, documentType, documentId, depth + 1);
+        }
+    }
+}
+
+/**
+ * Attach event listeners to comment actions
+ */
+function attachCommentEventListeners(container, documentType, documentId) {
+    // Flag comment buttons
     container.querySelectorAll(".flag-comment").forEach(btn => {
         btn.onclick = async (e) => {
             e.stopPropagation();
@@ -2822,6 +2882,7 @@ async function renderActivityComments(comments, containerId, documentType, docum
         };
     });
 
+    // Delete comment buttons
     container.querySelectorAll(".delete-comment").forEach(btn => {
         btn.onclick = async (e) => {
             e.stopPropagation();
@@ -2830,6 +2891,94 @@ async function renderActivityComments(comments, containerId, documentType, docum
             }
         };
     });
+
+    // Reply buttons
+    container.querySelectorAll(".reply-btn").forEach(btn => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            showReplyInput(btn.dataset.commentId, btn.dataset.userName, documentType, documentId);
+        };
+    });
+}
+
+/**
+ * Show reply input below a comment
+ */
+function showReplyInput(parentCommentId, parentUserName, documentType, documentId) {
+    // Remove any existing reply inputs
+    const existingReply = document.querySelector('.reply-input-container');
+    if (existingReply) {
+        existingReply.remove();
+    }
+
+    // Find the parent comment card
+    const parentCard = document.querySelector(`[data-comment-id="${parentCommentId}"]`);
+    if (!parentCard) return;
+
+    // Create reply input container
+    const replyContainer = document.createElement('div');
+    replyContainer.className = 'reply-input-container';
+    replyContainer.style.cssText = 'background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; margin-top:0.5rem; margin-left:40px;';
+
+    replyContainer.innerHTML = `
+        <div style="margin-bottom:0.5rem; font-size:0.85rem; opacity:0.7;">Replying to @${parentUserName}</div>
+        <textarea class="reply-textarea" placeholder="Write your reply..." 
+            style="width:100%; min-height:60px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.5rem; color:inherit; font-family:inherit; resize:vertical;"></textarea>
+        <div style="display:flex; gap:0.5rem; margin-top:0.5rem; align-items:center;">
+            <input type="file" class="reply-image-input" accept="image/*" style="display:none;">
+            <button class="reply-attach-btn action-btn" title="Attach Image" style="background:rgba(255,255,255,0.1);">
+                <i class="fas fa-image"></i>
+            </button>
+            <span class="reply-image-preview" style="font-size:0.8rem; opacity:0.7;"></span>
+            <button class="reply-post-btn btn-add" style="margin-left:auto; padding:0.5rem 1rem;">
+                Post Reply
+            </button>
+            <button class="reply-cancel-btn btn-logout" style="padding:0.5rem 1rem;">
+                Cancel
+            </button>
+        </div>
+    `;
+
+    // Insert after parent card
+    parentCard.insertAdjacentElement('afterend', replyContainer);
+
+    // Attach event listeners
+    const textarea = replyContainer.querySelector('.reply-textarea');
+    const fileInput = replyContainer.querySelector('.reply-image-input');
+    const attachBtn = replyContainer.querySelector('.reply-attach-btn');
+    const imagePreview = replyContainer.querySelector('.reply-image-preview');
+    const postBtn = replyContainer.querySelector('.reply-post-btn');
+    const cancelBtn = replyContainer.querySelector('.reply-cancel-btn');
+
+    attachBtn.onclick = () => fileInput.click();
+
+    fileInput.onchange = (e) => {
+        if (e.target.files.length > 0) {
+            imagePreview.textContent = `📎 ${e.target.files[0].name}`;
+        } else {
+            imagePreview.textContent = "";
+        }
+    };
+
+    postBtn.onclick = async () => {
+        const commentText = textarea.value.trim();
+        const imageFile = fileInput.files[0] || null;
+
+        if (commentText || imageFile) {
+            postBtn.disabled = true;
+            postBtn.textContent = "Posting...";
+            await handleAddComment(documentType, documentId, commentText, imageFile, parentCommentId);
+            postBtn.disabled = false;
+            postBtn.textContent = "Post Reply";
+        }
+    };
+
+    cancelBtn.onclick = () => {
+        replyContainer.remove();
+    };
+
+    // Focus the textarea
+    textarea.focus();
 }
 
 /**
@@ -2838,10 +2987,11 @@ async function renderActivityComments(comments, containerId, documentType, docum
  * @param {string} documentId - ID of the parent document
  * @param {string} commentText - The comment text
  * @param {File} imageFile - Optional image file
+ * @param {string} parentCommentId - Optional parent comment ID for replies
  */
-async function handleAddComment(documentType, documentId, commentText, imageFile = null) {
-    if (!commentText.trim()) {
-        alert("Please enter a comment.");
+async function handleAddComment(documentType, documentId, commentText, imageFile = null, parentCommentId = null) {
+    if (!commentText.trim() && !imageFile) {
+        alert("Please enter a comment or attach an image.");
         return;
     }
 
@@ -2875,6 +3025,11 @@ async function handleAddComment(documentType, documentId, commentText, imageFile
             commentData.image = imageUrl;
         }
 
+        // Add parent_comment_id if this is a reply
+        if (parentCommentId) {
+            commentData.parent_comment_id = parentCommentId;
+        }
+
         await addDoc(collection(db, "activityComments"), commentData);
 
         // Clear form
@@ -2885,6 +3040,12 @@ async function handleAddComment(documentType, documentId, commentText, imageFile
         document.getElementById(textareaId).value = "";
         document.getElementById(previewId).textContent = "";
         document.getElementById(fileInputId).value = "";
+
+        // Close reply input if it exists
+        const replyContainer = document.querySelector('.reply-input-container');
+        if (replyContainer) {
+            replyContainer.remove();
+        }
 
         console.log("Comment added successfully");
     } catch (err) {
