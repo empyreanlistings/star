@@ -2625,6 +2625,12 @@ function openEnquiryDetailsModal(enq) {
         console.log("🎨 [EnquiryDetails] Adding active class");
         enquiryDetailsModal.classList.add("active");
         console.log("✅ [EnquiryDetails] Modal should now be visible");
+        console.log("📊 [EnquiryDetails] classList:", enquiryDetailsModal.classList.toString());
+        console.log("📊 [EnquiryDetails] style.display:", enquiryDetailsModal.style.display);
+        console.log("📊 [EnquiryDetails] computed display:", window.getComputedStyle(enquiryDetailsModal).display);
+        console.log("📊 [EnquiryDetails] computed visibility:", window.getComputedStyle(enquiryDetailsModal).visibility);
+        console.log("📊 [EnquiryDetails] computed opacity:", window.getComputedStyle(enquiryDetailsModal).opacity);
+        console.log("📊 [EnquiryDetails] computed z-index:", window.getComputedStyle(enquiryDetailsModal).zIndex);
     }, 10);
 }
 
