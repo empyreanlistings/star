@@ -24,9 +24,9 @@ console.log("Admin Dashboard Script Loaded");
 // Globals
 let isEditMode = false;
 let isInitialized = false;
-let modal;
 let currentUserCompany = null; // Store user's company reference
 let tempInspectionMedia = []; // Stores { type: 'existing'|'new', url: string, file: File }
+let inspectionCache = { developments: {}, plots: {} }; // Cache for names
 let currentUserId = null; // Store current user's UID
 let galleryModal;
 let isGalleryEditMode = false;
@@ -2572,11 +2572,11 @@ function initInspectionsSync() {
         allInspections = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
         console.log(`🔥 [Firebase] Inspections sync received: ${allInspections.length} items`);
 
-        // Sort by date desc
+        // Sort by date desc (handle Firestore timestamps)
         allInspections.sort((a, b) => {
-            const dateA = new Date(a.created_at || 0);
-            const dateB = new Date(b.created_at || 0);
-            return dateB - dateA;
+            const timeA = a.created_at?.seconds || 0;
+            const timeB = b.created_at?.seconds || 0;
+            return timeB - timeA;
         });
 
         renderInspectionsTable();
@@ -2601,12 +2601,47 @@ function renderInspectionsTable() {
 
     tbody.innerHTML = "";
     paginated.forEach(insp => {
-        const date = insp.created_at ? new Date(insp.created_at).toLocaleDateString() : "-";
+        // Handle Firestore Timestamp formatting
+        let date = "-";
+        if (insp.created_at && typeof insp.created_at.toDate === 'function') {
+            date = insp.created_at.toDate().toLocaleDateString();
+        } else if (insp.created_at) {
+            date = new Date(insp.created_at).toLocaleDateString();
+        }
+
         const name = insp.name || "Unnamed";
 
-        // Handle References for Dev/Plot if they are objects
-        const devId = (insp.development_id?.id || insp.development_id || "-").toUpperCase();
-        const plotId = (insp.plot_id?.id || insp.plot_id || "-").toUpperCase();
+        // Resolve Refs for Dev/Plot Names from Cache
+        const devId = (insp.development_id?.id || insp.development_id);
+        const plotId = (insp.plot_id?.id || insp.plot_id);
+
+        let devName = inspectionCache.developments[devId] || "Loading...";
+        let plotName = inspectionCache.plots[plotId] || "Loading...";
+
+        // If not in cache, fetch and update UI later
+        if (devId && !inspectionCache.developments[devId]) {
+            (async () => {
+                try {
+                    const snap = await getDoc(doc(db, "Developments", devId));
+                    if (snap.exists()) {
+                        inspectionCache.developments[devId] = snap.data().name || snap.data().title || devId;
+                        renderInspectionsTable(); // Re-render to show names
+                    }
+                } catch (e) { console.error("Cache Fetch Fail (Dev):", e); }
+            })();
+        }
+
+        if (plotId && !inspectionCache.plots[plotId]) {
+            (async () => {
+                try {
+                    const snap = await getDoc(doc(db, "Plots", plotId));
+                    if (snap.exists()) {
+                        inspectionCache.plots[plotId] = snap.data().name || snap.data().number || plotId;
+                        renderInspectionsTable(); // Re-render to show names
+                    }
+                } catch (e) { console.error("Cache Fetch Fail (Plot):", e); }
+            })();
+        }
 
         const tags = Array.isArray(insp.inspection_tags) ? insp.inspection_tags.join(", ") : "-";
         const statusText = insp.private ? "Private" : "Public";
@@ -2618,11 +2653,11 @@ function renderInspectionsTable() {
         tr.innerHTML = `
             <td style="width: 120px;">${date}</td>
             <td style="min-width: 200px;"><strong>${name}</strong></td>
-            <td style="width: 150px;">${devId}</td>
-            <td style="width: 120px;">${plotId}</td>
+            <td style="width: 150px;">${devName}</td>
+            <td style="width: 120px;">${plotName}</td>
             <td><small>${tags}</small></td>
             <td style="width: 100px;"><span class="status-badge ${statusClass}">${statusText}</span></td>
-            <td style="width: 100px; white-space: nowrap;">
+            <td style="width: 100px; white-space: nowrap; text-align: right;">
                 <button class="action-btn edit-inspection" data-id="${insp.id}" title="Edit"><i class="fas fa-pen"></i></button>
                 <button class="action-btn delete-inspection" data-id="${insp.id}" title="Delete"><i class="fas fa-trash"></i></button>
             </td>
