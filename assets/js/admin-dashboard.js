@@ -190,7 +190,7 @@ function initGlobalDelegation() {
 
         // 2. Row Click Delegation (View Property)
         const tr = target.closest("tr");
-        if (tr && tr.parentElement?.id === "listingsTableBody") {
+        if (tr && tr.parentElement && tr.parentElement.id === "listingsTableBody") {
             console.log("🕵️ [RowClick] Triggered for property view");
             const firstBtn = tr.querySelector(".action-btn");
             const id = firstBtn?.dataset.id;
