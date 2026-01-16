@@ -1019,6 +1019,8 @@ function initModalEvents() {
     console.log("Initializing Modal Events...");
     // Triggers are now handled by Global Delegation (initGlobalDelegation)
     const closeBtn = document.getElementById("closeModal");
+    const addBtn = document.getElementById("addListingBtn");
+    const navAddBtn = document.getElementById("addListingNavbarBtn");
 
     if (!modal) {
         console.error("Listing Modal NOT FOUND");
