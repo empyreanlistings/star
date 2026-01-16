@@ -6576,6 +6576,10 @@ td img {
   gap: 1rem;
   justify-content: flex-end;
   margin-top: auto;
+  position: sticky;
+  bottom: 0;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .form-group {
