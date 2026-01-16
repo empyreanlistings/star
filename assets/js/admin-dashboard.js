@@ -1573,7 +1573,7 @@ function renderGalleryTable(gallery) {
             </td>
             <td><span class="status-badge status-active">${item.category?.toUpperCase() || "STRUCTURAL"}</span></td>
             <td style="text-align:center;">${item.display ? '<i class="fas fa-check" style="color:var(--accent);"></i>' : ''}</td>
-            <td>
+            <td style="text-align:center;">
                 <button class="action-btn edit-gallery" data-id="${item.id}" title="Edit"><i class="fas fa-pen"></i></button>
                 <button class="action-btn delete delete-gallery" data-id="${item.id}" title="Delete"><i class="fas fa-trash"></i></button>
             </td>
