@@ -5,7 +5,7 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=3.00">
+    <link rel="stylesheet" href="assets/css/main.css?v=3.03">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
@@ -608,38 +608,60 @@
     <!-- Palawan Gallery Modal -->
     <div id="palawanGalleryModal" class="modal-overlay premium-modal">
         <div class="modal-content">
-            <button id="closePalawanGalleryModal" class="closeModalDefault">&times;</button>
-            <h3 id="palawanGalleryModalTitle" class="modal-title">Add New Palawan Gallery Item</h3>
+            <span id="closePalawanGalleryModal" class="close-modal">&times;</span>
+            <h3 id="palawanGalleryModalTitle" class="modal-title" style="padding: 1.5rem 2rem 0.5rem;">Add Palawan
+                Gallery Item</h3>
             <form id="palawanGalleryForm">
                 <input type="hidden" id="palawanGalleryItemId">
-                <div class="form-group">
-                    <label>Title</label>
-                    <input type="text" id="palawanGalleryTitle" class="form-control" required
-                        placeholder="e.g. El Nido Bay">
-                </div>
+                <div class="modal-body">
+                    <div class="modal-grid">
+                        <!-- Left Column: Form Fields -->
+                        <div class="modal-column">
+                            <div class="modal-section">
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input type="text" id="palawanGalleryTitle" class="form-control" required
+                                        placeholder="e.g. El Nido Bay">
+                                </div>
 
-                <div class="form-group">
-                    <label>Description</label>
-                    <input type="text" id="palawanGalleryDescription" class="form-control"
-                        placeholder="e.g. El Nido, Palawan">
-                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <input type="text" id="palawanGalleryDescription" class="form-control"
+                                        placeholder="e.g. El Nido, Palawan">
+                                </div>
 
-                <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
-                    <input type="checkbox" id="palawanGalleryDisplay" style="width:auto;margin:0;" checked>
-                    <label for="palawanGalleryDisplay" style="margin:0;cursor:pointer;font-size:0.9rem;">Display in
-                        Palawan Gallery</label>
-                </div>
+                                <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;">
+                                    <input type="checkbox" id="palawanGalleryDisplay" style="width:auto;margin:0;"
+                                        checked>
+                                    <label for="palawanGalleryDisplay" style="margin:0;cursor:pointer;">Display in
+                                        Gallery</label>
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label>Image (Max width 800px on upload)</label>
-                    <input type="file" id="palawanGalleryImage" class="form-control" accept="image/*" required>
+                        <!-- Right Column: Image Upload & Preview -->
+                        <div class="modal-column">
+                            <div class="modal-section">
+                                <div class="form-group">
+                                    <label>Image Upload</label>
+                                    <input type="file" id="palawanGalleryImage" class="form-control" accept="image/*"
+                                        required>
+                                    <small style="display:block;margin-top:0.5rem;opacity:0.6;">Max width 800px on
+                                        upload</small>
+                                </div>
+                                <div id="palawanImagePreview" style="margin-top:1rem;text-align:center;display:none;">
+                                    <img id="palawanPreviewImg"
+                                        style="max-width:100%;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);"
+                                        alt="Preview">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <button type="submit" id="palawanGallerySubmitBtn" class="btn-add"
-                    style="width:100%;margin-top:1rem;">Upload
-                    Palawan Gallery Item</button>
-                <div id="palawanGalleryUploadStatus"
-                    style="margin-top:0.5rem;text-align:center;font-size:0.9rem;opacity:0.8;">
+                <div class="modal-footer">
+                    <div id="palawanGalleryUploadStatus" style="flex:1;text-align:left;opacity:0.8;"></div>
+                    <button type="submit" id="palawanGallerySubmitBtn" class="btn-add" style="min-width:200px;">Upload
+                        Item</button>
                 </div>
             </form>
         </div>
@@ -1193,7 +1215,7 @@
     </script>
     <script async defer loading="async"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBskYGOCldwNxevKvAfJaVvy9_8Mjfv22Q&libraries=places&v=weekly&callback=initMapCallback"></script>
-    <script type="module" src="assets/js/admin-dashboard.js?v=3.02"></script>
+    <script type="module" src="assets/js/admin-dashboard.js?v=3.03"></script>
 
 </body>
 

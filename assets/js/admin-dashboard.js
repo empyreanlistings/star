@@ -1953,6 +1953,25 @@ function initPalawanGalleryModalEvents() {
     if (form) {
         form.addEventListener("submit", handlePalawanGalleryFormSubmit);
     }
+
+    // Add image preview functionality
+    const imgInput = document.getElementById("palawanGalleryImage");
+    if (imgInput) {
+        imgInput.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            const previewContainer = document.getElementById("palawanImagePreview");
+            const previewImg = document.getElementById("palawanPreviewImg");
+
+            if (file && previewContainer && previewImg) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    previewImg.src = event.target.result;
+                    previewContainer.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
 }
 
 function openPalawanGalleryModal(edit = false) {
@@ -1961,6 +1980,7 @@ function openPalawanGalleryModal(edit = false) {
     const title = document.getElementById("palawanGalleryModalTitle");
     const submitBtn = document.getElementById("palawanGallerySubmitBtn");
     const imgInput = document.getElementById("palawanGalleryImage");
+    const previewContainer = document.getElementById("palawanImagePreview");
 
     if (!form || !title || !submitBtn) {
         console.error("Palawan Gallery modal elements missing");
@@ -1968,6 +1988,11 @@ function openPalawanGalleryModal(edit = false) {
     }
 
     form.reset();
+
+    // Reset preview
+    if (previewContainer) {
+        previewContainer.style.display = "none";
+    }
 
     palawanGalleryModal.style.display = "flex";
     setTimeout(() => {
@@ -1979,8 +2004,8 @@ function openPalawanGalleryModal(edit = false) {
         submitBtn.textContent = "Save Changes";
         imgInput.removeAttribute("required");
     } else {
-        title.textContent = "Add New Palawan Gallery Item";
-        submitBtn.textContent = "Upload Palawan Gallery Item";
+        title.textContent = "Add Palawan Gallery Item";
+        submitBtn.textContent = "Upload Item";
         document.getElementById("palawanGalleryItemId").value = "";
         imgInput.setAttribute("required", "true");
     }

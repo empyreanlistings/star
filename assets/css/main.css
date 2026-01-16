@@ -6633,6 +6633,7 @@ td img {
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   width: 90%;
   min-height: 400px;
+  border-radius: 50px;
 }
 
 .premium-modal.wide .modal-content {
