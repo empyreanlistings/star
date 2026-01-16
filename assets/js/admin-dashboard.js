@@ -2631,6 +2631,23 @@ function openEnquiryDetailsModal(enq) {
         console.log("📊 [EnquiryDetails] computed visibility:", window.getComputedStyle(enquiryDetailsModal).visibility);
         console.log("📊 [EnquiryDetails] computed opacity:", window.getComputedStyle(enquiryDetailsModal).opacity);
         console.log("📊 [EnquiryDetails] computed z-index:", window.getComputedStyle(enquiryDetailsModal).zIndex);
+        const rect = enquiryDetailsModal.getBoundingClientRect();
+        console.log("📊 [EnquiryDetails] position & size:", {
+            top: rect.top,
+            left: rect.left,
+            width: rect.width,
+            height: rect.height,
+            bottom: rect.bottom,
+            right: rect.right
+        });
+        const modalContent = enquiryDetailsModal.querySelector('.modal-content');
+        if (modalContent) {
+            const contentRect = modalContent.getBoundingClientRect();
+            console.log("📊 [EnquiryDetails] modal-content size:", {
+                width: contentRect.width,
+                height: contentRect.height
+            });
+        }
     }, 10);
 }
 
