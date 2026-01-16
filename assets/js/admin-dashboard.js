@@ -2162,6 +2162,15 @@ function openInspectionModal() {
         console.log("   ➡️ Added 'active' class.");
     }, 10);
 
+    // Reset UI text
+    document.getElementById("inspectionModalTitle").textContent = "New Inspection";
+    document.getElementById("inspSubmitBtn").textContent = "Create Inspection";
+    document.getElementById("inspectionId").value = "";
+
+    // Clear preview
+    const previewContainer = document.getElementById("inspectionGalleryPreview");
+    if (previewContainer) previewContainer.innerHTML = "";
+
     // Fetch Developments to populate dropdown
     fetchDevelopments();
 }
@@ -2191,9 +2200,8 @@ async function fetchDevelopments() {
     try {
         let q = collection(db, "Developments");
         if (currentUserCompany) {
-            // Ensure currentUserCompany is a reference or use ID comparison depending on your schema
-            // If currentUserCompany is an object/doc ref:
-            q = query(q, where("company", "==", currentUserCompany));
+            // Filter by company_id (which is a DocumentReference in the Developments collection)
+            q = query(q, where("company_id", "==", currentUserCompany));
         }
 
         const snapshot = await getDocs(q);
@@ -2203,7 +2211,8 @@ async function fetchDevelopments() {
             const data = docSnap.data();
             const option = document.createElement("option");
             option.value = docSnap.id;
-            option.textContent = data.title || "Untitled Development";
+            // Use data.name as requested
+            option.textContent = data.name || data.title || "Untitled Development";
             devSelect.appendChild(option);
         });
     } catch (err) {
@@ -2263,14 +2272,20 @@ async function handleInspectionFormSubmit(e) {
     status.textContent = "Creating Inspection Report...";
 
     try {
+        const id = document.getElementById("inspectionId").value;
         const developmentId = document.getElementById("inspDevelopment").value;
         const plotId = document.getElementById("inspPlot").value;
-        const title = document.getElementById("inspTitle").value;
-        const note = document.getElementById("inspNote").value;
+        const name = document.getElementById("inspName").value;
+        const notes = document.getElementById("inspNotes").value;
+        const tagsInput = document.getElementById("inspTags").value;
+        const isPrivate = document.getElementById("inspPrivate").checked;
         const files = document.getElementById("inspMedia").files;
 
-        // 1. Upload Images
-        const mediaUrls = [];
+        // 1. Upload Images (if new files selected)
+        let mediaUrls = [];
+        // If editing, we might want to keep old images or handle deletions. 
+        // For simplicity here, we add new ones to whatever exists if we had that logic, 
+        // but current UI/UX implies replacing or starting fresh for simplicity in this snippet.
         if (files.length > 0) {
             status.textContent = `Uploading ${files.length} images...`;
             for (let i = 0; i < files.length; i++) {
@@ -2283,21 +2298,36 @@ async function handleInspectionFormSubmit(e) {
             }
         }
 
-        // 2. Create Document
+        // 2. Prepare Data
+        const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()) : [];
         const docData = {
-            title: title,
-            development: doc(db, "Developments", developmentId),
-            plot: doc(db, "Plots", plotId),
-            note: note,
-            media: mediaUrls,
-            status: "Pending", // Default status
-            created_at: serverTimestamp(),
-            created_by: doc(db, "Users", currentUserId)
+            name: name,
+            development_id: doc(db, "Developments", developmentId),
+            plot_id: doc(db, "Plots", plotId),
+            notes: notes,
+            inspection_tags: tags,
+            private: isPrivate,
+            updated_at: serverTimestamp(),
+            last_editor: doc(db, "Users", currentUserId)
         };
 
-        await addDoc(collection(db, "Inspections"), docData);
+        if (mediaUrls.length > 0) {
+            docData.media = mediaUrls;
+        }
 
-        status.textContent = "✅ Inspection Created Successfully!";
+        if (id) {
+            // Update existing
+            await updateDoc(doc(db, "Inspections", id), docData);
+            status.textContent = "✅ Inspection Updated Successfully!";
+        } else {
+            // Create New
+            docData.created_at = serverTimestamp();
+            docData.created_by = doc(db, "Users", currentUserId);
+            docData.company_id = currentUserCompany; // Add company ref for new inspections
+            await addDoc(collection(db, "Inspections"), docData);
+            status.textContent = "✅ Inspection Created Successfully!";
+        }
+
         setTimeout(() => {
             closeInspectionModal();
             status.textContent = "";
@@ -2305,7 +2335,7 @@ async function handleInspectionFormSubmit(e) {
         }, 1500);
 
     } catch (err) {
-        console.error("Inspection Creation Error:", err);
+        console.error("Inspection Submission Error:", err);
         status.textContent = "Error: " + err.message;
         submitBtn.disabled = false;
     }
@@ -2559,14 +2589,66 @@ function renderInspectionsTable() {
     });
 }
 
-// Placeholder for handleEditInspection if not defined
 async function handleEditInspection(id) {
     console.log("📝 [Inspection] Edit triggered for ID:", id);
-    // Since the user said the modal is working well, I'll assume it can populate.
-    // However, I might need to implement the populating logic here or in openInspectionModal.
-    // For now, I'll just log it.
-}
+    if (!inspectionModal) return;
 
+    try {
+        const docSnap = await getDoc(doc(db, "Inspections", id));
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+
+            // Populate Modal
+            document.getElementById("inspectionId").value = id;
+            document.getElementById("inspName").value = data.name || "";
+            document.getElementById("inspNotes").value = data.notes || "";
+            document.getElementById("inspTags").value = Array.isArray(data.inspection_tags) ? data.inspection_tags.join(", ") : "";
+            document.getElementById("inspPrivate").checked = !!data.private;
+
+            document.getElementById("inspectionModalTitle").textContent = "Edit Inspection Report";
+            document.getElementById("inspSubmitBtn").textContent = "Update Inspection";
+
+            // Load developments first, then select highlited one
+            await fetchDevelopments();
+            const devSelect = document.getElementById("inspDevelopment");
+            const devId = data.development_id?.id || data.development_id;
+            if (devId) {
+                devSelect.value = devId;
+                // Fetch plots for this dev, then select the plot
+                await fetchPlotsForDevelopment();
+                const plotSelect = document.getElementById("inspPlot");
+                const plotId = data.plot_id?.id || data.plot_id;
+                if (plotId) {
+                    plotSelect.value = plotId;
+                }
+            }
+
+            // Show current media in preview if any
+            const previewContainer = document.getElementById("inspectionGalleryPreview");
+            if (previewContainer) {
+                previewContainer.innerHTML = "";
+                if (Array.isArray(data.media)) {
+                    data.media.forEach(url => {
+                        const img = document.createElement("img");
+                        img.src = url;
+                        img.style.width = "80px";
+                        img.style.height = "80px";
+                        img.style.objectFit = "cover";
+                        img.style.borderRadius = "8px";
+                        previewContainer.appendChild(img);
+                    });
+                }
+            }
+
+            // Show Modal
+            inspectionModal.style.display = "flex";
+            setTimeout(() => inspectionModal.classList.add("active"), 10);
+        }
+    } catch (err) {
+        console.error("Error loading inspection for edit:", err);
+        showSnackbar("Error loading inspection data.", "error");
+    }
+}
 /**
  * Initialize Enquiry Details Modal Events
  */
