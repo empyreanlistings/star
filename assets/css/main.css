@@ -8485,10 +8485,34 @@ mark.search-highlight.active {
 
 /* ============================== DASHBOARD GALLERY PREVIEW ============================== */
 .gallery-preview-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 10px;
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
   margin-top: 10px;
+  padding-bottom: 8px;
+  /* Space for scrollbar if visible */
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+
+.gallery-preview-grid::-webkit-scrollbar {
+  height: 6px;
+}
+
+.gallery-preview-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.gallery-preview-grid::-webkit-scrollbar-thumb {
+  background-color: var(--accent);
+  border-radius: 10px;
+}
+
+.gallery-preview-grid .preview-item {
+  flex: 0 0 100px;
+  /* Fixed width for horizontal scrolling */
+  width: 100px;
+  height: 100px;
 }
 
 .modal-image-container {

@@ -2126,12 +2126,41 @@ function initInspectionModalEvents() {
     // Development Selection Change Listener
     const devSelect = document.getElementById("inspDevelopment");
     if (devSelect) {
-        devSelect.addEventListener("change", fetchPlotsForDevelopment);
+        devSelect.addEventListener("change", () => {
+            if (devSelect.value) {
+                fetchPlotsForDevelopment();
+            } else {
+                const plotSelect = document.getElementById("inspPlot");
+                if (plotSelect) {
+                    plotSelect.innerHTML = '<option value="">Select Plot...</option>';
+                    plotSelect.disabled = true;
+                }
+            }
+        });
     }
 
-    // Check if modal is hidden by CSS by default
-    const style = window.getComputedStyle(inspectionModal);
-    console.log("   🎨 Modal Computed Style (Display):", style.display);
+    // Media Preview Listener
+    const mediaInput = document.getElementById("inspMedia");
+    if (mediaInput) {
+        mediaInput.addEventListener("change", () => {
+            const previewContainer = document.getElementById("inspectionGalleryPreview");
+            if (!previewContainer) return;
+            previewContainer.innerHTML = ""; // Clear existing
+
+            if (mediaInput.files && mediaInput.files.length > 0) {
+                Array.from(mediaInput.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const div = document.createElement("div");
+                        div.className = "preview-item";
+                        div.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                        previewContainer.appendChild(div);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
+    }
 }
 
 /**
@@ -2166,6 +2195,13 @@ function openInspectionModal() {
     document.getElementById("inspectionModalTitle").textContent = "New Inspection";
     document.getElementById("inspSubmitBtn").textContent = "Create Inspection";
     document.getElementById("inspectionId").value = "";
+
+    // Reset Plot Dropdown
+    const plotSelect = document.getElementById("inspPlot");
+    if (plotSelect) {
+        plotSelect.innerHTML = '<option value="">Select Plot...</option>';
+        plotSelect.disabled = true;
+    }
 
     // Clear preview
     const previewContainer = document.getElementById("inspectionGalleryPreview");
@@ -2240,11 +2276,16 @@ async function fetchPlotsForDevelopment() {
 
     try {
         const devRef = doc(db, "Developments", devId);
-        const q = query(collection(db, "Plots"), where("development", "==", devRef));
+        // Use development_id as requested
+        const q = query(collection(db, "Plots"), where("development_id", "==", devRef));
 
         const snapshot = await getDocs(q);
         plotSelect.innerHTML = '<option value="">Select Plot</option>';
-        plotSelect.disabled = false;
+        plotSelect.disabled = snapshot.empty;
+
+        if (snapshot.empty) {
+            plotSelect.innerHTML = '<option value="">No plots found</option>';
+        }
 
         snapshot.forEach(docSnap => {
             const data = docSnap.data();
@@ -2629,13 +2670,10 @@ async function handleEditInspection(id) {
                 previewContainer.innerHTML = "";
                 if (Array.isArray(data.media)) {
                     data.media.forEach(url => {
-                        const img = document.createElement("img");
-                        img.src = url;
-                        img.style.width = "80px";
-                        img.style.height = "80px";
-                        img.style.objectFit = "cover";
-                        img.style.borderRadius = "8px";
-                        previewContainer.appendChild(img);
+                        const div = document.createElement("div");
+                        div.className = "preview-item";
+                        div.innerHTML = `<img src="${url}" alt="Existing Media">`;
+                        previewContainer.appendChild(div);
                     });
                 }
             }
