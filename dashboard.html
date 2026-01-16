@@ -48,18 +48,6 @@
         </div>
         <div class="nav-right">
             <!-- Quick Actions -->
-            <div class="header-quick-actions" style="display: flex; gap: 8px; margin-right: 15px;">
-                <button id="addListingNavbarBtn" class="btn-add-icon" title="Add Listing">
-                    <i class="fas fa-home"></i><i class="fas fa-plus" style="font-size: 0.6rem;"></i>
-                </button>
-                <button id="addEnquiryNavbarBtn" class="btn-add-icon" title="Add Enquiry">
-                    <i class="fas fa-user-plus"></i>
-                </button>
-                <button id="addInspectionNavbarBtn" class="btn-add-icon" title="Add Inspection">
-                    <i class="fas fa-clipboard-check"></i>
-                </button>
-            </div>
-
             <button id="themeToggleDash" class="theme-toggle" aria-label="Toggle Theme">
                 <i class="theme-icon fas fa-moon"></i>
             </button>
@@ -79,7 +67,7 @@
             <div class="dashboard-section-header">
                 <h1>Manage Enquiries</h1>
                 <div class="header-actions">
-                    <button id="addEnquiryBtn" class="btn-add-icon" aria-label="Add New Enquiry">
+                    <button id="addEnquiryBtn" class="btn" aria-label="Add New Enquiry">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
@@ -109,7 +97,7 @@
             <!-- Header with Add Button -->
             <div class="dashboard-section-header">
                 <h1>Manage Listings</h1>
-                <button id="addListingBtn" class="btn-add-icon" aria-label="Add New Listing">
+                <button id="addListingBtn" class="btn" aria-label="Add New Listing">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
@@ -166,7 +154,7 @@
             <!-- Header with Add Button -->
             <div class="dashboard-section-header">
                 <h1>Manage Inspections</h1>
-                <button id="addInspectionBtn" class="btn-add-icon" aria-label="Add New Inspection">
+                <button id="addInspectionBtn" class="btn" aria-label="Add New Inspection">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
@@ -196,7 +184,7 @@
             <!-- Header with Add Button -->
             <div class="dashboard-section-header">
                 <h1>Manage Gallery</h1>
-                <button id="addGalleryBtn" class="btn-add-icon" aria-label="Add New Gallery Item">
+                <button id="addGalleryBtn" class="btn" aria-label="Add New Gallery Item">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
@@ -235,7 +223,7 @@
             <!-- Header with Add Button -->
             <div class="dashboard-section-header">
                 <h1>Manage Palawan Gallery</h1>
-                <button id="addPalawanGalleryBtn" class="btn-add-icon" aria-label="Add New Palawan Gallery Item">
+                <button id="addPalawanGalleryBtn" class="btn" aria-label="Add New Palawan Gallery Item">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
@@ -547,7 +535,7 @@
                 </div> <!-- End modal-body -->
                 <div class="modal-footer">
                     <div id="uploadStatus" style="flex:1; text-align:left; font-size:0.9rem; opacity:0.8;"></div>
-                    <button type="submit" id="submitBtn" class="btn-add" style="min-width: 200px;">Confirm & Save
+                    <button type="submit" id="submitBtn" class="btn" style="min-width: 200px;">Confirm & Save
                         Listing</button>
                 </div>
             </form>
@@ -597,7 +585,7 @@
                     <input type="file" id="galleryImage" class="form-control" accept="image/*" required>
                 </div>
 
-                <button type="submit" id="gallerySubmitBtn" class="btn-add" style="width:100%;margin-top:1rem;">Upload
+                <button type="submit" id="gallerySubmitBtn" class="btn" style="width:100%;margin-top:1rem;">Upload
                     Gallery Item</button>
                 <div id="galleryUploadStatus" style="margin-top:0.5rem;text-align:center;font-size:0.9rem;opacity:0.8;">
                 </div>
@@ -660,7 +648,7 @@
                 </div>
                 <div class="modal-footer">
                     <div id="palawanGalleryUploadStatus" style="flex:1;text-align:left;opacity:0.8;"></div>
-                    <button type="submit" id="palawanGallerySubmitBtn" class="btn-add" style="min-width:200px;">Upload
+                    <button type="submit" id="palawanGallerySubmitBtn" class="btn" style="min-width:200px;">Upload
                         Item</button>
                 </div>
             </form>
@@ -738,7 +726,7 @@
                 </div> <!-- End modal-body -->
                 <div class="modal-footer">
                     <div id="inspUploadStatus" style="flex:1; text-align:left; font-size:0.9rem; opacity:0.8;"></div>
-                    <button type="submit" id="inspSubmitBtn" class="btn-add" style="min-width: 200px;">Confirm & Create
+                    <button type="submit" id="inspSubmitBtn" class="btn" style="min-width: 200px;">Confirm & Create
                         Inspection</button>
                 </div>
             </form>
@@ -944,7 +932,7 @@
                         </div> <!-- End modal-body -->
                         <div class="modal-footer">
                             <div id="enqStatus" style="flex:1; text-align:left; font-size:0.9rem; opacity:0.8;"></div>
-                            <button type="submit" id="enqSubmitBtn" class="btn-add" style="min-width: 200px;">Confirm &
+                            <button type="submit" id="enqSubmitBtn" class="btn" style="min-width: 200px;">Confirm &
                                 Save Enquiry</button>
                         </div>
             </form>
@@ -1075,7 +1063,7 @@
                                         <i class="fas fa-image"></i>
                                     </button>
                                     <span id="detEnqImagePreview" style="font-size:0.8rem; opacity:0.7;"></span>
-                                    <button id="detEnqPostCommentBtn" class="btn-add"
+                                    <button id="detEnqPostCommentBtn" class="btn"
                                         style="margin-left:auto; padding:0.5rem 1rem;">
                                         Post Comment
                                     </button>
@@ -1086,7 +1074,7 @@
                 </div>
             </div> <!-- End modal-body -->
             <div class="modal-footer">
-                <button id="detEnqEditBtn" class="btn-add" style="flex:1;">Edit Enquiry Details</button>
+                <button id="detEnqEditBtn" class="btn" style="flex:1;">Edit Enquiry Details</button>
                 <button id="detEnqCloseBtn" class="btn-logout" style="flex:1;">Close View</button>
             </div>
         </div>
@@ -1176,7 +1164,7 @@
                                         <i class="fas fa-image"></i>
                                     </button>
                                     <span id="detInspImagePreview" style="font-size:0.8rem; opacity:0.7;"></span>
-                                    <button id="detInspPostCommentBtn" class="btn-add"
+                                    <button id="detInspPostCommentBtn" class="btn"
                                         style="margin-left:auto; padding:0.5rem 1rem;">
                                         Post Comment
                                     </button>
@@ -1187,7 +1175,7 @@
                 </div>
             </div> <!-- End modal-body -->
             <div class="modal-footer">
-                <button id="detInspEditBtn" class="btn-add" style="flex:1;">Edit Inspection Details</button>
+                <button id="detInspEditBtn" class="btn" style="flex:1;">Edit Inspection Details</button>
                 <button id="detInspCloseBtn" class="btn-logout" style="flex:1;">Close View</button>
             </div>
         </div>
