@@ -142,22 +142,72 @@ function initGlobalDelegation() {
             return;
         }
 
+        // Enquiry Details Edit Button
+        const detEnqEditBtn = target.closest("#detEnqEditBtn");
+        if (detEnqEditBtn) {
+            const id = detEnqEditBtn.dataset.id;
+            if (id) {
+                closeEnquiryDetailsModal();
+                handleEditEnquiry(id);
+            }
+            return;
+        }
+
+        // Enquiry Actions Delegation
+        const enqActionBtn = target.closest(".action-btn");
+        if (enqActionBtn && (enqActionBtn.classList.contains("edit-enquiry") || enqActionBtn.classList.contains("delete-enquiry") || enqActionBtn.classList.contains("toggle-responded"))) {
+            const id = enqActionBtn.dataset.id;
+            if (enqActionBtn.classList.contains("edit-enquiry")) {
+                handleEditEnquiry(id);
+            } else if (enqActionBtn.classList.contains("delete-enquiry")) {
+                if (confirm("Are you sure you need to delete this enquiry?")) {
+                    deleteDoc(doc(db, "Enquiries", id)).then(() => console.log("Deleted enquiry", id));
+                }
+            } else if (enqActionBtn.classList.contains("toggle-responded")) {
+                // Fetch current status or just toggle via a helper if available, for now manual toggle reference:
+                // We need to know current state or just toggle. Simple approach:
+                const isResponded = enqActionBtn.querySelector("i").classList.contains("fa-undo"); // If undo icon, it is currently responded
+                updateDoc(doc(db, "Enquiries", id), { responded: !isResponded });
+            }
+            return;
+        }
+
+        // Enquiry Row Click (Details)
+        const enqTr = target.closest("tr");
+        if (enqTr && enqTr.closest("#enquiriesTableBody") && !target.closest("button") && !target.closest("a")) {
+            // We need the enquiry object. Since we don't have it direct, we can look it up or use data attribute.
+            // We can look up in allEnquiries array.
+            // Let's rely on finding it by some index or ID if we stored it?
+            // Or better, let renderEnquiryTable store data-id on TR.
+            const enqId = enqTr.dataset.id;
+            if (enqId && typeof allEnquiries !== 'undefined') {
+                const enq = allEnquiries.find(e => e.id === enqId);
+                if (enq) openEnquiryDetailsModal(enq);
+            }
+            return;
+        }
+
+        // 2. Row Click Delegation (View Property)
+        if (typeof openInspectionModal === 'function') openInspectionModal();
+        return;
+    }
+
         // 2. Row Click Delegation (View Property)
         const tr = target.closest("tr");
-        if (tr && tr.parentElement?.id === "listingsTableBody") {
-            console.log("🕵️ [RowClick] Triggered for property view");
-            const firstBtn = tr.querySelector(".action-btn");
-            const id = firstBtn?.dataset.id;
-            if (id) {
-                const listing = allListings.find(l => l.id === id);
-                if (listing) {
-                    openPropertyModal(listing);
-                } else {
-                    console.warn("⚠️ [RowClick] Listing data not found for ID:", id);
-                }
+    if (tr && tr.parentElement?.id === "listingsTableBody") {
+        console.log("🕵️ [RowClick] Triggered for property view");
+        const firstBtn = tr.querySelector(".action-btn");
+        const id = firstBtn?.dataset.id;
+        if (id) {
+            const listing = allListings.find(l => l.id === id);
+            if (listing) {
+                openPropertyModal(listing);
+            } else {
+                console.warn("⚠️ [RowClick] Listing data not found for ID:", id);
             }
         }
-    });
+    }
+});
 }
 
 // Fetch User's Company Reference
@@ -2348,7 +2398,8 @@ let currentGalleryState = []; // Stores mixed array of Strings (URLs) and File o
 
                             const tr = document.createElement("tr");
                             tr.style.cursor = "pointer";
-                            tr.onclick = () => openEnquiryDetailsModal(enq);
+                            tr.dataset.id = enq.id; // For delegation
+                            // tr.onclick = () => openEnquiryDetailsModal(enq); // Moved to delegation
                             tr.innerHTML = `
             <td>${date}</td>
             <td><strong>${name}</strong></td>
@@ -2363,6 +2414,7 @@ let currentGalleryState = []; // Stores mixed array of Strings (URLs) and File o
                 <button class="action-btn toggle-responded" data-id="${enq.id}" title="Toggle Responded Status">
                     <i class="fas ${enq.responded ? 'fa-undo' : 'fa-check'}"></i>
                 </button>
+                <button class="action-btn edit-enquiry" data-id="${enq.id}" title="Edit"><i class="fas fa-pen"></i></button>
                 <button class="action-btn delete-enquiry" data-id="${enq.id}" title="Delete"><i class="fas fa-trash"></i></button>
             </td>
         `;
