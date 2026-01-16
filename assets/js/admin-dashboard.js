@@ -187,27 +187,23 @@ function initGlobalDelegation() {
             return;
         }
 
-        // 2. Row Click Delegation (View Property)
-        if (typeof openInspectionModal === 'function') openInspectionModal();
-        return;
-    }
 
         // 2. Row Click Delegation (View Property)
         const tr = target.closest("tr");
-    if (tr && tr.parentElement?.id === "listingsTableBody") {
-        console.log("🕵️ [RowClick] Triggered for property view");
-        const firstBtn = tr.querySelector(".action-btn");
-        const id = firstBtn?.dataset.id;
-        if (id) {
-            const listing = allListings.find(l => l.id === id);
-            if (listing) {
-                openPropertyModal(listing);
-            } else {
-                console.warn("⚠️ [RowClick] Listing data not found for ID:", id);
+        if (tr && tr.parentElement?.id === "listingsTableBody") {
+            console.log("🕵️ [RowClick] Triggered for property view");
+            const firstBtn = tr.querySelector(".action-btn");
+            const id = firstBtn?.dataset.id;
+            if (id) {
+                const listing = allListings.find(l => l.id === id);
+                if (listing) {
+                    openPropertyModal(listing);
+                } else {
+                    console.warn("⚠️ [RowClick] Listing data not found for ID:", id);
+                }
             }
         }
-    }
-});
+    });
 }
 
 // Fetch User's Company Reference
