@@ -1619,6 +1619,14 @@ async function handleGalleryEdit(e) {
         document.getElementById("gallerySubHeader").value = data.sub_header || "";
         setSelectedCategory(data.category || "structural"); // Use helper for chips
         document.getElementById("galleryDisplay").checked = !!data.display;
+
+        // Show existing image in preview
+        const previewContainer = document.getElementById("galleryImagePreview");
+        const previewImg = document.getElementById("galleryPreviewImg");
+        if (data.image && previewContainer && previewImg) {
+            previewImg.src = data.image;
+            previewContainer.style.display = "block";
+        }
     }
 }
 
@@ -1685,6 +1693,26 @@ function initGalleryModalEvents() {
     if (form) form.onsubmit = handleGalleryFormSubmit;
 
     initCategoryChips();
+
+    // Add image preview functionality
+    const imgInput = document.getElementById("galleryImage");
+    if (imgInput) {
+        imgInput.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            const previewContainer = document.getElementById("galleryImagePreview");
+            const previewImg = document.getElementById("galleryPreviewImg");
+
+            if (file && previewContainer && previewImg) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    previewImg.src = event.target.result;
+                    previewContainer.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
     console.log("   ✅ Gallery Modal Events initialized");
 }
 
@@ -1701,6 +1729,11 @@ function openGalleryModal(edit = false) {
     if (titleEl) titleEl.textContent = edit ? "Edit Gallery Item" : "Add New Gallery Item";
     if (submitBtn) submitBtn.textContent = edit ? "Save Changes" : "Upload Gallery Item";
     if (imgInput) imgInput.required = !edit;
+
+    const previewContainer = document.getElementById("galleryImagePreview");
+    if (previewContainer && !edit) {
+        previewContainer.style.display = "none";
+    }
 
     if (!edit) {
         setSelectedCategory("structural");
