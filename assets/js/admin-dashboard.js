@@ -383,6 +383,8 @@ function renderAdminTable(listings) {
         }
 
         const tr = document.createElement("tr");
+        tr.dataset.id = id; // FOR DELEGATION
+        tr.style.cursor = "pointer"; // INDICATE CLICKABLE
         tr.innerHTML = `
             <td style="width: 80px;">
                 <div class="thumb-wrapper">
@@ -2869,7 +2871,10 @@ function openEnquiryDetailsModal(enq) {
     document.getElementById("detEnqEditBtn").dataset.id = enq.id;
 
     document.body.style.overflow = "hidden";
-    enquiryDetailsModal.style.display = "flex";
+
+    // Nuke any CSS conflicts with inline styles
+    enquiryDetailsModal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483647 !important; pointer-events: auto !important;";
+
     setTimeout(() => {
         enquiryDetailsModal.classList.add("active");
     }, 10);
@@ -2879,6 +2884,7 @@ function closeEnquiryDetailsModal() {
     if (!enquiryDetailsModal) return;
     detachCommentsListener(); // Clean up comments listener
     enquiryDetailsModal.classList.remove("active");
+    enquiryDetailsModal.style.cssText = ""; // Clear inline hacks
     document.body.style.overflow = "";
     setTimeout(() => {
         if (!enquiryDetailsModal.classList.contains("active")) {
@@ -3006,7 +3012,10 @@ function openInspectionDetailsModal(insp) {
     document.getElementById("detInspEditBtn").dataset.id = insp.id;
 
     document.body.style.overflow = "hidden";
-    inspectionDetailsModal.style.display = "flex";
+
+    // Nuke any CSS conflicts with inline styles
+    inspectionDetailsModal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483647 !important; pointer-events: auto !important;";
+
     setTimeout(() => inspectionDetailsModal.classList.add("active"), 10);
 }
 
@@ -3014,6 +3023,7 @@ function closeInspectionDetailsModal() {
     if (!inspectionDetailsModal) return;
     detachCommentsListener(); // Clean up comments listener
     inspectionDetailsModal.classList.remove("active");
+    inspectionDetailsModal.style.cssText = ""; // Clear inline hacks
     document.body.style.overflow = "";
     setTimeout(() => {
         if (!inspectionDetailsModal.classList.contains("active")) {
