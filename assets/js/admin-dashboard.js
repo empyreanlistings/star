@@ -2440,10 +2440,8 @@ window.initMapCallback = function () {
 // =============================================================================
 // ENQUIRIES SYNC & RENDERING
 // =============================================================================
-let allEnquiries = [];
 let enquiryPage = 1;
 const enquiriesPerPage = 10;
-let activeEnquiryListener = null;
 
 function initEnquirySync() {
     const tbody = document.getElementById("enquiriesTableBody");
