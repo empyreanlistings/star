@@ -718,9 +718,9 @@ async function handleEdit(e) {
             setField("propFloorArea", data.specs?.floor_area);
 
             // Lead Source
-            if (data.whatsapp) document.getElementById("sourceWhatsapp").checked = true;
-            else if (data.telegram) document.getElementById("sourceTelegram").checked = true;
-            else document.getElementById("sourceUser").checked = true;
+            if (data.whatsapp) document.getElementById("sourceWhatsappMain").checked = true;
+            else if (data.telegram) document.getElementById("sourceTelegramMain").checked = true;
+            else document.getElementById("sourceUserMain").checked = true;
 
             // Location
             setField("locArea", data.location?.area);
