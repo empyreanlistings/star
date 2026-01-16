@@ -6328,7 +6328,7 @@ html[data-theme="light"] .btn-add-nav span {
   align-items: center;
   justify-content: center;
   gap: 20px;
-  margin-bottom: 2rem;
+  margin: 2rem;
 }
 
 .page-header {
