@@ -47,6 +47,10 @@ let allListings = [];
 let allGallery = [];
 let allPalawanGallery = [];
 let allInspections = [];
+let allEnquiries = [];
+let activeEnquiryListener = null;
+let allEnquiries = []; // Added missing declaration
+let activeEnquiryListener = null; // Added missing declaration
 
 // Filtering State
 let dashboardFilters = {
@@ -75,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Initialize UI elements
             initGlobalDelegation(); // Added for robust event handling
+            loadPropertyModal(); // Load the property details component
 
             // Sync collections
             initAdminListingsSync();
@@ -116,6 +121,31 @@ function initGlobalDelegation() {
         const actionBtn = target.closest(".action-btn");
         if (actionBtn) {
             const id = actionBtn.dataset.id;
+
+            // Specific Handlers first
+            if (actionBtn.classList.contains("edit-enquiry")) {
+                handleEditEnquiry(id);
+                return;
+            } else if (actionBtn.classList.contains("delete-enquiry")) {
+                if (confirm("Are you sure you need to delete this enquiry?")) {
+                    deleteDoc(doc(db, "Enquiries", id)).then(() => console.log("Deleted enquiry", id));
+                }
+                return;
+            } else if (actionBtn.classList.contains("toggle-responded")) {
+                const enq = allEnquiries.find(x => x.id === id);
+                if (enq) updateDoc(doc(db, "Enquiries", id), { responded: !enq.responded });
+                return;
+            } else if (actionBtn.classList.contains("edit-inspection")) {
+                handleEditInspection(id);
+                return;
+            } else if (actionBtn.classList.contains("delete-inspection")) {
+                if (confirm("Delete this inspection report?")) {
+                    deleteDoc(doc(db, "Inspections", id)).then(() => console.log("Deleted inspection", id));
+                }
+                return;
+            }
+
+            // Generic Property Action Buttons
             if (actionBtn.classList.contains("edit")) {
                 handleEdit(e);
             } else if (actionBtn.classList.contains("delete")) {
@@ -123,92 +153,49 @@ function initGlobalDelegation() {
             } else if (actionBtn.classList.contains("duplicate")) {
                 handleDuplicate(e);
             }
-            return; // Stop here if it was an action button
+            return;
         }
 
+        // Navbar / Add Buttons
         if (target.closest("#addEnquiryBtn, #addEnquiryNavbarBtn")) {
-            console.log("🖱️ [Global] Add Enquiry button clicked");
             if (typeof openEnquiryModal === 'function') openEnquiryModal();
             return;
         }
-
         if (target.closest("#addListingBtn, #addListingNavbarBtn")) {
-            console.log("🖱️ [Global] Add Listing button clicked");
-            if (typeof openModal === 'function') openModal(false); // false = not edit mode
+            if (typeof openModal === 'function') openModal(false);
             return;
         }
-
         if (target.closest("#addInspectionBtn, #addInspectionNavbarBtn")) {
-            console.log("🖱️ [Global] Add Inspection button clicked");
             if (typeof openInspectionModal === 'function') openInspectionModal();
             return;
         }
 
-        // Enquiry Details Edit Button
-        const detEnqEditBtn = target.closest("#detEnqEditBtn");
-        if (detEnqEditBtn) {
-            const id = detEnqEditBtn.dataset.id;
-            if (id) {
-                closeEnquiryDetailsModal();
-                handleEditEnquiry(id);
-            }
-            return;
-        }
-
-        // Enquiry Actions Delegation
-        const enqActionBtn = target.closest(".action-btn");
-        if (enqActionBtn && (enqActionBtn.classList.contains("edit-enquiry") || enqActionBtn.classList.contains("delete-enquiry") || enqActionBtn.classList.contains("toggle-responded"))) {
-            const id = enqActionBtn.dataset.id;
-            if (enqActionBtn.classList.contains("edit-enquiry")) {
-                handleEditEnquiry(id);
-            } else if (enqActionBtn.classList.contains("delete-enquiry")) {
-                if (confirm("Are you sure you need to delete this enquiry?")) {
-                    deleteDoc(doc(db, "Enquiries", id)).then(() => console.log("Deleted enquiry", id));
-                }
-            } else if (enqActionBtn.classList.contains("toggle-responded")) {
-                // Fetch current status or just toggle via a helper if available, for now manual toggle reference:
-                // We need to know current state or just toggle. Simple approach:
-                const isResponded = enqActionBtn.querySelector("i").classList.contains("fa-undo"); // If undo icon, it is currently responded
-                updateDoc(doc(db, "Enquiries", id), { responded: !isResponded });
-            }
-            return;
-        }
-
-        // Enquiry Row Click (Details)
-        const enqTr = target.closest("tr");
-        if (enqTr && enqTr.closest("#enquiriesTableBody") && !target.closest("button") && !target.closest("a")) {
-            const enqId = enqTr.dataset.id;
-            if (enqId && typeof allEnquiries !== 'undefined') {
-                const enq = allEnquiries.find(e => e.id === enqId);
-                if (enq) openEnquiryDetailsModal(enq);
-            }
-            return;
-        }
-
-        // Inspection Row Click (Details)
-        const inspTr = target.closest("tr");
-        if (inspTr && inspTr.closest("#inspectionsTableBody") && !target.closest("button") && !target.closest("a")) {
-            const inspId = inspTr.dataset.id;
-            if (inspId && typeof allInspections !== 'undefined') {
-                const insp = allInspections.find(i => i.id === inspId);
-                if (insp) openInspectionDetailsModal(insp);
-            }
-            return;
-        }
-
-
-        // 2. Row Click Delegation (View Property)
+        // Row Click Delegation (Details View)
         const tr = target.closest("tr");
-        if (tr && tr.parentElement && tr.parentElement.id === "listingsTableBody") {
-            console.log("🕵️ [RowClick] Triggered for property view");
-            const firstBtn = tr.querySelector(".action-btn");
-            const id = firstBtn?.dataset.id;
-            if (id) {
-                const listing = allListings.find(l => l.id === id);
-                if (listing) {
+        if (!tr || target.closest("button") || target.closest("a")) return;
+
+        const tbody = tr.closest("tbody");
+        if (!tbody) return;
+
+        const id = tr.dataset.id;
+        if (!id) return;
+
+        if (tbody.id === "enquiriesTableBody") {
+            const enq = allEnquiries.find(e => e.id === id);
+            if (enq) openEnquiryDetailsModal(enq);
+        } else if (tbody.id === "inspectionsTableBody") {
+            const insp = allInspections.find(i => i.id === id);
+            if (insp) openInspectionDetailsModal(insp);
+        } else if (tbody.id === "listingsTableBody") {
+            console.log("🕵️ [RowClick] Listing detected, opening details modal");
+            const listing = allListings.find(l => l.id === id);
+            if (listing) {
+                // If propertyModal is not present, we can fallback to edit modal.
+                if (document.getElementById("propertyModal")) {
                     openPropertyModal(listing);
                 } else {
-                    console.warn("⚠️ [RowClick] Listing data not found for ID:", id);
+                    console.log("Falling back to Edit modal for listing view");
+                    openModal(true, listing.id);
                 }
             }
         }
@@ -1338,6 +1325,23 @@ function closePropertyModal() {
     }
 
     document.body.style.overflow = ""; // Re-enable scrolling
+}
+
+// Function to load the property modal component
+async function loadPropertyModal() {
+    const placeholder = document.getElementById('propertymodal-placeholder');
+    if (!placeholder) return;
+    try {
+        const response = await fetch('propertymodalRC.html');
+        if (response.ok) {
+            const html = await response.text();
+            placeholder.innerHTML = html;
+            console.log("✅ [Component] Property Modal loaded");
+            initPropertyModalEvents(); // Re-init events after loading
+        }
+    } catch (error) {
+        console.error("❌ [Component] Error loading Property Modal:", error);
+    }
 }
 
 // Open Property Modal with listing data
@@ -2868,35 +2872,10 @@ function openEnquiryDetailsModal(enq) {
     // Edit Button Data
     document.getElementById("detEnqEditBtn").dataset.id = enq.id;
 
-    console.log("🎨 [EnquiryDetails] Setting display to flex");
+    document.body.style.overflow = "hidden";
     enquiryDetailsModal.style.display = "flex";
     setTimeout(() => {
-        console.log("🎨 [EnquiryDetails] Adding active class");
         enquiryDetailsModal.classList.add("active");
-        console.log("✅ [EnquiryDetails] Modal should now be visible");
-        console.log("📊 [EnquiryDetails] classList:", enquiryDetailsModal.classList.toString());
-        console.log("📊 [EnquiryDetails] style.display:", enquiryDetailsModal.style.display);
-        console.log("📊 [EnquiryDetails] computed display:", window.getComputedStyle(enquiryDetailsModal).display);
-        console.log("📊 [EnquiryDetails] computed visibility:", window.getComputedStyle(enquiryDetailsModal).visibility);
-        console.log("📊 [EnquiryDetails] computed opacity:", window.getComputedStyle(enquiryDetailsModal).opacity);
-        console.log("📊 [EnquiryDetails] computed z-index:", window.getComputedStyle(enquiryDetailsModal).zIndex);
-        const rect = enquiryDetailsModal.getBoundingClientRect();
-        console.log("📊 [EnquiryDetails] position & size:", {
-            top: rect.top,
-            left: rect.left,
-            width: rect.width,
-            height: rect.height,
-            bottom: rect.bottom,
-            right: rect.right
-        });
-        const modalContent = enquiryDetailsModal.querySelector('.modal-content');
-        if (modalContent) {
-            const contentRect = modalContent.getBoundingClientRect();
-            console.log("📊 [EnquiryDetails] modal-content size:", {
-                width: contentRect.width,
-                height: contentRect.height
-            });
-        }
     }, 10);
 }
 
@@ -2904,6 +2883,7 @@ function closeEnquiryDetailsModal() {
     if (!enquiryDetailsModal) return;
     detachCommentsListener(); // Clean up comments listener
     enquiryDetailsModal.classList.remove("active");
+    document.body.style.overflow = "";
     setTimeout(() => {
         if (!enquiryDetailsModal.classList.contains("active")) {
             enquiryDetailsModal.style.display = "none";
@@ -3029,6 +3009,7 @@ function openInspectionDetailsModal(insp) {
 
     document.getElementById("detInspEditBtn").dataset.id = insp.id;
 
+    document.body.style.overflow = "hidden";
     inspectionDetailsModal.style.display = "flex";
     setTimeout(() => inspectionDetailsModal.classList.add("active"), 10);
 }
@@ -3037,6 +3018,7 @@ function closeInspectionDetailsModal() {
     if (!inspectionDetailsModal) return;
     detachCommentsListener(); // Clean up comments listener
     inspectionDetailsModal.classList.remove("active");
+    document.body.style.overflow = "";
     setTimeout(() => {
         if (!inspectionDetailsModal.classList.contains("active")) {
             inspectionDetailsModal.style.display = "none";
