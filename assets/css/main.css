@@ -6343,7 +6343,7 @@ html[data-theme="light"] .btn-add-nav span {
 }
 
 .btn-add {
-  background: #ed786a;
+  background: var(--accent);
   color: white;
   padding: 0.8rem 1.5rem;
   border-radius: 50px;
@@ -6691,7 +6691,7 @@ html[data-theme="light"] .modal-section {
   background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.7) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 2rem !important;
+  margin: 1rem !important;
 }
 
 html[data-theme="light"] .modal-title {
@@ -6760,7 +6760,7 @@ html[data-theme="light"] .chip.active {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--accent);
+  background: #ed786a;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #fff !important;
