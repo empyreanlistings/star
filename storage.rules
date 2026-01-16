@@ -1,0 +1,52 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ===============================
+    // User profile images (LOCKED)
+    // ===============================
+    match /user-profile-images/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.auth.uid == userId;
+    }
+
+    // ===============================
+    // Property Listings folder
+    // ===============================
+    match /property-images/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ===============================
+    // Gallery / Portfolio folder
+    // ===============================
+    match /gallery/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ===============================
+    // Palawan Gallery folder
+    // ===============================
+    match /palawan-gallery/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    match /users/{userId}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // ===============================
+    // Activity Comments attachments (NEW)
+    // ===============================
+    match /activity-comments/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+  }
+}

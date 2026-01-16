@@ -5,7 +5,7 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=2.88">
+    <link rel="stylesheet" href="assets/css/main.css?v=2.89">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
@@ -249,273 +249,280 @@
     </main>
 
     <!-- Listing Modal -->
-    <div id="listingModal" class="modal-overlay premium-modal">
+    <div id="listingModal" class="modal-overlay premium-modal wide">
         <div class="modal-content">
             <span id="closeModal" class="close-modal">&times;</span>
             <h3 id="modalTitle" class="modal-title">Add New Property</h3>
             <form id="listingForm">
                 <input type="hidden" id="listingId">
-                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-                    <div>
-                        <label>Property Title</label>
-                        <input type="text" id="propTitle" class="form-control" required
-                            placeholder="Luxurious Beach Villa">
-                    </div>
-                    <div>
-                        <label>Slug (URL Identifier)</label>
-                        <input type="text" id="propSlug" class="form-control" placeholder="luxurious-beach-villa">
-                    </div>
-                </div>
 
-                <!-- LEAD SOURCE -->
-                <div class="form-group">
-                    <label>Lead Source (Select One)</label>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:0.5rem; margin-top:0.5rem;">
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; font-weight:normal; cursor:pointer;">
-                            <input type="radio" name="leadSource" value="website" id="sourceWebsiteMain">
-                            <i class="fas fa-globe" style="color:var(--accent)"></i> Website
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; font-weight:normal; cursor:pointer;">
-                            <input type="radio" name="leadSource" value="facebook" id="sourceFacebookMain">
-                            <i class="fab fa-facebook" style="color:#1877F2"></i> Facebook
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; font-weight:normal; cursor:pointer;">
-                            <input type="radio" name="leadSource" value="instagram" id="sourceInstagramMain">
-                            <i class="fab fa-instagram" style="color:#E4405F"></i> Instagram
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; font-weight:normal; cursor:pointer;">
-                            <input type="radio" name="leadSource" value="tiktok" id="sourceTiktokMain">
-                            <i class="fab fa-tiktok" style="color:#000000"></i> TikTok
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; font-weight:normal; cursor:pointer;">
-                            <input type="radio" name="leadSource" value="viber" id="sourceViberMain">
-                            <i class="fab fa-viber" style="color:#7360f2"></i> Viber
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; font-weight:normal; cursor:pointer;">
-                            <input type="radio" name="leadSource" value="messenger" id="sourceMessengerMain">
-                            <i class="fab fa-facebook-messenger" style="color:#0084FF"></i> Messenger
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; font-weight:normal; cursor:pointer;">
-                            <input type="radio" name="leadSource" value="whatsapp" id="sourceWhatsappMain">
-                            <i class="fab fa-whatsapp" style="color:#25D366"></i> WhatsApp
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; font-weight:normal; cursor:pointer;">
-                            <input type="radio" name="leadSource" value="telegram" id="sourceTelegramMain">
-                            <i class="fab fa-telegram" style="color:#0088cc"></i> Telegram
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; font-weight:normal; cursor:pointer;">
-                            <input type="radio" name="leadSource" value="word_of_mouth" id="sourceWordOfMouthMain">
-                            <i class="fas fa-comments" style="color:var(--text-muted)"></i> Word/Mouth
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; font-weight:normal; cursor:pointer;">
-                            <input type="radio" name="leadSource" value="user" id="sourceUserMain" checked>
-                            <i class="fas fa-user" style="color:var(--text-muted)"></i> Manual/User
-                        </label>
-                    </div>
-                </div>
+                <div class="modal-grid">
+                    <!-- Left Column: Primary Details -->
+                    <div class="modal-column">
+                        <div class="modal-section">
+                            <div class="modal-section-title"><i class="fas fa-info-circle"></i> Basic Information</div>
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Property Title</label>
+                                    <input type="text" id="propTitle" class="form-control" required
+                                        placeholder="Luxurious Beach Villa">
+                                </div>
+                                <div>
+                                    <label>Slug (URL Identifier)</label>
+                                    <input type="text" id="propSlug" class="form-control"
+                                        placeholder="luxurious-beach-villa">
+                                </div>
+                            </div>
 
-                <div id="telegramLinkContainerMain" style="display:none; margin-bottom: 1rem;">
-                    <label>Telegram Link</label>
-                    <input type="text" id="propTelegramLink" class="form-control" placeholder="https://t.me/username">
-                </div>
+                            <div class="form-group">
+                                <label>Short Description (Card)</label>
+                                <input type="text" id="propShortDesc" class="form-control" required>
+                            </div>
 
-                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                    <div>
-                        <label>Listing Type (Select at least one)</label>
-                        <div style="display:flex; gap:1.5rem; margin-top:0.5rem;">
-                            <label
-                                style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                                <input type="checkbox" id="propListingForSale" value="for_sale"> For Sale
-                            </label>
-                            <label
-                                style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                                <input type="checkbox" id="propListingForLease" value="for_lease"> For Lease
-                            </label>
-                        </div>
-                    </div>
-                    <div>
-                        <label>Property Type</label>
-                        <select id="propType" class="form-control">
-                            <option value="">Select Type...</option>
-                            <option value="condo">Condo</option>
-                            <option value="duplex">Duplex</option>
-                            <option value="house_lot">House & lot</option>
-                            <option value="lot_only">Lot only</option>
-                            <option value="villa">Villa</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group" style="display:grid;grid-template-columns:100px 1fr 1fr;gap:1rem;">
-                    <div>
-                        <label>Currency</label>
-                        <select id="propCurrency" class="form-control">
-                            <option value="PHP">₱ PHP</option>
-                            <option value="USD">$ USD</option>
-                            <option value="EUR">€ EUR</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Selling Price</label>
-                        <input type="number" id="propPrice" class="form-control" required placeholder="₱">
-                    </div>
-                    <div>
-                        <label>Lease Price</label>
-                        <input type="number" id="propLeasePrice" class="form-control" placeholder="₱">
-                    </div>
-                </div>
-
-                <!-- LOCATION PICKER -->
-                <div class="form-group">
-                    <label>Location Search (Google Maps)</label>
-                    <input type="text" id="locationSearch" class="form-control"
-                        placeholder="Search for property location...">
-                </div>
-                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-                    <div>
-                        <label>Floor Number</label>
-                        <input type="text" id="propFloorNumber" class="form-control" placeholder="e.g. 5">
-                    </div>
-                    <div>
-                        <label>Unit Number</label>
-                        <input type="text" id="propUnitNumber" class="form-control" placeholder="e.g. 502">
-                    </div>
-                </div>
-                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-                    <div>
-                        <label>Area / Neighborhood</label>
-                        <input type="text" id="locArea" class="form-control" placeholder="El Nido">
-                    </div>
-                    <div>
-                        <label>Municipality / City</label>
-                        <input type="text" id="locMunicipality" class="form-control" placeholder="Palawan">
-                    </div>
-                </div>
-                <input type="hidden" id="locLat">
-                <input type="hidden" id="locLng">
-
-                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-                    <div>
-                        <label>Category</label>
-                        <select id="propCategory" class="form-control">
-                            <option value="residential">Residential</option>
-                            <option value="land">Land</option>
-                            <option value="commercial">Commercial</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Status</label>
-                        <select id="propStatus" class="form-control">
-                            <option value="for_sale">For Sale</option>
-                            <option value="sold">Sold</option>
-                            <option value="under_offer">Under Offer</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group"
-                    style="display:flex; justify-content: space-between; align-items:center; gap:1rem;">
-                    <div style="display:flex; align-items:center; gap:0.5rem;">
-                        <input type="checkbox" id="propFeatured" style="width:auto;margin:0;">
-                        <label for="propFeatured" style="margin:0;cursor:pointer;font-size:0.9rem;">Featured
-                            Property</label>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:0.5rem;">
-                        <input type="checkbox" id="propDisplay" checked style="width:auto;margin:0;">
-                        <label for="propDisplay" style="margin:0;cursor:pointer;font-size:0.9rem;">Publicly
-                            Visible</label>
-                    </div>
-                </div>
-
-                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-                    <div>
-                        <label>Thumbnail (Slide 1)</label>
-                        <input type="file" id="propImage" class="form-control" accept="image/*">
-                    </div>
-                    <div>
-                        <label>Gallery (Slides 2+)</label>
-                        <input type="file" id="propGallery" class="form-control" multiple accept="image/*">
-                    </div>
-                </div>
-                <div id="galleryPreview" class="gallery-preview-grid" style="margin-bottom:1rem;"></div>
-
-                <div class="form-group">
-                    <label>Short Description (Card)</label>
-                    <input type="text" id="propShortDesc" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Full Description (Modal)</label>
-                    <textarea id="propFullDesc" class="form-control" rows="4"></textarea>
-                </div>
-
-                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;">
-                    <input type="number" id="propBeds" class="form-control" placeholder="Beds">
-                    <input type="number" id="propBaths" class="form-control" placeholder="Baths">
-                    <input type="number" id="propSize" class="form-control" placeholder="Size (sqm)">
-                </div>
-
-                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
-                    <input type="number" id="propLotSize" class="form-control" placeholder="Lot Size (sqm)">
-                    <input type="number" id="propFloorArea" class="form-control" placeholder="Floor Area (sqm)">
-                </div>
-
-                <div class="form-group">
-                    <label>Features</label>
-                    <div style="display:flex; flex-wrap:wrap; gap:1.5rem; margin-top:0.5rem; margin-bottom: 0.5rem;">
-                        <div style="display:flex; align-items:center; gap:0.5rem;">
-                            <label
-                                style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal; margin:0;">
-                                <input type="checkbox" id="propHasParking" style="width:auto;margin:0;"> Parking
-                            </label>
-                            <div id="propParkingSpacesContainer" style="display:none;">
-                                <input type="number" id="propParkingSpaces" class="form-control" style="width:80px;"
-                                    placeholder="#">
+                            <div class="form-group">
+                                <label>Full Description (Modal)</label>
+                                <textarea id="propFullDesc" class="form-control" rows="6"></textarea>
                             </div>
                         </div>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal; margin:0;">
-                            <input type="checkbox" id="propFurnished" style="width:auto;margin:0;"> Furnished
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal; margin:0;">
-                            <input type="checkbox" id="propBalcony" style="width:auto;margin:0;"> Balcony
-                        </label>
+
+                        <div class="modal-section" style="margin-top: 1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-search"></i> SEO / Meta Data</div>
+                            <div class="form-group">
+                                <label>Meta Title</label>
+                                <input type="text" id="metaTitle" class="form-control"
+                                    placeholder="Browse Palawan Homes | Villa XYZ">
+                            </div>
+                            <div class="form-group">
+                                <label>Meta Description</label>
+                                <textarea id="metaDesc" class="form-control" rows="2"
+                                    placeholder="Explore this beautiful villa in El Nido..."></textarea>
+                            </div>
+                        </div>
                     </div>
-                    <label>Additional Features (comma separated)</label>
-                    <input type="text" id="propFeatures" class="form-control" placeholder="Pool, Solar, View...">
+
+                    <!-- Right Column: Specifics & Media -->
+                    <div class="modal-column">
+                        <div class="modal-section">
+                            <div class="modal-section-title"><i class="fas fa-tags"></i> Classification & Pricing</div>
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Listing Type</label>
+                                    <div style="display:flex; gap:1rem; margin-top:0.5rem;">
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0;">
+                                            <input type="checkbox" id="propListingForSale" value="for_sale"> Sale
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0;">
+                                            <input type="checkbox" id="propListingForLease" value="for_lease"> Lease
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label>Property Type</label>
+                                    <select id="propType" class="form-control">
+                                        <option value="">Select Type...</option>
+                                        <option value="condo">Condo</option>
+                                        <option value="duplex">Duplex</option>
+                                        <option value="house_lot">House & lot</option>
+                                        <option value="lot_only">Lot only</option>
+                                        <option value="villa">Villa</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Category</label>
+                                    <select id="propCategory" class="form-control">
+                                        <option value="residential">Residential</option>
+                                        <option value="land">Land</option>
+                                        <option value="commercial">Commercial</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Status</label>
+                                    <select id="propStatus" class="form-control">
+                                        <option value="for_sale">For Sale</option>
+                                        <option value="sold">Sold</option>
+                                        <option value="under_offer">Under Offer</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display:grid; grid-template-columns:80px 1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Currency</label>
+                                    <select id="propCurrency" class="form-control">
+                                        <option value="PHP">₱ PHP</option>
+                                        <option value="USD">$ USD</option>
+                                        <option value="EUR">€ EUR</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Selling Price</label>
+                                    <input type="number" id="propPrice" class="form-control" required placeholder="₱">
+                                </div>
+                                <div>
+                                    <label>Lease Price</label>
+                                    <input type="number" id="propLeasePrice" class="form-control" placeholder="₱">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-section" style="margin-top: 1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-map-marker-alt"></i> Location</div>
+                            <div class="form-group">
+                                <label>Google Maps Search</label>
+                                <input type="text" id="locationSearch" class="form-control"
+                                    placeholder="Search for property location...">
+                            </div>
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Floor #</label>
+                                    <input type="text" id="propFloorNumber" class="form-control" placeholder="e.g. 5">
+                                </div>
+                                <div>
+                                    <label>Unit #</label>
+                                    <input type="text" id="propUnitNumber" class="form-control" placeholder="e.g. 502">
+                                </div>
+                            </div>
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Area</label>
+                                    <input type="text" id="locArea" class="form-control" placeholder="El Nido">
+                                </div>
+                                <div>
+                                    <label>Municipality</label>
+                                    <input type="text" id="locMunicipality" class="form-control" placeholder="Palawan">
+                                </div>
+                            </div>
+                            <input type="hidden" id="locLat">
+                            <input type="hidden" id="locLng">
+                        </div>
+
+                        <div class="modal-section" style="margin-top: 1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-star"></i> Features & Media</div>
+                            <div class="form-group"
+                                style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem;">
+                                <div>
+                                    <label>Beds</label>
+                                    <input type="number" id="propBeds" class="form-control" placeholder="0">
+                                </div>
+                                <div>
+                                    <label>Baths</label>
+                                    <input type="number" id="propBaths" class="form-control" placeholder="0">
+                                </div>
+                                <div>
+                                    <label>SqM</label>
+                                    <input type="number" id="propSize" class="form-control" placeholder="0">
+                                </div>
+                            </div>
+
+                            <div style="display:flex; flex-wrap:wrap; gap:1rem; margin-bottom: 1rem;">
+                                <div style="display:flex; align-items:center; gap:0.5rem;">
+                                    <label
+                                        style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                        <input type="checkbox" id="propHasParking" style="width:auto;margin:0;"> Parking
+                                    </label>
+                                    <div id="propParkingSpacesContainer" style="display:none;">
+                                        <input type="number" id="propParkingSpaces" class="form-control"
+                                            style="width:60px; padding:0.4rem;" placeholder="#">
+                                    </div>
+                                </div>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                    <input type="checkbox" id="propFurnished" style="width:auto;margin:0;"> Furnished
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                    <input type="checkbox" id="propBalcony" style="width:auto;margin:0;"> Balcony
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                    <input type="checkbox" id="propFeatured" style="width:auto;margin:0;"> Featured
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                    <input type="checkbox" id="propDisplay" style="width:auto;margin:0;"> Visible
+                                </label>
+                            </div>
+
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Main Image</label>
+                                    <input type="file" id="propImage" class="form-control" accept="image/*">
+                                </div>
+                                <div>
+                                    <label>Gallery Images</label>
+                                    <input type="file" id="propGallery" class="form-control" multiple accept="image/*">
+                                </div>
+                            </div>
+                            <div id="galleryPreview" class="gallery-preview-grid" style="margin-top:0.5rem;"></div>
+                        </div>
+
+                        <div class="modal-section" style="margin-top: 1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-bullseye"></i> Lead Source</div>
+                            <div id="leadSourceRadios"
+                                style="display:grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:0.5rem; font-size:0.85rem;">
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="website" id="sourceWebsiteMain">
+                                    Website
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="facebook" id="sourceFacebookMain"> FB
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="instagram" id="sourceInstagramMain"> IG
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="tiktok" id="sourceTiktokMain"> TikTok
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="viber" id="sourceViberMain"> Viber
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="messenger" id="sourceMessengerMain">
+                                    Msg
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="whatsapp" id="sourceWhatsappMain"> WA
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="telegram" id="sourceTelegramMain"> TG
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="user" id="sourceUserMain" checked>
+                                    Manual
+                                </label>
+                            </div>
+                            <div id="telegramLinkContainerMain" style="display:none; margin-top: 1rem;">
+                                <label>Telegram Link</label>
+                                <input type="text" id="propTelegramLink" class="form-control"
+                                    placeholder="https://t.me/username">
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- META DATA -->
-                <div style="margin-top:2rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.1);">
-                    <h4 style="margin-bottom:1rem; opacity:0.8;">SEO / Meta Data</h4>
-                    <div class="form-group">
-                        <label>Meta Title</label>
-                        <input type="text" id="metaTitle" class="form-control"
-                            placeholder="Browse Palawan Homes | Villa XYZ">
-                    </div>
-                    <div class="form-group">
-                        <label>Meta Description</label>
-                        <textarea id="metaDesc" class="form-control" rows="2"
-                            placeholder="Explore this beautiful villa in El Nido..."></textarea>
-                    </div>
+                <div style="margin-top:2rem; display:flex; gap:1rem; align-items:center;">
+                    <button type="submit" id="submitBtn" class="btn-add" style="flex:2;">Confirm & Save Listing</button>
+                    <div id="uploadStatus" style="flex:1; text-align:right; font-size:0.9rem; opacity:0.8;"></div>
                 </div>
-
-                <button type="submit" id="submitBtn" class="btn-add" style="width:100%;margin-top:1rem;">Save
-                    Listing</button>
-                <div id="uploadStatus" style="margin-top:0.5rem;text-align:center;font-size:0.9rem;opacity:0.8;"></div>
             </form>
         </div>
+    </div>
+    </form>
+    </div>
     </div>
 
     <!-- Gallery Modal -->
@@ -607,464 +614,525 @@
     </div>
 
     <!-- Inspection Modal -->
-    <div id="inspectionModal" class="modal-overlay premium-modal">
+    <div id="inspectionModal" class="modal-overlay premium-modal wide">
         <div class="modal-content">
             <span id="closeInspectionModal" class="close-modal">&times;</span>
             <h3 id="inspectionModalTitle" class="modal-title">New Inspection</h3>
             <form id="inspectionForm">
                 <input type="hidden" id="inspectionId">
-                <div class="form-group">
-                    <label>Inspection Name</label>
-                    <input type="text" id="inspName" class="form-control" required
-                        placeholder="e.g. Final Walkthrough - Unit A">
-                </div>
 
-                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-                    <div>
-                        <label>Development</label>
-                        <select id="inspDevelopment" class="form-control" required>
-                            <option value="">Select Development...</option>
-                        </select>
+                <div class="modal-grid">
+                    <!-- Left Column -->
+                    <div class="modal-column">
+                        <div class="modal-section">
+                            <div class="modal-section-title"><i class="fas fa-info-circle"></i> Basic Info</div>
+                            <div class="form-group">
+                                <label>Inspection Name</label>
+                                <input type="text" id="inspName" class="form-control" required
+                                    placeholder="e.g. Final Walkthrough - Unit A">
+                            </div>
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Development</label>
+                                    <select id="inspDevelopment" class="form-control" required>
+                                        <option value="">Select Development...</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Plot / Unit</label>
+                                    <select id="inspPlot" class="form-control" required disabled>
+                                        <option value="">Select Plot...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-section" style="margin-top:1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-tags"></i> Classification</div>
+                            <div class="form-group">
+                                <label>Inspection Tags (comma separated)</label>
+                                <input type="text" id="inspTags" class="form-control"
+                                    placeholder="e.g. structural, electric, plumbing">
+                            </div>
+                            <div class="form-group" style="display:flex; align-items:center; gap:0.5rem;">
+                                <input type="checkbox" id="inspPrivate" style="width:auto;margin:0;">
+                                <label for="inspPrivate" style="margin:0;cursor:pointer;font-size:0.9rem;">Mark as
+                                    Private</label>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label>Plot / Unit</label>
-                        <select id="inspPlot" class="form-control" required disabled>
-                            <option value="">Select Plot...</option>
-                        </select>
+
+                    <!-- Right Column -->
+                    <div class="modal-column">
+                        <div class="modal-section">
+                            <div class="modal-section-title"><i class="fas fa-sticky-note"></i> Observations & Media
+                            </div>
+                            <div class="form-group">
+                                <label>Notes</label>
+                                <textarea id="inspNotes" class="form-control" rows="6"
+                                    placeholder="Enter inspection details and observations..."></textarea>
+                            </div>
+
+                            <div class="form-group" style="margin-top:1rem;">
+                                <label>Media Gallery (Photos)</label>
+                                <input type="file" id="inspMedia" class="form-control" multiple accept="image/*">
+                            </div>
+                            <div id="inspectionGalleryPreview" class="gallery-preview-grid" style="margin-top:0.5rem;">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Inspection Tags (comma separated)</label>
-                    <input type="text" id="inspTags" class="form-control"
-                        placeholder="e.g. structural, electric, plumbing">
-                </div>
-
-                <div class="form-group">
-                    <label>Notes</label>
-                    <textarea id="inspNotes" class="form-control" rows="4"
-                        placeholder="Enter inspection details and observations..."></textarea>
-                </div>
-
-                <div class="form-group" style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
-                    <input type="checkbox" id="inspPrivate" style="width:auto;margin:0;">
-                    <label for="inspPrivate" style="margin:0;cursor:pointer;font-size:0.9rem;">Mark as Private</label>
-                </div>
-
-                <div class="form-group">
-                    <label>Media Gallery (Photos)</label>
-                    <input type="file" id="inspMedia" class="form-control" multiple accept="image/*">
-                </div>
-                <div id="inspectionGalleryPreview" class="gallery-preview-grid" style="margin-bottom:1rem;"></div>
-
-                <button type="submit" id="inspSubmitBtn" class="btn-add" style="width:100%;margin-top:1rem;">Create
-                    Inspection</button>
-                <div id="inspUploadStatus" style="margin-top:0.5rem;text-align:center;font-size:0.9rem;opacity:0.8;">
+                <div style="margin-top:2rem; display:flex; gap:1rem;">
+                    <button type="submit" id="inspSubmitBtn" class="btn-add" style="flex:2;">Confirm & Create
+                        Inspection</button>
+                    <div id="inspUploadStatus" style="flex:1; text-align:right; font-size:0.9rem; opacity:0.8;"></div>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Enquiry Modal -->
-    <div id="enquiryModal" class="modal-overlay premium-modal">
+    <div id="enquiryModal" class="modal-overlay premium-modal wide">
         <div class="modal-content">
             <span id="closeEnquiryModal" class="close-modal">&times;</span>
             <h3 id="enquiryModalTitle" class="modal-title">Manually Add Enquiry</h3>
             <form id="enquiryForm">
-                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-                    <div>
-                        <label>Name</label>
-                        <input type="text" id="enqName" class="form-control" placeholder="John Doe">
-                    </div>
-                    <div>
-                        <label>Email</label>
-                        <input type="email" id="enqEmail" class="form-control" placeholder="john@example.com">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Phone Number</label>
-                    <input type="text" id="enqPhone" class="form-control" placeholder="+123456789">
-                </div>
-
-                <!-- Listing Type -->
-                <div class="form-group" style="margin-top:1rem;">
-                    <label>Listing Type (Select at least one)</label>
-                    <div style="display:flex; gap:1.5rem; margin-top:0.5rem;">
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                            <input type="checkbox" id="enqListingForSale" value="for_sale"> For Sale
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                            <input type="checkbox" id="enqListingForLease" value="for_lease"> For Lease
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Property Details -->
-                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
-                    <div>
-                        <label>Property Type</label>
-                        <select id="enqPropType" class="form-control">
-                            <option value="">Select Type...</option>
-                            <option value="condo">Condo</option>
-                            <option value="duplex">Duplex</option>
-                            <option value="house_lot">House & lot</option>
-                            <option value="lot_only">Lot only</option>
-                            <option value="villa">Villa</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Features</label>
-                        <div style="display:flex; flex-wrap:wrap; gap:1rem; margin-top:0.5rem;">
-                            <label
-                                style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; font-size:0.9rem;">
-                                <input type="checkbox" id="enqFurnished"> Furnished
-                            </label>
-                            <label
-                                style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; font-size:0.9rem;">
-                                <input type="checkbox" id="enqBalcony"> Balcony
-                            </label>
+                <div class="modal-grid">
+                    <!-- Left Column -->
+                    <div class="modal-column">
+                        <div class="modal-section">
+                            <div class="modal-section-title"><i class="fas fa-user"></i> Contact Details</div>
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Name</label>
+                                    <input type="text" id="enqName" class="form-control" placeholder="John Doe">
+                                </div>
+                                <div>
+                                    <label>Email</label>
+                                    <input type="email" id="enqEmail" class="form-control"
+                                        placeholder="john@example.com">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="text" id="enqPhone" class="form-control" placeholder="+123456789">
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                    <div style="display:flex; align-items:center; gap:0.5rem;">
-                        <div style="flex:1;">
-                            <label
-                                style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal; margin-bottom: 5px;">
-                                <input type="checkbox" id="enqHasParking"> Parking
-                            </label>
-                            <div id="parkingSpacesContainer" style="display:none;">
-                                <input type="number" id="enqParkingSpaces" class="form-control" placeholder="Spaces"
-                                    min="0">
+                        <div class="modal-section" style="margin-top:1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-home"></i> Property Requirements</div>
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Listing Type</label>
+                                    <div style="display:flex; gap:1rem; margin-top:0.5rem;">
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0;">
+                                            <input type="checkbox" id="enqListingForSale" value="for_sale"> Sale
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0;">
+                                            <input type="checkbox" id="enqListingForLease" value="for_lease"> Lease
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label>Property Type</label>
+                                    <select id="enqPropType" class="form-control">
+                                        <option value="">Select Type...</option>
+                                        <option value="condo">Condo</option>
+                                        <option value="duplex">Duplex</option>
+                                        <option value="house_lot">House & lot</option>
+                                        <option value="lot_only">Lot only</option>
+                                        <option value="villa">Villa</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Area / Neighborhood</label>
+                                <input type="text" id="enqArea" class="form-control" placeholder="e.g. El Nido">
+                            </div>
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Floor #</label>
+                                    <input type="text" id="enqFloorNumber" class="form-control" placeholder="e.g. 5">
+                                </div>
+                                <div>
+                                    <label>Unit #</label>
+                                    <input type="text" id="enqUnitNumber" class="form-control" placeholder="e.g. 502">
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <!-- Column padding/alignment -->
+
+                    <!-- Right Column -->
+                    <div class="modal-column">
+                        <div class="modal-section">
+                            <div class="modal-section-title"><i class="fas fa-tags"></i> Budget & Status</div>
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Selling Price (PHP)</label>
+                                    <input type="number" id="enqSellingPrice" class="form-control" placeholder="₱">
+                                </div>
+                                <div>
+                                    <label>Lease Price (PHP)</label>
+                                    <input type="number" id="enqLeasePrice" class="form-control" placeholder="₱">
+                                </div>
+                            </div>
+
+                            <div
+                                style="display:flex; flex-wrap:wrap; gap:1rem; margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.05);">
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                    <input type="checkbox" id="enqResponded"> Responded
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                    <input type="checkbox" id="enqOffPlan" checked> Off-Plan
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                    <input type="checkbox" id="enqCustomBuild"> Custom Build
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="modal-section" style="margin-top:1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-star"></i> Desired Features</div>
+                            <div style="display:flex; flex-wrap:wrap; gap:1rem;">
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                    <input type="checkbox" id="enqFurnished"> Furnished
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                    <input type="checkbox" id="enqBalcony"> Balcony
+                                </label>
+                                <div style="display:flex; align-items:center; gap:0.5rem;">
+                                    <label
+                                        style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                        <input type="checkbox" id="enqHasParking"> Parking
+                                    </label>
+                                    <div id="parkingSpacesContainer" style="display:none;">
+                                        <input type="number" id="enqParkingSpaces" class="form-control"
+                                            style="width:60px; padding:0.4rem;" placeholder="#" min="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-section" style="margin-top:1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-bullseye"></i> Acquisition Source</div>
+                            <div
+                                style="display:grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:0.5rem; font-size:0.85rem;">
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="enqSource" value="website" id="srcWebsite" checked>
+                                    Website
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="enqSource" value="facebook" id="srcFacebook"> FB
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="enqSource" value="instagram" id="srcInstagram"> IG
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="enqSource" value="tiktok" id="srcTiktok"> TikTok
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="enqSource" value="viber" id="srcViber"> Viber
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="enqSource" value="messenger" id="srcMessenger"> Msg
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="enqSource" value="whatsapp" id="srcWhatsapp"> WA
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="enqSource" value="telegram" id="srcTelegram"> TG
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="enqSource" value="word_of_mouth" id="srcWordOfMouth"> W/M
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="enqSource" value="direct_contact" id="srcDirectContact">
+                                    Direct
+                                </label>
+                            </div>
+                            <div id="telegramLinkContainer" style="display:none; margin-top: 1rem;">
+                                <label>Telegram Link</label>
+                                <input type="text" id="enqTelegramLink" class="form-control"
+                                    placeholder="https://t.me/username">
+                            </div>
+                        </div>
+
+                        <div class="modal-section" style="margin-top:1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-sticky-note"></i> Internal Notes</div>
+                            <textarea id="enqComments" class="form-control" rows="3"
+                                placeholder="Additional details..."></textarea>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                    <div>
-                        <label>Floor Number</label>
-                        <input type="text" id="enqFloorNumber" class="form-control" placeholder="e.g. 5">
-                    </div>
-                    <div>
-                        <label>Unit Number</label>
-                        <input type="text" id="enqUnitNumber" class="form-control" placeholder="e.g. 502">
-                    </div>
+                <div style="margin-top:2rem; display:flex; gap:1rem;">
+                    <button type="submit" id="enqSubmitBtn" class="btn-add" style="flex:2;">Confirm & Save
+                        Enquiry</button>
+                    <div id="enqStatus" style="flex:1; text-align:right; font-size:0.9rem; opacity:0.8;"></div>
                 </div>
-
-                <div class="form-group">
-                    <label>Area / Neighborhood</label>
-                    <input type="text" id="enqArea" class="form-control" placeholder="e.g. El Nido">
-                </div>
-
-                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                    <div>
-                        <label>Selling Price (PHP)</label>
-                        <input type="number" id="enqSellingPrice" class="form-control" placeholder="₱">
-                    </div>
-                    <div>
-                        <label>Lease Price (PHP)</label>
-                        <input type="number" id="enqLeasePrice" class="form-control" placeholder="₱">
-                    </div>
-                </div>
-
-                <!-- Toggles (existing) -->
-                <div class="form-group"
-                    style="display:flex; flex-wrap:wrap; gap:1.5rem; margin-top:1rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem;">
-                    <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                        <input type="checkbox" id="enqResponded">
-                        Responded
-                    </label>
-                    <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                        <input type="checkbox" id="enqOffPlan" checked>
-                        Off-Plan Interest
-                    </label>
-                    <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                        <input type="checkbox" id="enqCustomBuild">
-                        Custom Build
-                    </label>
-                </div>
-
-                <!-- Sources -->
-                <div class="form-group">
-                    <label>Source (Select One)</label>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:0.5rem; margin-top:0.5rem;">
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                            <input type="radio" name="enqSource" value="website" id="srcWebsite" checked> Website
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                            <input type="radio" name="enqSource" value="facebook" id="srcFacebook"> Facebook
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                            <input type="radio" name="enqSource" value="instagram" id="srcInstagram"> Instagram
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                            <input type="radio" name="enqSource" value="tiktok" id="srcTiktok"> TikTok
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                            <input type="radio" name="enqSource" value="viber" id="srcViber"> Viber
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                            <input type="radio" name="enqSource" value="messenger" id="srcMessenger"> Messenger
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                            <input type="radio" name="enqSource" value="telegram" id="srcTelegram"> Telegram
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                            <input type="radio" name="enqSource" value="word_of_mouth" id="srcWordOfMouth"> Word/Mouth
-                        </label>
-                        <label
-                            style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:normal;">
-                            <input type="radio" name="enqSource" value="direct_contact" id="srcDirectContact"> Direct
-                        </label>
-                    </div>
-                </div>
-
-                <div id="telegramLinkContainer" style="display:none; margin-bottom: 1rem;">
-                    <label>Telegram Link</label>
-                    <input type="text" id="enqTelegramLink" class="form-control" placeholder="https://t.me/username">
-                </div>
-
-                <div class="form-group">
-                    <label>Comments / Notes</label>
-                    <textarea id="enqComments" class="form-control" rows="3"
-                        placeholder="Additional details..."></textarea>
-                </div>
-
-                <button type="submit" id="enqSubmitBtn" class="btn-add" style="width:100%;margin-top:1rem;">Add
-                    Enquiry</button>
-                <div id="enqStatus" style="margin-top:0.5rem;text-align:center;font-size:0.9rem;opacity:0.8;"></div>
             </form>
         </div>
     </div>
+    </form>
+    </div>
+    </div>
 
     <!-- Enquiry Details Modal -->
-    <div id="enquiryDetailsModal" class="modal-overlay premium-modal">
+    <div id="enquiryDetailsModal" class="modal-overlay premium-modal wide">
         <div class="modal-content">
             <span id="closeEnquiryDetailsModal" class="close-modal">&times;</span>
             <h3 class="modal-title">Enquiry Details</h3>
             <div id="enqDetailsContent">
-                <div class="form-group"
-                    style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:1rem; margin-bottom:1rem;">
-                    <div>
-                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Name</label>
-                        <div id="detEnqName" style="font-weight:bold; font-size:1.1rem;">-</div>
-                    </div>
-                    <div>
-                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Date Received</label>
-                        <div id="detEnqDate">-</div>
-                    </div>
-                </div>
-
-                <div class="form-group"
-                    style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-                    <div>
-                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Email</label>
-                        <div id="detEnqEmail">-</div>
-                    </div>
-                    <div>
-                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Phone Number</label>
-                        <div id="detEnqPhone">-</div>
-                    </div>
-                </div>
-
-                <div class="form-group"
-                    style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-                    <div>
-                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Lead Source</label>
-                        <div id="detEnqSource">-</div>
-                        <div id="detEnqTelegramLink"
-                            style="font-size:0.85rem; color:var(--accent); margin-top:4px; display:none;"></div>
-                    </div>
-                    <div>
-                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Status</label>
-                        <div id="detEnqStatus">-</div>
-                    </div>
-                </div>
-
-                <div style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; margin-bottom:1rem;">
-                    <h4
-                        style="font-size:0.9rem; margin-bottom:1rem; opacity:0.8; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:0.5rem;">
-                        Property Requirements</h4>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                        <div>
-                            <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Listing Type</label>
-                            <div id="detEnqListingType">-</div>
+                <div class="modal-grid">
+                    <!-- Left Column: Core Info & Requirements -->
+                    <div class="modal-column">
+                        <div class="modal-section">
+                            <div class="modal-section-title"><i class="fas fa-user-circle"></i> Contact Information
+                            </div>
+                            <div class="form-group"
+                                style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Name</label>
+                                    <div id="detEnqName" style="font-weight:bold; font-size:1.1rem;">-</div>
+                                </div>
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Date
+                                        Received</label>
+                                    <div id="detEnqDate">-</div>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Email</label>
+                                    <div id="detEnqEmail">-</div>
+                                </div>
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Phone
+                                        Number</label>
+                                    <div id="detEnqPhone">-</div>
+                                </div>
+                            </div>
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Lead Source</label>
+                                    <div id="detEnqSource">-</div>
+                                    <div id="detEnqTelegramLink"
+                                        style="font-size:0.85rem; color:var(--accent); margin-top:4px; display:none;">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Status</label>
+                                    <div id="detEnqStatus">-</div>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Property Type</label>
-                            <div id="detEnqPropType">-</div>
-                        </div>
-                    </div>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
-                        <div>
-                            <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Area / Neighborhood</label>
-                            <div id="detEnqArea">-</div>
-                        </div>
-                        <div>
-                            <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Unit / Floor</label>
-                            <div id="detEnqUnitFloor">-</div>
-                        </div>
-                    </div>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
-                        <div>
-                            <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Selling Price Range</label>
-                            <div id="detEnqSellingPrice">-</div>
-                        </div>
-                        <div>
-                            <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Lease Price Range</label>
-                            <div id="detEnqLeasePrice">-</div>
-                        </div>
-                    </div>
-                    <div style="margin-top:1rem;">
-                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:4px;">Request Features</label>
-                        <div id="detEnqFeatures" style="display:flex; flex-wrap:wrap; gap:0.5rem;">-</div>
-                    </div>
-                    <div style="display:flex; gap:1rem; margin-top:1rem;">
-                        <div id="detEnqOffPlan" class="status-badge" style="display:none;">Off-Plan</div>
-                        <div id="detEnqCustomBuild" class="status-badge" style="display:none;">Custom Build</div>
-                    </div>
-                </div>
 
-
-                <div class="form-group">
-                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:8px;">Activity Comments</label>
-
-                    <!-- Comments Feed -->
-                    <div id="detEnqCommentsContainer"
-                        style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; max-height: 300px; overflow-y: auto; margin-bottom:1rem;">
-                        <!-- Comments will be dynamically rendered here -->
+                        <div class="modal-section" style="margin-top:1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-home"></i> Property Requirements</div>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Listing
+                                        Type</label>
+                                    <div id="detEnqListingType">-</div>
+                                </div>
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Property
+                                        Type</label>
+                                    <div id="detEnqPropType">-</div>
+                                </div>
+                            </div>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Area /
+                                        Neighborhood</label>
+                                    <div id="detEnqArea">-</div>
+                                </div>
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Unit /
+                                        Floor</label>
+                                    <div id="detEnqUnitFloor">-</div>
+                                </div>
+                            </div>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Selling Price
+                                        Range</label>
+                                    <div id="detEnqSellingPrice">-</div>
+                                </div>
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Lease Price
+                                        Range</label>
+                                    <div id="detEnqLeasePrice">-</div>
+                                </div>
+                            </div>
+                            <div style="margin-top:1rem;">
+                                <label style="opacity:0.6; font-size:0.8rem; margin-bottom:4px;">Request
+                                    Features</label>
+                                <div id="detEnqFeatures" style="display:flex; flex-wrap:wrap; gap:0.5rem;">-</div>
+                            </div>
+                            <div style="display:flex; gap:1rem; margin-top:1rem;">
+                                <div id="detEnqOffPlan" class="status-badge" style="display:none;">Off-Plan</div>
+                                <div id="detEnqCustomBuild" class="status-badge" style="display:none;">Custom Build
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Add Comment Form -->
-                    <div style="background: rgba(255,255,255,0.05); border-radius:8px; padding:1rem;">
-                        <textarea id="detEnqNewComment" placeholder="Add a comment..."
-                            style="width:100%; min-height:60px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.5rem; color:inherit; font-family:inherit; resize:vertical;"></textarea>
-                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem; align-items:center;">
-                            <input type="file" id="detEnqCommentImage" accept="image/*" style="display:none;">
-                            <button id="detEnqAttachImageBtn" class="action-btn" title="Attach Image"
-                                style="background:rgba(255,255,255,0.1);">
-                                <i class="fas fa-image"></i>
-                            </button>
-                            <span id="detEnqImagePreview" style="font-size:0.8rem; opacity:0.7;"></span>
-                            <button id="detEnqPostCommentBtn" class="btn-add"
-                                style="margin-left:auto; padding:0.5rem 1rem;">
-                                Post Comment
-                            </button>
+                    <!-- Right Column: Activity & Comments -->
+                    <div class="modal-column">
+                        <div class="modal-section" style="height: 100%; display: flex; flex-direction: column;">
+                            <div class="modal-section-title"><i class="fas fa-comments"></i> Activity Timeline</div>
+
+                            <!-- Comments Feed -->
+                            <div id="detEnqCommentsContainer"
+                                style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; flex: 1; min-height: 300px; max-height: 500px; overflow-y: auto; margin-bottom:1rem;">
+                                <!-- Comments will be dynamically rendered here -->
+                            </div>
+
+                            <!-- Add Comment Form -->
+                            <div style="background: rgba(255,255,255,0.05); border-radius:8px; padding:1rem;">
+                                <textarea id="detEnqNewComment" placeholder="Add a comment..."
+                                    style="width:100%; min-height:80px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.5rem; color:inherit; font-family:inherit; resize:vertical;"></textarea>
+                                <div style="display:flex; gap:0.5rem; margin-top:0.5rem; align-items:center;">
+                                    <input type="file" id="detEnqCommentImage" accept="image/*" style="display:none;">
+                                    <button id="detEnqAttachImageBtn" class="action-btn" title="Attach Image"
+                                        style="background:rgba(255,255,255,0.1);">
+                                        <i class="fas fa-image"></i>
+                                    </button>
+                                    <span id="detEnqImagePreview" style="font-size:0.8rem; opacity:0.7;"></span>
+                                    <button id="detEnqPostCommentBtn" class="btn-add"
+                                        style="margin-left:auto; padding:0.5rem 1rem;">
+                                        Post Comment
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div style="margin-top:2rem; display:flex; gap:1rem;">
-                <button id="detEnqEditBtn" class="btn-add" style="flex:1;">Edit Enquiry</button>
-                <button id="detEnqCloseBtn" class="btn-logout" style="flex:1;">Close</button>
+                <button id="detEnqEditBtn" class="btn-add" style="flex:1;">Edit Enquiry Details</button>
+                <button id="detEnqCloseBtn" class="btn-logout" style="flex:1;">Close View</button>
             </div>
         </div>
     </div>
 
     <!-- Inspection Details Modal -->
-    <div id="inspectionDetailsModal" class="modal-overlay premium-modal">
+    <div id="inspectionDetailsModal" class="modal-overlay premium-modal wide">
         <div class="modal-content">
             <span id="closeInspectionDetailsModal" class="close-modal">&times;</span>
             <h3 class="modal-title">Inspection Details</h3>
             <div id="inspDetailsContent">
-                <div class="form-group"
-                    style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:1rem; margin-bottom:1rem;">
-                    <div>
-                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Title / Inspector</label>
-                        <div id="detInspTitle" style="font-weight:bold; font-size:1.1rem;">-</div>
-                    </div>
-                    <div>
-                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Inspection Date</label>
-                        <div id="detInspDate">-</div>
-                    </div>
-                </div>
+                <div class="modal-grid">
+                    <!-- Left Column: Details & Media -->
+                    <div class="modal-column">
+                        <div class="modal-section">
+                            <div class="modal-section-title"><i class="fas fa-file-contract"></i> Core Information</div>
+                            <div class="form-group"
+                                style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Title /
+                                        Inspector</label>
+                                    <div id="detInspTitle" style="font-weight:bold; font-size:1.1rem;">-</div>
+                                </div>
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Inspection
+                                        Date</label>
+                                    <div id="detInspDate">-</div>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Development</label>
+                                    <div id="detInspDev">-</div>
+                                </div>
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Plot / Unit</label>
+                                    <div id="detInspPlot">-</div>
+                                </div>
+                            </div>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:4px;">Tags</label>
+                                    <div id="detInspTags" style="display:flex; flex-wrap:wrap; gap:0.5rem;">-</div>
+                                </div>
+                                <div>
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:4px;">Visibility
+                                        Status</label>
+                                    <div id="detInspStatus">-</div>
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="form-group"
-                    style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-                    <div>
-                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Development</label>
-                        <div id="detInspDev">-</div>
-                    </div>
-                    <div>
-                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Plot / Unit</label>
-                        <div id="detInspPlot">-</div>
-                    </div>
-                </div>
-
-                <div class="form-group" style="margin-bottom:1rem;">
-                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:4px;">Tags</label>
-                    <div id="detInspTags" style="display:flex; flex-wrap:wrap; gap:0.5rem;">-</div>
-                </div>
-
-                <div class="form-group" style="margin-bottom:1rem;">
-                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:4px;">Visibility Status</label>
-                    <div id="detInspStatus">-</div>
-                </div>
-
-                <div class="form-group" style="margin-bottom:1.5rem;">
-                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:4px;">Inspection Notes</label>
-                    <div id="detInspNote"
-                        style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; font-size:0.95rem; line-height:1.6; min-height:60px;">
-                        -
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:8px;">Media Gallery</label>
-                    <div id="detInspMedia" class="gallery-preview-grid"
-                        style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap:10px;">
-                        <!-- Images will be injected here -->
-                    </div>
-                </div>
-
-                <!-- Activity Comments Section -->
-                <div class="form-group" style="margin-top:1.5rem;">
-                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:8px;">Activity Comments</label>
-
-                    <!-- Comments Feed -->
-                    <div id="detInspCommentsContainer"
-                        style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; max-height: 300px; overflow-y: auto; margin-bottom:1rem;">
-                        <!-- Comments will be dynamically rendered here -->
+                        <div class="modal-section" style="margin-top:1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-sticky-note"></i> Inspection Notes</div>
+                            <div id="detInspNote"
+                                style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; font-size:0.95rem; line-height:1.6; min-height:80px; margin-bottom:1.5rem;">
+                                -
+                            </div>
+                            <label style="opacity:0.6; font-size:0.8rem; margin-bottom:8px;">Media Gallery</label>
+                            <div id="detInspMedia" class="gallery-preview-grid"
+                                style="grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:10px;">
+                                <!-- Images will be injected here -->
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Add Comment Form -->
-                    <div style="background: rgba(255,255,255,0.05); border-radius:8px; padding:1rem;">
-                        <textarea id="detInspNewComment" placeholder="Add a comment..."
-                            style="width:100%; min-height:60px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.5rem; color:inherit; font-family:inherit; resize:vertical;"></textarea>
-                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem; align-items:center;">
-                            <input type="file" id="detInspCommentImage" accept="image/*" style="display:none;">
-                            <button id="detInspAttachImageBtn" class="action-btn" title="Attach Image"
-                                style="background:rgba(255,255,255,0.1);">
-                                <i class="fas fa-image"></i>
-                            </button>
-                            <span id="detInspImagePreview" style="font-size:0.8rem; opacity:0.7;"></span>
-                            <button id="detInspPostCommentBtn" class="btn-add"
-                                style="margin-left:auto; padding:0.5rem 1rem;">
-                                Post Comment
-                            </button>
+                    <!-- Right Column: Activity & Comments -->
+                    <div class="modal-column">
+                        <div class="modal-section" style="height: 100%; display: flex; flex-direction: column;">
+                            <div class="modal-section-title"><i class="fas fa-comments"></i> Activity Timeline</div>
+
+                            <!-- Comments Feed -->
+                            <div id="detInspCommentsContainer"
+                                style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; flex: 1; min-height: 300px; max-height: 500px; overflow-y: auto; margin-bottom:1rem;">
+                                <!-- Comments will be dynamically rendered here -->
+                            </div>
+
+                            <!-- Add Comment Form -->
+                            <div style="background: rgba(255,255,255,0.05); border-radius:8px; padding:1rem;">
+                                <textarea id="detInspNewComment" placeholder="Add a comment..."
+                                    style="width:100%; min-height:80px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.5rem; color:inherit; font-family:inherit; resize:vertical;"></textarea>
+                                <div style="display:flex; gap:0.5rem; margin-top:0.5rem; align-items:center;">
+                                    <input type="file" id="detInspCommentImage" accept="image/*" style="display:none;">
+                                    <button id="detInspAttachImageBtn" class="action-btn" title="Attach Image"
+                                        style="background:rgba(255,255,255,0.1);">
+                                        <i class="fas fa-image"></i>
+                                    </button>
+                                    <span id="detInspImagePreview" style="font-size:0.8rem; opacity:0.7;"></span>
+                                    <button id="detInspPostCommentBtn" class="btn-add"
+                                        style="margin-left:auto; padding:0.5rem 1rem;">
+                                        Post Comment
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div style="margin-top:2rem; display:flex; gap:1rem;">
-                <button id="detInspEditBtn" class="btn-add" style="flex:1;">Edit Inspection</button>
-                <button id="detInspCloseBtn" class="btn-logout" style="flex:1;">Close</button>
+                <button id="detInspEditBtn" class="btn-add" style="flex:1;">Edit Inspection Details</button>
+                <button id="detInspCloseBtn" class="btn-logout" style="flex:1;">Close View</button>
             </div>
         </div>
     </div>
@@ -1072,9 +1140,9 @@
     <!-- Property Modal == [DYNAMIC COMPONENT] -->
     <div id="propertymodal-placeholder"></div>
 
-    <script src="assets/js/nav.js?v=2.88" defer></script>
-    <script src="assets/js/snackbar.js?v=2.88"></script>
-    <script src="assets/js/main.js?v=2.88" defer></script>
+    <script src="assets/js/nav.js?v=2.89" defer></script>
+    <script src="assets/js/snackbar.js?v=2.89"></script>
+    <script src="assets/js/main.js?v=2.89" defer></script>
     <!-- Google Maps API -->
     <!-- Google Maps API -->
     <script async defer
