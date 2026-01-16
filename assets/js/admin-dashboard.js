@@ -26,6 +26,7 @@ let isEditMode = false;
 let isInitialized = false;
 let modal;
 let currentUserCompany = null; // Store user's company reference
+let tempInspectionMedia = []; // Stores { type: 'existing'|'new', url: string, file: File }
 let currentUserId = null; // Store current user's UID
 let galleryModal;
 let isGalleryEditMode = false;
@@ -2143,24 +2144,49 @@ function initInspectionModalEvents() {
     const mediaInput = document.getElementById("inspMedia");
     if (mediaInput) {
         mediaInput.addEventListener("change", () => {
-            const previewContainer = document.getElementById("inspectionGalleryPreview");
-            if (!previewContainer) return;
-            previewContainer.innerHTML = ""; // Clear existing
-
             if (mediaInput.files && mediaInput.files.length > 0) {
                 Array.from(mediaInput.files).forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const div = document.createElement("div");
-                        div.className = "preview-item";
-                        div.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-                        previewContainer.appendChild(div);
-                    };
-                    reader.readAsDataURL(file);
+                    tempInspectionMedia.push({
+                        type: 'new',
+                        file: file,
+                        preview: URL.createObjectURL(file)
+                    });
                 });
+                renderInspectionMediaPreview();
+                mediaInput.value = ""; // Reset input so same file can be selected again if removed
             }
         });
     }
+}
+
+/**
+ * Render Inspection Media Preview
+ */
+function renderInspectionMediaPreview() {
+    const previewContainer = document.getElementById("inspectionGalleryPreview");
+    if (!previewContainer) return;
+    previewContainer.innerHTML = "";
+
+    tempInspectionMedia.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "preview-item";
+
+        const src = item.type === 'existing' ? item.url : item.preview;
+        div.innerHTML = `
+            <img src="${src}" alt="Preview">
+            <button type="button" class="preview-remove" data-index="${index}">&times;</button>
+        `;
+
+        div.querySelector(".preview-remove").onclick = () => {
+            if (item.type === 'new' && item.preview) {
+                URL.revokeObjectURL(item.preview);
+            }
+            tempInspectionMedia.splice(index, 1);
+            renderInspectionMediaPreview();
+        };
+
+        previewContainer.appendChild(div);
+    });
 }
 
 /**
@@ -2204,6 +2230,7 @@ function openInspectionModal() {
     }
 
     // Clear preview
+    tempInspectionMedia = [];
     const previewContainer = document.getElementById("inspectionGalleryPreview");
     if (previewContainer) previewContainer.innerHTML = "";
 
@@ -2291,7 +2318,8 @@ async function fetchPlotsForDevelopment() {
             const data = docSnap.data();
             const option = document.createElement("option");
             option.value = docSnap.id;
-            option.textContent = `Plot ${data.number || data.title || "Untitled"}`;
+            // Use name field as requested
+            option.textContent = data.name || data.number || data.title || "Untitled Plot";
             plotSelect.appendChild(option);
         });
 
@@ -2320,22 +2348,29 @@ async function handleInspectionFormSubmit(e) {
         const notes = document.getElementById("inspNotes").value;
         const tagsInput = document.getElementById("inspTags").value;
         const isPrivate = document.getElementById("inspPrivate").checked;
-        const files = document.getElementById("inspMedia").files;
 
-        // 1. Upload Images (if new files selected)
-        let mediaUrls = [];
-        // If editing, we might want to keep old images or handle deletions. 
-        // For simplicity here, we add new ones to whatever exists if we had that logic, 
-        // but current UI/UX implies replacing or starting fresh for simplicity in this snippet.
-        if (files.length > 0) {
-            status.textContent = `Uploading ${files.length} images...`;
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
+        // 1. Process Media
+        status.textContent = "Processing images...";
+        const finalMediaUrls = [];
+        const newFilesToUpload = [];
+
+        tempInspectionMedia.forEach(item => {
+            if (item.type === 'existing') {
+                finalMediaUrls.push(item.url);
+            } else {
+                newFilesToUpload.push(item.file);
+            }
+        });
+
+        if (newFilesToUpload.length > 0) {
+            status.textContent = `Uploading ${newFilesToUpload.length} new images...`;
+            for (let i = 0; i < newFilesToUpload.length; i++) {
+                const file = newFilesToUpload[i];
                 const resizedBlob = await compressAndConvertToWebP(file, 1000);
                 const storageRef = ref(storage, `inspections/${Date.now()}_${i}.webp`);
                 await uploadBytes(storageRef, resizedBlob);
                 const url = await getDownloadURL(storageRef);
-                mediaUrls.push(url);
+                finalMediaUrls.push(url);
             }
         }
 
@@ -2348,13 +2383,10 @@ async function handleInspectionFormSubmit(e) {
             notes: notes,
             inspection_tags: tags,
             private: isPrivate,
+            media: finalMediaUrls,
             updated_at: serverTimestamp(),
             last_editor: doc(db, "Users", currentUserId)
         };
-
-        if (mediaUrls.length > 0) {
-            docData.media = mediaUrls;
-        }
 
         if (id) {
             // Update existing
@@ -2665,18 +2697,13 @@ async function handleEditInspection(id) {
             }
 
             // Show current media in preview if any
-            const previewContainer = document.getElementById("inspectionGalleryPreview");
-            if (previewContainer) {
-                previewContainer.innerHTML = "";
-                if (Array.isArray(data.media)) {
-                    data.media.forEach(url => {
-                        const div = document.createElement("div");
-                        div.className = "preview-item";
-                        div.innerHTML = `<img src="${url}" alt="Existing Media">`;
-                        previewContainer.appendChild(div);
-                    });
-                }
+            tempInspectionMedia = [];
+            if (Array.isArray(data.media)) {
+                data.media.forEach(url => {
+                    tempInspectionMedia.push({ type: 'existing', url: url });
+                });
             }
+            renderInspectionMediaPreview();
 
             // Show Modal
             inspectionModal.style.display = "flex";
