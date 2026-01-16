@@ -2536,7 +2536,12 @@ function initEnquiryDetailsModalEvents() {
 }
 
 function openEnquiryDetailsModal(enq) {
-    if (!enquiryDetailsModal) return;
+    console.log("🔍 [EnquiryDetails] Opening modal for:", enq.id);
+    if (!enquiryDetailsModal) {
+        console.error("❌ [EnquiryDetails] Modal element not found!");
+        return;
+    }
+    console.log("✅ [EnquiryDetails] Modal element exists, display:", enquiryDetailsModal.style.display);
 
     // Populate Fields
     document.getElementById("detEnqName").textContent = enq.name || "Anonymous";
@@ -2614,8 +2619,13 @@ function openEnquiryDetailsModal(enq) {
     // Edit Button Data
     document.getElementById("detEnqEditBtn").dataset.id = enq.id;
 
+    console.log("🎨 [EnquiryDetails] Setting display to flex");
     enquiryDetailsModal.style.display = "flex";
-    setTimeout(() => enquiryDetailsModal.classList.add("active"), 10);
+    setTimeout(() => {
+        console.log("🎨 [EnquiryDetails] Adding active class");
+        enquiryDetailsModal.classList.add("active");
+        console.log("✅ [EnquiryDetails] Modal should now be visible");
+    }, 10);
 }
 
 function closeEnquiryDetailsModal() {
