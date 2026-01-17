@@ -116,7 +116,7 @@ body {
   background: none;
 }
 
-/* Fixed background layer */
+/* Fixed background layer REMOVED per user request
 body::before {
   content: "";
   position: fixed;
@@ -131,11 +131,11 @@ body::before {
   background-repeat: no-repeat;
   will-change: transform;
   transform: translateZ(0);
-}
+} */
 
 /* ============================== LIGHT MODE BACKGROUND ============================== */
 /* LIGHT MODE — NO FLASH — uses html[data-theme] so it applies instantly */
-html[data-theme="light"],
+/* html[data-theme="light"],
 html[data-theme="light"] body::before {
   background:
     var(--site-bg-overlay-light),
@@ -143,7 +143,7 @@ html[data-theme="light"] body::before {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-}
+} */
 
 /* Also add a fallback for any other elements that use body selector */
 html[data-theme="light"] {
@@ -1340,8 +1340,10 @@ html[data-theme="light"] nav {
 }
 
 nav .logo-container {
-  all: unset;
+  display: flex;
+  align-items: center;
   cursor: pointer;
+  height: 100%;
 }
 
 nav .logo-container img {

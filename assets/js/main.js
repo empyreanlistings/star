@@ -135,7 +135,7 @@ async function initResponsiveVideo() {
 
   const updateVideoSource = () => {
     const isMobile = window.innerWidth <= 768;
-    const videoSrc = isMobile ? 'images/mobile-video.mp4?v=3.18' : 'images/web-video.mp4?v=3.18';
+    const videoSrc = isMobile ? 'images/mobile-video.mp4?v=3.19' : 'images/web-video.mp4?v=3.19';
     const posterSrc = isMobile ? (video.getAttribute('data-mobile-poster') || 'images/web-video.webp') : 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
@@ -1090,8 +1090,8 @@ window.syncThemeUI = function (theme) {
 
   // 2. Update Logos
   const logos = {
-    light: "images/logo2-light.png",
-    dark: "images/logo2-dark.png"
+    light: "images/logo_light.png",
+    dark: "images/logo_dark.png"
   };
 
   // Main nav logo
