@@ -256,7 +256,8 @@ function createPropertyCard(data) {
 
   // Nested objects with fallbacks
   const media = data.media || {};
-  const imageSrc = media.thumbnail || "images/web-video.webp";
+  let imageSrc = media.thumbnail || "images/web-video.webp";
+  if (imageSrc.includes("coming-soon")) imageSrc = "images/web-video.webp";
 
   const content = data.content || {};
   const shortDesc = content.short_description || "All-inclusive / key-in-hand";
