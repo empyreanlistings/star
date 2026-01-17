@@ -69,7 +69,9 @@ service cloud.firestore {
     }
 
     match /{document=**} {
-      allow read, write: if request.auth.token.email.matches("firebase@flutterflow.io");
+      allow read, write: if request.auth.token.email.matches("firebase@flutterflow.io") ||
+                          request.auth.token.email.matches("empyreanlistings@gmail.com") ||
+                          request.auth.token.email.matches("steve@empyrean.ph");
     }
 
     match /Attendance/{document} {

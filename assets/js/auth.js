@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAu9fL7HRSouwBAvmi9SI4AomaHd7epvpY",
@@ -14,6 +15,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 let isLoggingOut = false;
 
 const USER_CACHE_KEY = "star_user_profile";
@@ -40,7 +42,92 @@ async function handleLogin(e) {
     } catch (error) {
         console.error("Login Failed", error);
         if (errorDiv) {
-            errorDiv.textContent = "Invalid email or password.";
+            errorDiv.textContent = error.message.includes("auth/") ? "Invalid email or password." : error.message;
+            errorDiv.style.display = "block";
+        }
+    }
+}
+
+// Signup Function
+async function handleSignup(e) {
+    e.preventDefault();
+    const fullName = document.getElementById("fullName").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const avatarFile = document.getElementById("avatarUpload")?.files[0];
+    const errorDiv = document.getElementById("signupError");
+    const successDiv = document.getElementById("signupSuccess");
+
+    if (password !== confirmPassword) {
+        errorDiv.textContent = "Passwords do not match.";
+        errorDiv.style.display = "block";
+        return;
+    }
+
+    try {
+        errorDiv.style.display = "none";
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        let photoURL = "";
+        if (avatarFile) {
+            const storageRef = ref(storage, `avatars/${user.uid}/${Date.now()}_${avatarFile.name}`);
+            const snapshot = await uploadBytes(storageRef, avatarFile);
+            photoURL = await getDownloadURL(snapshot.ref);
+        }
+
+        // Update Auth Profile
+        await updateProfile(user, {
+            displayName: fullName,
+            photoURL: photoURL
+        });
+
+        // Create Firestore User Doc
+        await setDoc(doc(db, "Users", user.uid), {
+            uid: user.uid,
+            email: email,
+            display_name: fullName,
+            photo_url: photoURL,
+            role: "user", // Default role
+            created_at: new Date().toISOString(),
+            last_login: new Date().toISOString()
+        });
+
+        if (successDiv) {
+            successDiv.textContent = "Account created successfully! Redirecting...";
+            successDiv.style.display = "block";
+        }
+
+        setTimeout(() => window.location.replace("profile.html"), 1500);
+
+    } catch (error) {
+        console.error("Signup Failed", error);
+        if (errorDiv) {
+            errorDiv.textContent = error.message;
+            errorDiv.style.display = "block";
+        }
+    }
+}
+
+// Reset Password Function
+async function handleResetPassword(e) {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const errorDiv = document.getElementById("resetError");
+    const successDiv = document.getElementById("resetSuccess");
+
+    try {
+        errorDiv.style.display = "none";
+        await sendPasswordResetEmail(auth, email);
+        if (successDiv) {
+            successDiv.textContent = "Reset link sent! Please check your email.";
+            successDiv.style.display = "block";
+        }
+    } catch (error) {
+        console.error("Reset Failed", error);
+        if (errorDiv) {
+            errorDiv.textContent = error.message;
             errorDiv.style.display = "block";
         }
     }
@@ -332,6 +419,16 @@ function initAuth() {
             }
         }
         loginForm.addEventListener("submit", handleLogin);
+    }
+
+    const signupForm = document.getElementById("signupForm");
+    if (signupForm) {
+        signupForm.addEventListener("submit", handleSignup);
+    }
+
+    const resetForm = document.getElementById("resetForm");
+    if (resetForm) {
+        resetForm.addEventListener("submit", handleResetPassword);
     }
 
     // Use delegation or specific IDs for multiple logout buttons if they exist
