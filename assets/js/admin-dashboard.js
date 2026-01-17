@@ -1411,22 +1411,36 @@ function openPropertyModal(data) {
                 li.style.display = "flex";
                 li.style.alignItems = "center";
                 li.style.gap = "8px";
-                li.innerHTML = `<i class="fas fa-check-circle" style="color:var(--accent); font-size:0.8rem;"></i> ${f}`;
+                li.innerHTML = `<i class="fas fa-check-circle" style="opacity:0.6; font-size:0.8rem;"></i> ${f}`;
                 featuresEl.appendChild(li);
             });
         }
 
-        // Mini Gallery
+        // Gallery Thumbnails
         const gallery = data.media?.gallery || [];
-        const mini1 = getEl("miniGallery1");
-        const mini2 = getEl("miniGallery2");
-        if (mini1) {
-            mini1.src = gallery[0] || (data.media?.thumbnail || "images/coming-soon.webp");
-            mini1.style.opacity = gallery[0] ? "1" : "0.3";
-        }
-        if (mini2) {
-            mini2.src = gallery[1] || (data.media?.thumbnail || "images/coming-soon.webp");
-            mini2.style.opacity = gallery[1] ? "1" : "0.3";
+        const thumbContainer = getEl("modalGalleryThumbs");
+
+        if (thumbContainer) {
+            thumbContainer.innerHTML = "";
+            const mainImgSrc = data.media?.thumbnail || "images/coming-soon.webp";
+            const allGalleryImages = [mainImgSrc, ...gallery];
+
+            allGalleryImages.forEach((src, index) => {
+                if (!src) return;
+                const thumb = document.createElement("img");
+                thumb.src = src;
+                thumb.alt = `Gallery item ${index + 1}`;
+                if (index === 0) thumb.classList.add("active-thumb");
+
+                thumb.onclick = () => {
+                    if (img) img.src = src;
+                    thumbContainer.querySelectorAll("img").forEach(t => t.classList.remove("active-thumb"));
+                    thumb.classList.add("active-thumb");
+                };
+
+                thumbContainer.appendChild(thumb);
+            });
+            thumbContainer.style.display = allGalleryImages.length > 1 ? "flex" : "none";
         }
 
         // Engagement stats
