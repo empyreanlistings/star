@@ -6815,7 +6815,6 @@ html[data-theme="light"] .chip.active {
 
 .premium-modal .close-modal {
   position: absolute;
-  top: 1.5rem;
   right: 1.5rem;
   width: 32px;
   height: 32px;
