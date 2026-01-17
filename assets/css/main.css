@@ -8264,7 +8264,7 @@ html[data-theme="light"] .payment-table td {
 /* ============================== FLOATING SEARCH UI ============================== */
 .search-fab {
   position: fixed;
-  top: 100px;
+  top: 140px;
   /* Below header */
   right: 24px;
   width: 50px;
