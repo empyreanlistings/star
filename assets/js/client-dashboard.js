@@ -6,12 +6,12 @@ import { initializeApp, getApp } from "https://www.gstatic.com/firebasejs/10.7.1
 import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyArViUzMduVitt8FJDrSVPC_IQTeQrDFX4",
-    authDomain: "kaiandisla-rulryn.firebaseapp.com",
-    projectId: "kaiandisla-rulryn",
-    storageBucket: "kaiandisla-rulryn.firebasestorage.app",
-    messagingSenderId: "155934228174",
-    appId: "1:155934228174:web:a4bcdc4b9702980c4e1a9f"
+    apiKey: "AIzaSyAu9fL7HRSouwBAvmi9SI4AomaHd7epvpY",
+    authDomain: "empyrean-3da06.firebaseapp.com",
+    projectId: "empyrean-3da06",
+    storageBucket: "empyrean-3da06.firebasestorage.app",
+    messagingSenderId: "973213656906",
+    appId: "1:973213656906:web:5cfbee0541932e579403b3"
 };
 
 // Initialize or Get App
@@ -24,7 +24,7 @@ try {
 
 const db = getFirestore(app);
 
-const INSPECTIONS_CACHE_KEY = "kai_isla_inspections";
+const INSPECTIONS_CACHE_KEY = "star_inspections";
 let inspectionsList = [];
 let currentLightboxIndex = 0;
 

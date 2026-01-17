@@ -1,4 +1,4 @@
-function initKaiAndIslaGallery() {
+function initStarGallery() {
   console.log("🎨 [Gallery] initGallery called");
   const galleries = document.querySelectorAll(".mixed-gallery");
   if (!galleries.length) return;
@@ -8,8 +8,8 @@ function initKaiAndIslaGallery() {
   ).matches;
 
   // Global State for Lightbox (attached to window for cross-module access if needed)
-  if (!window.KaiGalleryState) {
-    window.KaiGalleryState = {
+  if (!window.StarGalleryState) {
+    window.StarGalleryState = {
       items: [],
       index: -1
     };
@@ -49,8 +49,8 @@ function initKaiAndIslaGallery() {
 
         // Update global state with CURRENT visible items
         const visibleItems = Array.from(gallery.querySelectorAll(".gallery-item")).filter(el => getComputedStyle(el).display !== "none");
-        window.KaiGalleryState.items = visibleItems;
-        window.KaiGalleryState.index = visibleItems.indexOf(item);
+        window.StarGalleryState.items = visibleItems;
+        window.StarGalleryState.index = visibleItems.indexOf(item);
 
         openLightbox(item);
       });
@@ -153,8 +153,8 @@ function initKaiAndIslaGallery() {
       const gallery = item.closest('.mixed-gallery') || document.querySelector('.mixed-gallery');
       if (gallery) {
         const visibleItems = Array.from(gallery.querySelectorAll(".gallery-item")).filter(el => getComputedStyle(el).display !== "none");
-        window.KaiGalleryState.items = visibleItems;
-        window.KaiGalleryState.index = visibleItems.indexOf(item);
+        window.StarGalleryState.items = visibleItems;
+        window.StarGalleryState.index = visibleItems.indexOf(item);
       }
     }
   }
@@ -180,7 +180,7 @@ function initKaiAndIslaGallery() {
   });
 
   function navigateLightbox(dir) {
-    const state = window.KaiGalleryState;
+    const state = window.StarGalleryState;
     if (!state || state.items.length <= 1) return;
 
     state.index = (state.index + dir + state.items.length) % state.items.length;
@@ -320,6 +320,5 @@ window.initPalawanGalleryScroll();
 
 
 // Auto-init REMOVED to prevent duplicate calls
-// if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initKaiAndIslaGallery);
-// else initKaiAndIslaGallery();
-window.initGallery = initKaiAndIslaGallery;
+
+window.initGallery = initStarGallery;

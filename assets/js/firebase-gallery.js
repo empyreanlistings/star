@@ -115,12 +115,12 @@ document.addEventListener("submit", (e) => {
 });
 
 const firebaseConfig = {
-    apiKey: "AIzaSyArViUzMduVitt8FJDrSVPC_IQTeQrDFX4",
-    authDomain: "kaiandisla-rulryn.firebaseapp.com",
-    projectId: "kaiandisla-rulryn",
-    storageBucket: "kaiandisla-rulryn.firebasestorage.app",
-    messagingSenderId: "155934228174",
-    appId: "1:155934228174:web:a4bcdc4b9702980c4e1a9f"
+    apiKey: "AIzaSyAu9fL7HRSouwBAvmi9SI4AomaHd7epvpY",
+    authDomain: "empyrean-3da06.firebaseapp.com",
+    projectId: "empyrean-3da06",
+    storageBucket: "empyrean-3da06.firebasestorage.app",
+    messagingSenderId: "973213656906",
+    appId: "1:973213656906:web:5cfbee0541932e579403b3"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -128,7 +128,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-const GALLERY_CACHE_KEY = "kai_isla_gallery";
+const GALLERY_CACHE_KEY = "star_gallery";
 
 let currentUser = null;
 

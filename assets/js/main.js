@@ -828,7 +828,7 @@ function initPropertyModal() {
         const title = modal.dataset.currentTitle || (locationEl ? locationEl.textContent : "Property");
         const widget = document.querySelector(".calendly-inline-widget");
         if (widget) {
-          const baseUrl = "https://calendly.com/kaiandisla-com/30min?text_color=000000&primary_color=12a7b8&embed_domain=kaiandisla.com&embed_type=Inline";
+          const baseUrl = "https://calendly.com/empyreanlistings-com/30min?text_color=000000&primary_color=12a7b8&embed_domain=empyreanlistings.com&embed_type=Inline";
           const prefillUrl = `${baseUrl}&a1=${encodeURIComponent('Interest in: ' + title)}`;
 
           // Update data-url for future reloads (though Calendly script might consume it once)
