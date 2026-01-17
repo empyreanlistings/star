@@ -2582,7 +2582,7 @@ function renderEnquiryTable() {
                     <i class="fas ${enq.responded ? 'fa-undo' : 'fa-check'}"></i>
                 </button>
                 <button class="action-btn edit-enquiry" data-id="${enq.id}" title="Edit"><i class="fas fa-pen"></i></button>
-                <button class="action-btn delete-enquiry" data-id="${enq.id}" title="Delete"><i class="fas fa-trash"></i></button>
+                <button class="action-btn delete delete-enquiry" data-id="${enq.id}" title="Delete"><i class="fas fa-trash"></i></button>
             </td>
         `;
         tbody.appendChild(tr);
@@ -2718,7 +2718,7 @@ function renderInspectionsTable() {
             <td style="width: 100px;"><span class="status-badge ${statusClass}">${statusText}</span></td>
             <td style="width: 100px; white-space: nowrap; text-align: right;">
                 <button class="action-btn edit-inspection" data-id="${insp.id}" title="Edit"><i class="fas fa-pen"></i></button>
-                <button class="action-btn delete-inspection" data-id="${insp.id}" title="Delete"><i class="fas fa-trash"></i></button>
+                <button class="action-btn delete delete-inspection" data-id="${insp.id}" title="Delete"><i class="fas fa-trash"></i></button>
             </td>
         `;
         tbody.appendChild(tr);
