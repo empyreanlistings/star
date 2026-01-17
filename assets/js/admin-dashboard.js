@@ -1306,6 +1306,7 @@ function initPropertyModalEvents() {
 
     if (overlay) {
         overlay.onclick = (e) => {
+            // Only close if clicking the actual overlay (backdrop), not the content
             if (e.target === overlay) closePropertyModal();
         };
     }
@@ -1316,11 +1317,11 @@ function closePropertyModal() {
     const modal = document.getElementById("propertyModal");
 
     if (overlay) {
-        overlay.classList.remove("open");
+        overlay.classList.remove("open", "active");
         overlay.style.cssText = ""; // Reset inline hacks
     }
     if (modal) {
-        modal.classList.remove("open");
+        modal.classList.remove("open", "active");
         modal.style.cssText = ""; // Reset inline hacks
     }
 
@@ -1379,25 +1380,53 @@ function openPropertyModal(data) {
 
         if (img) img.src = data.media?.thumbnail || "images/coming-soon.webp";
         if (locationEl) locationEl.textContent = data.title || "Untitled";
-        if (typeEl) typeEl.textContent = data.type || "";
+
+        // Capitalize Type
+        if (typeEl) {
+            const rawType = data.type || "Property";
+            typeEl.textContent = rawType.charAt(0).toUpperCase() + rawType.slice(1);
+        }
+
         if (priceEl) {
-            const price = data.price ? `₱${Number(data.price).toLocaleString()}` : "TBC";
+            const curr = data.price_config?.currency || "₱";
+            const price = data.price ? `${curr}${Number(data.price).toLocaleString()}` : "TBC";
             priceEl.textContent = price;
         }
+
         if (bedsEl) bedsEl.textContent = data.specs?.beds || "-";
         if (bathsEl) bathsEl.textContent = data.specs?.baths || "-";
         if (sizeEl) sizeEl.textContent = data.specs?.lot_size || "-";
-        if (descEl) descEl.textContent = data.content?.full_description || data.content?.short_description || "";
 
-        // Features
+        // Description - use full if available
+        if (descEl) {
+            descEl.textContent = data.content?.full_description || data.content?.short_description || "No description available.";
+        }
+
+        // Features - with icons
         if (featuresEl) {
             featuresEl.innerHTML = "";
             const features = data.content?.features || [];
             features.forEach(f => {
                 const li = document.createElement("li");
-                li.textContent = f;
+                li.style.display = "flex";
+                li.style.alignItems = "center";
+                li.style.gap = "8px";
+                li.innerHTML = `<i class="fas fa-check-circle" style="color:var(--accent); font-size:0.8rem;"></i> ${f}`;
                 featuresEl.appendChild(li);
             });
+        }
+
+        // Mini Gallery
+        const gallery = data.media?.gallery || [];
+        const mini1 = getEl("miniGallery1");
+        const mini2 = getEl("miniGallery2");
+        if (mini1) {
+            mini1.src = gallery[0] || (data.media?.thumbnail || "images/coming-soon.webp");
+            mini1.style.opacity = gallery[0] ? "1" : "0.3";
+        }
+        if (mini2) {
+            mini2.src = gallery[1] || (data.media?.thumbnail || "images/coming-soon.webp");
+            mini2.style.opacity = gallery[1] ? "1" : "0.3";
         }
 
         // Engagement stats
@@ -1415,7 +1444,12 @@ function openPropertyModal(data) {
 
         // Use inline styles to override any display:none
         overlay.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483647 !important; pointer-events: auto !important;";
-        modal.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
+
+        // Add active class after a small delay for transition
+        setTimeout(() => {
+            overlay.classList.add("active");
+            modal.classList.add("active");
+        }, 10);
 
         console.log("✅ [PropertyModal] Finished populating and showing modal.");
     } catch (err) {

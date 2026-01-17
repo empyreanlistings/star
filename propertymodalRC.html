@@ -1,45 +1,126 @@
 <!-- PROPERTY MODAL -->
-<div class="modal-overlay" id="modalOverlay">
-    <div class="property-modal" id="propertyModal">
-        <div class="modal-content">
-            <button id="modalClose" class="closeModalDefault" aria-label="Close modal">×</button>
-            <div class="modal-image-container">
-                <img id="modalImage" class="modal-image" src="" alt="">
-            </div>
-            <div class="modal-glass">
-                <div class="modal-header">
-                    <div>
-                        <h2 id="modalLocation"></h2><span id="modalType" class="modal-subtext"></span>
+<div class="modal-overlay premium-modal wide" id="modalOverlay">
+    <div class="modal-content" id="propertyModal">
+        <span id="modalClose" class="close-modal">&times;</span>
+        <h3 id="modalLocation" class="modal-title" style="padding: 1.5rem 2rem 0.5rem;">Property Details</h3>
+
+        <div class="modal-body">
+            <div class="modal-grid">
+                <!-- Left Column: Details -->
+                <div class="modal-column">
+                    <div class="modal-section">
+                        <div class="modal-section-title"><i class="fas fa-info-circle"></i> Basic Information</div>
+                        <div class="form-group"
+                            style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                            <div>
+                                <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Property Type</label>
+                                <div id="modalType" style="font-weight:600; font-size:1rem; color:var(--accent);">--
+                                </div>
+                            </div>
+                            <div>
+                                <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Price</label>
+                                <div id="modalPrice" style="font-weight:700; font-size:1.2rem;">--</div>
+                            </div>
+                        </div>
+
+                        <div class="modal-stats"
+                            style="display:flex; justify-content:space-around; background:rgba(255,255,255,0.03); padding:1.2rem; border-radius:16px; margin-bottom:1.5rem; text-align:center;">
+                            <div>
+                                <div
+                                    style="font-size:0.7rem; opacity:0.5; text-transform:uppercase; margin-bottom:4px;">
+                                    Beds</div>
+                                <strong id="modalBeds" style="font-size:1.4rem;">-</strong>
+                            </div>
+                            <div style="width:1px; background:rgba(255,255,255,0.1);"></div>
+                            <div>
+                                <div
+                                    style="font-size:0.7rem; opacity:0.5; text-transform:uppercase; margin-bottom:4px;">
+                                    Baths</div>
+                                <strong id="modalBaths" style="font-size:1.4rem;">-</strong>
+                            </div>
+                            <div style="width:1px; background:rgba(255,255,255,0.1);"></div>
+                            <div>
+                                <div
+                                    style="font-size:0.7rem; opacity:0.5; text-transform:uppercase; margin-bottom:4px;">
+                                    Area</div>
+                                <strong style="font-size:1.4rem;"><span id="modalSize">-</span> <small
+                                        style="font-size:0.8rem; font-weight:normal;">sqm</small></strong>
+                            </div>
+                        </div>
                     </div>
-                    <h2 id="modalPrice" class="modal-price"></h2>
-                </div>
-                <div class="modal-stats">
-                    <div><strong id="modalBeds"></strong><span>Beds</span></div>
-                    <div><strong id="modalBaths"></strong><span>Baths</span></div>
-                    <div><strong id="modalSize"></strong><span>sqm</span></div>
-                </div>
-                <div>
-                    <h3>OVERVIEW</h3>
-                    <p id="modalDescription"></p>
-                </div>
-                <div class="modal-section">
-                    <h3>KEY FEATURES</h3>
-                    <ul class="modal-features" id="modalFeatures"></ul>
-                </div>
-                <div class="modal-engagement">
-                    <div class="engagement-stats">
-                        <span><i class="far fa-eye"></i> <span id="modalVisits">0</span> <span
-                                id="modalVisitsLabel">visits</span></span>
-                        <span><i class="far fa-heart"></i> <span id="modalLikes">0</span> <span
-                                id="modalLikesLabel">likes</span></span>
+
+                    <div class="modal-section" style="margin-top:1.5rem;">
+                        <div class="modal-section-title"><i class="fas fa-align-left"></i> Description</div>
+                        <div id="modalDescription"
+                            style="font-size:0.95rem; line-height:1.7; opacity:0.8; margin-bottom:1.5rem; max-height:200px; overflow-y:auto; padding-right:10px;">
+                            --</div>
+
+                        <div class="modal-section-title"><i class="fas fa-list-ul"></i> Highlights</div>
+                        <ul id="modalFeatures" class="modal-features"
+                            style="list-style:none; padding:0; margin:0; display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.9rem;">
+                            <!-- Dynamic features -->
+                        </ul>
                     </div>
-                    <button id="modalLikeBtn" class="btn-like" aria-label="Like Property"><i
-                            class="far fa-heart"></i></button>
+
+                    <div class="modal-footer"
+                        style="margin-top:2.5rem; padding:0; display:flex; gap:0.8rem; flex-wrap:wrap;">
+                        <a href="#schedule" class="btn" id="scheduleCallBtn"
+                            style="flex:1; min-width:140px; text-align:center; padding:0.8rem;">Schedule Call</a>
+                        <a href="#contact" class="btn" id="contactCallBtn"
+                            style="flex:1; min-width:140px; text-align:center; padding:0.8rem;">Contact</a>
+                        <a href="#how-it-works" class="btn" id="homebuyerBtn"
+                            style="flex:1.5; min-width:200px; text-align:center; padding:0.8rem; background:var(--accent-gradient); border:none;">Paradise
+                            Life Homebuyer</a>
+                    </div>
                 </div>
-                <div class="modal-btn-grid">
-                    <a href="#schedule" class="btn" id="scheduleCallBtn">Schedule a Call</a>
-                    <a href="#contact" class="btn" id="contactCallBtn">Contact us</a>
-                    <a href="#how-it-works" class="btn" id="homebuyerBtn">Paradise Life Homebuyer</a>
+
+                <!-- Right Column: Media -->
+                <div class="modal-column">
+                    <div class="modal-section" style="height: 100%; display: flex; flex-direction: column;">
+                        <div class="modal-section-title"><i class="fas fa-image"></i> Media Gallery</div>
+                        <div class="modal-image-container"
+                            style="position:relative; border-radius:24px; overflow:hidden; aspect-ratio:4/3; background:rgba(0,0,0,0.4); margin-bottom:1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+                            <img id="modalImage" src="" alt="Property"
+                                style="width:100%; height:100%; object-fit:cover; transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);">
+
+                            <!-- Floating Badge -->
+                            <div
+                                style="position:absolute; bottom:20px; left:20px; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); padding:8px 16px; border-radius:30px; border:1px solid rgba(255,255,255,0.1); display:flex; gap:12px; align-items:center;">
+                                <div style="display:flex; align-items:center; gap:6px;">
+                                    <i class="far fa-eye" style="color:var(--accent); font-size:0.8rem;"></i>
+                                    <span id="modalVisits" style="font-weight:600; font-size:0.9rem;">0</span>
+                                </div>
+                                <div style="width:1px; height:12px; background:rgba(255,255,255,0.2);"></div>
+                                <div style="display:flex; align-items:center; gap:6px;">
+                                    <i class="far fa-heart" style="color:#ff3b30; font-size:0.8rem;"></i>
+                                    <span id="modalLikes" style="font-weight:600; font-size:0.9rem;">0</span>
+                                </div>
+                            </div>
+
+                            <div id="modalLikeBtn" class="btn-like"
+                                style="position:absolute; top:20px; right:20px; cursor:pointer; background:rgba(255,255,255,0.1); backdrop-filter:blur(12px); width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; border:1px solid rgba(255,255,255,0.2); transition:all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                                <i class="far fa-heart" style="font-size:1.2rem;"></i>
+                            </div>
+                        </div>
+
+                        <!-- Mini Gallery Grid (Optional Placeholder) -->
+                        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px;">
+                            <div
+                                style="aspect-ratio:1; background:rgba(255,255,255,0.05); border-radius:12px; overflow:hidden;">
+                                <img src="" id="miniGallery1"
+                                    style="width:100%; height:100%; object-fit:cover; opacity:0.5;">
+                            </div>
+                            <div
+                                style="aspect-ratio:1; background:rgba(255,255,255,0.05); border-radius:12px; overflow:hidden;">
+                                <img src="" id="miniGallery2"
+                                    style="width:100%; height:100%; object-fit:cover; opacity:0.5;">
+                            </div>
+                            <div
+                                style="background:rgba(255,255,255,0.05); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:600; opacity:0.6;">
+                                + MORE
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
