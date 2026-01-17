@@ -1426,7 +1426,7 @@ html[data-theme="light"] .menu-toggle:hover {
 
 nav ul {
   display: flex;
-  gap: 16px;
+  gap: 30px;
   list-style: none;
   margin: 0;
   padding: 0;
