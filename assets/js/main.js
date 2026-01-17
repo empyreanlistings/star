@@ -135,7 +135,7 @@ async function initResponsiveVideo() {
 
   const updateVideoSource = () => {
     const isMobile = window.innerWidth <= 768;
-    const videoSrc = isMobile ? 'images/mobile-video.mp4?v=3.19' : 'images/web-video.mp4?v=3.19';
+    const videoSrc = isMobile ? 'images/mobile-video.mp4?v=3.20' : 'images/web-video.mp4?v=3.20';
     const posterSrc = isMobile ? (video.getAttribute('data-mobile-poster') || 'images/web-video.webp') : 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
@@ -1096,15 +1096,15 @@ window.syncThemeUI = function (theme) {
 
   // Main nav logo
   const navLogo = document.querySelector(".logo-container img");
-  if (navLogo) navLogo.src = theme === "dark" ? logos.light : logos.dark;
+  if (navLogo) navLogo.src = theme === "dark" ? logos.dark : logos.light;
 
   // Dashboard logo
   const dashLogo = document.getElementById("dashLogo");
-  if (dashLogo) dashLogo.src = theme === "dark" ? logos.light : logos.dark;
+  if (dashLogo) dashLogo.src = theme === "dark" ? logos.dark : logos.light;
 
   // Mobile menu logo
   const mobileLogo = document.querySelector(".mobile-menu img");
-  if (mobileLogo) mobileLogo.src = theme === "dark" ? logos.light : logos.dark;
+  if (mobileLogo) mobileLogo.src = theme === "dark" ? logos.dark : logos.light;
 };
 
 function bindThemeToggles() {
