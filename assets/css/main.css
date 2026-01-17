@@ -6119,7 +6119,7 @@ html[data-theme="light"] .messenger-fab:hover {
   justify-content: center;
   width: 38px;
   height: 38px;
-  border-radius: 50%;
+  border-radius: 20%;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
   /* Subtle default border */
@@ -6127,6 +6127,7 @@ html[data-theme="light"] .messenger-fab:hover {
   cursor: pointer;
   color: var(--white);
   text-decoration: none;
+  margin: 20px 0px;
 }
 
 .nav-avatar img {
