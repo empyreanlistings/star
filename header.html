@@ -22,27 +22,20 @@
     <li><a href="dashboard.html" id="navSignInLink" target="_blank" rel="noopener" role="menuitem">SIGN-IN</a></li>
   </ul>
   <div class="nav-right">
-    <!-- Dashboard Icon -->
+    <!-- Dashboard Icon (Shown for admins or when logged out as login entry) -->
     <a href="dashboard.html" id="navDashboardLink" class="nav-icon-link" aria-label="Dashboard">
       <i class="fas fa-th-large"></i>
     </a>
 
-    <!-- Light / Dark Mode Toggle -->
-    <button class="theme-toggle" aria-label="Toggle dark/light theme">
-      <i class="theme-icon fas fa-moon"></i> <!-- Moon = dark mode -->
-    </button>
-
-    <!-- User Avatar -->
+    <!-- User Avatar (Shown when signed in) -->
     <a href="profile.html" id="navAvatarLink" class="nav-avatar" aria-label="My Profile" style="display:none;">
       <i id="navDashboardIcon" class="fas fa-user-circle" style="display:none;"></i>
       <img id="navAvatarImg" src="images/logo.png" alt="User" style="display:none;">
     </a>
 
-    <!-- Logout Button (Only on profile screen) -->
-    <button id="navLogoutBtn" class="nav-icon-link" aria-label="Logout"
-      style="display:none; background:none; border:none; padding:0; cursor:pointer; color:inherit;">
-      <i class="fas fa-sign-out-alt"></i>
-      <span class="logout-text" style="margin-left: 5px;">Logout</span>
+    <!-- Light / Dark Mode Toggle -->
+    <button class="theme-toggle" aria-label="Toggle dark/light theme">
+      <i class="theme-icon fas fa-moon"></i> <!-- Moon = dark mode -->
     </button>
 
     <!-- Mobile Menu Toggle (Hamburger) -->
