@@ -349,7 +349,8 @@ function renderAdminTable(listings) {
     paginatedListings.forEach(data => {
         const id = data.id;
         const title = data.title || "Untitled";
-        const thumbnail = data.media?.thumbnail || "images/web-video.webp";
+        let thumbnail = data.media?.thumbnail || "images/web-video.webp";
+        if (thumbnail.includes("coming-soon")) thumbnail = "images/web-video.webp";
 
         // Abbreviate Price
         let price = "TBC";
@@ -1378,7 +1379,9 @@ function openPropertyModal(data) {
         const visitsLabel = getEl("modalVisitsLabel");
         const likesLabel = getEl("modalLikesLabel");
 
-        if (img) img.src = data.media?.thumbnail || "images/web-video.webp";
+        let imgSrc = data.media?.thumbnail || "images/web-video.webp";
+        if (imgSrc.includes("coming-soon")) imgSrc = "images/web-video.webp";
+        if (img) img.src = imgSrc;
         if (locationEl) locationEl.textContent = data.title || "Untitled";
 
         // Capitalize Type
@@ -1422,7 +1425,8 @@ function openPropertyModal(data) {
 
         if (thumbContainer) {
             thumbContainer.innerHTML = "";
-            const mainImgSrc = data.media?.thumbnail || "images/web-video.webp";
+            let mainImgSrc = data.media?.thumbnail || "images/web-video.webp";
+            if (mainImgSrc.includes("coming-soon")) mainImgSrc = "images/web-video.webp";
             const allGalleryImages = [mainImgSrc, ...gallery];
 
             allGalleryImages.forEach((src, index) => {
