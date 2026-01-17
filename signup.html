@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Admin Login - Kai & Isla</title>
+    <title>Create Account - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="assets/css/main.css?v=3.24" />
@@ -27,7 +27,7 @@
             padding: 3rem;
             border-radius: 12px;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
             text-align: center;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
             transition: all 0.3s ease;
@@ -40,7 +40,7 @@
         }
 
         .login-logo {
-            width: 120px;
+            width: 100px;
             margin-bottom: 2rem;
             filter: brightness(0) invert(1);
             display: block;
@@ -65,7 +65,7 @@
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             text-align: left;
         }
 
@@ -81,11 +81,9 @@
             color: #555;
         }
 
-        /* form-control styles are partially inherited from main.css, 
-           but we ensure specific overrides for the login context if needed */
         .form-control {
             border-radius: 8px !important;
-            padding: 1rem !important;
+            padding: 0.8rem !important;
         }
 
         .btn-login {
@@ -106,7 +104,7 @@
             transition: all 0.3s cubic-bezier(.2, .9, .2, 1);
             font-weight: 700;
             letter-spacing: 0.15em;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
             z-index: 1;
             text-decoration: none;
         }
@@ -115,41 +113,6 @@
             background: #006699;
             transform: scale(1.05);
             box-shadow: 0 16px 40px rgba(0, 136, 204, 0.5);
-        }
-
-        .btn-signup {
-            margin-top: 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        html[data-theme="light"] .btn-signup {
-            background: rgba(0, 0, 0, 0.03);
-            border: 2px solid rgba(0, 0, 0, 0.08);
-            color: #333 !important;
-        }
-
-        .btn-signup:hover {
-            background: var(--accent);
-            color: white !important;
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .forgot-link {
-            display: block;
-            margin-top: 1rem;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.85rem;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        html[data-theme="light"] .forgot-link {
-            color: #666;
-        }
-
-        .forgot-link:hover {
-            color: var(--accent);
         }
 
         .error-message {
@@ -166,7 +129,7 @@
             display: inline-block;
             margin-top: 2rem;
             color: rgba(255, 255, 255, 0.5);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-decoration: none;
             transition: color 0.3s;
         }
@@ -177,6 +140,84 @@
 
         .back-link:hover {
             color: var(--accent);
+        }
+
+        /* Avatar Upload Grid */
+        .avatar-upload {
+            position: relative;
+            max-width: 120px;
+            margin: 0 auto 2rem;
+        }
+
+        .avatar-preview {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            border-radius: 100%;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        html[data-theme="light"] .avatar-preview {
+            background: rgba(0, 0, 0, 0.05);
+            border: 4px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .avatar-preview i {
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        html[data-theme="light"] .avatar-preview i {
+            color: rgba(0, 0, 0, 0.2);
+        }
+
+        .avatar-edit {
+            position: absolute;
+            right: 0;
+            bottom: 5px;
+            z-index: 1;
+        }
+
+        .avatar-edit input {
+            display: none;
+        }
+
+        .avatar-edit label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            margin-bottom: 0;
+            border-radius: 100%;
+            background: var(--accent);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .avatar-edit label:hover {
+            transform: scale(1.1);
+            background: #006699;
+        }
+
+        .avatar-edit label i {
+            color: white;
+            font-size: 0.9rem;
         }
 
         .password-input-wrapper {
@@ -192,15 +233,10 @@
             color: rgba(255, 255, 255, 0.4);
             padding: 5px;
             z-index: 5;
-            transition: color 0.2s;
         }
 
         html[data-theme="light"] .toggle-password {
             color: #777;
-        }
-
-        .toggle-password:hover {
-            color: var(--accent);
         }
     </style>
 </head>
@@ -210,77 +246,94 @@
     <div class="login-wrapper">
         <div class="login-card">
             <img id="loginLogo" src="images/logo_dark.png" alt="Kai & Isla" class="login-logo">
-            <h2>ADMIN ACCESS</h2>
+            <h2>CREATE ACCOUNT</h2>
 
-            <form id="loginForm">
+            <form id="signupForm">
+                <!-- Avatar Upload -->
+                <div class="avatar-upload">
+                    <div class="avatar-edit">
+                        <input type='file' id="avatarUpload" accept=".png, .jpg, .jpeg" />
+                        <label for="avatarUpload"><i class="fas fa-camera"></i></label>
+                    </div>
+                    <div class="avatar-preview">
+                        <img id="avatarPreview" src="" alt="Profile Preview">
+                        <i class="fas fa-user" id="avatarIcon"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullName">FULL NAME</label>
+                    <input type="text" id="fullName" class="form-control" required placeholder="John Doe">
+                </div>
+
                 <div class="form-group">
                     <label for="email">EMAIL ADDRESS</label>
-                    <input type="email" id="email" class="form-control" required placeholder="name@example.com"
-                        autocomplete="username">
+                    <input type="email" id="email" class="form-control" required placeholder="name@example.com">
                 </div>
+
                 <div class="form-group">
                     <label for="password">PASSWORD</label>
                     <div class="password-input-wrapper">
-                        <input type="password" id="password" class="form-control" required placeholder="••••••••"
-                            autocomplete="current-password">
+                        <input type="password" id="password" class="form-control" required placeholder="••••••••">
                         <i class="fas fa-eye toggle-password" id="togglePassword"></i>
                     </div>
                 </div>
 
-                <div style="display: flex; justify-content: flex-end; margin-top: -1rem; margin-bottom: 2rem;">
-                    <a href="resetpassword.html" class="forgot-link">FORGOT PASSWORD?</a>
+                <div class="form-group">
+                    <label for="confirmPassword">CONFIRM PASSWORD</label>
+                    <input type="password" id="confirmPassword" class="form-control" required placeholder="••••••••">
                 </div>
 
-                <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;">
-                    <input type="checkbox" id="rememberMe"
-                        style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent);">
-                    <label for="rememberMe"
-                        style="margin-bottom: 0; cursor: pointer; font-size: 0.8rem; opacity: 0.8;">REMEMBER ME</label>
-                </div>
+                <button type="submit" class="btn-login">REGISTER</button>
 
-                <button type="submit" class="btn-login">SIGN IN</button>
-
-                <div id="loginError" class="error-message"></div>
+                <div id="signupError" class="error-message"></div>
+                <div id="signupSuccess" class="error-message"
+                    style="background: rgba(85, 255, 85, 0.1); color: #55ff55;"></div>
             </form>
 
-            <a href="signup.html" class="btn-login btn-signup">CREATE ACCOUNT</a>
-
-            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> BACK TO WEBSITE</a>
+            <a href="login.html" class="back-link">ALREADY HAVE AN ACCOUNT? SIGN IN</a>
         </div>
     </div>
 
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/jquery.scrollex.min.js"></script>
-    <script src="assets/js/jquery.scrolly.min.js"></script>
-    <script src="assets/js/browser.min.js"></script>
-    <script src="assets/js/breakpoints.min.js"></script>
-    <script src="assets/js/util.js"></script>
-    <script src="assets/js/snackbar.js?v=3.24"></script>
     <script src="assets/js/main.js?v=3.24" defer></script>
-
-    <!-- Auth Logic -->
     <script type="module" src="assets/js/auth.js"></script>
 
     <script>
-        // Password Visibility Toggle
         document.addEventListener('DOMContentLoaded', () => {
+            // Preview Image
+            const avatarUpload = document.getElementById('avatarUpload');
+            const avatarPreview = document.getElementById('avatarPreview');
+            const avatarIcon = document.getElementById('avatarIcon');
+
+            if (avatarUpload) {
+                avatarUpload.addEventListener('change', function (e) {
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            avatarPreview.src = e.target.result;
+                            avatarPreview.style.display = 'block';
+                            avatarIcon.style.display = 'none';
+                        }
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
+            }
+
+            // Toggle Password
             const togglePassword = document.querySelector('#togglePassword');
             const passwordInput = document.querySelector('#password');
-
             if (togglePassword && passwordInput) {
                 togglePassword.addEventListener('click', function () {
                     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                     passwordInput.setAttribute('type', type);
-
-                    // Toggle icon
                     this.classList.toggle('fa-eye');
                     this.classList.toggle('fa-eye-slash');
                 });
             }
         });
     </script>
-
 </body>
 
 </html>
