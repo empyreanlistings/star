@@ -1672,6 +1672,20 @@ html[data-theme="dark"] .menu-toggle:hover i {
   transform: translateX(0);
 }
 
+/* Logout Text Hide on Desktop */
+@media screen and (min-width: 992px) {
+  .logout-text {
+    display: none;
+  }
+}
+
+/* Page Transition for Persistent Nav */
+.page-fade-out {
+  opacity: 0 !important;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
 .menu-overlay {
   position: fixed;
   inset: 0;

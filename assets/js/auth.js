@@ -182,6 +182,12 @@ function initAuth() {
                 }
             }
 
+            // 3.5 Logout Button Logic (Only on profile screen)
+            const navLogoutBtn = document.getElementById("navLogoutBtn");
+            if (navLogoutBtn) {
+                navLogoutBtn.style.display = isProfile ? "inline-flex" : "none";
+            }
+
             // 4. Background Sync with Firestore (Non-blocking)
             (async () => {
                 try {
@@ -292,6 +298,9 @@ function initAuth() {
                 dashLink.style.display = "none";
             }
             if (avatarLink) avatarLink.style.display = "none";
+
+            const navLogoutBtn = document.getElementById("navLogoutBtn");
+            if (navLogoutBtn) navLogoutBtn.style.display = "none";
         }
     });
 
@@ -321,4 +330,5 @@ function initAuth() {
     });
 }
 
+window.initAuth = initAuth;
 initAuth();

@@ -990,7 +990,15 @@ document.addEventListener("DOMContentLoaded", () => {
   safeInit("bindThemeToggles", bindThemeToggles);
   safeInit("initScrollbarBehavior", initScrollbarBehavior);
   safeInit("Responsive Video", initResponsiveVideo);
-  safeInit("initializeApp", initializeApp);
+
+  // SPA re-init guard
+  if (!window.appInitialized) {
+    safeInit("initializeApp", initializeApp);
+    window.appInitialized = true;
+  } else {
+    // Soft re-init for SPA
+    initializeApp();
+  }
 });
 
 function initializeApp() {
@@ -1046,6 +1054,113 @@ function initializeApp() {
   });
   loadComponent("#fabs-placeholder", "fabsRC.html");
   loadComponent("#gallery-modal-placeholder", "galleryModalRC.html");
+
+  // Persistent Navigation (SPA-lite)
+  if (!window.spaInitialized) {
+    initPersistentNav();
+    window.spaInitialized = true;
+  }
+}
+
+/**
+ * Persistent Navigation Logic
+ */
+function initPersistentNav() {
+  console.log("🚀 [SPA] Initializing Persistent Navigation...");
+
+  document.addEventListener('click', async e => {
+    const link = e.target.closest('a');
+    if (!link || !link.href) return;
+
+    // Check if internal link
+    const url = new URL(link.href);
+    if (url.origin !== window.location.origin) return;
+    if (link.getAttribute('target') === '_blank') return;
+    if (link.hasAttribute('download')) return;
+    if (link.classList.contains('no-spa')) return;
+
+    // Only handle HTML pages
+    const path = url.pathname;
+    const isHtml = path.endsWith('.html') || path === '/' || !path.includes('.');
+    if (!isHtml) return;
+
+    // Handle same page anchors
+    if (path === window.location.pathname) {
+      if (url.hash) {
+        e.preventDefault();
+        const target = document.querySelector(url.hash);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          history.pushState(null, null, link.href);
+        }
+      }
+      return;
+    }
+
+    e.preventDefault();
+    navigateTo(link.href);
+  });
+
+  window.addEventListener('popstate', () => {
+    loadPage(window.location.href, false);
+  });
+}
+
+async function navigateTo(url) {
+  console.log(`🔗 [SPA] Navigating to: ${url}`);
+  history.pushState(null, null, url);
+  await loadPage(url, true);
+}
+
+async function loadPage(url, animate = true) {
+  // 1. Fade out current content (all children of body except header/footer if possible)
+  // For safety, we'll fade the entire body content except the scripts
+  const contentToFade = document.querySelectorAll('body > *:not(script):not(.theme-toggle)');
+  if (animate) {
+    contentToFade.forEach(el => el.classList.add('page-fade-out'));
+    await new Promise(r => setTimeout(r, 300));
+  }
+
+  try {
+    const response = await fetch(url);
+    const html = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    // Update Title
+    document.title = doc.title;
+
+    // Update Body Classes (Targeting themes)
+    document.body.className = doc.body.className;
+
+    // Identify common elements to keep (like header if it's identical)
+    // For now, let's swap the whole innerHTML which is safer than complex diffing
+    // but we'll try to keep the header-placeholder if it exists and matches
+
+    const newBodyHtml = doc.body.innerHTML;
+    document.body.innerHTML = newBodyHtml;
+
+    // Re-initialize!
+    // We need to re-run initializeApp and auth logic
+    if (animate) {
+      document.body.classList.remove('is-preload');
+    }
+
+    // Re-init everything
+    initializeApp();
+
+    // If auth is present, we might need a manual refresh of auth state
+    // but auth.js usually runs on module load or has its own state listener
+    // If it's a module, it might not re-run. We'll check if window.initAuth exists.
+    if (window.initAuth) window.initAuth();
+
+    window.scrollTo(0, 0);
+    console.log("✅ [SPA] Page Swapped Successfully");
+
+  } catch (err) {
+    console.error("❌ [SPA] Navigation Failed", err);
+    window.location.href = url; // Hard fallback
+  }
 }
 
 /**
