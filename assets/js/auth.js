@@ -97,9 +97,29 @@ function initAuth() {
         }
     }
 
+    // --- FOOTER & NAV AUTH UI SYNC ---
+    const updateFooterAuthUI = (isLoggedIn) => {
+        const footerBtn = document.getElementById("footerSignInBtn");
+        if (footerBtn) {
+            if (isLoggedIn) {
+                footerBtn.textContent = "SIGN-OUT";
+                footerBtn.href = "#"; // Handled by listener
+                footerBtn.onclick = (e) => {
+                    e.preventDefault();
+                    handleLogout();
+                };
+            } else {
+                footerBtn.textContent = "SIGN-IN";
+                footerBtn.href = "dashboard.html";
+                footerBtn.onclick = null;
+            }
+        }
+    };
+
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             console.log("User logged in:", user.email);
+            updateFooterAuthUI(true);
 
             // 1. Static UI immediately
             const userEmailEl = document.getElementById("userEmail");
@@ -267,6 +287,7 @@ function initAuth() {
         } else {
             console.log("User logged out");
             localStorage.removeItem(USER_CACHE_KEY);
+            updateFooterAuthUI(false);
 
             if (isLoggingOut) {
                 window.location.replace("index.html");
