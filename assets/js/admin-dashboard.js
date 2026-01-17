@@ -2875,6 +2875,9 @@ function openEnquiryDetailsModal(enq) {
     // Nuke any CSS conflicts with inline styles
     enquiryDetailsModal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483647 !important; pointer-events: auto !important;";
 
+    const content = enquiryDetailsModal.querySelector('.modal-content');
+    if (content) content.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; transform: scale(1) translateY(0) !important;";
+
     setTimeout(() => {
         enquiryDetailsModal.classList.add("active");
     }, 10);
@@ -2885,6 +2888,8 @@ function closeEnquiryDetailsModal() {
     detachCommentsListener(); // Clean up comments listener
     enquiryDetailsModal.classList.remove("active");
     enquiryDetailsModal.style.cssText = ""; // Clear inline hacks
+    const content = enquiryDetailsModal.querySelector('.modal-content');
+    if (content) content.style.cssText = "";
     document.body.style.overflow = "";
     setTimeout(() => {
         if (!enquiryDetailsModal.classList.contains("active")) {
@@ -3016,6 +3021,9 @@ function openInspectionDetailsModal(insp) {
     // Nuke any CSS conflicts with inline styles
     inspectionDetailsModal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483647 !important; pointer-events: auto !important;";
 
+    const content = inspectionDetailsModal.querySelector('.modal-content');
+    if (content) content.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; transform: scale(1) translateY(0) !important;";
+
     setTimeout(() => inspectionDetailsModal.classList.add("active"), 10);
 }
 
@@ -3024,6 +3032,8 @@ function closeInspectionDetailsModal() {
     detachCommentsListener(); // Clean up comments listener
     inspectionDetailsModal.classList.remove("active");
     inspectionDetailsModal.style.cssText = ""; // Clear inline hacks
+    const content = inspectionDetailsModal.querySelector('.modal-content');
+    if (content) content.style.cssText = "";
     document.body.style.overflow = "";
     setTimeout(() => {
         if (!inspectionDetailsModal.classList.contains("active")) {
