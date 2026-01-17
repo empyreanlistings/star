@@ -135,7 +135,7 @@ async function initResponsiveVideo() {
 
   const updateVideoSource = () => {
     const isMobile = window.innerWidth <= 768;
-    const videoSrc = isMobile ? 'images/mobile-video.mp4?v=3.22' : 'images/web-video.mp4?v=3.22';
+    const videoSrc = isMobile ? 'images/mobile-video.mp4?v=3.23' : 'images/web-video.mp4?v=3.23';
     const posterSrc = isMobile ? (video.getAttribute('data-mobile-poster') || 'images/web-video.webp') : 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
@@ -828,7 +828,7 @@ function initPropertyModal() {
         const title = modal.dataset.currentTitle || (locationEl ? locationEl.textContent : "Property");
         const widget = document.querySelector(".calendly-inline-widget");
         if (widget) {
-          const baseUrl = "https://calendly.com/empyreanlistings-com/30min?text_color=000000&primary_color=12a7b8&embed_domain=empyreanlistings.com&embed_type=Inline";
+          const baseUrl = "https://calendly.com/empyreanlistings?text_color=000000&primary_color=12a7b8&embed_domain=empyreanlistings.com&embed_type=Inline";
           const prefillUrl = `${baseUrl}&a1=${encodeURIComponent('Interest in: ' + title)}`;
 
           // Update data-url for future reloads (though Calendly script might consume it once)
@@ -1056,7 +1056,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=3.22`);
+    const response = await fetch(`${url}?v=3.23`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
@@ -1274,52 +1274,52 @@ function initPalawanGallery() {
 // ================================================================
 const servicesData = [
   {
-    title: "Key-in-hand Homes",
-    subtitle: "Land, House, Appliances, Deep Well, Solar (off-grid) and Swimming Pool included, ready to move in.",
-    description: `We secure your property with an official reservation agreement, fully verifying titles, ownership, zoning, boundaries, and all government requirements—no shortcuts.`,
-    image: "images/keyinhand.webp"
-  },
-  {
-    title: "Custom-built Homes",
-    subtitle: "Your land, our expertise. We can build your house or commercial building anywhere in Palawan.",
-    description: `Show us your dream and we will make it come true - from planning and design to full project management and fit out, we deliver with honesty, trust and transparency.`,
-    image: "images/customhouse.webp"
-  },
-  {
-    title: "Property Management",
-    subtitle: "Key holding, security monitoring, maintenance, cleaning and vacation rentals.",
-    description: `Fresh, clean and ready to enjoy - whether you are coming to vacation or use our holiday letting service, we always ensure your home is well maintained and ready to wow guests.`,
-    image: "images/travel.webp"
-  },
-  {
-    title: "Swimming Pools",
-    subtitle: "Design, installation and maintenance of your beautiful, tropical pool.",
-    description: `Nothing beats jumping into a beautiful pool on a hot summers day - it's truly living the dream on an award-winning Paradise Island. We also offer twice weekly cleaning services to keep your pool in top condition.`,
-    image: "images/swimming.webp"
-  },
-  {
-    title: "Gates, Walls & Fencing",
-    subtitle: "Manual & automatic gates, surrounding walls and feature lighting.",
-    description: `We provide structural and construction services for garden walls and retainer walls. We also supply and install fencing materials and can fabricate fencing, gates and staircases to your design.`,
-    image: "images/walls.webp"
-  },
-  {
-    title: "Beautiful Landscaping",
-    subtitle: "Planting, artificial grass installation, water features and maintenance.",
-    description: `With such an abundance of tropical plants and perfect weather, we are blessed to have so many options for landscaping. We design, supply and install plants, trees and edibles - perfect for a cute veggie garden setup.`,
-    image: "images/landscape.webp"
-  },
-  {
     title: "Real Estate Brokerage",
-    subtitle: "Licensed Brokerage with access to International buyers.",
-    description: `We secure your property with an official reservation agreement, fully verifying titles, ownership, zoning, boundaries, and all government requirements—no shortcuts.`,
+    subtitle: "Professional Buying, Selling & Leasing across the Philippines.",
+    description: `We navigate the complexity of the Philippine real estate market with transparency and accountability. Whether you are buying, selling, or leasing, our licensed brokers ensure a seamless, results-oriented experience.`,
     image: "images/legal.webp"
   },
   {
-    title: "Engineering Consultancy",
-    subtitle: "Structural guidance, Project Management & Supervision.",
-    description: `We secure your property with an official reservation agreement, fully verifying titles, ownership, zoning, boundaries, and all government requirements—no shortcuts.`,
+    title: "Project Selling",
+    subtitle: "Exclusive Marketing for Premier Developments.",
+    description: `Representing choice developments across the country, we provide investors and home buyers with vetted, high-quality opportunities in high-growth prime zones.`,
+    image: "images/keyinhand.webp"
+  },
+  {
+    title: "Property Resales",
+    subtitle: "Expertly Marketing Your Pre-owned Property.",
+    description: `We connect your property to an extensive global network of qualified buyers, managing the entire transaction from valuation to closing with professional excellence.`,
+    image: "images/customhouse.webp"
+  },
+  {
+    title: "Leasing Solutions",
+    subtitle: "End-to-End Residential & Commercial Leasing.",
+    description: `From tenant vetting to contract management and collection, we maximize your property's yield while ensuring a hands-free experience for owners.`,
+    image: "images/travel.webp"
+  },
+  {
+    title: "Home Improvements",
+    subtitle: "Enhancing Your Property's Value & Comfort.",
+    description: `Upgrade your living space with modern solar systems, smart-home integration, swimming pools, or structural additions that respect the local environment and increase value.`,
+    image: "images/swimming.webp"
+  },
+  {
+    title: "Project Planning",
+    subtitle: "Pre-Construction Design & Documentation.",
+    description: `Our engineering and design experts handle zoning, permits, and architectural planning to ensure your dream project starts on a compliant and solid foundation.`,
     image: "images/engineering.webp"
+  },
+  {
+    title: "Construction Services",
+    subtitle: "Durable, Sustainable Building Excellence.",
+    description: `Specializing in professional, high-standard construction of off-grid enabled homes and commercial spaces using modern engineering techniques tailored for the tropics.`,
+    image: "images/pic11.webp"
+  },
+  {
+    title: "Renovations",
+    subtitle: "Revitalize & Transform Existing Spaces.",
+    description: `Transforming older properties into modern sanctuaries with high-quality finishes and structural upgrades that meet today's aesthetic and functional standards.`,
+    image: "images/walls.webp"
   }
 ];
 
@@ -1459,51 +1459,51 @@ function initServices() {
 // ================================================================
 const howItWorksData = [
   {
-    title: "Legal and Secure",
-    subtitle: "Legally titled land and permitted construction; we are registered and licensed Professional Builders.",
-    description: `We secure your property with an official reservation agreement, fully verifying titles, ownership, zoning, boundaries, and all government requirements—no shortcuts.`,
+    title: "Verified Titles",
+    subtitle: "Legal & Secure Property Ownership in Paradise.",
+    description: `We provide complete transparency with fully verified titles and ownership documentation. Our team handles the legal heavy lifting to ensure your investment is safe, compliant, and permanent.`,
     image: "images/legal.webp"
   },
   {
-    title: "Beautiful Locations",
-    subtitle: "We build in scenic areas with high-growth potential in close proximity to beaches and amenities.",
-    description: `Our homes are thoughtfully sited in prime northern El Nido areas like peaceful Bucana – offering secluded beaches, dramatic limestone cliffs, and easy access to world-class lagoons while positioning you in emerging high-growth zones with rising property values.`,
+    title: "Prime Locations",
+    subtitle: "Scouting High-Growth, Scenic Real Estate.",
+    description: `Specializing in prime Palawan areas like El Nido, we site our developments in high-growth zones with stunning beach access and limestone views, ensuring long-term value appreciation.`,
     image: "images/locations.webp"
   },
   {
-    title: "Off-Grid / No more bills!",
-    subtitle: "Our turn-key developments are off-grid enabled so there is no reliance on local utilities.",
-    description: `Our turn-key homes feature robust off-grid solar systems with high-capacity panels, batteries, and inverters—delivering reliable, uninterrupted power even in remote areas prone to outages.`,
+    title: "Solar-Ready Living",
+    subtitle: "Eco-Friendly Homes with Off-Grid Capacity.",
+    description: `Our homes are designed for modern sustainability, featuring robust off-grid solar systems that provide reliable, clean energy so you never have to worry about power outages or utility bills.`,
     image: "images/solar.webp"
   },
   {
-    title: "Milestone Payments",
-    subtitle: "Safe, verified payment channels with clear receipts and compliance tracking. No surprises. No hidden fees.",
-    description: `Our transparent, milestone-based payment system ties installments directly to clear construction progress—such as foundation completion, framing, and finishing—ensuring you only pay for verified work.`,
+    title: "Progress Payments",
+    subtitle: "Safe, Milestone-Based Financial Transparency.",
+    description: `Pay with confidence through our verified milestone payment system. Installments are tied directly to construction progress, with clear digital tracking and compliance receipts.`,
     image: "images/milestone.webp"
   },
   {
-    title: "Appliances & Furnishings",
-    subtitle: "Everything included with upgrade options available throughout.",
-    description: `Your turn-key home comes fully equipped with premium appliances—including refrigerator, oven, stove, microwave, washer/dryer, and air conditioning—plus stylish, durable tropical furnishings for every room.`,
+    title: "Turn-Key Finish",
+    subtitle: "All-Inclusive Homes, Ready for Your Arrival.",
+    description: `Your home comes fully equipped with premium appliances and high-quality tropical furnishings. From landscaping to fine interior details, everything is handled so you can just turn the key.`,
     image: "images/appliances.webp"
   },
   {
-    title: "Land Holding/ Leasing",
-    subtitle: "We offer long-term lease solutions for non-national buyers.",
-    description: `As a foreigner, you can securely enjoy long-term land holding in the Philippines through extended leases—now up to 99 years under recent laws.`,
+    title: "Secure Land Leases",
+    subtitle: "Reliable Solutions for International Buyers.",
+    description: `We facilitate secure Long-Term Land Leases for non-nationals, providing a legal and reliable path to enjoying your own piece of paradise with full protection and peace of mind.`,
     image: "images/land.webp"
   },
   {
-    title: "Real Estate Brokerage",
-    subtitle: "Licensed brokers with an established buyer and tenant network.",
-    description: `Our licensed real estate brokers bring deep local expertise and an extensive network of international buyers, investors, and qualified tenants.`,
+    title: "Brokerage Access",
+    subtitle: "Direct Connection to Global Sales & Leasing.",
+    description: `As a licensed brokerage, we provide direct access to an established network of buyers and tenants, ensuring your property is professionally marketed and easily liquid if needed.`,
     image: "images/pic6.webp"
   },
   {
-    title: "After-care Services",
-    subtitle: "Maintenance, landscaping, pool care, and rental management/ holiday lettings.",
-    description: `Our dedicated after-care team provides comprehensive maintenance, inspections, landscaping, pool cleaning, and repairs to keep your property pristine year-round.`,
+    title: "Property Management",
+    subtitle: "Professional Care while you are away.",
+    description: `Our dedicated team handles maintenance, inspections, landscaping, and holiday rental operations so your property is always pristine and yielding potential returns.`,
     image: "images/servicesCard.webp"
   }
 ];
