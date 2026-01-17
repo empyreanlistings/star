@@ -3108,10 +3108,6 @@ html[data-theme="light"] .modal-price {
 }
 
 /* ============================== SECTIONS ==============================*/
-/* Modal Section */
-.modal-section {
-  margin-bottom: 24px;
-}
 
 .modal-engagement {
   display: flex;
@@ -8772,7 +8768,6 @@ html[data-theme="light"] .pagination-btn {
 .modal-column {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
   max-height: calc(95vh - 200px);
   /* Allow internal column scrolling if needed */
 }
@@ -8789,11 +8784,9 @@ html[data-theme="light"] .pagination-btn {
   font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: 0.02rem;
-  color: var(--accent);
   margin-bottom: 1.2rem;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
   opacity: 1;
 }
 
