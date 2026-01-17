@@ -52,8 +52,8 @@ function initHeader() {
   // THEME & LOGOS
   // ================================================================
   function syncLogos(theme) {
-    const light = "images/logo2-light.png";
-    const dark = "images/logo2-dark.png";
+    const light = "images/logo_light.png";
+    const dark = "images/logo_dark.png";
     if (navLogo) navLogo.src = theme === "light" ? dark : light;
     if (mobileLogo) mobileLogo.src = theme === "light" ? dark : light;
 
@@ -68,7 +68,7 @@ function initHeader() {
 
     // Team Card Logos Sync
     document.querySelectorAll(".team-card .team-image img").forEach(img => {
-      if (img.src.includes("logo2-")) {
+      if (img.src.includes("logo_")) {
         img.src = theme === "light" ? dark : light;
       }
     });

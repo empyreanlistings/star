@@ -45,7 +45,7 @@ function renderProfileData(data) {
     if (topRole) topRole.textContent = data.role || 'Member';
 
     if (profileImg) {
-        profileImg.src = data.photo_url || (auth.currentUser ? auth.currentUser.photoURL : 'images/logo.png') || 'images/logo.png';
+        profileImg.src = data.photo_url || (auth.currentUser ? auth.currentUser.photoURL : 'images/logo_dark.png') || 'images/logo_dark.png';
     }
 }
 
