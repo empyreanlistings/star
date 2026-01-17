@@ -5,7 +5,7 @@
     <title>Admin Login - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=3.27" />
+    <link rel="stylesheet" href="assets/css/main.css?v=3.28" />
     <noscript>
         <link rel="stylesheet" href="assets/css/noscript.css" />
     </noscript>
@@ -109,6 +109,9 @@
             margin-top: 1rem;
             z-index: 1;
             text-decoration: none;
+            box-sizing: border-box;
+            font-size: 0.85rem;
+            font-family: inherit;
         }
 
         .btn-login:hover {
@@ -241,12 +244,9 @@
                 <button type="submit" class="btn-login">SIGN IN</button>
 
                 <div id="loginError" class="error-message"></div>
-                
-                <div>
-                <a href="signup.html" class="btn-login">CREATE ACCOUNT</a>
-                </div>
-                
             </form>
+
+            <a href="signup.html" class="btn-login">CREATE ACCOUNT</a>
 
 
 
@@ -261,8 +261,8 @@
     <script src="assets/js/browser.min.js"></script>
     <script src="assets/js/breakpoints.min.js"></script>
     <script src="assets/js/util.js"></script>
-    <script src="assets/js/snackbar.js?v=3.27"></script>
-    <script src="assets/js/main.js?v=3.27" defer></script>
+    <script src="assets/js/snackbar.js?v=3.28"></script>
+    <script src="assets/js/main.js?v=3.28" defer></script>
 
     <!-- Auth Logic -->
     <script type="module" src="assets/js/auth.js"></script>
