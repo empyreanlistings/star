@@ -135,7 +135,7 @@ async function initResponsiveVideo() {
 
   const updateVideoSource = () => {
     const isMobile = window.innerWidth <= 768;
-    const videoSrc = isMobile ? 'images/mobile-video.mp4?v=3.20' : 'images/web-video.mp4?v=3.20';
+    const videoSrc = isMobile ? 'images/mobile-video.mp4?v=3.21' : 'images/web-video.mp4?v=3.21';
     const posterSrc = isMobile ? (video.getAttribute('data-mobile-poster') || 'images/web-video.webp') : 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
