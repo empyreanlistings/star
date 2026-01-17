@@ -3,12 +3,12 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyArViUzMduVitt8FJDrSVPC_IQTeQrDFX4",
-    authDomain: "kaiandisla-rulryn.firebaseapp.com",
-    projectId: "kaiandisla-rulryn",
-    storageBucket: "kaiandisla-rulryn.firebasestorage.app",
-    messagingSenderId: "155934228174",
-    appId: "1:155934228174:web:a4bcdc4b9702980c4e1a9f"
+    apiKey: "AIzaSyAu9fL7HRSouwBAvmi9SI4AomaHd7epvpY",
+    authDomain: "empyrean-3da06.firebaseapp.com",
+    projectId: "empyrean-3da06",
+    storageBucket: "empyrean-3da06.firebasestorage.app",
+    messagingSenderId: "973213656906",
+    appId: "1:973213656906:web:5cfbee0541932e579403b3"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -16,8 +16,8 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 let isLoggingOut = false;
 
-const USER_CACHE_KEY = "kai_isla_user_profile";
-const REMEMBER_KEY = "kai_isla_remember_me";
+const USER_CACHE_KEY = "star_user_profile";
+const REMEMBER_KEY = "star_remember_me";
 
 // Login Function
 async function handleLogin(e) {
@@ -52,9 +52,9 @@ async function handleLogout() {
         isLoggingOut = true;
 
         // Clear sensitive admin caches
-        localStorage.removeItem("kai_isla_listings");
-        localStorage.removeItem("kai_isla_gallery");
-        localStorage.removeItem("kai_isla_palawan_gallery");
+        localStorage.removeItem("star_listings");
+        localStorage.removeItem("star_gallery");
+        localStorage.removeItem("star_palawan_gallery");
         localStorage.removeItem(USER_CACHE_KEY);
         // Let's keep theme but definitely clear the data.
 
