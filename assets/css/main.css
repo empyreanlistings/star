@@ -38,7 +38,7 @@
   --shadow-card: 0 10px 35px rgba(0, 0, 0, 0.22);
 
   /* ============================== BACKGROUND IMAGE & CONTROL ============================== */
-  --site-bg-image: url('../../images/contact-background.webp');
+  --site-bg-image: url('../../images/web-video.webp');
   --site-bg-overlay-dark:
     linear-gradient(145deg,
       rgba(12, 12, 12, 0.72) 0%,
@@ -116,7 +116,7 @@ body {
   background: none;
 }
 
-/* Fixed background layer REMOVED per user request
+/* Fixed background layer using web-video.webp */
 body::before {
   content: "";
   position: fixed;
@@ -124,14 +124,13 @@ body::before {
   z-index: -1;
   background:
     var(--site-bg-overlay-dark),
-    var(--site-bg-image),
-    var(--site-bg-overlay-chroma);
+    var(--site-bg-image);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   will-change: transform;
   transform: translateZ(0);
-} */
+}
 
 /* ============================== LIGHT MODE BACKGROUND ============================== */
 /* LIGHT MODE — NO FLASH — uses html[data-theme] so it applies instantly */

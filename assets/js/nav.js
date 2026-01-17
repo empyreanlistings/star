@@ -54,11 +54,11 @@ function initHeader() {
   function syncLogos(theme) {
     const light = "images/logo_light.png";
     const dark = "images/logo_dark.png";
-    if (navLogo) navLogo.src = theme === "light" ? dark : light;
-    if (mobileLogo) mobileLogo.src = theme === "light" ? dark : light;
+    if (navLogo) navLogo.src = theme === "light" ? light : dark;
+    if (mobileLogo) mobileLogo.src = theme === "light" ? light : dark;
 
     // Paradise Life Homebuyer Logo Sync (Main Section only)
-    const hbLogoImg = theme === "light" ? "images/homebuyer_light2.png" : "images/homebuyer_dark2.png";
+    const hbLogoImg = theme === "light" ? "images/homebuyer_dark2.png" : "images/homebuyer_light2.png";
     const hbLogo = document.getElementById("homebuyerLogoMain");
     if (hbLogo) hbLogo.src = hbLogoImg;
     const hbRibbons = document.querySelectorAll(".property-logo img");
@@ -69,7 +69,7 @@ function initHeader() {
     // Team Card Logos Sync
     document.querySelectorAll(".team-card .team-image img").forEach(img => {
       if (img.src.includes("logo_")) {
-        img.src = theme === "light" ? dark : light;
+        img.src = theme === "light" ? light : dark;
       }
     });
   }
