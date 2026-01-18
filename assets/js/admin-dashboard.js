@@ -410,7 +410,10 @@ function renderAdminTable(listings) {
 
         const status = data.status || "-";
         const category = data.category || "All";
-        const shortDesc = data.content?.short_description || "";
+        let shortDesc = data.content?.short_description || "";
+        if (shortDesc.length > 80) {
+            shortDesc = shortDesc.substring(0, 80) + "...";
+        }
 
         // Gallery Badge Logic
         const allImages = data.media?.images || [];
