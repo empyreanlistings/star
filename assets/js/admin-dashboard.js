@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 function initPageNavigation() {
     const navBtns = document.querySelectorAll('.page-nav-btn');
-    const pages = document.querySelectorAll('.dashboard-page');
+    const pages = document.querySelectorAll('.dashboard-tab-content');
 
     navBtns.forEach(btn => {
         btn.addEventListener('click', () => {
