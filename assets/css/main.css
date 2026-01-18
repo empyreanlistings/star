@@ -5674,7 +5674,7 @@ html[data-theme="light"] .newsletter-card input.form-control {
 /* Desktop: 3 columns */
 @media (min-width: 992px) {
   .contact-cards-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 }
 
