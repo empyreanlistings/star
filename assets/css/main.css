@@ -1435,7 +1435,6 @@ nav a {
   color: var(--white);
   border-radius: 50px;
   /* Pill shape */
-  padding: 0.5rem 1rem;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
@@ -1514,8 +1513,8 @@ html[data-theme="light"] nav a:not(.logo-container).active {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 38px;
-  width: 38px;
+  height: 40px;
+  width: 40px;
   border-radius: 10px;
   border: none;
   background: rgba(255, 255, 255, 0.08);
@@ -6123,8 +6122,8 @@ html[data-theme="light"] .messenger-fab:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 20%;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -6133,7 +6132,7 @@ html[data-theme="light"] .messenger-fab:hover {
   cursor: pointer;
   color: var(--white);
   text-decoration: none;
-  margin: 20px 0px;
+  margin: 10px 0px;
 }
 
 .nav-avatar img {
