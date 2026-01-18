@@ -5,12 +5,12 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=3.35">
+    <link rel="stylesheet" href="assets/css/main.css?v=3.36">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <style>
-        /* Styles moved to assets/css/main.css?v=3.35 */
+        /* Styles moved to assets/css/main.css?v=3.36 */
     </style>
     <!-- Apply saved theme early to prevent flash -->
     <script>
@@ -153,7 +153,7 @@
         <div id="inspectionsSection" class="listings-table-container">
             <!-- Header with Add Button -->
             <div class="dashboard-section-header">
-                <h1>Manage Inspections</h1>
+                <h1>Manage Viewings</h1>
                 <button id="addInspectionBtn" class="btn" aria-label="Add New Inspection">
                     <i class="fas fa-plus"></i>
                 </button>
@@ -180,1066 +180,1012 @@
             <div id="inspectionsPagination" class="pagination-wrapper"></div>
         </div>
 
-        <div id="gallerySection" class="listings-table-container">
-            <!-- Header with Add Button -->
-            <div class="dashboard-section-header">
-                <h1>Manage Gallery</h1>
-                <button id="addGalleryBtn" class="btn" aria-label="Add New Gallery Item">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </div>
+        <form id="listingForm" style="display: contents;">
+            <div class="modal-body">
+                <input type="hidden" id="listingId">
 
-            <!-- Filters -->
-            <div class="property-filters-container" style="margin-bottom: 2rem; position: relative;">
-                <div class="gallery-type-filters" role="group" aria-label="Gallery category filters">
-                    <button class="filter active" data-filter="all" type="button">ALL</button>
-                    <button class="filter" data-filter="structural" type="button">STRUCTURAL</button>
-                    <button class="filter" data-filter="exterior" type="button">EXTERIOR</button>
-                    <button class="filter" data-filter="interior" type="button">INTERIOR</button>
-                    <button class="filter" data-filter="pool" type="button">SWIMMING POOLS</button>
-                </div>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th style="width: 140px;">Gallery Item</th>
-                        <th>Category</th>
-                        <th style="width: 40px; text-align: center;">Display</th>
-                        <th style="width: 80px; text-align: center;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="galleryTableBody">
-                    <tr>
-                        <td colspan="5" style="text-align:center;padding:2rem;opacity:0.6;">Loading gallery...</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div id="galleryPagination" class="pagination-wrapper"></div>
-        </div>
-
-        <div id="palawanGallerySection" class="listings-table-container">
-            <!-- Header with Add Button -->
-            <div class="dashboard-section-header">
-                <h1>Manage Palawan Gallery</h1>
-                <button id="addPalawanGalleryBtn" class="btn" aria-label="Add New Palawan Gallery Item">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Item Details</th>
-                        <th style="width: 40px; text-align: center;">Display</th>
-                        <th style="width: 80px; text-align: center;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="palawanGalleryTableBody">
-                    <tr>
-                        <td colspan="5" style="text-align:center;padding:2rem;opacity:0.6;">Loading Palawan gallery...
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div id="palawanGalleryPagination" class="pagination-wrapper"></div>
-        </div>
-
-    </main>
-
-    <!-- Listing Modal -->
-    <div id="listingModal" class="modal-overlay premium-modal wide">
-        <div class="modal-content">
-            <div class="modal-header-premium">
-                <h3 id="modalTitle" class="modal-title" style="margin:0 !important;">Add New Property</h3>
-                <span id="closeModal" class="close-modal">&times;</span>
-            </div>
-            <form id="listingForm" style="display: contents;">
-                <div class="modal-body">
-                    <input type="hidden" id="listingId">
-
-                    <div class="modal-grid">
-                        <!-- Left Column: Primary Details -->
-                        <div class="modal-column">
-                            <div class="modal-section">
-                                <div class="modal-section-title"><i class="fas fa-info-circle"></i> Basic Information
+                <div class="modal-grid">
+                    <!-- Left Column: Primary Details -->
+                    <div class="modal-column">
+                        <div class="modal-section">
+                            <div class="modal-section-title"><i class="fas fa-info-circle"></i> Basic Information
+                            </div>
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Property Title</label>
+                                    <input type="text" id="propTitle" class="form-control" required
+                                        placeholder="Luxurious Beach Villa">
                                 </div>
-                                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                                    <div>
-                                        <label>Property Title</label>
-                                        <input type="text" id="propTitle" class="form-control" required
-                                            placeholder="Luxurious Beach Villa">
-                                    </div>
-                                    <div>
-                                        <label>Slug (URL Identifier)</label>
-                                        <input type="text" id="propSlug" class="form-control"
-                                            placeholder="luxurious-beach-villa">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Short Description (Card)</label>
-                                    <input type="text" id="propShortDesc" class="form-control" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Full Description (Modal)</label>
-                                    <textarea id="propFullDesc" class="form-control" rows="6"></textarea>
+                                <div>
+                                    <label>Slug (URL Identifier)</label>
+                                    <input type="text" id="propSlug" class="form-control"
+                                        placeholder="luxurious-beach-villa">
                                 </div>
                             </div>
 
-                            <div class="modal-section" style="margin-top: 1.5rem;">
-                                <div class="modal-section-title"><i class="fas fa-search"></i> SEO / Meta Data</div>
-                                <div class="form-group">
-                                    <label>Meta Title</label>
-                                    <input type="text" id="metaTitle" class="form-control"
-                                        placeholder="Browse Palawan Homes | Villa XYZ">
+                            <div class="form-group">
+                                <label>Short Description (Card)</label>
+                                <input type="text" id="propShortDesc" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Full Description (Modal)</label>
+                                <textarea id="propFullDesc" class="form-control" rows="6"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="modal-section" style="margin-top: 1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-search"></i> SEO / Meta Data</div>
+                            <div class="form-group">
+                                <label>Meta Title</label>
+                                <input type="text" id="metaTitle" class="form-control"
+                                    placeholder="Browse Palawan Homes | Villa XYZ">
+                            </div>
+                            <div class="form-group">
+                                <label>Meta Description</label>
+                                <textarea id="metaDesc" class="form-control" rows="2"
+                                    placeholder="Explore this beautiful villa in El Nido..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Specifics & Media -->
+                    <div class="modal-column">
+                        <div class="modal-section">
+                            <div class="modal-section-title"><i class="fas fa-tags"></i> Classification & Pricing
+                            </div>
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Listing Type</label>
+                                    <div style="display:flex; gap:1rem; margin-top:0.5rem;">
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0;">
+                                            <input type="checkbox" id="propListingForSale" value="for_sale"> Sale
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0;">
+                                            <input type="checkbox" id="propListingForLease" value="for_lease"> Lease
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>Meta Description</label>
-                                    <textarea id="metaDesc" class="form-control" rows="2"
-                                        placeholder="Explore this beautiful villa in El Nido..."></textarea>
+                                <div>
+                                    <label>Property Type</label>
+                                    <select id="propType" class="form-control">
+                                        <option value="">Select Type...</option>
+                                        <option value="condo">Condo</option>
+                                        <option value="duplex">Duplex</option>
+                                        <option value="house_lot">House & lot</option>
+                                        <option value="lot_only">Lot only</option>
+                                        <option value="villa">Villa</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Category</label>
+                                    <select id="propCategory" class="form-control">
+                                        <option value="residential">Residential</option>
+                                        <option value="land">Land</option>
+                                        <option value="commercial">Commercial</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Status</label>
+                                    <select id="propStatus" class="form-control">
+                                        <option value="for_sale">For Sale</option>
+                                        <option value="sold">Sold</option>
+                                        <option value="under_offer">Under Offer</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display:grid; grid-template-columns:80px 1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Currency</label>
+                                    <select id="propCurrency" class="form-control">
+                                        <option value="PHP">₱ PHP</option>
+                                        <option value="USD">$ USD</option>
+                                        <option value="EUR">€ EUR</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Selling Price</label>
+                                    <input type="number" id="propPrice" class="form-control" required placeholder="₱">
+                                </div>
+                                <div>
+                                    <label>Lease Price</label>
+                                    <input type="number" id="propLeasePrice" class="form-control" placeholder="₱">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Right Column: Specifics & Media -->
-                        <div class="modal-column">
-                            <div class="modal-section">
-                                <div class="modal-section-title"><i class="fas fa-tags"></i> Classification & Pricing
+                        <div class="modal-section" style="margin-top: 1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-map-marker-alt"></i> Location</div>
+                            <div class="form-group">
+                                <label>Google Maps Search</label>
+                                <input type="text" id="locationSearch" class="form-control"
+                                    placeholder="Search for property location...">
+                            </div>
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Floor #</label>
+                                    <input type="text" id="propFloorNumber" class="form-control" placeholder="e.g. 5">
                                 </div>
-                                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                                    <div>
-                                        <label>Listing Type</label>
-                                        <div style="display:flex; gap:1rem; margin-top:0.5rem;">
-                                            <label
-                                                style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0;">
-                                                <input type="checkbox" id="propListingForSale" value="for_sale"> Sale
-                                            </label>
-                                            <label
-                                                style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0;">
-                                                <input type="checkbox" id="propListingForLease" value="for_lease"> Lease
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label>Property Type</label>
-                                        <select id="propType" class="form-control">
-                                            <option value="">Select Type...</option>
-                                            <option value="condo">Condo</option>
-                                            <option value="duplex">Duplex</option>
-                                            <option value="house_lot">House & lot</option>
-                                            <option value="lot_only">Lot only</option>
-                                            <option value="villa">Villa</option>
-                                        </select>
-                                    </div>
+                                <div>
+                                    <label>Unit #</label>
+                                    <input type="text" id="propUnitNumber" class="form-control" placeholder="e.g. 502">
                                 </div>
+                            </div>
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Area</label>
+                                    <input type="text" id="locArea" class="form-control" placeholder="El Nido">
+                                </div>
+                                <div>
+                                    <label>Municipality</label>
+                                    <input type="text" id="locMunicipality" class="form-control" placeholder="Palawan">
+                                </div>
+                            </div>
+                            <input type="hidden" id="locLat">
+                            <input type="hidden" id="locLng">
+                        </div>
 
-                                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                                    <div>
+                        <div class="modal-section" style="margin-top: 1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-star"></i> Features & Media</div>
+                            <div class="form-group"
+                                style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem;">
+                                <div>
+                                    <label>Beds</label>
+                                    <input type="number" id="propBeds" class="form-control" placeholder="0">
+                                </div>
+                                <div>
+                                    <label>Baths</label>
+                                    <input type="number" id="propBaths" class="form-control" placeholder="0">
+                                </div>
+                                <div>
+                                    <label>SqM</label>
+                                    <input type="number" id="propSize" class="form-control" placeholder="0">
+                                </div>
+                            </div>
+
+                            <div style="display:flex; flex-wrap:wrap; gap:1rem; margin-bottom: 1rem;">
+                                <div style="display:flex; align-items:center; gap:0.5rem;">
+                                    <label
+                                        style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                        <input type="checkbox" id="propHasParking" style="width:auto;margin:0;">
+                                        Parking
+                                    </label>
+                                    <div id="propParkingSpacesContainer" style="display:none;">
+                                        <input type="number" id="propParkingSpaces" class="form-control"
+                                            style="width:60px; padding:0.4rem;" placeholder="#">
+                                    </div>
+                                </div>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                    <input type="checkbox" id="propFurnished" style="width:auto;margin:0;">
+                                    Furnished
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                    <input type="checkbox" id="propBalcony" style="width:auto;margin:0;"> Balcony
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                    <input type="checkbox" id="propFeatured" style="width:auto;margin:0;"> Featured
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                    <input type="checkbox" id="propDisplay" style="width:auto;margin:0;"> Visible
+                                </label>
+                            </div>
+
+                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div>
+                                    <label>Main Image</label>
+                                    <input type="file" id="propImage" class="form-control" accept="image/*">
+                                </div>
+                                <div>
+                                    <label>Gallery Images</label>
+                                    <input type="file" id="propGallery" class="form-control" multiple accept="image/*">
+                                </div>
+                            </div>
+                            <div id="galleryPreview" class="gallery-preview-grid" style="margin-top:0.5rem;"></div>
+                        </div>
+
+                        <div class="modal-section" style="margin-top: 1.5rem;">
+                            <div class="modal-section-title"><i class="fas fa-bullseye"></i> Lead Source</div>
+                            <div id="leadSourceRadios"
+                                style="display:grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:0.5rem; font-size:0.85rem;">
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="website" id="sourceWebsiteMain">
+                                    Website
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="facebook" id="sourceFacebookMain">
+                                    FB
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="instagram" id="sourceInstagramMain"> IG
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="tiktok" id="sourceTiktokMain">
+                                    TikTok
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="viber" id="sourceViberMain"> Viber
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="messenger" id="sourceMessengerMain">
+                                    Msg
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="whatsapp" id="sourceWhatsappMain">
+                                    WA
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="telegram" id="sourceTelegramMain">
+                                    TG
+                                </label>
+                                <label
+                                    style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                    <input type="radio" name="leadSource" value="user" id="sourceUserMain" checked>
+                                    Manual
+                                </label>
+                            </div>
+                            <div id="telegramLinkContainerMain" style="display:none; margin-top: 1rem;">
+                                <label>Telegram Link</label>
+                                <input type="text" id="propTelegramLink" class="form-control"
+                                    placeholder="https://t.me/username">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- End modal-body -->
+            <div class="modal-footer">
+                <div id="uploadStatus" style="flex:1; text-align:left; font-size:0.9rem; opacity:0.8;"></div>
+                <button type="submit" id="submitBtn" class="btn" style="min-width: 200px;">Confirm & Save
+                    Listing</button>
+            </div>
+        </form>
+        </div>
+        </div>
+
+        <!-- Gallery Modal -->
+        <div id="galleryModal" class="modal-overlay premium-modal">
+            <div class="modal-content">
+                <div class="modal-header-premium">
+                    <h3 id="galleryModalTitle" class="modal-title" style="margin:0 !important;">Add New Gallery Item
+                    </h3>
+                    <span id="closeGalleryModal" class="close-modal">&times;</span>
+                </div>
+                <form id="galleryForm">
+                    <input type="hidden" id="galleryItemId">
+                    <div class="modal-body">
+                        <div class="modal-grid">
+                            <!-- Left Column: Form Fields -->
+                            <div class="modal-column">
+                                <div class="modal-section">
+                                    <div class="form-group">
+                                        <label>Headline (Title)</label>
+                                        <input type="text" id="galleryHeadline" class="form-control" required
+                                            placeholder="e.g. Spaceous Pool House">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Sub-header (Description)</label>
+                                        <input type="text" id="gallerySubHeader" class="form-control"
+                                            placeholder="e.g. AAC Blockwork • Pool">
+                                    </div>
+
+                                    <div class="form-group">
                                         <label>Category</label>
-                                        <select id="propCategory" class="form-control">
-                                            <option value="residential">Residential</option>
-                                            <option value="land">Land</option>
-                                            <option value="commercial">Commercial</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label>Status</label>
-                                        <select id="propStatus" class="form-control">
-                                            <option value="for_sale">For Sale</option>
-                                            <option value="sold">Sold</option>
-                                            <option value="under_offer">Under Offer</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group"
-                                    style="display:grid; grid-template-columns:80px 1fr 1fr; gap:1rem;">
-                                    <div>
-                                        <label>Currency</label>
-                                        <select id="propCurrency" class="form-control">
-                                            <option value="PHP">₱ PHP</option>
-                                            <option value="USD">$ USD</option>
-                                            <option value="EUR">€ EUR</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label>Selling Price</label>
-                                        <input type="number" id="propPrice" class="form-control" required
-                                            placeholder="₱">
-                                    </div>
-                                    <div>
-                                        <label>Lease Price</label>
-                                        <input type="number" id="propLeasePrice" class="form-control" placeholder="₱">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal-section" style="margin-top: 1.5rem;">
-                                <div class="modal-section-title"><i class="fas fa-map-marker-alt"></i> Location</div>
-                                <div class="form-group">
-                                    <label>Google Maps Search</label>
-                                    <input type="text" id="locationSearch" class="form-control"
-                                        placeholder="Search for property location...">
-                                </div>
-                                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                                    <div>
-                                        <label>Floor #</label>
-                                        <input type="text" id="propFloorNumber" class="form-control"
-                                            placeholder="e.g. 5">
-                                    </div>
-                                    <div>
-                                        <label>Unit #</label>
-                                        <input type="text" id="propUnitNumber" class="form-control"
-                                            placeholder="e.g. 502">
-                                    </div>
-                                </div>
-                                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                                    <div>
-                                        <label>Area</label>
-                                        <input type="text" id="locArea" class="form-control" placeholder="El Nido">
-                                    </div>
-                                    <div>
-                                        <label>Municipality</label>
-                                        <input type="text" id="locMunicipality" class="form-control"
-                                            placeholder="Palawan">
-                                    </div>
-                                </div>
-                                <input type="hidden" id="locLat">
-                                <input type="hidden" id="locLng">
-                            </div>
-
-                            <div class="modal-section" style="margin-top: 1.5rem;">
-                                <div class="modal-section-title"><i class="fas fa-star"></i> Features & Media</div>
-                                <div class="form-group"
-                                    style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem;">
-                                    <div>
-                                        <label>Beds</label>
-                                        <input type="number" id="propBeds" class="form-control" placeholder="0">
-                                    </div>
-                                    <div>
-                                        <label>Baths</label>
-                                        <input type="number" id="propBaths" class="form-control" placeholder="0">
-                                    </div>
-                                    <div>
-                                        <label>SqM</label>
-                                        <input type="number" id="propSize" class="form-control" placeholder="0">
-                                    </div>
-                                </div>
-
-                                <div style="display:flex; flex-wrap:wrap; gap:1rem; margin-bottom: 1rem;">
-                                    <div style="display:flex; align-items:center; gap:0.5rem;">
-                                        <label
-                                            style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
-                                            <input type="checkbox" id="propHasParking" style="width:auto;margin:0;">
-                                            Parking
-                                        </label>
-                                        <div id="propParkingSpacesContainer" style="display:none;">
-                                            <input type="number" id="propParkingSpaces" class="form-control"
-                                                style="width:60px; padding:0.4rem;" placeholder="#">
+                                        <div id="galleryCategoryChips" class="category-chips">
+                                            <div class="chip active" data-value="structural">Structural</div>
+                                            <div class="chip" data-value="exterior">Exterior</div>
+                                            <div class="chip" data-value="interior">Interior</div>
+                                            <div class="chip" data-value="pool">Swimming Pools</div>
                                         </div>
                                     </div>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
-                                        <input type="checkbox" id="propFurnished" style="width:auto;margin:0;">
-                                        Furnished
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
-                                        <input type="checkbox" id="propBalcony" style="width:auto;margin:0;"> Balcony
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
-                                        <input type="checkbox" id="propFeatured" style="width:auto;margin:0;"> Featured
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
-                                        <input type="checkbox" id="propDisplay" style="width:auto;margin:0;"> Visible
-                                    </label>
+
+                                    <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;">
+                                        <input type="checkbox" id="galleryDisplay" style="width:auto;margin:0;" checked>
+                                        <label for="galleryDisplay"
+                                            style="margin:0;cursor:pointer;font-size:0.9rem;">Display in
+                                            Portfolio</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column: Image Upload & Preview -->
+                            <div class="modal-column">
+                                <div class="modal-section">
+                                    <div class="form-group">
+                                        <label>Image Upload</label>
+                                        <input type="file" id="galleryImage" class="form-control" accept="image/*"
+                                            required>
+                                        <small style="display:block;margin-top:0.5rem;opacity:0.6;">Max width 1000px on
+                                            upload</small>
+                                    </div>
+                                    <div id="galleryImagePreview"
+                                        style="margin-top:1rem;text-align:center;display:none;">
+                                        <img id="galleryPreviewImg"
+                                            style="width:200px;height:200px;object-fit:cover;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);"
+                                            alt="Preview">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div id="galleryUploadStatus" style="flex:1;text-align:left;opacity:0.8;"></div>
+                        <button type="submit" id="gallerySubmitBtn" class="btn" style="min-width:200px;">Upload Gallery
+                            Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Palawan Gallery Modal -->
+        <div id="palawanGalleryModal" class="modal-overlay premium-modal">
+            <div class="modal-content">
+                <div class="modal-header-premium">
+                    <h3 id="palawanGalleryModalTitle" class="modal-title" style="margin:0 !important;">Add Palawan
+                        Gallery
+                        Item</h3>
+                    <span id="closePalawanGalleryModal" class="close-modal">&times;</span>
+                </div>
+                <form id="palawanGalleryForm">
+                    <input type="hidden" id="palawanGalleryItemId">
+                    <div class="modal-body">
+                        <div class="modal-grid">
+                            <!-- Left Column: Form Fields -->
+                            <div class="modal-column">
+                                <div class="modal-section">
+                                    <div class="form-group">
+                                        <label>Title</label>
+                                        <input type="text" id="palawanGalleryTitle" class="form-control" required
+                                            placeholder="e.g. El Nido Bay">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                        <input type="text" id="palawanGalleryDescription" class="form-control"
+                                            placeholder="e.g. El Nido, Palawan">
+                                    </div>
+
+                                    <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;">
+                                        <input type="checkbox" id="palawanGalleryDisplay" style="width:auto;margin:0;"
+                                            checked>
+                                        <label for="palawanGalleryDisplay" style="margin:0;cursor:pointer;">Display in
+                                            Gallery</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column: Image Upload & Preview -->
+                            <div class="modal-column">
+                                <div class="modal-section">
+                                    <div class="form-group">
+                                        <label>Image Upload</label>
+                                        <input type="file" id="palawanGalleryImage" class="form-control"
+                                            accept="image/*" required>
+                                        <small style="display:block;margin-top:0.5rem;opacity:0.6;">Max width 800px on
+                                            upload</small>
+                                    </div>
+                                    <div id="palawanImagePreview"
+                                        style="margin-top:1rem;text-align:center;display:none;">
+                                        <img id="palawanPreviewImg"
+                                            style="width:200px;height:200px;object-fit:cover;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);"
+                                            alt="Preview">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div id="palawanGalleryUploadStatus" style="flex:1;text-align:left;opacity:0.8;"></div>
+                        <button type="submit" id="palawanGallerySubmitBtn" class="btn" style="min-width:200px;">Upload
+                            Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Inspection Modal -->
+        <div id="inspectionModal" class="modal-overlay premium-modal wide">
+            <div class="modal-content">
+                <div class="modal-header-premium">
+                    <h3 id="inspectionModalTitle" class="modal-title" style="margin:0 !important;">New Inspection</h3>
+                    <span id="closeInspectionModal" class="close-modal">&times;</span>
+                </div>
+                <form id="inspectionForm">
+                    <input type="hidden" id="inspectionId">
+
+                    <div class="modal-body">
+                        <div class="modal-grid">
+                            <!-- Left Column -->
+                            <div class="modal-column">
+                                <div class="modal-section">
+                                    <div class="modal-section-title"><i class="fas fa-info-circle"></i> Basic Info</div>
+                                    <div class="form-group">
+                                        <label>Inspection Name</label>
+                                        <input type="text" id="inspName" class="form-control" required
+                                            placeholder="e.g. Final Walkthrough - Unit A">
+                                    </div>
+                                    <div class="form-group"
+                                        style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                        <div>
+                                            <label>Development</label>
+                                            <select id="inspDevelopment" class="form-control" required>
+                                                <option value="">Select Development...</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label>Plot / Unit</label>
+                                            <select id="inspPlot" class="form-control" required disabled>
+                                                <option value="">Select Plot...</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                                    <div>
-                                        <label>Main Image</label>
-                                        <input type="file" id="propImage" class="form-control" accept="image/*">
+                                <div class="modal-section" style="margin-top:1.5rem;">
+                                    <div class="modal-section-title"><i class="fas fa-tags"></i> Classification</div>
+                                    <div class="form-group">
+                                        <label>Inspection Tags (comma separated)</label>
+                                        <input type="text" id="inspTags" class="form-control"
+                                            placeholder="e.g. structural, electric, plumbing">
                                     </div>
-                                    <div>
-                                        <label>Gallery Images</label>
-                                        <input type="file" id="propGallery" class="form-control" multiple
+                                    <div class="form-group" style="display:flex; align-items:center; gap:0.5rem;">
+                                        <input type="checkbox" id="inspPrivate" style="width:auto;margin:0;">
+                                        <label for="inspPrivate" style="margin:0;cursor:pointer;font-size:0.9rem;">Mark
+                                            as
+                                            Private</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="modal-column">
+                                <div class="modal-section">
+                                    <div class="modal-section-title"><i class="fas fa-sticky-note"></i> Observations &
+                                        Media
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Notes</label>
+                                        <textarea id="inspNotes" class="form-control" rows="6"
+                                            placeholder="Enter inspection details and observations..."></textarea>
+                                    </div>
+
+                                    <div class="form-group" style="margin-top:1rem;">
+                                        <label>Media Gallery (Photos)</label>
+                                        <input type="file" id="inspMedia" class="form-control" multiple
                                             accept="image/*">
                                     </div>
-                                </div>
-                                <div id="galleryPreview" class="gallery-preview-grid" style="margin-top:0.5rem;"></div>
-                            </div>
-
-                            <div class="modal-section" style="margin-top: 1.5rem;">
-                                <div class="modal-section-title"><i class="fas fa-bullseye"></i> Lead Source</div>
-                                <div id="leadSourceRadios"
-                                    style="display:grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:0.5rem; font-size:0.85rem;">
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="leadSource" value="website" id="sourceWebsiteMain">
-                                        Website
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="leadSource" value="facebook" id="sourceFacebookMain">
-                                        FB
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="leadSource" value="instagram"
-                                            id="sourceInstagramMain"> IG
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="leadSource" value="tiktok" id="sourceTiktokMain">
-                                        TikTok
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="leadSource" value="viber" id="sourceViberMain"> Viber
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="leadSource" value="messenger"
-                                            id="sourceMessengerMain">
-                                        Msg
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="leadSource" value="whatsapp" id="sourceWhatsappMain">
-                                        WA
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="leadSource" value="telegram" id="sourceTelegramMain">
-                                        TG
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="leadSource" value="user" id="sourceUserMain" checked>
-                                        Manual
-                                    </label>
-                                </div>
-                                <div id="telegramLinkContainerMain" style="display:none; margin-top: 1rem;">
-                                    <label>Telegram Link</label>
-                                    <input type="text" id="propTelegramLink" class="form-control"
-                                        placeholder="https://t.me/username">
+                                    <div id="inspectionGalleryPreview" class="gallery-preview-grid"
+                                        style="margin-top:0.5rem;">
+                                    </div>
                                 </div>
                             </div>
+                        </div> <!-- End modal-grid -->
+                    </div> <!-- End modal-body -->
+                    <div class="modal-footer">
+                        <div id="inspUploadStatus" style="flex:1; text-align:left; font-size:0.9rem; opacity:0.8;">
                         </div>
+                        <button type="submit" id="inspSubmitBtn" class="btn" style="min-width: 200px;">Create
+                            Inspection</button>
                     </div>
-
-                </div> <!-- End modal-body -->
-                <div class="modal-footer">
-                    <div id="uploadStatus" style="flex:1; text-align:left; font-size:0.9rem; opacity:0.8;"></div>
-                    <button type="submit" id="submitBtn" class="btn" style="min-width: 200px;">Confirm & Save
-                        Listing</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Gallery Modal -->
-    <div id="galleryModal" class="modal-overlay premium-modal">
-        <div class="modal-content">
-            <div class="modal-header-premium">
-                <h3 id="galleryModalTitle" class="modal-title" style="margin:0 !important;">Add New Gallery Item</h3>
-                <span id="closeGalleryModal" class="close-modal">&times;</span>
+                </form>
             </div>
-            <form id="galleryForm">
-                <input type="hidden" id="galleryItemId">
-                <div class="modal-body">
-                    <div class="modal-grid">
-                        <!-- Left Column: Form Fields -->
-                        <div class="modal-column">
-                            <div class="modal-section">
-                                <div class="form-group">
-                                    <label>Headline (Title)</label>
-                                    <input type="text" id="galleryHeadline" class="form-control" required
-                                        placeholder="e.g. Spaceous Pool House">
-                                </div>
+        </div>
 
-                                <div class="form-group">
-                                    <label>Sub-header (Description)</label>
-                                    <input type="text" id="gallerySubHeader" class="form-control"
-                                        placeholder="e.g. AAC Blockwork • Pool">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Category</label>
-                                    <div id="galleryCategoryChips" class="category-chips">
-                                        <div class="chip active" data-value="structural">Structural</div>
-                                        <div class="chip" data-value="exterior">Exterior</div>
-                                        <div class="chip" data-value="interior">Interior</div>
-                                        <div class="chip" data-value="pool">Swimming Pools</div>
+        <!-- Enquiry Modal -->
+        <div id="enquiryModal" class="modal-overlay premium-modal wide">
+            <div class="modal-content">
+                <div class="modal-header-premium">
+                    <h3 id="enquiryModalTitle" class="modal-title" style="margin:0 !important;">New Enquiry</h3>
+                    <span id="closeEnquiryModal" class="close-modal">&times;</span>
+                </div>
+                <form id="enquiryForm" style="display: contents;">
+                    <div class="modal-body">
+                        <input type="hidden" id="enqId">
+                        <div class="modal-grid">
+                            <!-- Left Column -->
+                            <div class="modal-column">
+                                <div class="modal-section">
+                                    <div class="modal-section-title"><i class="fas fa-user"></i> Contact Details</div>
+                                    <div class="form-group"
+                                        style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                        <div>
+                                            <label>Name</label>
+                                            <input type="text" id="enqName" class="form-control" placeholder="John Doe">
+                                        </div>
+                                        <div>
+                                            <label>Email</label>
+                                            <input type="email" id="enqEmail" class="form-control"
+                                                placeholder="john@example.com">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Phone Number</label>
+                                        <input type="text" id="enqPhone" class="form-control" placeholder="+123456789">
                                     </div>
                                 </div>
 
-                                <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;">
-                                    <input type="checkbox" id="galleryDisplay" style="width:auto;margin:0;" checked>
-                                    <label for="galleryDisplay"
-                                        style="margin:0;cursor:pointer;font-size:0.9rem;">Display in Portfolio</label>
+                                <div class="modal-section" style="margin-top:1.5rem;">
+                                    <div class="modal-section-title"><i class="fas fa-home"></i> Property Requirements
+                                    </div>
+                                    <div class="form-group"
+                                        style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                        <div>
+                                            <label>Listing Type</label>
+                                            <div style="display:flex; gap:1rem; margin-top:0.5rem;">
+                                                <label
+                                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0;">
+                                                    <input type="checkbox" id="enqListingForSale" value="for_sale"> Sale
+                                                </label>
+                                                <label
+                                                    style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0;">
+                                                    <input type="checkbox" id="enqListingForLease" value="for_lease">
+                                                    Lease
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label>Property Type</label>
+                                            <select id="enqPropType" class="form-control">
+                                                <option value="">Select Type...</option>
+                                                <option value="condo">Condo</option>
+                                                <option value="duplex">Duplex</option>
+                                                <option value="house_lot">House & lot</option>
+                                                <option value="lot_only">Lot only</option>
+                                                <option value="villa">Villa</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Area / Neighborhood</label>
+                                        <input type="text" id="enqArea" class="form-control" placeholder="e.g. El Nido">
+                                    </div>
+                                    <div class="form-group"
+                                        style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                        <div>
+                                            <label>Floor #</label>
+                                            <input type="text" id="enqFloorNumber" class="form-control"
+                                                placeholder="e.g. 5">
+                                        </div>
+                                        <div>
+                                            <label>Unit #</label>
+                                            <input type="text" id="enqUnitNumber" class="form-control"
+                                                placeholder="e.g. 502">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Right Column: Image Upload & Preview -->
-                        <div class="modal-column">
-                            <div class="modal-section">
-                                <div class="form-group">
-                                    <label>Image Upload</label>
-                                    <input type="file" id="galleryImage" class="form-control" accept="image/*" required>
-                                    <small style="display:block;margin-top:0.5rem;opacity:0.6;">Max width 1000px on
-                                        upload</small>
+                            <!-- Right Column -->
+                            <div class="modal-column">
+                                <div class="modal-section">
+                                    <div class="modal-section-title"><i class="fas fa-tags"></i> Budget & Status</div>
+                                    <div class="form-group"
+                                        style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                        <div>
+                                            <label>Selling Price (PHP)</label>
+                                            <input type="number" id="enqSellingPrice" class="form-control"
+                                                placeholder="₱">
+                                        </div>
+                                        <div>
+                                            <label>Lease Price (PHP)</label>
+                                            <input type="number" id="enqLeasePrice" class="form-control"
+                                                placeholder="₱">
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        style="display:flex; flex-wrap:wrap; gap:1rem; margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.05);">
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                            <input type="checkbox" id="enqResponded"> Responded
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                            <input type="checkbox" id="enqOffPlan" checked> Off-Plan
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                            <input type="checkbox" id="enqCustomBuild"> Custom Build
+                                        </label>
+                                    </div>
                                 </div>
-                                <div id="galleryImagePreview" style="margin-top:1rem;text-align:center;display:none;">
-                                    <img id="galleryPreviewImg"
-                                        style="width:200px;height:200px;object-fit:cover;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);"
-                                        alt="Preview">
+
+                                <div class="modal-section" style="margin-top:1.5rem;">
+                                    <div class="modal-section-title"><i class="fas fa-star"></i> Desired Features</div>
+                                    <div style="display:flex; flex-wrap:wrap; gap:1rem;">
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                            <input type="checkbox" id="enqFurnished"> Furnished
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                            <input type="checkbox" id="enqBalcony"> Balcony
+                                        </label>
+                                        <div style="display:flex; align-items:center; gap:0.5rem;">
+                                            <label
+                                                style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
+                                                <input type="checkbox" id="enqHasParking"> Parking
+                                            </label>
+                                            <div id="parkingSpacesContainer" style="display:none;">
+                                                <input type="number" id="enqParkingSpaces" class="form-control"
+                                                    style="width:60px; padding:0.4rem;" placeholder="#" min="0">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+
+                                <div class="modal-section" style="margin-top:1.5rem;">
+                                    <div class="modal-section-title"><i class="fas fa-bullseye"></i> Acquisition Source
+                                    </div>
+                                    <div
+                                        style="display:grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:0.5rem; font-size:0.85rem;">
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                            <input type="radio" name="enqSource" value="website" id="srcWebsite"
+                                                checked>
+                                            Website
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                            <input type="radio" name="enqSource" value="facebook" id="srcFacebook"> FB
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                            <input type="radio" name="enqSource" value="instagram" id="srcInstagram"> IG
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                            <input type="radio" name="enqSource" value="tiktok" id="srcTiktok"> TikTok
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                            <input type="radio" name="enqSource" value="viber" id="srcViber"> Viber
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                            <input type="radio" name="enqSource" value="messenger" id="srcMessenger">
+                                            Msg
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                            <input type="radio" name="enqSource" value="whatsapp" id="srcWhatsapp"> WA
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                            <input type="radio" name="enqSource" value="telegram" id="srcTelegram"> TG
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                            <input type="radio" name="enqSource" value="word_of_mouth"
+                                                id="srcWordOfMouth">
+                                            W/M
+                                        </label>
+                                        <label
+                                            style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
+                                            <input type="radio" name="enqSource" value="direct_contact"
+                                                id="srcDirectContact">
+                                            Direct
+                                        </label>
+                                    </div>
+                                    <div id="telegramLinkContainer" style="display:none; margin-top: 1rem;">
+                                        <label>Telegram Link</label>
+                                        <input type="text" id="enqTelegramLink" class="form-control"
+                                            placeholder="https://t.me/username">
+                                    </div>
+                                </div>
+
+                                <div class="modal-section" style="margin-top:1.5rem;">
+                                    <div class="modal-section-title"><i class="fas fa-sticky-note"></i> Internal Notes
+                                    </div>
+                                    <textarea id="enqComments" class="form-control" rows="3"
+                                        placeholder="Additional details..."></textarea>
+                                </div>
+                            </div> <!-- End modal-column -->
+                        </div> <!-- End modal-grid -->
+                    </div> <!-- End modal-body -->
+                    <div class="modal-footer">
+                        <div id="enqStatus" style="flex:1; text-align:left; font-size:0.9rem; opacity:0.8;"></div>
+                        <button type="submit" id="enqSubmitBtn" class="btn" style="min-width: 200px;">Confirm &
+                            Save Enquiry</button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <div id="galleryUploadStatus" style="flex:1;text-align:left;opacity:0.8;"></div>
-                    <button type="submit" id="gallerySubmitBtn" class="btn" style="min-width:200px;">Upload Gallery
-                        Item</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Palawan Gallery Modal -->
-    <div id="palawanGalleryModal" class="modal-overlay premium-modal">
-        <div class="modal-content">
-            <div class="modal-header-premium">
-                <h3 id="palawanGalleryModalTitle" class="modal-title" style="margin:0 !important;">Add Palawan Gallery
-                    Item</h3>
-                <span id="closePalawanGalleryModal" class="close-modal">&times;</span>
+                </form>
             </div>
-            <form id="palawanGalleryForm">
-                <input type="hidden" id="palawanGalleryItemId">
-                <div class="modal-body">
-                    <div class="modal-grid">
-                        <!-- Left Column: Form Fields -->
-                        <div class="modal-column">
-                            <div class="modal-section">
-                                <div class="form-group">
-                                    <label>Title</label>
-                                    <input type="text" id="palawanGalleryTitle" class="form-control" required
-                                        placeholder="e.g. El Nido Bay">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <input type="text" id="palawanGalleryDescription" class="form-control"
-                                        placeholder="e.g. El Nido, Palawan">
-                                </div>
-
-                                <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;">
-                                    <input type="checkbox" id="palawanGalleryDisplay" style="width:auto;margin:0;"
-                                        checked>
-                                    <label for="palawanGalleryDisplay" style="margin:0;cursor:pointer;">Display in
-                                        Gallery</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Column: Image Upload & Preview -->
-                        <div class="modal-column">
-                            <div class="modal-section">
-                                <div class="form-group">
-                                    <label>Image Upload</label>
-                                    <input type="file" id="palawanGalleryImage" class="form-control" accept="image/*"
-                                        required>
-                                    <small style="display:block;margin-top:0.5rem;opacity:0.6;">Max width 800px on
-                                        upload</small>
-                                </div>
-                                <div id="palawanImagePreview" style="margin-top:1rem;text-align:center;display:none;">
-                                    <img id="palawanPreviewImg"
-                                        style="width:200px;height:200px;object-fit:cover;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);"
-                                        alt="Preview">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div id="palawanGalleryUploadStatus" style="flex:1;text-align:left;opacity:0.8;"></div>
-                    <button type="submit" id="palawanGallerySubmitBtn" class="btn" style="min-width:200px;">Upload
-                        Item</button>
-                </div>
-            </form>
         </div>
-    </div>
 
-    <!-- Inspection Modal -->
-    <div id="inspectionModal" class="modal-overlay premium-modal wide">
-        <div class="modal-content">
-            <div class="modal-header-premium">
-                <h3 id="inspectionModalTitle" class="modal-title" style="margin:0 !important;">New Inspection</h3>
-                <span id="closeInspectionModal" class="close-modal">&times;</span>
-            </div>
-            <form id="inspectionForm">
-                <input type="hidden" id="inspectionId">
-
-                <div class="modal-body">
+        <!-- Enquiry Details Modal -->
+        <div id="enquiryDetailsModal" class="modal-overlay premium-modal wide">
+            <div class="modal-content">
+                <div class="modal-header-premium">
+                    <h3 class="modal-title" style="margin:0 !important;">Enquiry Details</h3>
+                    <span id="closeEnquiryDetailsModal" class="close-modal">&times;</span>
+                </div>
+                <div id="enqDetailsContent" class="modal-body">
                     <div class="modal-grid">
-                        <!-- Left Column -->
+                        <!-- Left Column: Core Info & Requirements -->
                         <div class="modal-column">
                             <div class="modal-section">
-                                <div class="modal-section-title"><i class="fas fa-info-circle"></i> Basic Info</div>
-                                <div class="form-group">
-                                    <label>Inspection Name</label>
-                                    <input type="text" id="inspName" class="form-control" required
-                                        placeholder="e.g. Final Walkthrough - Unit A">
+                                <div class="modal-section-title"><i class="fas fa-user-circle"></i> Contact Information
+                                </div>
+                                <div class="form-group"
+                                    style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                                    <div>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Name</label>
+                                        <div id="detEnqName" style="font-weight:bold; font-size:1.1rem;">-</div>
+                                    </div>
+                                    <div>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Date
+                                            Received</label>
+                                        <div id="detEnqDate">-</div>
+                                    </div>
+                                </div>
+                                <div class="form-group"
+                                    style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                                    <div>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Email</label>
+                                        <div id="detEnqEmail">-</div>
+                                    </div>
+                                    <div>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Phone
+                                            Number</label>
+                                        <div id="detEnqPhone">-</div>
+                                    </div>
                                 </div>
                                 <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
                                     <div>
-                                        <label>Development</label>
-                                        <select id="inspDevelopment" class="form-control" required>
-                                            <option value="">Select Development...</option>
-                                        </select>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Lead
+                                            Source</label>
+                                        <div id="detEnqSource">-</div>
+                                        <div id="detEnqTelegramLink"
+                                            style="font-size:0.85rem; opacity:0.8; margin-top:4px; display:none;">
+                                        </div>
                                     </div>
                                     <div>
-                                        <label>Plot / Unit</label>
-                                        <select id="inspPlot" class="form-control" required disabled>
-                                            <option value="">Select Plot...</option>
-                                        </select>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Status</label>
+                                        <div id="detEnqStatus">-</div>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div class="modal-section" style="margin-top:1.5rem;">
-                                <div class="modal-section-title"><i class="fas fa-tags"></i> Classification</div>
-                                <div class="form-group">
-                                    <label>Inspection Tags (comma separated)</label>
-                                    <input type="text" id="inspTags" class="form-control"
-                                        placeholder="e.g. structural, electric, plumbing">
-                                </div>
-                                <div class="form-group" style="display:flex; align-items:center; gap:0.5rem;">
-                                    <input type="checkbox" id="inspPrivate" style="width:auto;margin:0;">
-                                    <label for="inspPrivate" style="margin:0;cursor:pointer;font-size:0.9rem;">Mark as
-                                        Private</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Column -->
-                        <div class="modal-column">
-                            <div class="modal-section">
-                                <div class="modal-section-title"><i class="fas fa-sticky-note"></i> Observations & Media
-                                </div>
-                                <div class="form-group">
-                                    <label>Notes</label>
-                                    <textarea id="inspNotes" class="form-control" rows="6"
-                                        placeholder="Enter inspection details and observations..."></textarea>
-                                </div>
-
-                                <div class="form-group" style="margin-top:1rem;">
-                                    <label>Media Gallery (Photos)</label>
-                                    <input type="file" id="inspMedia" class="form-control" multiple accept="image/*">
-                                </div>
-                                <div id="inspectionGalleryPreview" class="gallery-preview-grid"
-                                    style="margin-top:0.5rem;">
-                                </div>
-                            </div>
-                        </div>
-                    </div> <!-- End modal-grid -->
-                </div> <!-- End modal-body -->
-                <div class="modal-footer">
-                    <div id="inspUploadStatus" style="flex:1; text-align:left; font-size:0.9rem; opacity:0.8;"></div>
-                    <button type="submit" id="inspSubmitBtn" class="btn" style="min-width: 200px;">Create
-                        Inspection</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Enquiry Modal -->
-    <div id="enquiryModal" class="modal-overlay premium-modal wide">
-        <div class="modal-content">
-            <div class="modal-header-premium">
-                <h3 id="enquiryModalTitle" class="modal-title" style="margin:0 !important;">New Enquiry</h3>
-                <span id="closeEnquiryModal" class="close-modal">&times;</span>
-            </div>
-            <form id="enquiryForm" style="display: contents;">
-                <div class="modal-body">
-                    <input type="hidden" id="enqId">
-                    <div class="modal-grid">
-                        <!-- Left Column -->
-                        <div class="modal-column">
-                            <div class="modal-section">
-                                <div class="modal-section-title"><i class="fas fa-user"></i> Contact Details</div>
-                                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                                    <div>
-                                        <label>Name</label>
-                                        <input type="text" id="enqName" class="form-control" placeholder="John Doe">
-                                    </div>
-                                    <div>
-                                        <label>Email</label>
-                                        <input type="email" id="enqEmail" class="form-control"
-                                            placeholder="john@example.com">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Phone Number</label>
-                                    <input type="text" id="enqPhone" class="form-control" placeholder="+123456789">
                                 </div>
                             </div>
 
                             <div class="modal-section" style="margin-top:1.5rem;">
                                 <div class="modal-section-title"><i class="fas fa-home"></i> Property Requirements</div>
-                                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
                                     <div>
-                                        <label>Listing Type</label>
-                                        <div style="display:flex; gap:1rem; margin-top:0.5rem;">
-                                            <label
-                                                style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0;">
-                                                <input type="checkbox" id="enqListingForSale" value="for_sale"> Sale
-                                            </label>
-                                            <label
-                                                style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0;">
-                                                <input type="checkbox" id="enqListingForLease" value="for_lease"> Lease
-                                            </label>
-                                        </div>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Listing
+                                            Type</label>
+                                        <div id="detEnqListingType">-</div>
                                     </div>
                                     <div>
-                                        <label>Property Type</label>
-                                        <select id="enqPropType" class="form-control">
-                                            <option value="">Select Type...</option>
-                                            <option value="condo">Condo</option>
-                                            <option value="duplex">Duplex</option>
-                                            <option value="house_lot">House & lot</option>
-                                            <option value="lot_only">Lot only</option>
-                                            <option value="villa">Villa</option>
-                                        </select>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Property
+                                            Type</label>
+                                        <div id="detEnqPropType">-</div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>Area / Neighborhood</label>
-                                    <input type="text" id="enqArea" class="form-control" placeholder="e.g. El Nido">
-                                </div>
-                                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
                                     <div>
-                                        <label>Floor #</label>
-                                        <input type="text" id="enqFloorNumber" class="form-control"
-                                            placeholder="e.g. 5">
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Area /
+                                            Neighborhood</label>
+                                        <div id="detEnqArea">-</div>
                                     </div>
                                     <div>
-                                        <label>Unit #</label>
-                                        <input type="text" id="enqUnitNumber" class="form-control"
-                                            placeholder="e.g. 502">
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Unit /
+                                            Floor</label>
+                                        <div id="detEnqUnitFloor">-</div>
+                                    </div>
+                                </div>
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
+                                    <div>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Selling Price
+                                            Range</label>
+                                        <div id="detEnqSellingPrice">-</div>
+                                    </div>
+                                    <div>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Lease Price
+                                            Range</label>
+                                        <div id="detEnqLeasePrice">-</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top:1rem;">
+                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:4px;">Request
+                                        Features</label>
+                                    <div id="detEnqFeatures" style="display:flex; flex-wrap:wrap; gap:0.5rem;">-</div>
+                                </div>
+                                <div style="display:flex; gap:1rem; margin-top:1rem;">
+                                    <div id="detEnqOffPlan" class="status-badge" style="display:none;">Off-Plan</div>
+                                    <div id="detEnqCustomBuild" class="status-badge" style="display:none;">Custom Build
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Right Column -->
+                        <!-- Right Column: Activity & Comments -->
                         <div class="modal-column">
-                            <div class="modal-section">
-                                <div class="modal-section-title"><i class="fas fa-tags"></i> Budget & Status</div>
-                                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                                    <div>
-                                        <label>Selling Price (PHP)</label>
-                                        <input type="number" id="enqSellingPrice" class="form-control" placeholder="₱">
-                                    </div>
-                                    <div>
-                                        <label>Lease Price (PHP)</label>
-                                        <input type="number" id="enqLeasePrice" class="form-control" placeholder="₱">
-                                    </div>
+                            <div class="modal-section" style="height: 100%; display: flex; flex-direction: column;">
+                                <div class="modal-section-title"><i class="fas fa-comments"></i> Activity Timeline</div>
+
+                                <!-- Comments Feed -->
+                                <div id="detEnqCommentsContainer"
+                                    style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; flex: 1; min-height: 300px; max-height: 500px; overflow-y: auto; margin-bottom:1rem;">
+                                    <!-- Comments will be dynamically rendered here -->
                                 </div>
 
-                                <div
-                                    style="display:flex; flex-wrap:wrap; gap:1rem; margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.05);">
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
-                                        <input type="checkbox" id="enqResponded"> Responded
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
-                                        <input type="checkbox" id="enqOffPlan" checked> Off-Plan
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
-                                        <input type="checkbox" id="enqCustomBuild"> Custom Build
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="modal-section" style="margin-top:1.5rem;">
-                                <div class="modal-section-title"><i class="fas fa-star"></i> Desired Features</div>
-                                <div style="display:flex; flex-wrap:wrap; gap:1rem;">
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
-                                        <input type="checkbox" id="enqFurnished"> Furnished
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
-                                        <input type="checkbox" id="enqBalcony"> Balcony
-                                    </label>
-                                    <div style="display:flex; align-items:center; gap:0.5rem;">
-                                        <label
-                                            style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:normal; margin:0; font-size:0.85rem;">
-                                            <input type="checkbox" id="enqHasParking"> Parking
-                                        </label>
-                                        <div id="parkingSpacesContainer" style="display:none;">
-                                            <input type="number" id="enqParkingSpaces" class="form-control"
-                                                style="width:60px; padding:0.4rem;" placeholder="#" min="0">
-                                        </div>
+                                <!-- Add Comment Form (Pinned to bottom of column) -->
+                                <div class="comment-sticky-form">
+                                    <textarea id="detEnqNewComment" placeholder="Add a comment..."
+                                        style="width:100%; min-height:80px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.5rem; color:inherit; font-family:inherit; resize:vertical;"></textarea>
+                                    <div style="display:flex; gap:0.5rem; margin-top:0.5rem; align-items:center;">
+                                        <input type="file" id="detEnqCommentImage" accept="image/*"
+                                            style="display:none;">
+                                        <button id="detEnqAttachImageBtn" class="action-btn" title="Attach Image"
+                                            style="background:rgba(255,255,255,0.1);">
+                                            <i class="fas fa-image"></i>
+                                        </button>
+                                        <span id="detEnqImagePreview" style="font-size:0.8rem; opacity:0.7;"></span>
+                                        <button id="detEnqPostCommentBtn" class="btn"
+                                            style="margin-left:auto; padding:0.5rem 1rem;">
+                                            Post Comment
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="modal-section" style="margin-top:1.5rem;">
-                                <div class="modal-section-title"><i class="fas fa-bullseye"></i> Acquisition Source
-                                </div>
-                                <div
-                                    style="display:grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:0.5rem; font-size:0.85rem;">
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="enqSource" value="website" id="srcWebsite" checked>
-                                        Website
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="enqSource" value="facebook" id="srcFacebook"> FB
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="enqSource" value="instagram" id="srcInstagram"> IG
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="enqSource" value="tiktok" id="srcTiktok"> TikTok
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="enqSource" value="viber" id="srcViber"> Viber
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="enqSource" value="messenger" id="srcMessenger"> Msg
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="enqSource" value="whatsapp" id="srcWhatsapp"> WA
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="enqSource" value="telegram" id="srcTelegram"> TG
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="enqSource" value="word_of_mouth" id="srcWordOfMouth">
-                                        W/M
-                                    </label>
-                                    <label
-                                        style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; cursor:pointer;">
-                                        <input type="radio" name="enqSource" value="direct_contact"
-                                            id="srcDirectContact">
-                                        Direct
-                                    </label>
-                                </div>
-                                <div id="telegramLinkContainer" style="display:none; margin-top: 1rem;">
-                                    <label>Telegram Link</label>
-                                    <input type="text" id="enqTelegramLink" class="form-control"
-                                        placeholder="https://t.me/username">
-                                </div>
-                            </div>
-
-                            <div class="modal-section" style="margin-top:1.5rem;">
-                                <div class="modal-section-title"><i class="fas fa-sticky-note"></i> Internal Notes</div>
-                                <textarea id="enqComments" class="form-control" rows="3"
-                                    placeholder="Additional details..."></textarea>
-                            </div>
-                        </div> <!-- End modal-column -->
-                    </div> <!-- End modal-grid -->
+                        </div>
+                    </div>
                 </div> <!-- End modal-body -->
                 <div class="modal-footer">
-                    <div id="enqStatus" style="flex:1; text-align:left; font-size:0.9rem; opacity:0.8;"></div>
-                    <button type="submit" id="enqSubmitBtn" class="btn" style="min-width: 200px;">Confirm &
-                        Save Enquiry</button>
+                    <button id="detEnqEditBtn" class="btn" style="min-width: 200px;">Edit Enquiry Details</button>
+                    <button id="detEnqCloseBtn" class="btn-logout" style="padding: 0.8rem 1.5rem;">Close View</button>
                 </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Enquiry Details Modal -->
-    <div id="enquiryDetailsModal" class="modal-overlay premium-modal wide">
-        <div class="modal-content">
-            <div class="modal-header-premium">
-                <h3 class="modal-title" style="margin:0 !important;">Enquiry Details</h3>
-                <span id="closeEnquiryDetailsModal" class="close-modal">&times;</span>
             </div>
-            <div id="enqDetailsContent" class="modal-body">
-                <div class="modal-grid">
-                    <!-- Left Column: Core Info & Requirements -->
-                    <div class="modal-column">
-                        <div class="modal-section">
-                            <div class="modal-section-title"><i class="fas fa-user-circle"></i> Contact Information
-                            </div>
-                            <div class="form-group"
-                                style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Name</label>
-                                    <div id="detEnqName" style="font-weight:bold; font-size:1.1rem;">-</div>
+        </div>
+
+        <!-- Inspection Details Modal -->
+        <div id="inspectionDetailsModal" class="modal-overlay premium-modal wide">
+            <div class="modal-content">
+                <div class="modal-header-premium">
+                    <h3 class="modal-title" style="margin:0 !important;">Inspection Details</h3>
+                    <span id="closeInspectionDetailsModal" class="close-modal">&times;</span>
+                </div>
+                <div id="inspDetailsContent" class="modal-body">
+                    <div class="modal-grid">
+                        <!-- Left Column: Details & Media -->
+                        <div class="modal-column">
+                            <div class="modal-section">
+                                <div class="modal-section-title"><i class="fas fa-file-contract"></i> Core Information
                                 </div>
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Date
-                                        Received</label>
-                                    <div id="detEnqDate">-</div>
-                                </div>
-                            </div>
-                            <div class="form-group"
-                                style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Email</label>
-                                    <div id="detEnqEmail">-</div>
-                                </div>
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Phone
-                                        Number</label>
-                                    <div id="detEnqPhone">-</div>
-                                </div>
-                            </div>
-                            <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Lead Source</label>
-                                    <div id="detEnqSource">-</div>
-                                    <div id="detEnqTelegramLink"
-                                        style="font-size:0.85rem; opacity:0.8; margin-top:4px; display:none;">
+                                <div class="form-group"
+                                    style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                                    <div>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Title /
+                                            Inspector</label>
+                                        <div id="detInspTitle" style="font-weight:bold; font-size:1.1rem;">-</div>
+                                    </div>
+                                    <div>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Inspection
+                                            Date</label>
+                                        <div id="detInspDate">-</div>
                                     </div>
                                 </div>
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Status</label>
-                                    <div id="detEnqStatus">-</div>
+                                <div class="form-group"
+                                    style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                                    <div>
+                                        <label
+                                            style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Development</label>
+                                        <div id="detInspDev">-</div>
+                                    </div>
+                                    <div>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Plot /
+                                            Unit</label>
+                                        <div id="detInspPlot">-</div>
+                                    </div>
+                                </div>
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                    <div>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:4px;">Tags</label>
+                                        <div id="detInspTags" style="display:flex; flex-wrap:wrap; gap:0.5rem;">-</div>
+                                    </div>
+                                    <div>
+                                        <label style="opacity:0.6; font-size:0.8rem; margin-bottom:4px;">Visibility
+                                            Status</label>
+                                        <div id="detInspStatus">-</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-section" style="margin-top:1.5rem;">
+                                <div class="modal-section-title"><i class="fas fa-sticky-note"></i> Inspection Notes
+                                </div>
+                                <div id="detInspNote"
+                                    style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; font-size:0.95rem; line-height:1.6; min-height:80px; margin-bottom:1.5rem;">
+                                    -
+                                </div>
+                                <label style="opacity:0.6; font-size:0.8rem; margin-bottom:8px;">Media Gallery</label>
+                                <div id="detInspMedia" class="gallery-preview-grid"
+                                    style="grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:10px;">
+                                    <!-- Images will be injected here -->
                                 </div>
                             </div>
                         </div>
 
-                        <div class="modal-section" style="margin-top:1.5rem;">
-                            <div class="modal-section-title"><i class="fas fa-home"></i> Property Requirements</div>
-                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Listing
-                                        Type</label>
-                                    <div id="detEnqListingType">-</div>
-                                </div>
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Property
-                                        Type</label>
-                                    <div id="detEnqPropType">-</div>
-                                </div>
-                            </div>
-                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Area /
-                                        Neighborhood</label>
-                                    <div id="detEnqArea">-</div>
-                                </div>
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Unit /
-                                        Floor</label>
-                                    <div id="detEnqUnitFloor">-</div>
-                                </div>
-                            </div>
-                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Selling Price
-                                        Range</label>
-                                    <div id="detEnqSellingPrice">-</div>
-                                </div>
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Lease Price
-                                        Range</label>
-                                    <div id="detEnqLeasePrice">-</div>
-                                </div>
-                            </div>
-                            <div style="margin-top:1rem;">
-                                <label style="opacity:0.6; font-size:0.8rem; margin-bottom:4px;">Request
-                                    Features</label>
-                                <div id="detEnqFeatures" style="display:flex; flex-wrap:wrap; gap:0.5rem;">-</div>
-                            </div>
-                            <div style="display:flex; gap:1rem; margin-top:1rem;">
-                                <div id="detEnqOffPlan" class="status-badge" style="display:none;">Off-Plan</div>
-                                <div id="detEnqCustomBuild" class="status-badge" style="display:none;">Custom Build
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <!-- Right Column: Activity & Comments -->
+                        <div class="modal-column">
+                            <div class="modal-section" style="height: 100%; display: flex; flex-direction: column;">
+                                <div class="modal-section-title"><i class="fas fa-comments"></i> Activity Timeline</div>
 
-                    <!-- Right Column: Activity & Comments -->
-                    <div class="modal-column">
-                        <div class="modal-section" style="height: 100%; display: flex; flex-direction: column;">
-                            <div class="modal-section-title"><i class="fas fa-comments"></i> Activity Timeline</div>
+                                <!-- Comments Feed -->
+                                <div id="detInspCommentsContainer"
+                                    style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; flex: 1; min-height: 300px; max-height: 500px; overflow-y: auto; margin-bottom:1rem;">
+                                    <!-- Comments will be dynamically rendered here -->
+                                </div>
 
-                            <!-- Comments Feed -->
-                            <div id="detEnqCommentsContainer"
-                                style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; flex: 1; min-height: 300px; max-height: 500px; overflow-y: auto; margin-bottom:1rem;">
-                                <!-- Comments will be dynamically rendered here -->
-                            </div>
-
-                            <!-- Add Comment Form (Pinned to bottom of column) -->
-                            <div class="comment-sticky-form">
-                                <textarea id="detEnqNewComment" placeholder="Add a comment..."
-                                    style="width:100%; min-height:80px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.5rem; color:inherit; font-family:inherit; resize:vertical;"></textarea>
-                                <div style="display:flex; gap:0.5rem; margin-top:0.5rem; align-items:center;">
-                                    <input type="file" id="detEnqCommentImage" accept="image/*" style="display:none;">
-                                    <button id="detEnqAttachImageBtn" class="action-btn" title="Attach Image"
-                                        style="background:rgba(255,255,255,0.1);">
-                                        <i class="fas fa-image"></i>
-                                    </button>
-                                    <span id="detEnqImagePreview" style="font-size:0.8rem; opacity:0.7;"></span>
-                                    <button id="detEnqPostCommentBtn" class="btn"
-                                        style="margin-left:auto; padding:0.5rem 1rem;">
-                                        Post Comment
-                                    </button>
+                                <!-- Add Comment Form (Pinned to bottom) -->
+                                <div class="comment-sticky-form">
+                                    <textarea id="detInspNewComment" placeholder="Add a comment..."
+                                        style="width:100%; min-height:80px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.5rem; color:inherit; font-family:inherit; resize:vertical;"></textarea>
+                                    <div style="display:flex; gap:0.5rem; margin-top:0.5rem; align-items:center;">
+                                        <input type="file" id="detInspCommentImage" accept="image/*"
+                                            style="display:none;">
+                                        <button id="detInspAttachImageBtn" class="action-btn" title="Attach Image"
+                                            style="background:rgba(255,255,255,0.1);">
+                                            <i class="fas fa-image"></i>
+                                        </button>
+                                        <span id="detInspImagePreview" style="font-size:0.8rem; opacity:0.7;"></span>
+                                        <button id="detInspPostCommentBtn" class="btn"
+                                            style="margin-left:auto; padding:0.5rem 1rem;">
+                                            Post Comment
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div> <!-- End modal-body -->
+                <div class="modal-footer">
+                    <button id="detInspEditBtn" class="btn" style="min-width: 200px;">Edit Inspection Details</button>
+                    <button id="detInspCloseBtn" class="btn-logout" style="padding: 0.8rem 1.5rem;">Close View</button>
                 </div>
-            </div> <!-- End modal-body -->
-            <div class="modal-footer">
-                <button id="detEnqEditBtn" class="btn" style="min-width: 200px;">Edit Enquiry Details</button>
-                <button id="detEnqCloseBtn" class="btn-logout" style="padding: 0.8rem 1.5rem;">Close View</button>
             </div>
         </div>
-    </div>
 
-    <!-- Inspection Details Modal -->
-    <div id="inspectionDetailsModal" class="modal-overlay premium-modal wide">
-        <div class="modal-content">
-            <div class="modal-header-premium">
-                <h3 class="modal-title" style="margin:0 !important;">Inspection Details</h3>
-                <span id="closeInspectionDetailsModal" class="close-modal">&times;</span>
-            </div>
-            <div id="inspDetailsContent" class="modal-body">
-                <div class="modal-grid">
-                    <!-- Left Column: Details & Media -->
-                    <div class="modal-column">
-                        <div class="modal-section">
-                            <div class="modal-section-title"><i class="fas fa-file-contract"></i> Core Information</div>
-                            <div class="form-group"
-                                style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Title /
-                                        Inspector</label>
-                                    <div id="detInspTitle" style="font-weight:bold; font-size:1.1rem;">-</div>
-                                </div>
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Inspection
-                                        Date</label>
-                                    <div id="detInspDate">-</div>
-                                </div>
-                            </div>
-                            <div class="form-group"
-                                style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Development</label>
-                                    <div id="detInspDev">-</div>
-                                </div>
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:2px;">Plot / Unit</label>
-                                    <div id="detInspPlot">-</div>
-                                </div>
-                            </div>
-                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:4px;">Tags</label>
-                                    <div id="detInspTags" style="display:flex; flex-wrap:wrap; gap:0.5rem;">-</div>
-                                </div>
-                                <div>
-                                    <label style="opacity:0.6; font-size:0.8rem; margin-bottom:4px;">Visibility
-                                        Status</label>
-                                    <div id="detInspStatus">-</div>
-                                </div>
-                            </div>
-                        </div>
+        <!-- Property Modal == [DYNAMIC COMPONENT] -->
+        <div id="propertymodal-placeholder"></div>
 
-                        <div class="modal-section" style="margin-top:1.5rem;">
-                            <div class="modal-section-title"><i class="fas fa-sticky-note"></i> Inspection Notes</div>
-                            <div id="detInspNote"
-                                style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; font-size:0.95rem; line-height:1.6; min-height:80px; margin-bottom:1.5rem;">
-                                -
-                            </div>
-                            <label style="opacity:0.6; font-size:0.8rem; margin-bottom:8px;">Media Gallery</label>
-                            <div id="detInspMedia" class="gallery-preview-grid"
-                                style="grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:10px;">
-                                <!-- Images will be injected here -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right Column: Activity & Comments -->
-                    <div class="modal-column">
-                        <div class="modal-section" style="height: 100%; display: flex; flex-direction: column;">
-                            <div class="modal-section-title"><i class="fas fa-comments"></i> Activity Timeline</div>
-
-                            <!-- Comments Feed -->
-                            <div id="detInspCommentsContainer"
-                                style="background: rgba(255,255,255,0.03); border-radius:8px; padding:1rem; flex: 1; min-height: 300px; max-height: 500px; overflow-y: auto; margin-bottom:1rem;">
-                                <!-- Comments will be dynamically rendered here -->
-                            </div>
-
-                            <!-- Add Comment Form (Pinned to bottom) -->
-                            <div class="comment-sticky-form">
-                                <textarea id="detInspNewComment" placeholder="Add a comment..."
-                                    style="width:100%; min-height:80px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:0.5rem; color:inherit; font-family:inherit; resize:vertical;"></textarea>
-                                <div style="display:flex; gap:0.5rem; margin-top:0.5rem; align-items:center;">
-                                    <input type="file" id="detInspCommentImage" accept="image/*" style="display:none;">
-                                    <button id="detInspAttachImageBtn" class="action-btn" title="Attach Image"
-                                        style="background:rgba(255,255,255,0.1);">
-                                        <i class="fas fa-image"></i>
-                                    </button>
-                                    <span id="detInspImagePreview" style="font-size:0.8rem; opacity:0.7;"></span>
-                                    <button id="detInspPostCommentBtn" class="btn"
-                                        style="margin-left:auto; padding:0.5rem 1rem;">
-                                        Post Comment
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> <!-- End modal-body -->
-            <div class="modal-footer">
-                <button id="detInspEditBtn" class="btn" style="min-width: 200px;">Edit Inspection Details</button>
-                <button id="detInspCloseBtn" class="btn-logout" style="padding: 0.8rem 1.5rem;">Close View</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Property Modal == [DYNAMIC COMPONENT] -->
-    <div id="propertymodal-placeholder"></div>
-
-    <script src="assets/js/nav.js?v=3.35" defer></script>
-    <script src="assets/js/snackbar.js?v=3.35"></script>
-    <script src="assets/js/main.js?v=3.35" defer></script>
-    <!-- Google Maps API -->
-    <!-- Google Maps API -->
-    <!-- Maps Callback Shim -->
-    <script>
-        window.initMapCallback = function () {
-            console.log("📍 [Maps] Callback received (Shim)");
-            // If the module loads later, it can overwrite or checking if function exists
-            if (window.initLocationPicker) {
-                window.initLocationPicker();
-            } else {
-                window.mapReady = true; // Flag for module to check
-            }
-        };
-    </script>
-    <script async defer loading="async"
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBskYGOCldwNxevKvAfJaVvy9_8Mjfv22Q&libraries=places&v=weekly&callback=initMapCallback"></script>
-    <script type="module" src="assets/js/admin-dashboard.js?v=3.35"></script>
+        <script src="assets/js/nav.js?v=3.36" defer></script>
+        <script src="assets/js/snackbar.js?v=3.36"></script>
+        <script src="assets/js/main.js?v=3.36" defer></script>
+        <!-- Google Maps API -->
+        <!-- Google Maps API -->
+        <!-- Maps Callback Shim -->
+        <script>
+            window.initMapCallback = function () {
+                console.log("📍 [Maps] Callback received (Shim)");
+                // If the module loads later, it can overwrite or checking if function exists
+                if (window.initLocationPicker) {
+                    window.initLocationPicker();
+                } else {
+                    window.mapReady = true; // Flag for module to check
+                }
+            };
+        </script>
+        <script async defer loading="async"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBskYGOCldwNxevKvAfJaVvy9_8Mjfv22Q&libraries=places&v=weekly&callback=initMapCallback"></script>
+        <script type="module" src="assets/js/admin-dashboard.js?v=3.36"></script>
 
 </body>
 

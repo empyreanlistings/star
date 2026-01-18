@@ -348,7 +348,13 @@ function renderAdminTable(listings) {
 
     paginatedListings.forEach(data => {
         const id = data.id;
-        const title = data.title || "Untitled";
+        let title = data.title || "Untitled";
+
+        // Truncate title to 60 characters
+        if (title.length > 60) {
+            title = title.substring(0, 60) + "...";
+        }
+
         let thumbnail = data.media?.thumbnail || "images/web-video.webp";
         if (thumbnail.includes("coming-soon")) thumbnail = "images/web-video.webp";
 
@@ -393,7 +399,7 @@ function renderAdminTable(listings) {
                     ${galleryCount > 0 ? `<span class="gallery-badge" title="${galleryCount} more images">${galleryCount}</span>` : ''}
                 </div>
             </td>
-            <td style="min-width: 250px;">
+            <td style="min-width: 450px;">
                 <strong>${title}</strong><br>
                 <small style="opacity: 0.7;">${shortDesc}</small>
             </td>
