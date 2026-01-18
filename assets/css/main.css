@@ -1505,7 +1505,7 @@ html[data-theme="light"] nav a:not(.logo-container).active {
   justify-content: center;
   height: 38px;
   width: 38px;
-  border-radius: 50%;
+  border-radius: 10px;
   border: none;
   background: rgba(255, 255, 255, 0.08);
   /* DARK MODE GLASS */
