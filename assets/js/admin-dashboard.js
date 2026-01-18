@@ -121,7 +121,8 @@ function initPageNavigation() {
     const pages = document.querySelectorAll('.dashboard-tab-content');
 
     navBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent anchor navigation
             const targetPage = btn.dataset.page;
 
             // Update active button

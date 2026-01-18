@@ -5446,7 +5446,7 @@ html[data-theme="light"] .newsletter-card .ml-form-embedContent h2 {
 }
 
 /* Match MailerLite button to .btn style */
-#mlb2-3.427454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button[type="submit"],
+#mlb2-3.437454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button[type="submit"],
 .newsletter-card .ml-form-embedSubmit button.btn,
 .newsletter-card .ml-form-embedSubmit button.primary {
   background: var(--accent) !important;
@@ -5468,7 +5468,7 @@ html[data-theme="light"] .newsletter-card .ml-form-embedContent h2 {
 }
 
 /* Ensure loading button is absolutely hidden unless active */
-#mlb2-3.427454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.loading,
+#mlb2-3.437454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.loading,
 .newsletter-card .ml-form-embedSubmit button.loading {
   display: none !important;
 }
@@ -6175,17 +6175,17 @@ html[data-theme="light"] .nav-icon-link:hover i {
 :root {
   --dash-bg: #f4f6f8;
   --dash-card-bg: var(--white);
-  --dash-text: #3.4233;
+  --dash-text: #3.4333;
   --dash-border: #eeeeee;
   --dash-header-bg: var(--white);
 }
 
 [data-theme="dark"] {
   --dash-bg: #1a1f2c;
-  --dash-card-bg: #2e3842;
+  --dash-card-bg: #2e3.43;
   --dash-text: #eeeeee;
   --dash-border: #444444;
-  --dash-header-bg: #2e3842;
+  --dash-header-bg: #2e3.43;
 }
 
 body,
@@ -6313,51 +6313,53 @@ html[data-theme="light"] .btn-add-nav span {
   background: rgba(78, 205, 196, 0.15);
 }
 
-/* Dashboard Page Navigation (Center) */
+/* Dashboard Page Navigation (Center) - Matches Main Navbar Link Style */
 .dashboard-nav-center {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   height: 100%;
+  display: flex;
+  align-items: center;
 }
 
-.dash-nav-item {
-  background: transparent;
-  border: none;
+/* Dashboard Nav Links Container */
+.dashboard-header .nav-links {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Dashboard Link Items (Anchors) */
+.dashboard-header .dash-nav-item {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   color: var(--dash-text);
-  font-size: 0.95rem;
+  text-decoration: none;
   font-weight: 500;
-  cursor: pointer;
   padding: 0.5rem 1rem;
-  border-radius: 6px;
+  border-radius: 10px;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
   opacity: 0.7;
 }
 
-.dash-nav-item:hover {
+.dashboard-header .dash-nav-item:hover,
+.dashboard-header .dash-nav-item.active {
   opacity: 1;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.dash-nav-item.active {
-  opacity: 1;
-  font-weight: 600;
   color: var(--accent);
-  /* Optional: Keep accent color for text if desired, or just var(--dash-text) */
   background: rgba(var(--accent-rgb), 0.1);
+  box-shadow: none;
 }
 
-[data-theme="light"] .dash-nav-item:hover {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-[data-theme="light"] .dash-nav-item.active {
+/* Light Theme Adjustments */
+[data-theme="light"] .dashboard-header .dash-nav-item:hover,
+[data-theme="light"] .dashboard-header .dash-nav-item.active {
   background: rgba(78, 205, 196, 0.15);
 }
 
@@ -7204,7 +7206,7 @@ html[data-theme="light"] .btn-copy:hover {
 }
 
 .sunset-gradient {
-  background: #a9323.42 !important;
+  background: #a9323.43 !important;
   border-color: rgba(169, 50, 61, 0.3) !important;
 }
 
@@ -7214,13 +7216,13 @@ html[data-theme="light"] .btn-copy:hover {
 }
 
 .tropical-gradient {
-  background: #d4af3.42 !important;
+  background: #d4af3.43 !important;
   border-color: rgba(212, 175, 55, 0.3) !important;
 }
 
 .sun-icon {
   font-size: 2.5rem;
-  color: #03.429;
+  color: #03.439;
   margin-bottom: 20px;
   position: relative;
   z-index: 2;
