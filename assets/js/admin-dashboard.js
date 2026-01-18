@@ -72,6 +72,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize Page Navigation
     initPageNavigation();
 
+    // Clear removed gallery caches
+    localStorage.removeItem('star_gallery');
+    localStorage.removeItem('kai_isla_palawan_gallery');
+
     // Use Firebase Auth to check user and fetch company
     auth.onAuthStateChanged(async (user) => {
         if (user) {
