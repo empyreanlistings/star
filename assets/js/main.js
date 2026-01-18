@@ -135,7 +135,7 @@ async function initResponsiveVideo() {
 
   const updateVideoSource = () => {
     const isMobile = window.innerWidth <= 768;
-    const videoSrc = isMobile ? 'images/mobile-video.mp4?v=3.34' : 'images/web-video.mp4?v=3.34';
+    const videoSrc = isMobile ? 'images/mobile-video.mp4?v=3.35' : 'images/web-video.mp4?v=3.35';
     const posterSrc = isMobile ? (video.getAttribute('data-mobile-poster') || 'images/web-video.webp') : 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
@@ -1056,7 +1056,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=3.34`);
+    const response = await fetch(`${url}?v=3.35`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
@@ -1281,49 +1281,49 @@ const servicesData = [
     title: "Real Estate Brokerage",
     subtitle: "Professional Buying, Selling & Leasing across the Philippines.",
     description: `We navigate the complexity of the Philippine real estate market with transparency and accountability. Whether you are buying, selling, or leasing, our licensed brokers ensure a seamless, results-oriented experience.`,
-    image: "images/legal.webp"
+    image: "images/web-video.webp"
   },
   {
     title: "Project Selling",
     subtitle: "Exclusive Marketing for Premier Developments.",
     description: `Representing choice developments across the country, we provide investors and home buyers with vetted, high-quality opportunities in high-growth prime zones.`,
-    image: "images/keyinhand.webp"
+    image: "images/web-video.webp"
   },
   {
     title: "Property Resales",
     subtitle: "Expertly Marketing Your Pre-owned Property.",
     description: `We connect your property to an extensive global network of qualified buyers, managing the entire transaction from valuation to closing with professional excellence.`,
-    image: "images/customhouse.webp"
+    image: "images/web-video.webp"
   },
   {
     title: "Leasing Solutions",
     subtitle: "End-to-End Residential & Commercial Leasing.",
     description: `From tenant vetting to contract management and collection, we maximize your property's yield while ensuring a hands-free experience for owners.`,
-    image: "images/travel.webp"
+    image: "images/web-video.webp"
   },
   {
     title: "Home Improvements",
     subtitle: "Enhancing Your Property's Value & Comfort.",
     description: `Upgrade your living space with modern solar systems, smart-home integration, swimming pools, or structural additions that respect the local environment and increase value.`,
-    image: "images/swimming.webp"
+    image: "images/web-video.webp"
   },
   {
     title: "Project Planning",
     subtitle: "Pre-Construction Design & Documentation.",
     description: `Our engineering and design experts handle zoning, permits, and architectural planning to ensure your dream project starts on a compliant and solid foundation.`,
-    image: "images/engineering.webp"
+    image: "images/web-video.webp"
   },
   {
     title: "Construction Services",
     subtitle: "Durable, Sustainable Building Excellence.",
     description: `Specializing in professional, high-standard construction of off-grid enabled homes and commercial spaces using modern engineering techniques tailored for the tropics.`,
-    image: "images/pic11.webp"
+    image: "images/web-video.webp"
   },
   {
     title: "Renovations",
     subtitle: "Revitalize & Transform Existing Spaces.",
     description: `Transforming older properties into modern sanctuaries with high-quality finishes and structural upgrades that meet today's aesthetic and functional standards.`,
-    image: "images/walls.webp"
+    image: "images/web-video.webp"
   }
 ];
 
@@ -1466,49 +1466,49 @@ const howItWorksData = [
     title: "Verified Titles",
     subtitle: "Legal & Secure Property Ownership in Paradise.",
     description: `We provide complete transparency with fully verified titles and ownership documentation. Our team handles the legal heavy lifting to ensure your investment is safe, compliant, and permanent.`,
-    image: "images/legal.webp"
+    image: "images/web-video.webp"
   },
   {
     title: "Prime Locations",
     subtitle: "Scouting High-Growth, Scenic Real Estate.",
     description: `Specializing in prime Palawan areas like El Nido, we site our developments in high-growth zones with stunning beach access and limestone views, ensuring long-term value appreciation.`,
-    image: "images/locations.webp"
+    image: "images/web-video.webp"
   },
   {
     title: "Solar-Ready Living",
     subtitle: "Eco-Friendly Homes with Off-Grid Capacity.",
     description: `Our homes are designed for modern sustainability, featuring robust off-grid solar systems that provide reliable, clean energy so you never have to worry about power outages or utility bills.`,
-    image: "images/solar.webp"
+    image: "images/web-video.webp"
   },
   {
     title: "Progress Payments",
     subtitle: "Safe, Milestone-Based Financial Transparency.",
     description: `Pay with confidence through our verified milestone payment system. Installments are tied directly to construction progress, with clear digital tracking and compliance receipts.`,
-    image: "images/milestone.webp"
+    image: "images/web-video.webp"
   },
   {
     title: "Turn-Key Finish",
     subtitle: "All-Inclusive Homes, Ready for Your Arrival.",
     description: `Your home comes fully equipped with premium appliances and high-quality tropical furnishings. From landscaping to fine interior details, everything is handled so you can just turn the key.`,
-    image: "images/appliances.webp"
+    image: "images/web-video.webp"
   },
   {
     title: "Secure Land Leases",
     subtitle: "Reliable Solutions for International Buyers.",
     description: `We facilitate secure Long-Term Land Leases for non-nationals, providing a legal and reliable path to enjoying your own piece of paradise with full protection and peace of mind.`,
-    image: "images/land.webp"
+    image: "images/web-video.webp"
   },
   {
     title: "Brokerage Access",
     subtitle: "Direct Connection to Global Sales & Leasing.",
     description: `As a licensed brokerage, we provide direct access to an established network of buyers and tenants, ensuring your property is professionally marketed and easily liquid if needed.`,
-    image: "images/pic6.webp"
+    image: "images/web-video.webp"
   },
   {
     title: "Property Management",
     subtitle: "Professional Care while you are away.",
     description: `Our dedicated team handles maintenance, inspections, landscaping, and holiday rental operations so your property is always pristine and yielding potential returns.`,
-    image: "images/servicesCard.webp"
+    image: "images/web-video.webp"
   }
 ];
 
