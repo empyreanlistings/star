@@ -176,8 +176,32 @@ function initHeader() {
     mobileLogo && (mobileLogo.style.transform = `scale(${scale})`);
 
     updateScrollProgress();
+    updateActiveLink(); // Scroll Spy
     lastScroll = scrollY;
     ticking = false;
+  }
+
+  // SCROLL SPY
+  function updateActiveLink() {
+    const scrollPos = window.scrollY + 150; // Offset for header
+    const links = document.querySelectorAll("nav .nav-links a");
+
+    let currentSectionId = "";
+    sections.forEach(section => {
+      const top = section.offsetTop;
+      const height = section.offsetHeight;
+      if (scrollPos >= top && scrollPos < top + height) {
+        currentSectionId = section.getAttribute("id");
+      }
+    });
+
+    links.forEach(link => {
+      link.classList.remove("active");
+      const href = link.getAttribute("href");
+      if (currentSectionId && href && href.endsWith(`#${currentSectionId}`)) {
+        link.classList.add("active");
+      }
+    });
   }
 
   window.addEventListener("scroll", () => {
