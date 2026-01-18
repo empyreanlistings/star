@@ -1151,7 +1151,7 @@ function openModal(edit = false) {
 
     // Safer transition trigger: display then active class with delay
     modal.style.display = "flex";
-    modal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.49 !important; pointer-events: auto !important;";
+    modal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.50 !important; pointer-events: auto !important;";
 
     setTimeout(() => {
         modal.classList.add("active");
@@ -1345,18 +1345,19 @@ async function handleFormSubmit(e) {
 // =============================================================================
 
 function initPropertyModalEvents() {
-    console.log("🛠️ [PropertyModal] Initializing Property View Modal Events...");
-    const overlay = document.getElementById("modalOverlay");
-    const closeBtn = document.getElementById("modalClose");
+    console.log("🛠️ [PropertyModal] Initializing Property View Modal Events (Delegated)...");
 
-    if (closeBtn) closeBtn.onclick = closePropertyModal;
+    document.addEventListener('click', (e) => {
+        // Close Button
+        if (e.target.closest('#modalClose') || e.target.matches('#modalClose')) {
+            closePropertyModal();
+        }
 
-    if (overlay) {
-        overlay.onclick = (e) => {
-            // Only close if clicking the actual overlay (backdrop), not the content
-            if (e.target === overlay) closePropertyModal();
-        };
-    }
+        // Overlay Click (Backdrop)
+        if (e.target.id === 'modalOverlay') {
+            closePropertyModal();
+        }
+    });
 }
 
 function closePropertyModal() {
@@ -1507,7 +1508,7 @@ function openPropertyModal(data) {
         document.body.style.overflow = "hidden";
 
         // Use inline styles to override any display:none
-        overlay.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.49 !important; pointer-events: auto !important;";
+        overlay.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.50 !important; pointer-events: auto !important;";
 
         // Add active class after a small delay for transition
         setTimeout(() => {
@@ -2971,7 +2972,7 @@ function openEnquiryDetailsModal(enq) {
     document.body.style.overflow = "hidden";
 
     // Nuke any CSS conflicts with inline styles
-    enquiryDetailsModal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.49 !important; pointer-events: auto !important;";
+    enquiryDetailsModal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.50 !important; pointer-events: auto !important;";
 
     const content = enquiryDetailsModal.querySelector('.modal-content');
     if (content) content.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; transform: scale(1) translateY(0) !important;";
@@ -3117,7 +3118,7 @@ function openInspectionDetailsModal(insp) {
     document.body.style.overflow = "hidden";
 
     // Nuke any CSS conflicts with inline styles
-    inspectionDetailsModal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.49 !important; pointer-events: auto !important;";
+    inspectionDetailsModal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.50 !important; pointer-events: auto !important;";
 
     const content = inspectionDetailsModal.querySelector('.modal-content');
     if (content) content.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; transform: scale(1) translateY(0) !important;";
