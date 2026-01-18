@@ -265,6 +265,10 @@ function initAuth() {
                     }
                 } catch (e) { }
             }
+            // Render Cache Role immediately
+            const userRoleEl = document.getElementById("userRole");
+            if (userRoleEl) userRoleEl.textContent = currentRole;
+
             updateAvatarUI(currentProfileUrl);
 
             // Initial Dashboard visibility from cache or default
@@ -303,6 +307,10 @@ function initAuth() {
                         if (remoteUrl && remoteUrl !== currentProfileUrl) {
                             updateAvatarUI(remoteUrl);
                         }
+
+                        // Update Role in Header
+                        const userRoleEl = document.getElementById("userRole");
+                        if (userRoleEl) userRoleEl.textContent = role;
 
                         // Always ensure cache is up to date with full profile
                         localStorage.setItem(USER_CACHE_KEY, JSON.stringify({
