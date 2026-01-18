@@ -5,12 +5,12 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=3.36">
+    <link rel="stylesheet" href="assets/css/main.css?v=3.37">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <style>
-        /* Styles moved to assets/css/main.css?v=3.36 */
+        /* Styles moved to assets/css/main.css?v=3.37 */
     </style>
     <!-- Apply saved theme early to prevent flash -->
     <script>
@@ -61,8 +61,24 @@
         </div>
     </header>
 
+    <!-- Dashboard Page Navigation -->
+    <nav class="dashboard-page-nav">
+        <button class="page-nav-btn active" data-page="enquiries">
+            <i class="fas fa-envelope"></i>
+            <span>Enquiries</span>
+        </button>
+        <button class="page-nav-btn" data-page="listings">
+            <i class="fas fa-home"></i>
+            <span>Listings</span>
+        </button>
+        <button class="page-nav-btn" data-page="viewings">
+            <i class="fas fa-calendar-check"></i>
+            <span>Viewings</span>
+        </button>
+    </nav>
+
     <main class="dashboard-content">
-        <div id="enquiriesSection" class="listings-table-container">
+        <div id="enquiriesSection" class="dashboard-page active">
             <!-- Header -->
             <div class="dashboard-section-header">
                 <h1>Manage Enquiries</h1>
@@ -93,7 +109,7 @@
             <div id="enquiriesPagination" class="pagination-wrapper"></div>
         </div>
 
-        <div id="listingsTableContainer" class="listings-table-container">
+        <div id="listingsTableContainer" class="dashboard-page">
             <!-- Header with Add Button -->
             <div class="dashboard-section-header">
                 <h1>Manage Listings</h1>
@@ -150,7 +166,7 @@
             <div id="listingsPagination" class="pagination-wrapper"></div>
         </div>
 
-        <div id="inspectionsSection" class="listings-table-container">
+        <div id="inspectionsSection" class="dashboard-page">
             <!-- Header with Add Button -->
             <div class="dashboard-section-header">
                 <h1>Manage Viewings</h1>
@@ -1167,9 +1183,9 @@
     <!-- Property Modal == [DYNAMIC COMPONENT] -->
     <div id="propertymodal-placeholder"></div>
 
-    <script src="assets/js/nav.js?v=3.36" defer></script>
-    <script src="assets/js/snackbar.js?v=3.36"></script>
-    <script src="assets/js/main.js?v=3.36" defer></script>
+    <script src="assets/js/nav.js?v=3.37" defer></script>
+    <script src="assets/js/snackbar.js?v=3.37"></script>
+    <script src="assets/js/main.js?v=3.37" defer></script>
     <!-- Google Maps API -->
     <!-- Google Maps API -->
     <!-- Maps Callback Shim -->
@@ -1186,7 +1202,7 @@
     </script>
     <script async defer loading="async"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBskYGOCldwNxevKvAfJaVvy9_8Mjfv22Q&libraries=places&v=weekly&callback=initMapCallback"></script>
-    <script type="module" src="assets/js/admin-dashboard.js?v=3.36"></script>
+    <script type="module" src="assets/js/admin-dashboard.js?v=3.37"></script>
 
 </body>
 

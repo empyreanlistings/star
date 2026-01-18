@@ -69,6 +69,9 @@ document.addEventListener("DOMContentLoaded", () => {
     enquiryDetailsModal = document.getElementById("enquiryDetailsModal");
     inspectionDetailsModal = document.getElementById("inspectionDetailsModal");
 
+    // Initialize Page Navigation
+    initPageNavigation();
+
     // Use Firebase Auth to check user and fetch company
     auth.onAuthStateChanged(async (user) => {
         if (user) {
@@ -105,6 +108,35 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+/**
+ * Initialize Page Navigation
+ */
+function initPageNavigation() {
+    const navBtns = document.querySelectorAll('.page-nav-btn');
+    const pages = document.querySelectorAll('.dashboard-page');
+
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetPage = btn.dataset.page;
+
+            // Update active button
+            navBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Update active page
+            pages.forEach(page => {
+                page.classList.remove('active');
+                if (page.id === `${targetPage}Section` ||
+                    (targetPage === 'listings' && page.id === 'listingsTableContainer') ||
+                    (targetPage === 'viewings' && page.id === 'inspectionsSection') ||
+                    (targetPage === 'enquiries' && page.id === 'enquiriesSection')) {
+                    page.classList.add('active');
+                }
+            });
+        });
+    });
+}
 
 /**
  * Global Event Delegation for Dynamic Content
