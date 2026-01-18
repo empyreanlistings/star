@@ -131,6 +131,16 @@ function renderListings(listings) {
   const grid = document.querySelector(".property-grid");
   if (!grid) return;
 
+  // 0. Performance Check: Has the data actually changed?
+  const currentIds = Array.from(grid.querySelectorAll('.property-card:not(.no-results-card)')).map(c => c.dataset.id).join(',');
+  const newIds = listings.map(l => l.id).join(',');
+
+  // If we are on the same page and data hasn't changed, skip heavy render
+  if (!window.forceReRender && currentIds === newIds && fullListings.length === listings.length) {
+    console.log("⚡ [Performance] Skipping redundant grid render");
+    return;
+  }
+
   fullListings = listings;
 
   // Read optional limit from grid OR its parent placeholder

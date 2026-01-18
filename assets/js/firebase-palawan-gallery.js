@@ -58,6 +58,14 @@ function renderPalawanGallery(gallery) {
     const container = document.querySelector(".palawan-gallery");
     if (!container) return;
 
+    // Performance Check
+    const currentIds = Array.from(container.querySelectorAll('.gallery-item')).map(el => el.dataset.id || '').join(',');
+    const newIds = gallery.map(i => i.id).join(',');
+    if (currentIds === newIds && container.children.length > 0) {
+        console.log("⚡ [Performance] Skipping redundant Palawan gallery render");
+        return;
+    }
+
     console.log(`🚀 [Palawan Gallery] Rendering ${gallery.length} dynamic items`);
 
     // Sort by added_at descending
@@ -68,6 +76,7 @@ function renderPalawanGallery(gallery) {
     gallery.forEach(item => {
         const div = document.createElement("div");
         div.className = "gallery-item";
+        div.dataset.id = item.id;
 
         div.innerHTML = `
             <img src="${item.image}" alt="${item.title || "Palawan"}" loading="lazy">
