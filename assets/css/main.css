@@ -6368,14 +6368,6 @@ html[data-theme="light"] .btn-add-nav span {
   background: rgba(78, 205, 196, 0.15);
 }
 
-/* Dark Theme Adjustments */
-[data-theme="dark"] .dashboard-nav-center {
-  background: #000;
-  border-radius: 50px;
-  padding: 4px 6px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
 [data-theme="dark"] .dashboard-header .dash-nav-item {
   color: white !important;
 }
