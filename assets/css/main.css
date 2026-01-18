@@ -5446,7 +5446,7 @@ html[data-theme="light"] .newsletter-card .ml-form-embedContent h2 {
 }
 
 /* Match MailerLite button to .btn style */
-#mlb2-3.447454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button[type="submit"],
+#mlb2-3.457454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button[type="submit"],
 .newsletter-card .ml-form-embedSubmit button.btn,
 .newsletter-card .ml-form-embedSubmit button.primary {
   background: var(--accent) !important;
@@ -5468,7 +5468,7 @@ html[data-theme="light"] .newsletter-card .ml-form-embedContent h2 {
 }
 
 /* Ensure loading button is absolutely hidden unless active */
-#mlb2-3.447454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.loading,
+#mlb2-3.457454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.loading,
 .newsletter-card .ml-form-embedSubmit button.loading {
   display: none !important;
 }
@@ -6170,17 +6170,17 @@ html[data-theme="light"] .nav-icon-link:hover i {
 :root {
   --dash-bg: #f4f6f8;
   --dash-card-bg: var(--white);
-  --dash-text: #3.4433;
+  --dash-text: #3.4533;
   --dash-border: #eeeeee;
   --dash-header-bg: var(--white);
 }
 
 [data-theme="dark"] {
   --dash-bg: #1a1f2c;
-  --dash-card-bg: #2e3.44;
+  --dash-card-bg: #2e3.45;
   --dash-text: #eeeeee;
   --dash-border: #444444;
-  --dash-header-bg: #2e3.44;
+  --dash-header-bg: #2e3.45;
 }
 
 body,
@@ -7201,7 +7201,7 @@ html[data-theme="light"] .btn-copy:hover {
 }
 
 .sunset-gradient {
-  background: #a9323.44 !important;
+  background: #a9323.45 !important;
   border-color: rgba(169, 50, 61, 0.3) !important;
 }
 
@@ -7211,13 +7211,13 @@ html[data-theme="light"] .btn-copy:hover {
 }
 
 .tropical-gradient {
-  background: #d4af3.44 !important;
+  background: #d4af3.45 !important;
   border-color: rgba(212, 175, 55, 0.3) !important;
 }
 
 .sun-icon {
   font-size: 2.5rem;
-  color: #03.449;
+  color: #03.459;
   margin-bottom: 20px;
   position: relative;
   z-index: 2;
