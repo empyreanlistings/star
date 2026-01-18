@@ -447,9 +447,9 @@ function renderAdminTable(listings) {
             <td style="width: 100px;">${price}</td>
             <td style="width: 120px;"><span class="status-badge status-active">${category.toUpperCase()}</span></td>
             <td style="width: 60px; text-align:center;">${sourceHtml}</td>
-            <td style="width: 60px; text-align:center;">${data.featured ? '<i class="fas fa-star featured-star"></i>' : ''}</td>
-            <td style="width: 60px; text-align:center;">${data.visits || 0}</td>
-            <td style="width: 60px; text-align:center;">${data.likes || 0}</td>
+            <td style="width: 50px; text-align:center;">${data.featured ? '<i class="fas fa-star featured-star"></i>' : ''}</td>
+            <td style="width: 50px; text-align:center;">${data.visits || 0}</td>
+            <td style="width: 50px; text-align:center;">${data.likes || 0}</td>
             <td style="width: 140px; white-space: nowrap;">
                 <button class="action-btn edit" data-id="${id}" title="Edit"><i class="fas fa-pen"></i></button>
                 <button class="action-btn duplicate" data-id="${id}" title="Duplicate / Copy"><i class="fas fa-copy"></i></button>
@@ -1151,7 +1151,7 @@ function openModal(edit = false) {
 
     // Safer transition trigger: display then active class with delay
     modal.style.display = "flex";
-    modal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.48 !important; pointer-events: auto !important;";
+    modal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.49 !important; pointer-events: auto !important;";
 
     setTimeout(() => {
         modal.classList.add("active");
@@ -1507,7 +1507,7 @@ function openPropertyModal(data) {
         document.body.style.overflow = "hidden";
 
         // Use inline styles to override any display:none
-        overlay.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.48 !important; pointer-events: auto !important;";
+        overlay.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.49 !important; pointer-events: auto !important;";
 
         // Add active class after a small delay for transition
         setTimeout(() => {
@@ -2971,7 +2971,7 @@ function openEnquiryDetailsModal(enq) {
     document.body.style.overflow = "hidden";
 
     // Nuke any CSS conflicts with inline styles
-    enquiryDetailsModal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.48 !important; pointer-events: auto !important;";
+    enquiryDetailsModal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.49 !important; pointer-events: auto !important;";
 
     const content = enquiryDetailsModal.querySelector('.modal-content');
     if (content) content.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; transform: scale(1) translateY(0) !important;";
@@ -3117,7 +3117,7 @@ function openInspectionDetailsModal(insp) {
     document.body.style.overflow = "hidden";
 
     // Nuke any CSS conflicts with inline styles
-    inspectionDetailsModal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.48 !important; pointer-events: auto !important;";
+    inspectionDetailsModal.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.49 !important; pointer-events: auto !important;";
 
     const content = inspectionDetailsModal.querySelector('.modal-content');
     if (content) content.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; transform: scale(1) translateY(0) !important;";
