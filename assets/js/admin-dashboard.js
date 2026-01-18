@@ -84,16 +84,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Sync collections
             initAdminListingsSync();
-            initGallerySync();
-            initPalawanGallerySync();
+            // initGallerySync(); // Removed gallery sections
+            // initPalawanGallerySync(); // Removed gallery sections
             initEnquirySync();
             initInspectionsSync();
 
             // Initialize filters & events
             initDashboardFilters();
             initModalEvents();
-            initGalleryModalEvents();
-            initPalawanGalleryModalEvents();
+            // initGalleryModalEvents(); // Removed gallery sections
+            // initPalawanGalleryModalEvents(); // Removed gallery sections
             initInspectionModalEvents();
             initPropertyModalEvents();
             initEnquiryModalEvents(); // Keep but triggers moved to global
