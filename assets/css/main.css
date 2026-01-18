@@ -46,13 +46,13 @@
       rgba(22, 22, 22, 0.35) 40%,
       rgba(0, 0, 0, 0.90) 100%);
 
-  /* Light  overlay */
+  /* Light  overlay - significantly brightened for washout */
   --site-bg-overlay-light:
     linear-gradient(140deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.14) 28%,
-      rgba(255, 255, 255, 0.22) 55%,
-      rgba(255, 255, 255, 0.28) 100%);
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0.75) 28%,
+      rgba(255, 255, 255, 0.65) 55%,
+      rgba(255, 255, 255, 0.90) 100%);
 
   /* Shared SVG Filters */
   --site-bg-overlay-chroma:
@@ -63,6 +63,12 @@
       rgba(255, 200, 255, 0.05),
       transparent 65%);
 
+  /* Default Dynamic Overlay */
+  --site-bg-overlay: var(--site-bg-overlay-dark);
+}
+
+html[data-theme="light"] {
+  --site-bg-overlay: var(--site-bg-overlay-light);
 }
 
 .theme-text-icon {
@@ -123,7 +129,7 @@ body::before {
   inset: 0;
   z-index: -1;
   background:
-    var(--site-bg-overlay-dark),
+    var(--site-bg-overlay),
     var(--site-bg-image);
   background-size: cover;
   background-position: center;
@@ -132,17 +138,6 @@ body::before {
   transform: translateZ(0);
 }
 
-/* ============================== LIGHT MODE BACKGROUND ============================== */
-/* LIGHT MODE — NO FLASH — uses html[data-theme] so it applies instantly */
-/* html[data-theme="light"],
-html[data-theme="light"] body::before {
-  background:
-    var(--site-bg-overlay-light),
-    var(--site-bg-image);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-} */
 
 /* Also add a fallback for any other elements that use body selector */
 html[data-theme="light"] {
