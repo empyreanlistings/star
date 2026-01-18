@@ -135,7 +135,7 @@ async function initResponsiveVideo() {
 
   const updateVideoSource = () => {
     const isMobile = window.innerWidth <= 768;
-    const videoSrc = isMobile ? 'images/mobile-video.mp4?v=3.50' : 'images/web-video.mp4?v=3.50';
+    const videoSrc = isMobile ? 'images/mobile-video.mp4?v=3.51' : 'images/web-video.mp4?v=3.51';
     const posterSrc = isMobile ? (video.getAttribute('data-mobile-poster') || 'images/web-video.webp') : 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
@@ -446,7 +446,7 @@ function initPropertyModal() {
       toggleScrollLock(true);
 
       // NUCLEAR FORCE VISIBILITY
-      overlay.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.50 !important;";
+      overlay.style.cssText = "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 2147483.51 !important;";
       modal.style.cssText = "display: block !important; visibility: visible !important; opacity: 1 !important;";
 
       const modalContent = modal.querySelector(".modal-content");
@@ -1056,7 +1056,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=3.50`);
+    const response = await fetch(`${url}?v=3.51`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
