@@ -5446,7 +5446,7 @@ html[data-theme="light"] .newsletter-card .ml-form-embedContent h2 {
 }
 
 /* Match MailerLite button to .btn style */
-#mlb2-3.397454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button[type="submit"],
+#mlb2-3.407454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button[type="submit"],
 .newsletter-card .ml-form-embedSubmit button.btn,
 .newsletter-card .ml-form-embedSubmit button.primary {
   background: var(--accent) !important;
@@ -5468,7 +5468,7 @@ html[data-theme="light"] .newsletter-card .ml-form-embedContent h2 {
 }
 
 /* Ensure loading button is absolutely hidden unless active */
-#mlb2-3.397454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.loading,
+#mlb2-3.407454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.loading,
 .newsletter-card .ml-form-embedSubmit button.loading {
   display: none !important;
 }
@@ -6175,7 +6175,7 @@ html[data-theme="light"] .nav-icon-link:hover i {
 :root {
   --dash-bg: #f4f6f8;
   --dash-card-bg: var(--white);
-  --dash-text: #3.3933;
+  --dash-text: #3.4033;
   --dash-border: #eeeeee;
   --dash-header-bg: var(--white);
 }
@@ -6374,12 +6374,12 @@ html[data-theme="light"] .btn-add-nav span {
 }
 
 /* Dashboard Page Containers */
-.dashboard-page {
+.dashboard-tab-content {
   display: none;
   animation: fadeIn 0.3s ease-in-out;
 }
 
-.dashboard-page.active {
+.dashboard-tab-content.active {
   display: block;
 }
 
@@ -7158,7 +7158,7 @@ html[data-theme="light"] .btn-copy:hover {
 }
 
 .sunset-gradient {
-  background: #a9323.39 !important;
+  background: #a9323.40 !important;
   border-color: rgba(169, 50, 61, 0.3) !important;
 }
 
@@ -7168,13 +7168,13 @@ html[data-theme="light"] .btn-copy:hover {
 }
 
 .tropical-gradient {
-  background: #d4af3.39 !important;
+  background: #d4af3.40 !important;
   border-color: rgba(212, 175, 55, 0.3) !important;
 }
 
 .sun-icon {
   font-size: 2.5rem;
-  color: #03.399;
+  color: #03.409;
   margin-bottom: 20px;
   position: relative;
   z-index: 2;
