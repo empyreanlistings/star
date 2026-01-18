@@ -192,8 +192,6 @@ function renderGalleryItems(gallery) {
         return;
     }
 
-    // Check if we're on index.html - limit to 12 images
-    const isIndexPage = window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
     const displayGallery = isIndexPage ? gallery.slice(0, 12) : gallery;
 
     console.log(`🚀 [Gallery] Rendering ${displayGallery.length} dynamic items${isIndexPage ? ' (limited to 12 for index)' : ''}`);
