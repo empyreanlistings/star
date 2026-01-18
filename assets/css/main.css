@@ -5446,7 +5446,7 @@ html[data-theme="light"] .newsletter-card .ml-form-embedContent h2 {
 }
 
 /* Match MailerLite button to .btn style */
-#mlb2-3.347454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button[type="submit"],
+#mlb2-3.357454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button[type="submit"],
 .newsletter-card .ml-form-embedSubmit button.btn,
 .newsletter-card .ml-form-embedSubmit button.primary {
   background: var(--accent) !important;
@@ -5468,7 +5468,7 @@ html[data-theme="light"] .newsletter-card .ml-form-embedContent h2 {
 }
 
 /* Ensure loading button is absolutely hidden unless active */
-#mlb2-3.347454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.loading,
+#mlb2-3.357454.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.loading,
 .newsletter-card .ml-form-embedSubmit button.loading {
   display: none !important;
 }
@@ -6170,7 +6170,7 @@ html[data-theme="light"] .nav-icon-link:hover i {
 :root {
   --dash-bg: #f4f6f8;
   --dash-card-bg: var(--white);
-  --dash-text: #3.3433;
+  --dash-text: #3.3533;
   --dash-border: #eeeeee;
   --dash-header-bg: var(--white);
 }
