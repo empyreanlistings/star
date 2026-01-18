@@ -6440,6 +6440,8 @@ html[data-theme="light"] .btn-add-nav span {
 .dashboard-tab-content {
   display: none;
   animation: fadeIn 0.3s ease-in-out;
+  min-height: 80vh;
+  /* Request: 80% viewable area */
 }
 
 .dashboard-tab-content.active {
