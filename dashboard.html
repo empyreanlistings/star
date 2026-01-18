@@ -5,12 +5,12 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=3.40">
+    <link rel="stylesheet" href="assets/css/main.css?v=3.41">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <style>
-        /* Styles moved to assets/css/main.css?v=3.40 */
+        /* Styles moved to assets/css/main.css?v=3.41 */
     </style>
     <!-- Apply saved theme early to prevent flash -->
     <script>
@@ -46,6 +46,20 @@
                      In dark mode, header is dark, so dark logo might be lost. 
                      Let's handle logo swap in JS or Filter -->
         </div>
+
+        <!-- Center Nav -->
+        <nav class="dashboard-nav-center">
+            <button class="dash-nav-item active" data-page="enquiries">
+                <i class="fas fa-envelope"></i> Enquiries
+            </button>
+            <button class="dash-nav-item" data-page="listings">
+                <i class="fas fa-home"></i> Listings
+            </button>
+            <button class="dash-nav-item" data-page="viewings">
+                <i class="fas fa-calendar-check"></i> Viewings
+            </button>
+        </nav>
+
         <div class="nav-right">
             <!-- Quick Actions -->
             <button id="themeToggleDash" class="theme-toggle" aria-label="Toggle Theme">
@@ -60,22 +74,6 @@
                     class="logout-text">Logout</span></button>
         </div>
     </header>
-
-    <!-- Dashboard Page Navigation -->
-    <nav class="dashboard-page-nav">
-        <button class="page-nav-btn active" data-page="enquiries">
-            <i class="fas fa-envelope"></i>
-            <span>Enquiries</span>
-        </button>
-        <button class="page-nav-btn" data-page="listings">
-            <i class="fas fa-home"></i>
-            <span>Listings</span>
-        </button>
-        <button class="page-nav-btn" data-page="viewings">
-            <i class="fas fa-calendar-check"></i>
-            <span>Viewings</span>
-        </button>
-    </nav>
 
     <main class="dashboard-content">
         <div id="enquiriesSection" class="dashboard-tab-content listings-table-container active">
@@ -1183,9 +1181,9 @@
     <!-- Property Modal == [DYNAMIC COMPONENT] -->
     <div id="propertymodal-placeholder"></div>
 
-    <script src="assets/js/nav.js?v=3.40" defer></script>
-    <script src="assets/js/snackbar.js?v=3.40"></script>
-    <script src="assets/js/main.js?v=3.40" defer></script>
+    <script src="assets/js/nav.js?v=3.41" defer></script>
+    <script src="assets/js/snackbar.js?v=3.41"></script>
+    <script src="assets/js/main.js?v=3.41" defer></script>
     <!-- Google Maps API -->
     <!-- Google Maps API -->
     <!-- Maps Callback Shim -->
@@ -1202,7 +1200,7 @@
     </script>
     <script async defer loading="async"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBskYGOCldwNxevKvAfJaVvy9_8Mjfv22Q&libraries=places&v=weekly&callback=initMapCallback"></script>
-    <script type="module" src="assets/js/admin-dashboard.js?v=3.40"></script>
+    <script type="module" src="assets/js/admin-dashboard.js?v=3.41"></script>
 
 </body>
 
