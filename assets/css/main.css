@@ -6120,7 +6120,7 @@ html[data-theme="light"] .messenger-fab:hover {
 
 
 
-/* Nav Avatar */
+/* Nav Avatar & Dash Buttons (Consolidated Logout Style) */
 .nav-avatar,
 .nav-right-btn,
 .nav-icon-link {
@@ -6129,15 +6129,16 @@ html[data-theme="light"] .messenger-fab:hover {
   justify-content: center;
   width: 38px;
   height: 38px;
-  border-radius: 20%;
+  border-radius: 8px;
+  /* Square with slight rounding */
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  /* Subtle default border */
-  transition: all 0.3s ease;
+  border: 1px solid var(--dash-border);
+  background: none;
+  transition: all 0.2s ease;
   cursor: pointer;
-  color: var(--white);
+  color: var(--dash-text);
   text-decoration: none;
-  margin: 20px 0px;
+  margin: 0;
 }
 
 .nav-avatar img {
@@ -6151,36 +6152,30 @@ html[data-theme="light"] .messenger-fab:hover {
 .nav-avatar:hover,
 .nav-right-btn:hover,
 .nav-icon-link:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(255, 255, 255, 0.05);
+  border-color: #ed786a;
+  color: #ed786a;
 }
 
-.nav-avatar i {
+.nav-avatar i,
+.nav-right-btn i,
+.nav-icon-link i {
   font-size: 18px;
-  color: var(--white);
-  transition: color 0.3s ease;
+  color: var(--dash-text);
+  transition: color 0.2s ease;
 }
 
-.nav-avatar:hover i {
-  color: var(--accent);
+.nav-avatar:hover i,
+.nav-right-btn:hover i,
+.nav-icon-link:hover i {
+  color: #ed786a;
 }
 
+/* Light Theme Overrides (using shared btn-logout logic) */
 html[data-theme="light"] .nav-avatar,
 html[data-theme="light"] .nav-right-btn,
 html[data-theme="light"] .nav-icon-link {
-  color: #222;
-  border-color: rgba(0, 0, 0, 0.1);
-}
-
-html[data-theme="light"] .nav-avatar i,
-html[data-theme="light"] .nav-icon-link i {
-  color: #222;
-}
-
-html[data-theme="light"] .nav-avatar:hover i,
-html[data-theme="light"] .nav-icon-link:hover i {
-  color: var(--accent);
+  color: var(--dash-text);
+  border-color: var(--dash-border);
 }
 
 /* ============================== DASHBOARD STYLES ============================== */
@@ -6238,7 +6233,13 @@ body.dashboard-page::before {
 .btn-logout {
   background: none;
   border: 1px solid var(--dash-border);
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
+  /* Symmetrical for small square buttons */
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
@@ -6375,14 +6376,7 @@ html[data-theme="light"] .btn-add-nav span {
   background: rgba(78, 205, 196, 0.15);
 }
 
-/* Dark Theme Adjustments */
-[data-theme="dark"] .dashboard-nav-center {
-  background: #000;
-  border-radius: 50px;
-  padding: 4px 6px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
+/* Dark Theme Adjustments - Background Removed per User Request */
 [data-theme="dark"] .dashboard-header .dash-nav-item {
   color: white !important;
 }
