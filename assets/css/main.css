@@ -1423,6 +1423,53 @@ html[data-theme="light"] .menu-toggle:hover {
   border-color: rgba(0, 0, 0, 0.12);
 }
 
+/* Standalone Icon Button Style - Mirrors menu-toggle */
+.icon-button-default {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--white);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.icon-button-default:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme="light"] .icon-button-default {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: var(--black);
+}
+
+html[data-theme="light"] .icon-button-default:hover {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.icon-button-default i {
+  font-size: 18px;
+  color: var(--white);
+  transition: color 0.25s ease;
+}
+
+html[data-theme="light"] .icon-button-default i {
+  color: #222;
+}
+
+.icon-button-default:hover i {
+  color: var(--accent) !important;
+}
+
 nav ul {
   display: flex;
   gap: 30px;
@@ -6148,6 +6195,7 @@ html[data-theme="light"] .messenger-fab:hover {
   border-radius: 50%;
   display: block;
 }
+
 .nav-avatar i,
 .nav-right-btn i,
 .nav-icon-link i {
