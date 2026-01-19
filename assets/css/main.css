@@ -6148,14 +6148,6 @@ html[data-theme="light"] .messenger-fab:hover {
   border-radius: 50%;
   display: block;
 }
-
-.nav-avatar:hover,
-.nav-right-btn:hover,
-.nav-icon-link:hover {
-  border-color: #ed786a;
-  color: #ed786a;
-}
-
 .nav-avatar i,
 .nav-right-btn i,
 .nav-icon-link i {
