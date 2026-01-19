@@ -1469,6 +1469,45 @@ html[data-theme="light"] .icon-button-default:hover {
   transition: color 0.25s ease;
 }
 
+/* WhatsApp-Style Dashboard Icon */
+.icon-dashboard-whatsapp {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  /* Slightly larger than default */
+  height: 44px;
+  border-radius: 50%;
+  background: #25D366;
+  /* WhatsApp Green */
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  color: #fff !important;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.icon-dashboard-whatsapp i {
+  font-size: 20px;
+  color: #fff !important;
+}
+
+.icon-dashboard-whatsapp:hover {
+  background: #128C7E;
+  /* Darker WhatsApp Green */
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+}
+
+html[data-theme="light"] .icon-dashboard-whatsapp {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+html[data-theme="light"] .icon-dashboard-whatsapp:hover {
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+}
+
 html[data-theme="light"] .icon-button-default i {
   color: #222;
 }
