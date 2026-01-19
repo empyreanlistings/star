@@ -1322,7 +1322,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   backdrop-filter: blur(12px);
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.8);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   z-index: 1002;
   transition: top 0.3s ease, background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
@@ -1467,7 +1467,7 @@ html[data-theme="light"] .icon-button-default i {
 }
 
 .icon-button-default:hover i {
-  color: var(--accent) !important;
+  color: var(--white) !important;
 }
 
 nav ul {
