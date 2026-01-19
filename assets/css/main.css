@@ -8534,7 +8534,7 @@ html[data-theme="light"] .payment-table td {
 }
 
 .fa-search {
-  color: #111 !important;
+  color: var(--dash-text);
 }
 
 /* Hide search FAB on mobile */
