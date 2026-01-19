@@ -6270,7 +6270,7 @@ body.dashboard-page::before {
 
 .dashboard-header {
   background: var(--dash-header-bg);
-  padding: 1px 20px;
+  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
