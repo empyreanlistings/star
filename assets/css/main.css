@@ -1428,17 +1428,11 @@ html[data-theme="light"] .menu-toggle:hover {
   display: flex !important;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #25D366;
-  /* WhatsApp Green */
-  border: 3px solid rgba(255, 255, 255, 0.2);
-  color: #fff !important;
-  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--white);
+  transition: all 0.3s ease;
   cursor: pointer;
   text-decoration: none;
+  padding: 8px;
 }
 
 .nav-right {
@@ -1449,18 +1443,16 @@ html[data-theme="light"] .menu-toggle:hover {
 }
 
 .icon-button-default:hover {
-  background: #128C7E;
-  /* Darker WhatsApp Green */
+  opacity: 0.8;
   transform: scale(1.1);
-  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
 }
 
 html[data-theme="light"] .icon-button-default {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: var(--black);
 }
 
 html[data-theme="light"] .icon-button-default:hover {
-  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+  opacity: 0.7;
 }
 
 .icon-button-default i {
@@ -1474,17 +1466,11 @@ html[data-theme="light"] .icon-button-default:hover {
   display: flex !important;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #25D366;
-  /* WhatsApp Green */
-  border: 3px solid rgba(255, 255, 255, 0.2);
-  color: #fff !important;
-  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--white);
+  transition: all 0.3s ease;
   cursor: pointer;
   text-decoration: none;
+  padding: 8px;
 }
 
 .icon-dashboard-whatsapp i {
@@ -1493,14 +1479,12 @@ html[data-theme="light"] .icon-button-default:hover {
 }
 
 .icon-dashboard-whatsapp:hover {
-  background: #128C7E;
-  /* Darker WhatsApp Green */
+  opacity: 0.8;
   transform: scale(1.1);
-  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
 }
 
 html[data-theme="light"] .icon-dashboard-whatsapp {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: var(--black) !important;
 }
 
 html[data-theme="light"] .icon-button-default i {
@@ -6440,7 +6424,7 @@ html[data-theme="light"] .btn-add-nav span {
   color: var(--dash-text);
   text-decoration: none;
   font-weight: 500;
-  padding: 0.5rem 1rem;
+  padding: 1rem;
   border-radius: 10px;
   transition: all 0.2s ease;
   display: flex;
