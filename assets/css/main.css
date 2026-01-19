@@ -1457,7 +1457,7 @@ html[data-theme="light"] .icon-button-default:hover {
 
 .icon-button-default i {
   font-size: 18px;
-  color: var(--white);
+  color: inherit !important;
   transition: color 0.25s ease;
 }
 
@@ -1491,9 +1491,7 @@ html[data-theme="light"] .icon-button-default i {
   color: #222;
 }
 
-.icon-button-default:hover i {
-  color: var(--white) !important;
-}
+
 
 nav ul {
   display: flex;
@@ -6286,7 +6284,12 @@ body.dashboard-page::before {
 }
 
 .dashboard-logo img {
-  height: 60px;
+  display: block;
+  width: 120px;
+  height: auto;
+  max-height: 60px;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 .user-info {
