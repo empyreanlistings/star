@@ -1423,7 +1423,7 @@ html[data-theme="light"] .menu-toggle:hover {
   border-color: rgba(0, 0, 0, 0.12);
 }
 
-/* Standalone Icon Button Style - Mirrors menu-toggle */
+/* Consolidated Theme-Aware Icon Button */
 .icon-button-default {
   display: flex !important;
   align-items: center;
@@ -1435,16 +1435,15 @@ html[data-theme="light"] .menu-toggle:hover {
   padding: 8px;
 }
 
-.nav-right {
-  display: flex !important;
-  align-items: center !important;
-  gap: 15px;
-  height: 100%;
-}
-
 .icon-button-default:hover {
   opacity: 0.8;
   transform: scale(1.1);
+}
+
+.icon-button-default i {
+  font-size: 18px;
+  color: inherit !important;
+  transition: color 0.25s ease;
 }
 
 html[data-theme="light"] .icon-button-default {
@@ -1455,40 +1454,11 @@ html[data-theme="light"] .icon-button-default:hover {
   opacity: 0.7;
 }
 
-.icon-button-default i {
-  font-size: 18px;
-  color: inherit !important;
-  transition: color 0.25s ease;
-}
-
-/* Clean Dashboard Icon (Legacy WhatsApp Style Name) */
-.icon-dashboard-whatsapp {
+.nav-right {
   display: flex !important;
-  align-items: center;
-  justify-content: center;
-  color: var(--white);
-  transition: all 0.3s ease;
-  cursor: pointer;
-  text-decoration: none;
-  padding: 8px;
-}
-
-.icon-dashboard-whatsapp i {
-  font-size: 20px;
-  color: inherit !important;
-}
-
-.icon-dashboard-whatsapp:hover {
-  opacity: 0.8;
-  transform: scale(1.1);
-}
-
-html[data-theme="light"] .icon-dashboard-whatsapp {
-  color: var(--black) !important;
-}
-
-html[data-theme="light"] .icon-button-default i {
-  color: #222;
+  align-items: center !important;
+  gap: 15px;
+  height: 100%;
 }
 
 
@@ -6190,56 +6160,7 @@ html[data-theme="light"] .messenger-fab:hover {
 
 
 
-/* Nav Avatar & Dash Buttons (Consolidated Logout Style) */
-.nav-avatar,
-.nav-right-btn,
-.nav-icon-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
-  /* Square with slight rounding */
-  overflow: hidden;
-  border: 1px solid var(--dash-border);
-  background: none;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  color: var(--dash-text);
-  text-decoration: none;
-  margin: 0;
-}
 
-.nav-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  display: block;
-}
-
-.nav-avatar i,
-.nav-right-btn i,
-.nav-icon-link i {
-  font-size: 18px;
-  color: var(--dash-text);
-  transition: color 0.2s ease;
-}
-
-.nav-avatar:hover i,
-.nav-right-btn:hover i,
-.nav-icon-link:hover i {
-  color: #ed786a;
-}
-
-/* Light Theme Overrides (using shared btn-logout logic) */
-html[data-theme="light"] .nav-avatar,
-html[data-theme="light"] .nav-right-btn,
-html[data-theme="light"] .nav-icon-link {
-  color: var(--dash-text);
-  border-color: var(--dash-border);
-}
 
 /* ============================== DASHBOARD STYLES ============================== */
 :root {
