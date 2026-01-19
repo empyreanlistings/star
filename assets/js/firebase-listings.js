@@ -16,8 +16,8 @@ const firebaseConfig = {
   authDomain: "empyrean-3da06.firebaseapp.com",
   projectId: "empyrean-3da06",
   storageBucket: "empyrean-3da06.firebasestorage.app",
-  messagingSenderId: "973213.57906",
-  appId: "1:973213.57906:web:5cfbee0541932e579403b3"
+  messagingSenderId: "973213.58906",
+  appId: "1:973213.58906:web:5cfbee0541932e579403b3"
 };
 
 const app = initializeApp(firebaseConfig);
