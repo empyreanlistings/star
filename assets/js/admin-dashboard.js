@@ -452,7 +452,7 @@ function renderAdminTable(listings) {
                     </div>
                 </div>
             </td>
-            <td style="min-width: 450px;">
+            <td style="min-width: 550px;">
                 <strong>${title}</strong><br>
                 <small style="opacity: 0.7;">${shortDesc}</small>
             </td>
