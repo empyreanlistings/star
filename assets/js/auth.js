@@ -441,7 +441,7 @@ function initAuth() {
 
     // Use delegation or specific IDs for multiple logout buttons if they exist
     document.addEventListener('click', e => {
-        if (e.target.closest('#logoutBtn') || e.target.closest('.btn-logout')) {
+        if (e.target.closest('#logoutBtn') || e.target.closest('.icon-button-default .fa-sign-out-alt') || e.target.closest('.icon-button-default i.fa-sign-out-alt')) {
             handleLogout();
         }
     });

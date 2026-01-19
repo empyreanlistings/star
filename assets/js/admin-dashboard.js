@@ -316,7 +316,7 @@ function handleAdminSnapshot(snapshot) {
     if (!tbody) return;
 
     if (snapshot.empty) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:3rem;opacity:0.6;"><i class="fas fa-search" style="font-size:2rem;margin-bottom:1rem;display:block;"></i><strong>Nothing here. Try updating your filters</strong></td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:3rem;opacity:0.6;"><i class="fas fa-search" style="font-size:2rem;margin-bottom:1rem;display:block;"></i><strong>No Listings found. Try updating your filters</strong></td></tr>`;
         allListings = [];
         return;
     }
@@ -2593,7 +2593,7 @@ function renderEnquiryTable() {
     tbody.innerHTML = "";
 
     if (allEnquiries.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;opacity:0.6;">No enquiries found.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:3rem;opacity:0.6;"><i class="fas fa-envelope-open-text" style="font-size:2rem;margin-bottom:1rem;display:block;"></i><strong>No Enquiries found.</strong></td></tr>';
         return;
     }
 
@@ -2716,7 +2716,7 @@ function renderInspectionsTable() {
     const paginated = allInspections.slice(startIndex, endIndex);
 
     if (totalRecords === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:3rem;opacity:0.6;"><i class="fas fa-clipboard-list" style="font-size:2rem;margin-bottom:1rem;display:block;"></i><strong>No inspections found.</strong></td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:3rem;opacity:0.6;"><i class="fas fa-calendar-check" style="font-size:2rem;margin-bottom:1rem;display:block;"></i><strong>No Viewings found.</strong></td></tr>';
         return;
     }
 
