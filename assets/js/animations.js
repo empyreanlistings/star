@@ -71,7 +71,7 @@ function initHeroSequence() {
 
       gsap.to(heroCarousel, {
         opacity: 1,
-        duration: isImmediate ? 0.8 : 1.0,        
+        duration: isImmediate ? 0.8 : 1.0,
         ease: "sine.out",
         onComplete: () => {
           heroCarousel.classList.add("is-visible");
@@ -100,9 +100,13 @@ function initHeroSequence() {
   if (!heroVideo) {
     revealCarousel(true);
   } else {
-    // Video exists: wait for it to end or error
-    heroVideo.addEventListener('ended', () => {
-      console.log('🎬 Hero Video ended');
+    // Video exists: wait for it to end or trigger early fade-in
+    let transitionStarted = false;
+
+    const transitionToCarousel = () => {
+      if (transitionStarted) return;
+      transitionStarted = true;
+      console.log('🎬 Starting Hero Video -> Carousel transition');
 
       // Fade out video and reveal carousel simultaneously
       if (window.gsap) {
@@ -120,6 +124,18 @@ function initHeroSequence() {
       }
 
       revealCarousel();
+    };
+
+    // Trigger transition 1.5 seconds before end
+    heroVideo.addEventListener('timeupdate', () => {
+      if (heroVideo.duration && (heroVideo.duration - heroVideo.currentTime < 1.5)) {
+        transitionToCarousel();
+      }
+    });
+
+    heroVideo.addEventListener('ended', () => {
+      console.log('🎬 Hero Video ended');
+      transitionToCarousel();
     });
 
     heroVideo.addEventListener('error', () => {
