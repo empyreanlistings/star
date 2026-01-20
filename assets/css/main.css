@@ -41,8 +41,8 @@
   --site-bg-image: url('../../images/web-video.webp');
   --site-bg-overlay-dark:
     linear-gradient(145deg,
-      rgba(12, 12, 12, 0.72) 0%,
-      rgba(18, 18, 18, 0.78) 40%,
+      rgba(12, 12, 12, 0.72) 40%,
+      rgba(18, 18, 18, 0.78) 70%,
       rgba(22, 22, 22, 0.35) 90%,
       rgba(0, 0, 0, 0.90) 100%);
 
