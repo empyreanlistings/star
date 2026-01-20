@@ -6184,10 +6184,12 @@ body.dashboard-page::before {
 
 .dashboard-header {
   background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(12px);
   padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: fixed;
   top: 0;
@@ -6198,6 +6200,12 @@ body.dashboard-page::before {
   min-height: 0;
   z-index: 1000;
   box-sizing: border-box;
+}
+
+html[data-theme="light"] .dashboard-header {
+  background: var(--white);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
 .dashboard-logo img {
