@@ -5,12 +5,12 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=3.72">
+    <link rel="stylesheet" href="assets/css/main.css?v=3.73">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <style>
-        /* Styles moved to assets/css/main.css?v=3.72 */
+        /* Styles moved to assets/css/main.css?v=3.73 */
     </style>
     <!-- Apply saved theme early to prevent flash -->
     <script>
@@ -35,7 +35,7 @@
             opacity: 1 !important;
         }
     </style>
-    <script type="module" src="assets/js/auth.js?v=3.72"></script>
+    <script type="module" src="assets/js/auth.js?v=3.73"></script>
 
     <header class="dashboard-header">
         <div class="dashboard-logo">
@@ -50,8 +50,8 @@
         <!-- Center Nav -->
         <div class="dashboard-nav-center">
             <ul class="nav-links">
-                <li><a href="#" class="dash-nav-item active" data-page="enquiries">ENQUIRIES</a></li>
-                <li><a href="#" class="dash-nav-item" data-page="listings">LISTINGS</a></li>
+                <li><a href="#" class="dash-nav-item active" data-page="listings">LISTINGS</a></li>
+                <li><a href="#" class="dash-nav-item" data-page="enquiries">ENQUIRIES</a></li>
                 <li><a href="#" class="dash-nav-item" data-page="viewings">VIEWINGS</a></li>
             </ul>
         </div>
@@ -78,125 +78,123 @@
         </div>
     </header>
 
-    <main class="dashboard-content">
-        <div id="enquiriesSection" class="dashboard-tab-content listings-table-container active">
-            <!-- Header -->
-            <div class="dashboard-section-header">
-                <h1>Manage Enquiries</h1>
-                <div class="header-actions">
-                    <button id="addEnquiryBtn" class="btn" aria-label="Add New Enquiry">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Name</th>
-                        <th>Email / Phone</th>
-                        <th>Details</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="enquiriesTableBody">
-                    <tr>
-                        <td colspan="6" style="text-align:center;padding:2rem;opacity:0.6;">Loading enquiries...</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div id="enquiriesPagination" class="pagination-wrapper"></div>
+    <div id="listingsTableContainer" class="dashboard-tab-content listings-table-container active">
+        <!-- Header with Add Button -->
+        <div class="dashboard-section-header">
+            <h1>Manage Listings</h1>
+            <button id="addListingBtn" class="btn" aria-label="Add New Listing">
+                <i class="fas fa-plus"></i>
+            </button>
         </div>
 
-        <div id="listingsTableContainer" class="dashboard-tab-content listings-table-container">
-            <!-- Header with Add Button -->
-            <div class="dashboard-section-header">
-                <h1>Manage Listings</h1>
-                <button id="addListingBtn" class="btn" aria-label="Add New Listing">
+        <!-- Filters -->
+        <div class="property-filters-container" style="margin-bottom: 2rem; position: relative;">
+            <div class="property-gallery-filters" role="group" aria-label="Property type filters">
+                <button class="filter active" data-filter="all" type="button">ALL</button>
+                <button class="filter" data-filter="land" type="button">LAND</button>
+                <button class="filter" data-filter="residential" type="button">RESIDENTIAL</button>
+                <button class="filter" data-filter="commercial" type="button">COMMERCIAL</button>
+            </div>
+
+            <div class="price-filter-inline">
+                <div class="price-header-row">
+                    <span class="price-label">Price:</span>
+                    <span id="dashPriceRangeValue">Any Price</span>
+                </div>
+                <div class="slider-container-inline">
+                    <input type="range" min="0" max="50000000" value="0" class="slider-inline" id="dashPriceMin">
+                    <input type="range" min="0" max="50000000" value="50000000" class="slider-inline" id="dashPriceMax">
+                    <div class="slider-track-inline"></div>
+                    <div class="slider-range-inline"></div>
+                </div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Image</th>
+                    <th class="sortable" data-sort="title" style="width:550px;">Property <i class="fas fa-sort"></i>
+                    </th>
+                    <th class="sortable" data-sort="status">Status <i class="fas fa-sort"></i></th>
+                    <th class="sortable" data-sort="price">Price <i class="fas fa-sort"></i></th>
+                    <th class="sortable" data-sort="category">Category <i class="fas fa-sort"></i></th>
+                    <th class="text-center" style="text-align:center !important;">Source</th>
+                    <th class="sortable text-center" data-sort="featured"
+                        style="width:50px; text-align:center !important;" title="Featured"><i class="fas fa-star"></i>
+                    </th>
+                    <th class="text-center" style="text-align:center !important;">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="listingsTableBody">
+                <tr>
+                    <td colspan="9" style="text-align:center;padding:2rem;opacity:0.6;">Loading listings...</td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="listingsPagination" class="pagination-wrapper"></div>
+    </div>
+
+    <div id="enquiriesSection" class="dashboard-tab-content listings-table-container">
+        <!-- Header -->
+        <div class="dashboard-section-header">
+            <h1>Manage Enquiries</h1>
+            <div class="header-actions">
+                <button id="addEnquiryBtn" class="btn" aria-label="Add New Enquiry">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
-
-            <!-- Filters -->
-            <div class="property-filters-container" style="margin-bottom: 2rem; position: relative;">
-                <div class="property-gallery-filters" role="group" aria-label="Property type filters">
-                    <button class="filter active" data-filter="all" type="button">ALL</button>
-                    <button class="filter" data-filter="land" type="button">LAND</button>
-                    <button class="filter" data-filter="residential" type="button">RESIDENTIAL</button>
-                    <button class="filter" data-filter="commercial" type="button">COMMERCIAL</button>
-                </div>
-
-                <div class="price-filter-inline">
-                    <div class="price-header-row">
-                        <span class="price-label">Price:</span>
-                        <span id="dashPriceRangeValue">Any Price</span>
-                    </div>
-                    <div class="slider-container-inline">
-                        <input type="range" min="0" max="50000000" value="0" class="slider-inline" id="dashPriceMin">
-                        <input type="range" min="0" max="50000000" value="50000000" class="slider-inline"
-                            id="dashPriceMax">
-                        <div class="slider-track-inline"></div>
-                        <div class="slider-range-inline"></div>
-                    </div>
-                </div>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 80px;">Image</th>
-                        <th class="sortable" data-sort="title" style="width:550px;">Property <i class="fas fa-sort"></i>
-                        </th>
-                        <th class="sortable" data-sort="status">Status <i class="fas fa-sort"></i></th>
-                        <th class="sortable" data-sort="price">Price <i class="fas fa-sort"></i></th>
-                        <th class="sortable" data-sort="category">Category <i class="fas fa-sort"></i></th>
-                        <th class="text-center" style="text-align:center !important;">Source</th>
-                        <th class="sortable text-center" data-sort="featured"
-                            style="width:50px; text-align:center !important;" title="Featured"><i
-                                class="fas fa-star"></i></th>
-                        <th class="text-center" style="text-align:center !important;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="listingsTableBody">
-                    <tr>
-                        <td colspan="9" style="text-align:center;padding:2rem;opacity:0.6;">Loading listings...</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div id="listingsPagination" class="pagination-wrapper"></div>
         </div>
 
-        <div id="inspectionsSection" class="dashboard-tab-content listings-table-container">
-            <!-- Header with Add Button -->
-            <div class="dashboard-section-header">
-                <h1>Manage Viewings</h1>
-                <button id="addInspectionBtn" class="btn" aria-label="Add New Inspection">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Email / Phone</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="enquiriesTableBody">
+                <tr>
+                    <td colspan="6" style="text-align:center;padding:2rem;opacity:0.6;">Loading enquiries...</td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="enquiriesPagination" class="pagination-wrapper"></div>
+    </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Name</th>
-                        <th>Development</th>
-                        <th>Plot / Unit</th>
-                        <th>Tags</th>
-                        <th>Status</th>
-                        <th style="text-align: right;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="inspectionsTableBody">
-                    <tr>
-                        <td colspan="7" style="text-align:center;padding:2rem;opacity:0.6;">Loading inspections...</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div id="inspectionsPagination" class="pagination-wrapper"></div>
+    <div id="inspectionsSection" class="dashboard-tab-content listings-table-container">
+        <!-- Header with Add Button -->
+        <div class="dashboard-section-header">
+            <h1>Manage Viewings</h1>
+            <button id="addInspectionBtn" class="btn" aria-label="Add New Inspection">
+                <i class="fas fa-plus"></i>
+            </button>
         </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Development</th>
+                    <th>Plot / Unit</th>
+                    <th>Tags</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="inspectionsTableBody">
+                <tr>
+                    <td colspan="7" style="text-align:center;padding:2rem;opacity:0.6;">Loading inspections...</td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="inspectionsPagination" class="pagination-wrapper"></div>
+    </div>
 
     </main>
 
@@ -1185,9 +1183,9 @@
     <!-- Property Modal == [DYNAMIC COMPONENT] -->
     <div id="propertymodal-placeholder"></div>
 
-    <script src="assets/js/nav.js?v=3.72" defer></script>
-    <script src="assets/js/snackbar.js?v=3.72"></script>
-    <script src="assets/js/main.js?v=3.72" defer></script>
+    <script src="assets/js/nav.js?v=3.73" defer></script>
+    <script src="assets/js/snackbar.js?v=3.73"></script>
+    <script src="assets/js/main.js?v=3.73" defer></script>
     <!-- Google Maps API -->
     <!-- Google Maps API -->
     <!-- Maps Callback Shim -->
@@ -1204,7 +1202,7 @@
     </script>
     <script async defer loading="async"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBskYGOCldwNxevKvAfJaVvy9_8Mjfv22Q&libraries=places&v=weekly&callback=initMapCallback"></script>
-    <script type="module" src="assets/js/admin-dashboard.js?v=3.72"></script>
+    <script type="module" src="assets/js/admin-dashboard.js?v=3.73"></script>
 
 </body>
 
