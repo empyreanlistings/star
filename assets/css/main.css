@@ -6190,7 +6190,7 @@ body.dashboard-page::before {
 }
 
 .dashboard-header {
-  background: var(--dash-header-bg);
+  background: rgba(0, 0, 0, 0.8);
   padding: 20px;
   display: flex;
   justify-content: space-between;
