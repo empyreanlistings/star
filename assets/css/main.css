@@ -50,9 +50,9 @@
   --site-bg-overlay-light:
     linear-gradient(140deg,
       rgba(255, 255, 255, 0.85) 0%,
-      rgba(255, 255, 255, 0.75) 28%,
+      rgba(255, 255, 255, 0.75) 0%,
       rgba(255, 255, 255, 0.65) 55%,
-      rgba(255, 255, 255, 0.90) 100%);
+      rgba(255, 255, 255, 0.90) 0%);
 
   /* Shared SVG Filters */
   --site-bg-overlay-chroma:
@@ -1449,12 +1449,8 @@ html[data-theme="light"] .icon-button-default:hover {
 
 .nav-right {
   display: flex !important;
-  align-items: center !important;
   gap: 15px;
-  height: 100%;
 }
-
-
 
 nav ul {
   display: flex;
@@ -1537,13 +1533,6 @@ html[data-theme="light"] nav a:not(.logo-container).active {
 }
 
 /* ================= NAV RIGHT (DESKTOP + MOBILE) ================= */
-.nav-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 1rem;
-  z-index: auto;
-}
 
 /* Default (dark mode) buttons */
 .nav-right button {
@@ -1576,7 +1565,7 @@ html[data-theme="light"] .nav-right i {
 
 /* Dark Mode Toggle (Sun Icon showing) - Light Blue BG, Orange/Yellow Icon */
 .nav-right .theme-toggle {
-  background-color: #bae6fd !important;
+  background-color: var(--white) !important;
   color: #f59e0b !important;
 }
 
@@ -1586,7 +1575,7 @@ html[data-theme="light"] .nav-right i {
 
 /* Light Mode Toggle (Moon Icon showing) - Dark Blue BG, Light Yellow Icon */
 html[data-theme="light"] .nav-right .theme-toggle {
-  background-color: #1e3a8a !important;
+  background-color: var(--black) !important;
   color: #fef3c7 !important;
 }
 
