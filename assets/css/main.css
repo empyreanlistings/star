@@ -6423,50 +6423,174 @@ html[data-theme="light"] .btn-add-nav span {
   background: rgba(0, 0, 0, 0.2);
 }
 
-/* Responsive Nav */
-@media (max-width: 900px) {
-  .dashboard-nav-center {
-    position: static;
-    transform: none;
-    margin-left: auto;
-    margin-right: 1rem;
-    gap: 0.5rem;
-  }
-
-  .dash-nav-item span {
-    display: none;
-    /* Hide text on small screens if needed */
-  }
-
-  .dash-nav-item {
-    padding: 8px;
-  }
-}
-
-@media (max-width: 600px) {
+/* Responsive Dashboard Header & Mobile Optimizations */
+@media (max-width: 768px) {
   .dashboard-header {
-    flex-direction: column;
-    height: auto;
-    padding: 10px;
-    gap: 10px;
+    flex-direction: column !important;
+    height: auto !important;
+    padding: 20px 15px !important;
+    gap: 15px !important;
+    position: relative !important;
   }
 
   .dashboard-nav-center {
-    width: 100%;
-    justify-content: center;
-    margin: 0;
+    position: static !important;
+    transform: none !important;
+    width: 100% !important;
+    justify-content: center !important;
+    margin: 10px 0 !important;
     order: 2;
-    /* Move below logo */
+  }
+
+  .dashboard-header .nav-links {
+    gap: 15px !important;
+    justify-content: center !important;
+  }
+
+  .dashboard-header .dash-nav-item {
+    padding: 8px 12px !important;
+    font-size: 11px !important;
   }
 
   .nav-right {
-    position: absolute;
-    right: 15px;
+    width: 100% !important;
+    justify-content: center !important;
+    order: 3;
+    position: static !important;
+    margin: 0 !important;
+    gap: 10px !important;
   }
 
   .dashboard-content {
-    margin-top: 140px;
-    /* Adjust content push */
+    margin-top: 20px !important;
+    padding: 15px !important;
+  }
+
+  .dashboard-section-header {
+    margin: 1.5rem 0 !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    text-align: center;
+  }
+
+  /* Responsive Tables (Card View) */
+  .listings-table-container {
+    padding: 10px !important;
+    background: transparent !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+
+  .dashboard-tab-content table,
+  .dashboard-tab-content thead,
+  .dashboard-tab-content tbody,
+  .dashboard-tab-content th,
+  .dashboard-tab-content td,
+  .dashboard-tab-content tr {
+    display: block !important;
+  }
+
+  .dashboard-tab-content thead tr {
+    position: absolute !important;
+    top: -9999px !important;
+    left: -9999px !important;
+  }
+
+  .dashboard-tab-content tr {
+    margin-bottom: 25px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-radius: 16px !important;
+    padding: 15px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  [data-theme="light"] .dashboard-tab-content tr {
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05) !important;
+  }
+
+  .dashboard-tab-content td {
+    border: none !important;
+    position: relative !important;
+    padding-left: 45% !important;
+    text-align: left !important;
+    min-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: unset !important;
+    font-size: 0.95rem !important;
+  }
+
+  .dashboard-tab-content td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 15px;
+    width: 40%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: 700 !important;
+    color: var(--accent) !important;
+    font-size: 0.7rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  /* Special handling for Image and Actions in card view */
+  td[data-label="Image"] {
+    justify-content: center !important;
+    padding-left: 0 !important;
+    min-height: 120px !important;
+    margin-bottom: 15px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  }
+
+  [data-theme="light"] td[data-label="Image"] {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+  }
+
+  td[data-label="Image"]:before {
+    display: none !important;
+  }
+
+  td[data-label="Image"] .thumb-wrapper {
+    width: 100% !important;
+    max-width: 150px !important;
+    height: 100px !important;
+  }
+
+  td[data-label="Image"] img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 12px !important;
+  }
+
+  td[data-label="Actions"] {
+    justify-content: center !important;
+    padding-left: 0 !important;
+    margin-top: 15px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding-top: 15px !important;
+    gap: 10px !important;
+  }
+
+  [data-theme="light"] td[data-label="Actions"] {
+    border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+  }
+
+  td[data-label="Actions"]:before {
+    display: none !important;
+  }
+
+  .pagination-container {
+    flex-direction: column !important;
+    padding: 20px !important;
+    gap: 15px !important;
+    text-align: center;
   }
 }
 
@@ -8048,12 +8172,35 @@ html:not([data-theme="light"]) .card.full-width .card-content h2 {
 
 @media (max-width: 768px) {
   .profile-header-main {
-    flex-direction: column;
-    text-align: center;
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 1.5rem !important;
+    margin-bottom: 2.5rem !important;
+  }
+
+  .profile-avatar-large {
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  .profile-title-section h1 {
+    font-size: 1.75rem !important;
+    margin-bottom: 0.5rem !important;
   }
 
   .profile-card {
-    padding: 2rem 1.5rem;
+    padding: 2rem 1.25rem !important;
+    border-radius: 16px !important;
+  }
+
+  .profile-content-wrapper {
+    margin-top: 20px !important;
+    padding: 15px !important;
+  }
+
+  .profile-form .form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
   }
 }
 

@@ -433,7 +433,7 @@ function renderAdminTable(listings) {
         tr.dataset.id = id; // FOR DELEGATION
         tr.style.cursor = "pointer"; // INDICATE CLICKABLE
         tr.innerHTML = `
-            <td style="width: 80px;">
+            <td data-label="Image" style="width: 80px;">
                 <div class="thumb-wrapper" style="position:relative;">
                     <img src="${thumbnail}" alt="thumb">
                     ${galleryCount > 0 ? `<span class="gallery-badge" title="${galleryCount} more images">${galleryCount}</span>` : ''}
@@ -452,17 +452,17 @@ function renderAdminTable(listings) {
                     </div>
                 </div>
             </td>
-            <td style="min-width: 550px;">
+            <td data-label="Property" style="min-width: 550px;">
                 <strong>${title}</strong><br>
                 <small style="opacity: 0.7;">${shortDesc}</small>
             </td>
-            <td style="width: 100px;"><span style="text-transform: capitalize;">${status.replace('_', ' ')}</span></td>
-            <td style="width: 100px;">${price}</td>
-            <td style="width: 120px;"><span class="status-badge status-active">${category.toUpperCase()}</span></td>
-            <td style="width: 60px; text-align:center;">${sourceHtml}</td>
-            <td style="width: 50px; text-align:center;">${data.featured ? '<i class="fas fa-star featured-star"></i>' : ''}</td>
+            <td data-label="Status" style="width: 100px;"><span style="text-transform: capitalize;">${status.replace('_', ' ')}</span></td>
+            <td data-label="Price" style="width: 100px;">${price}</td>
+            <td data-label="Category" style="width: 120px;"><span class="status-badge status-active">${category.toUpperCase()}</span></td>
+            <td data-label="Source" style="width: 60px; text-align:center;">${sourceHtml}</td>
+            <td data-label="Featured" style="width: 50px; text-align:center;">${data.featured ? '<i class="fas fa-star featured-star"></i>' : ''}</td>
             <!-- Removed Visits/Likes Columns -->
-            <td style="width: 140px; white-space: nowrap;">
+            <td data-label="Actions" style="width: 140px; white-space: nowrap;">
                 <button class="action-btn edit" data-id="${id}" title="Edit"><i class="fas fa-pen"></i></button>
                 <button class="action-btn duplicate" data-id="${id}" title="Duplicate / Copy"><i class="fas fa-copy"></i></button>
                 <button class="action-btn delete" data-id="${id}" title="Delete"><i class="fas fa-trash"></i></button>
@@ -2631,16 +2631,16 @@ function renderEnquiryTable() {
         tr.dataset.id = enq.id; // For delegation
         // tr.onclick = () => openEnquiryDetailsModal(enq); // Moved to delegation
         tr.innerHTML = `
-            <td>${date}</td>
-            <td><strong>${name}</strong></td>
-            <td>${contact}</td>
-            <td>${details}</td>
-            <td>
+            <td data-label="Date">${date}</td>
+            <td data-label="Name"><strong>${name}</strong></td>
+            <td data-label="Contact">${contact}</td>
+            <td data-label="Details">${details}</td>
+            <td data-label="Status">
                 <span class="status-badge ${enq.responded ? 'status-active' : 'status-draft'}">
                     ${enq.responded ? 'Responded' : 'Pending'}
                 </span>
             </td>
-            <td>
+            <td data-label="Actions">
                 <button class="action-btn toggle-responded" data-id="${enq.id}" title="Toggle Responded Status">
                     <i class="fas ${enq.responded ? 'fa-undo' : 'fa-check'}"></i>
                 </button>
@@ -2773,13 +2773,13 @@ function renderInspectionsTable() {
         tr.dataset.id = insp.id; // Added for row click delegation
         // tr.onclick = () => openInspectionDetailsModal(insp); // Handled via delegation
         tr.innerHTML = `
-            <td style="width: 120px;">${date}</td>
-            <td style="min-width: 200px;"><strong>${name}</strong></td>
-            <td style="width: 150px;">${devName}</td>
-            <td style="width: 120px;">${plotName}</td>
-            <td><small>${tags}</small></td>
-            <td style="width: 100px;"><span class="status-badge ${statusClass}">${statusText}</span></td>
-            <td style="width: 100px; white-space: nowrap; text-align: right;">
+            <td data-label="Date" style="width: 120px;">${date}</td>
+            <td data-label="Name" style="min-width: 200px;"><strong>${name}</strong></td>
+            <td data-label="Development" style="width: 150px;">${devName}</td>
+            <td data-label="Plot / Unit" style="width: 120px;">${plotName}</td>
+            <td data-label="Tags"><small>${tags}</small></td>
+            <td data-label="Status" style="width: 100px;"><span class="status-badge ${statusClass}">${statusText}</span></td>
+            <td data-label="Actions" style="width: 100px; white-space: nowrap; text-align: right;">
                 <button class="action-btn edit-inspection" data-id="${insp.id}" title="Edit"><i class="fas fa-pen"></i></button>
                 <button class="action-btn delete delete-inspection" data-id="${insp.id}" title="Delete"><i class="fas fa-trash"></i></button>
             </td>
