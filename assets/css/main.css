@@ -499,20 +499,13 @@ html[data-theme="light"] .glass-panel::after {
   box-sizing: border-box;
   border-radius: var(--parent-radius);
   /* Multi-layer frosted glass with depth */
-  background:
-    linear-gradient(135deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.02) 100%),
-    var(--parent-bg-dark);
-
+  background: var(--black);
   border: 1px solid rgba(255, 255, 255, 0.18);
-
   /* Enhanced glass blur with multiple layers */
   backdrop-filter:
     blur(var(--parent-blur)) saturate(var(--parent-saturation)) brightness(1.05);
   -webkit-backdrop-filter:
     blur(var(--parent-blur)) saturate(var(--parent-saturation)) brightness(1.05);
-
   /* Dimensional shadow with subtle glow */
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.3),
