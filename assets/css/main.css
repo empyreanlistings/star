@@ -6346,7 +6346,7 @@ html[data-theme="light"] .btn-add-nav span {
   text-decoration: none;
   font-weight: 500;
   padding: 1rem;
-  border-radius: 10px;
+  border-radius: 50px;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
