@@ -1561,10 +1561,6 @@ html[data-theme="light"] nav a:not(.logo-container).active {
   transition: background 0.25s ease, transform 0.25s ease;
 }
 
-.nav-right button:hover {
-  background: var(--accent);
-}
-
 .nav-right i {
   font-size: 16px;
   transition: color 0.25s ease;
