@@ -1572,16 +1572,6 @@ html[data-theme="light"] nav a:not(.logo-container).active {
 }
 
 /* ================= LIGHT MODE FIXES ================= */
-html[data-theme="light"] .nav-right button {
-  background: rgba(0, 0, 0, 0.06);
-  /* SOFT GRAY GLASS */
-  border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-html[data-theme="light"] .nav-right button:hover {
-  background: rgba(78, 205, 196, 0.15);
-  /* ACCENT GLOW */
-}
 
 html[data-theme="light"] .nav-right i {
   color: #222;
