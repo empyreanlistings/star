@@ -1418,7 +1418,7 @@ html[data-theme="light"] .menu-toggle:hover {
 
 /* Consolidated Theme-Aware Icon Button */
 .icon-button-default {
-  display: flex !important;
+  display: flex;
   align-items: center;
   justify-content: center;
   color: var(--white);
@@ -1448,7 +1448,7 @@ html[data-theme="light"] .icon-button-default:hover {
 }
 
 .nav-right {
-  display: flex !important;
+  display: flex;
   gap: 15px;
 }
 
