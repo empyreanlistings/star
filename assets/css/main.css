@@ -2081,8 +2081,7 @@ html[data-theme="light"] .hero video {
 
 .matrix-text {
   font-family: 'Courier New', Courier, monospace;
-  color: #00ff41;
-  /* Classic Matrix Green */
+  color: var(--text);
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 4px;
@@ -2094,7 +2093,7 @@ html[data-theme="light"] .hero video {
   display: flex;
   gap: 2.5rem;
   font-size: 1.8rem;
-  color: #00ff41;
+  color: var(--text);
 }
 
 .matrix-logos i {
@@ -2147,13 +2146,13 @@ html[data-theme="light"] .matrix-loader {
 }
 
 html[data-theme="light"] .matrix-text {
-  color: var(--primary);
+  color: var(--text-light);
   /* Theme aligned */
   text-shadow: none;
 }
 
 html[data-theme="light"] .matrix-logos {
-  color: var(--primary);
+  color: var(--text-light);
   /* Theme aligned */
 }
 
