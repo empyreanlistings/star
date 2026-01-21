@@ -100,6 +100,46 @@ function initHeroSequence() {
   if (!heroVideo) {
     revealCarousel(true);
   } else {
+    // 3. Matrix Loader Initial Logic
+    const matrixLoader = document.getElementById("matrixLoader");
+
+    // Function to hide matrix loader safely
+    const hideMatrixLoader = () => {
+      if (!matrixLoader) return;
+      if (window.gsap) {
+        gsap.to(matrixLoader, {
+          opacity: 0,
+          y: -20,
+          duration: 1,
+          ease: "power2.inOut",
+          onComplete: () => {
+            matrixLoader.style.display = "none";
+          }
+        });
+      } else {
+        matrixLoader.style.opacity = "0";
+        setTimeout(() => matrixLoader.style.display = "none", 1000);
+      }
+    };
+
+    // Show matrix loader triggered by video play
+    heroVideo.addEventListener('play', () => {
+      if (matrixLoader) {
+        matrixLoader.style.opacity = "1";
+        matrixLoader.style.display = "flex";
+
+        // Hide after exactly 3 seconds
+        setTimeout(hideMatrixLoader, 3000);
+      }
+    });
+
+    // Also hide matrix if carousel reveals early
+    const originalReveal = revealCarousel;
+    revealCarousel = (isImmediate = false) => {
+      hideMatrixLoader();
+      originalReveal(isImmediate);
+    };
+
     // Video exists: wait for it to end or trigger early fade-in
     let transitionStarted = false;
 

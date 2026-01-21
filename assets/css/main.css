@@ -2054,6 +2054,109 @@ html[data-theme="light"] .hero video {
   filter: brightness(0.95);
 }
 
+/* ================================================================
+   MATRIX LOADING ANIMATION
+   ================================================================ */
+.matrix-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;
+  /* Above video and below logo overlays if any */
+  text-align: center;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2.5rem 4rem;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(0, 255, 65, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.1);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.matrix-text {
+  font-family: 'Courier New', Courier, monospace;
+  color: #00ff41;
+  /* Classic Matrix Green */
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+  animation: matrixTextBlink 1.5s infinite step-end;
+}
+
+.matrix-logos {
+  display: flex;
+  gap: 2.5rem;
+  font-size: 1.8rem;
+  color: #00ff41;
+}
+
+.matrix-logos i {
+  opacity: 0.1;
+  text-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+}
+
+/* Flashing logos - Staggered */
+.matrix-logos i:nth-child(1) {
+  animation: logoFlash 0.8s infinite alternate 0.2s;
+}
+
+.matrix-logos i:nth-child(2) {
+  animation: logoFlash 0.8s infinite alternate 0.4s;
+}
+
+.matrix-logos i:nth-child(3) {
+  animation: logoFlash 0.8s infinite alternate 0.6s;
+}
+
+@keyframes matrixTextBlink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes logoFlash {
+  0% {
+    opacity: 0.1;
+    transform: scale(0.95);
+  }
+
+  100% {
+    opacity: 0.9;
+    transform: scale(1.05);
+    text-shadow: 0 0 20px rgba(0, 255, 65, 0.8);
+  }
+}
+
+html[data-theme="light"] .matrix-loader {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme="light"] .matrix-text {
+  color: #059669;
+  /* Slightly more professional green for light mode */
+  text-shadow: none;
+}
+
+html[data-theme="light"] .matrix-logos {
+  color: #059669;
+}
+
+
 .hero-inner {
   position: relative;
   z-index: 10;
