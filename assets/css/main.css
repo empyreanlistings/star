@@ -2081,7 +2081,7 @@ html[data-theme="light"] .hero video {
 
 .matrix-text {
   font-family: 'Courier New', Courier, monospace;
-  color: var(--text);
+  color: var(--white);
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 4px;
@@ -2093,7 +2093,7 @@ html[data-theme="light"] .hero video {
   display: flex;
   gap: 2.5rem;
   font-size: 1.8rem;
-  color: var(--text);
+  color: var(--white);
 }
 
 .matrix-logos i {
