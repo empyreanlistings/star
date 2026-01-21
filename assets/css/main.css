@@ -7605,6 +7605,7 @@ html[data-theme="light"] .btn-copy:hover {
   min-width: 800px;
   /* Force minimum width to trigger scroll on small screens */
   width: 100%;
+  margin-top: 2rem;
 }
 
 /* Gallery Modal Specific */
