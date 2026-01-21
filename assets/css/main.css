@@ -2076,7 +2076,7 @@ html[data-theme="light"] .hero video {
   border: 1px solid rgba(0, 255, 65, 0.15);
   border-radius: 12px;
   box-shadow: 0 0 30px rgba(0, 255, 65, 0.1);
-  transition: opacity 1s ease, transform 1s ease;
+  transition: opacity 1s ease;
 }
 
 .matrix-text {
@@ -2142,18 +2142,19 @@ html[data-theme="light"] .hero video {
 
 html[data-theme="light"] .matrix-loader {
   background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(0, 0, 0, 0.1);
+  border-color: rgba(26, 95, 61, 0.2);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 html[data-theme="light"] .matrix-text {
-  color: #059669;
-  /* Slightly more professional green for light mode */
+  color: var(--primary);
+  /* Theme aligned */
   text-shadow: none;
 }
 
 html[data-theme="light"] .matrix-logos {
-  color: #059669;
+  color: var(--primary);
+  /* Theme aligned */
 }
 
 

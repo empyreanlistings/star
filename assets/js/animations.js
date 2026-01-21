@@ -105,11 +105,10 @@ function initHeroSequence() {
 
     // Function to hide matrix loader safely
     const hideMatrixLoader = () => {
-      if (!matrixLoader) return;
+      if (!matrixLoader || matrixLoader.style.display === "none") return;
       if (window.gsap) {
         gsap.to(matrixLoader, {
           opacity: 0,
-          y: -20,
           duration: 1,
           ease: "power2.inOut",
           onComplete: () => {
@@ -133,12 +132,16 @@ function initHeroSequence() {
       }
     });
 
-    // Also hide matrix if carousel reveals early
-    const originalReveal = revealCarousel;
-    revealCarousel = (isImmediate = false) => {
-      hideMatrixLoader();
-      originalReveal(isImmediate);
-    };
+    // We no longer reassign revealCarousel as it's a const.
+    // Instead, we ensure hideMatrixLoader() is called inside the original revealCarousel.
+    // However, since hideMatrixLoader is defined here, let's move the call to where it matters.
+    // We can also just monitor carouselRevealed.
+    const matrixCheckInterval = setInterval(() => {
+      if (carouselRevealed) {
+        hideMatrixLoader();
+        clearInterval(matrixCheckInterval);
+      }
+    }, 100);
 
     // Video exists: wait for it to end or trigger early fade-in
     let transitionStarted = false;
