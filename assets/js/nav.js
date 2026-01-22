@@ -57,6 +57,18 @@ function initHeader() {
     if (navLogo) navLogo.src = theme === "light" ? light : dark;
     if (mobileLogo) mobileLogo.src = theme === "light" ? light : dark;
 
+    // Theme Icon Toggle (Apps Menu)
+    const themeIcon = document.querySelector(".app-icon-theme");
+    if (themeIcon) {
+      if (theme === "light") {
+        themeIcon.classList.remove("fa-sun", "fa-adjust");
+        themeIcon.classList.add("fa-moon");
+      } else {
+        themeIcon.classList.remove("fa-moon", "fa-adjust");
+        themeIcon.classList.add("fa-sun");
+      }
+    }
+
     // Paradise Life Homebuyer Logo Sync (Main Section only)
     const hbLogoImg = theme === "light" ? "images/homebuyer_dark2.png" : "images/homebuyer_light2.png";
     const hbLogo = document.getElementById("homebuyerLogoMain");

@@ -257,17 +257,157 @@ function initAuth() {
                     appsBtn.style.display = "flex";
                 }
 
-                // Show Core Apps & Logout in Apps Menu
-                const coreApps = document.querySelectorAll(".apps-core-section");
-                const coreDividers = document.querySelectorAll(".apps-core-divider");
-                const logoutBtns = document.querySelectorAll(".apps-footer");
+                // Show Core Apps & Logout (MutationObserver for dynamic headers)
+                const applyVisibility = () => {
+                    const coreApps = document.querySelectorAll(".apps-core-section");
+                    const coreDividers = document.querySelectorAll(".apps-core-divider");
+                    const logoutBtns = document.querySelectorAll(".apps-footer");
 
-                console.log(`[Auth] Revealing apps menu items: ${coreApps.length} found`);
+                    let found = 0;
+                    if (coreApps.length > 0) {
+                        coreApps.forEach(el => el.classList.add("show-auth"));
+                        found++;
+                    }
+                    if (coreDividers.length > 0) coreDividers.forEach(el => el.classList.add("show-auth"));
+                    if (logoutBtns.length > 0) logoutBtns.forEach(el => el.classList.add("show-auth"));
 
-                coreApps.forEach(el => el.classList.add("show-auth"));
-                coreDividers.forEach(el => el.classList.add("show-auth"));
-                logoutBtns.forEach(el => el.classList.add("show-auth"));
+                    return found > 0;
+                };
+
+                // Try immediately
+                if (!applyVisibility()) {
+                    // Header loads dynamically in index.html, so observe body
+                    const observer = new MutationObserver((mutations, obs) => {
+                        if (applyVisibility()) {
+                            console.log("[Auth] Dynamic Apps Menu detected and updated.");
+                            obs.disconnect();
+                        }
+                    });
+                    observer.observe(document.body, { childList: true, subtree: true });
+                } else {
+                    console.log("[Auth] Apps Menu found immediately.");
+                }
             };
+
+            // Helper: Loading State for Buttons
+            const setLoading = (btn, isLoading) => {
+                if (!btn) return;
+                if (isLoading) {
+                    btn.dataset.originalText = btn.innerHTML;
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                } else {
+                    btn.disabled = false;
+                    btn.innerHTML = btn.dataset.originalText || btn.innerHTML;
+                }
+            };
+
+            // Login Logic
+            const loginForm = document.getElementById("loginForm");
+            if (loginForm) {
+                loginForm.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById("email").value;
+                    const password = document.getElementById("password").value;
+                    const errorEl = document.getElementById("loginError");
+                    const submitBtn = loginForm.querySelector("button[type='submit']");
+
+                    if (errorEl) errorEl.style.display = "none";
+                    setLoading(submitBtn, true);
+
+                    try {
+                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                        console.log("Logged in:", userCredential.user);
+                        // Redirect handled by onAuthStateChanged
+                    } catch (error) {
+                        console.error("Login error:", error);
+                        setLoading(submitBtn, false);
+                        if (errorEl) {
+                            errorEl.textContent = "Invalid email or password.";
+                            errorEl.style.display = "block";
+                        }
+                    }
+                });
+            }
+
+            // Signup Logic
+            const signupForm = document.getElementById("signupForm");
+            if (signupForm) {
+                signupForm.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById("email").value;
+                    const password = document.getElementById("password").value;
+                    const confirmPassword = document.getElementById("confirmPassword").value;
+                    const fullName = document.getElementById("fullName").value;
+                    const errorEl = document.getElementById("signupError");
+                    const successEl = document.getElementById("signupSuccess");
+                    const submitBtn = signupForm.querySelector("button[type='submit']");
+
+                    if (errorEl) errorEl.style.display = "none";
+                    if (successEl) {
+                        successEl.style.display = "none";
+                        successEl.textContent = "";
+                    }
+
+                    if (password !== confirmPassword) {
+                        if (errorEl) {
+                            errorEl.textContent = "Passwords do not match.";
+                            errorEl.style.display = "block";
+                        }
+                        return;
+                    }
+
+                    setLoading(submitBtn, true);
+
+                    try {
+                        // 1. Create Auth User
+                        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                        const user = userCredential.user;
+
+                        // 2. Upload Avatar (if selected)
+                        let photoURL = "";
+                        const avatarInput = document.getElementById("avatarUpload");
+                        if (avatarInput && avatarInput.files[0]) {
+                            const file = avatarInput.files[0];
+                            const storageRef = ref(storage, `avatars/${user.uid}/${file.name}`);
+                            await uploadBytes(storageRef, file);
+                            photoURL = await getDownloadURL(storageRef);
+                        }
+
+                        // 3. Update Profile
+                        await updateProfile(user, {
+                            displayName: fullName,
+                            photoURL: photoURL
+                        });
+
+                        // 4. Create Firestore Doc
+                        await setDoc(doc(db, "Users", user.uid), {
+                            uid: user.uid,
+                            email: email,
+                            display_name: fullName,
+                            photo_url: photoURL,
+                            role: "user",
+                            created_at: new Date()
+                        });
+
+                        setLoading(submitBtn, false);
+
+                        if (successEl) {
+                            successEl.textContent = "Account created! Redirecting...";
+                            successEl.style.display = "block";
+                        }
+
+                        // Redirect handled by onAuthStateChanged
+                    } catch (error) {
+                        console.error("Signup error:", error);
+                        setLoading(submitBtn, false);
+                        if (errorEl) {
+                            errorEl.textContent = error.message;
+                            errorEl.style.display = "block";
+                        }
+                    }
+                });
+            }
 
             // 3. Render from Cache Instantly
             let currentProfileUrl = user.photoURL;
