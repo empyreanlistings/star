@@ -262,6 +262,8 @@ function initAuth() {
                 const coreDividers = document.querySelectorAll(".apps-core-divider");
                 const logoutBtns = document.querySelectorAll(".apps-footer");
 
+                console.log(`[Auth] Revealing apps menu items: ${coreApps.length} found`);
+
                 coreApps.forEach(el => el.classList.add("show-auth"));
                 coreDividers.forEach(el => el.classList.add("show-auth"));
                 logoutBtns.forEach(el => el.classList.add("show-auth"));

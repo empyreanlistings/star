@@ -9544,20 +9544,12 @@ html[data-theme="light"] .apps-logout-btn:hover {
 
 html[data-theme="light"] .app-icon-services { color: #95a5a6 !important; }
 
-/* Secure Apps Menu: Hidden by default (v3.92) */
-.apps-core-section,
-.apps-core-divider,
-.apps-footer {
-  display: none !important;
-}
 
-/* Auth Visibility Toggles (v3.93) */
-.apps-core-section.show-auth {
-  display: grid !important;
-}
-.apps-core-divider.show-auth {
-  display: block !important;
-}
-.apps-footer.show-auth {
-  display: flex !important;
+
+/* Secure Apps Menu: Robust Visibility (v3.94) */
+/* Hide these elements ONLY if they lack the .show-auth class */
+.apps-core-section:not(.show-auth),
+.apps-core-divider:not(.show-auth),
+.apps-footer:not(.show-auth) {
+  display: none !important;
 }
