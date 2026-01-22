@@ -9553,3 +9553,14 @@ html[data-theme="light"] .app-icon-services { color: #95a5a6 !important; }
 .apps-footer:not(.show-auth) {
   display: none !important;
 }
+
+/* Secure Apps Menu: FAILSAFE VISIBILITY (v3.98) */
+.apps-core-section.show-auth {
+  display: grid !important;
+}
+.apps-core-divider.show-auth {
+  display: block !important;
+}
+.apps-footer.show-auth {
+  display: flex !important;
+}

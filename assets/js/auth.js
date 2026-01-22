@@ -265,11 +265,20 @@ function initAuth() {
 
                     let found = 0;
                     if (coreApps.length > 0) {
-                        coreApps.forEach(el => el.classList.add("show-auth"));
+                        coreApps.forEach(el => {
+                            el.classList.add("show-auth");
+                            el.style.setProperty("display", "grid", "important"); // Force override
+                        });
                         found++;
                     }
-                    if (coreDividers.length > 0) coreDividers.forEach(el => el.classList.add("show-auth"));
-                    if (logoutBtns.length > 0) logoutBtns.forEach(el => el.classList.add("show-auth"));
+                    if (coreDividers.length > 0) coreDividers.forEach(el => {
+                        el.classList.add("show-auth");
+                        el.style.setProperty("display", "block", "important");
+                    });
+                    if (logoutBtns.length > 0) logoutBtns.forEach(el => {
+                        el.classList.add("show-auth");
+                        el.style.setProperty("display", "flex", "important");
+                    });
 
                     return found > 0;
                 };
@@ -584,28 +593,158 @@ function initAuth() {
     // Globals for external access
     window.logoutUser = handleLogout;
 
-    const loginForm = document.getElementById("loginForm");
-    if (loginForm) {
-        // Pre-fill Remembered Email
-        const remembered = localStorage.getItem(REMEMBER_KEY);
-        if (remembered) {
-            try {
-                const { email } = JSON.parse(remembered);
-                const emailInput = document.getElementById("email");
-                const rememberCheckbox = document.getElementById("rememberMe");
-                if (emailInput) emailInput.value = email;
-                if (rememberCheckbox) rememberCheckbox.checked = true;
-            } catch (e) {
-                console.warn("Failed to parse remember cache", e);
+    // Helper: Loading State for Buttons
+    const setLoading = (btn, isLoading) => {
+        if (!btn) return;
+        if (isLoading) {
+            btn.dataset.originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = btn.dataset.originalText || btn.innerHTML;
+        }
+    };
+
+    // Initialize Form Listeners when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+        // Login Logic
+        const loginForm = document.getElementById("loginForm");
+        if (loginForm) {
+            // Remove old listeners if any (by cloning) or just add new one
+            // Cloning prevents duplicate listeners
+            const newLoginForm = loginForm.cloneNode(true);
+            loginForm.parentNode.replaceChild(newLoginForm, loginForm);
+
+            // Re-attach visual toggles if needed (password toggle is separate)
+            // But cloning removes ALL listeners. The specific feature password toggle is attached to #togglePassword, which is outside the form or inside?
+            // Inside. Cloning might break password toggle if attached to element inside form.
+            // Better: Just don't attach handleLogin.
+
+            newLoginForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+                const errorEl = document.getElementById("loginError");
+                const submitBtn = newLoginForm.querySelector("button[type='submit']");
+
+                if (errorEl) errorEl.style.display = "none";
+                setLoading(submitBtn, true);
+
+                try {
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    console.log("Logged in:", userCredential.user);
+                } catch (error) {
+                    console.error("Login error:", error);
+                    setLoading(submitBtn, false);
+                    if (errorEl) {
+                        errorEl.textContent = "Invalid email or password.";
+                        errorEl.style.display = "block";
+                    }
+                }
+            });
+
+            // Re-init password toggle because we cloned
+            const togglePassword = newLoginForm.querySelector('#togglePassword');
+            const passwordInput = newLoginForm.querySelector('#password');
+            if (togglePassword && passwordInput) {
+                togglePassword.addEventListener('click', function () {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
             }
         }
-        loginForm.addEventListener("submit", handleLogin);
-    }
 
-    const signupForm = document.getElementById("signupForm");
-    if (signupForm) {
-        signupForm.addEventListener("submit", handleSignup);
-    }
+        // Signup Logic
+        const signupForm = document.getElementById("signupForm");
+        if (signupForm) {
+            const newSignupForm = signupForm.cloneNode(true);
+            signupForm.parentNode.replaceChild(newSignupForm, signupForm);
+
+            newSignupForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+                const confirmPassword = document.getElementById("confirmPassword").value;
+                const fullName = document.getElementById("fullName").value;
+                const errorEl = document.getElementById("signupError");
+                const successEl = document.getElementById("signupSuccess");
+                const submitBtn = newSignupForm.querySelector("button[type='submit']");
+
+                if (errorEl) errorEl.style.display = "none";
+                if (successEl) successEl.style.display = "none";
+
+                if (password !== confirmPassword) {
+                    if (errorEl) {
+                        errorEl.textContent = "Passwords do not match.";
+                        errorEl.style.display = "block";
+                    }
+                    return;
+                }
+
+                setLoading(submitBtn, true);
+
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+
+                    let photoURL = "";
+                    const avatarInput = document.getElementById("avatarUpload"); // ID might be inside new form?
+                    // IDs are unique, so document.getElementById still works if it's the same ID.
+                    // But if we cloned, the old one is gone.
+
+                    // ... (rest of logic) ...
+                    // Just simplifying for brevity in replacement, but must include full logic
+                    // 2. Upload Avatar
+                    if (avatarInput && avatarInput.files[0]) {
+                        const file = avatarInput.files[0];
+                        const storageRef = ref(storage, `avatars/${user.uid}/${file.name}`);
+                        await uploadBytes(storageRef, file);
+                        photoURL = await getDownloadURL(storageRef);
+                    }
+
+                    await updateProfile(user, { displayName: fullName, photoURL: photoURL });
+                    await setDoc(doc(db, "Users", user.uid), {
+                        uid: user.uid, email: email, display_name: fullName, photo_url: photoURL,
+                        role: "user", created_at: new Date()
+                    });
+
+                    setLoading(submitBtn, false);
+                    if (successEl) {
+                        successEl.textContent = "Account created! Redirecting...";
+                        successEl.style.display = "block";
+                    }
+                } catch (error) {
+                    console.error("Signup error:", error);
+                    setLoading(submitBtn, false);
+                    if (errorEl) {
+                        errorEl.textContent = error.message;
+                        errorEl.style.display = "block";
+                    }
+                }
+            });
+
+            // Re-init avatar preview
+            const avatarUpload = newSignupForm.querySelector('#avatarUpload');
+            const avatarPreview = newSignupForm.querySelector('#avatarPreview');
+            const avatarIcon = newSignupForm.querySelector('#avatarIcon');
+            if (avatarUpload) {
+                avatarUpload.addEventListener('change', function (e) {
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            avatarPreview.src = e.target.result;
+                            avatarPreview.style.display = 'block';
+                            avatarIcon.style.display = 'none';
+                        }
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
+            }
+        }
+    });
 
     const resetForm = document.getElementById("resetForm");
     if (resetForm) {
