@@ -1710,38 +1710,40 @@ function initLb() {
 initLb();
 
 /* ================= APPS MENU LOGIC ================= */
-document.addEventListener('DOMContentLoaded', () => {
-  const appsBtn = document.getElementById('navAppsBtn');
+/* ================= APPS MENU LOGIC ================= */
+document.addEventListener('click', (e) => {
+  const appsBtn = e.target.closest('#navAppsBtn');
   const appsModal = document.getElementById('appsModal');
 
+  // Toggle Menu
   if (appsBtn && appsModal) {
-    // Toggle Menu
-    appsBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isVisible = appsModal.style.display === 'block';
-      appsModal.style.display = isVisible ? 'none' : 'block';
-      
-      // Accessibility update
-      appsBtn.setAttribute('aria-expanded', !isVisible);
-    });
+    e.stopPropagation();
+    const isVisible = appsModal.style.display === 'block';
+    appsModal.style.display = isVisible ? 'none' : 'block';
+    appsBtn.setAttribute('aria-expanded', !isVisible);
+    return;
+  }
 
-    // Close when clicking outside
-    document.addEventListener('click', (e) => {
-      if (appsModal.style.display === 'block' && 
-          !appsModal.contains(e.target) && 
-          !appsBtn.contains(e.target)) {
-        appsModal.style.display = 'none';
-        appsBtn.setAttribute('aria-expanded', 'false');
-      }
-    });
+  // Close when clicking outside
+  if (appsModal && appsModal.style.display === 'block') {
+    if (!appsModal.contains(e.target)) {
+      appsModal.style.display = 'none';
+      const btn = document.getElementById('navAppsBtn');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    }
+  }
+});
 
-    // Close when pressing Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && appsModal.style.display === 'block') {
-        appsModal.style.display = 'none';
-        appsBtn.setAttribute('aria-expanded', 'false');
-        appsBtn.focus();
-      }
-    });
+// Close when pressing Escape
+document.addEventListener('keydown', (e) => {
+  const appsModal = document.getElementById('appsModal');
+  const appsBtn = document.getElementById('navAppsBtn');
+
+  if (e.key === 'Escape' && appsModal && appsModal.style.display === 'block') {
+    appsModal.style.display = 'none';
+    if (appsBtn) {
+      appsBtn.setAttribute('aria-expanded', 'false');
+      appsBtn.focus();
+    }
   }
 });
