@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
@@ -257,6 +257,19 @@ function initAuth() {
                     appsBtn.style.display = "flex";
                 }
 
+                // FOOTER BUTTON TOGGLE (v3.101)
+                const footerBtn = document.getElementById("footerSignInBtn");
+                if (footerBtn) {
+                    footerBtn.innerHTML = "SIGN-OUT";
+                    footerBtn.href = "#";
+                    // Remove old listeners to prevent duplicates (simple clone replacement or direct override)
+                    // Since this runs on state change, we'll just set onclick handler directly for simplicity here
+                    footerBtn.onclick = (e) => {
+                        e.preventDefault();
+                        logoutUser();
+                    };
+                }
+
                 // Show Core Apps & Logout (PArent-Based Toggle v3.101)
                 const applyVisibility = () => {
                     const modal = document.getElementById("appsModal");
@@ -300,11 +313,23 @@ function initAuth() {
 
             // Login Logic
             const loginForm = document.getElementById("loginForm");
+            const REMEMBER_KEY = "star_remember_me";
+
+            // Pre-fill Email if Remember Me was used
             if (loginForm) {
+                const savedUser = JSON.parse(localStorage.getItem(REMEMBER_KEY));
+                if (savedUser && savedUser.email) {
+                    const emailInput = document.getElementById("email");
+                    const rememberBox = document.getElementById("rememberMe");
+                    if (emailInput) emailInput.value = savedUser.email;
+                    if (rememberBox) rememberBox.checked = true;
+                }
+
                 loginForm.addEventListener("submit", async (e) => {
                     e.preventDefault();
                     const email = document.getElementById("email").value;
                     const password = document.getElementById("password").value;
+                    const rememberMe = document.getElementById("rememberMe")?.checked;
                     const errorEl = document.getElementById("loginError");
                     const submitBtn = loginForm.querySelector("button[type='submit']");
 
@@ -312,6 +337,16 @@ function initAuth() {
                     setLoading(submitBtn, true);
 
                     try {
+                        // 1. Handle Persistence (Remember Me)
+                        if (rememberMe) {
+                            await setPersistence(auth, browserLocalPersistence);
+                            localStorage.setItem(REMEMBER_KEY, JSON.stringify({ email }));
+                        } else {
+                            await setPersistence(auth, browserSessionPersistence);
+                            localStorage.removeItem(REMEMBER_KEY);
+                        }
+
+                        // 2. Sign In
                         const userCredential = await signInWithEmailAndPassword(auth, email, password);
                         console.log("Logged in:", userCredential.user);
                         // Redirect handled by onAuthStateChanged
