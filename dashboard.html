@@ -5,12 +5,12 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=3.100">
+    <link rel="stylesheet" href="assets/css/main.css?v=3.101">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <style>
-        /* Styles moved to assets/css/main.css?v=3.100 */
+        /* Styles moved to assets/css/main.css?v=3.101 */
     </style>
     <!-- Apply saved theme early to prevent flash -->
     <script>
@@ -35,7 +35,7 @@
             opacity: 1 !important;
         }
     </style>
-    <script type="module" src="assets/js/auth.js?v=3.100"></script>
+    <script type="module" src="assets/js/auth.js?v=3.101"></script>
 
     <header class="dashboard-header">
         <div class="dashboard-logo">
@@ -71,64 +71,8 @@
         </div>
     </header>
 
-    <!-- Apps Menu Modal -->
-    <div id="appsModal" class="apps-modal" style="display:none;">
-        <div class="apps-scroll-container">
-            <!-- Menu Logo -->
-            <div class="apps-menu-logo-container">
-                <img src="images/logo_dark.png" alt="Empyrean" id="appsMenuLogoDash" class="apps-menu-logo">
-            </div>
-
-            <!-- Core Apps (Hidden when logged out) -->
-            <div class="apps-section apps-core-section">
-                <a href="dashboard.html" class="app-item">
-                    <i class="fas fa-th-large app-icon-dashboard"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="profile.html" class="app-item">
-                    <i class="fas fa-user-circle app-icon-profile"></i>
-                    <span>Profile</span>
-                </a>
-            </div>
-
-            <div class="apps-divider apps-core-divider"></div>
-
-            <!-- Theme Toggle -->
-            <div class="apps-section">
-                <button class="app-item theme-toggle-app" id="appsThemeToggleDash">
-                    <i class="fas fa-adjust app-icon-theme"></i>
-                    <span>Theme</span>
-                </button>
-            </div>
-
-            <div class="apps-divider"></div>
-
-            <!-- Services -->
-            <div class="apps-section">
-                <a href="index.html#maintenance" class="app-item">
-                    <i class="fas fa-tools app-icon-maintenance"></i>
-                    <span>Maintenance</span>
-                </a>
-                <a href="index.html#cleaning" class="app-item">
-                    <i class="fas fa-broom app-icon-cleaning"></i>
-                    <span>Cleaning</span>
-                </a>
-                <a href="index.html#petcare" class="app-item">
-                    <i class="fas fa-paw app-icon-petcare"></i>
-                    <span>Pet Care</span>
-                </a>
-                <a href="index.html#laundry" class="app-item">
-                    <i class="fas fa-tshirt app-icon-laundry"></i>
-                    <span>Laundry</span>
-                </a>
-                <a href="index.html#handyman" class="app-item">
-                    <i class="fas fa-hammer app-icon-handyman"></i>
-                    <span>Handyman</span>
-                </a>
-
-            </div>
-        </div>
-    </div>
+    <!-- Apps Menu Placeholder (v3.100 Refactor) -->
+    <div id="apps-menu-placeholder"></div>
 
     <div id="listingsTableContainer" class="dashboard-tab-content listings-table-container active">
         <!-- Header with Add Button -->
@@ -1235,9 +1179,9 @@
     <!-- Property Modal == [DYNAMIC COMPONENT] -->
     <div id="propertymodal-placeholder"></div>
 
-    <script src="assets/js/nav.js?v=3.100" defer></script>
-    <script src="assets/js/snackbar.js?v=3.100"></script>
-    <script src="assets/js/main.js?v=3.100" defer></script>
+    <script src="assets/js/nav.js?v=3.101" defer></script>
+    <script src="assets/js/snackbar.js?v=3.101"></script>
+    <script src="assets/js/main.js?v=3.101" defer></script>
     <!-- Google Maps API -->
     <!-- Google Maps API -->
     <!-- Maps Callback Shim -->
@@ -1254,7 +1198,7 @@
     </script>
     <script async defer loading="async"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBskYGOCldwNxevKvAfJaVvy9_8Mjfv22Q&libraries=places&v=weekly&callback=initMapCallback"></script>
-    <script type="module" src="assets/js/admin-dashboard.js?v=3.100"></script>
+    <script type="module" src="assets/js/admin-dashboard.js?v=3.101"></script>
 
 </body>
 

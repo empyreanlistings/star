@@ -257,45 +257,18 @@ function initAuth() {
                     appsBtn.style.display = "flex";
                 }
 
-                // Show Core Apps & Logout (MutationObserver for dynamic headers)
+                // Show Core Apps & Logout (PArent-Based Toggle v3.101)
                 const applyVisibility = () => {
-                    const coreApps = document.querySelectorAll(".apps-core-section");
-                    const coreDividers = document.querySelectorAll(".apps-core-divider");
-                    const logoutBtns = document.querySelectorAll(".apps-footer");
-
-                    let found = 0;
-                    if (coreApps.length > 0) {
-                        coreApps.forEach(el => {
-                            el.classList.add("show-auth");
-                            el.style.setProperty("display", "grid", "important"); // Force override
-                        });
-                        found++;
+                    const modal = document.getElementById("appsModal");
+                    if (modal) {
+                        modal.classList.add("user-authenticated");
+                        return true;
                     }
-                    if (coreDividers.length > 0) coreDividers.forEach(el => {
-                        el.classList.add("show-auth");
-                        el.style.setProperty("display", "block", "important");
-                    });
-                    if (logoutBtns.length > 0) logoutBtns.forEach(el => {
-                        el.classList.add("show-auth");
-                        el.style.setProperty("display", "flex", "important");
-                    });
-
-                    return found > 0;
+                    return false;
                 };
 
                 // Try immediately
-                if (!applyVisibility()) {
-                    // Header loads dynamically in index.html, so observe body
-                    const observer = new MutationObserver((mutations, obs) => {
-                        if (applyVisibility()) {
-                            console.log("[Auth] Dynamic Apps Menu detected and updated.");
-                            obs.disconnect();
-                        }
-                    });
-                    observer.observe(document.body, { childList: true, subtree: true });
-                } else {
-                    console.log("[Auth] Apps Menu found immediately.");
-                }
+                applyVisibility();
 
                 // JUST-IN-TIME FIX (v3.99): Enforce on click
                 document.addEventListener('click', (e) => {
@@ -307,8 +280,8 @@ function initAuth() {
 
                 // DYNAMIC COMPONENT LOAD LISTENER (v3.100)
                 document.addEventListener('appsMenuLoaded', () => {
-                    console.log("[Auth] Apps Menu Component Loaded - Applying Visibility");
-                    setTimeout(applyVisibility, 50); // Small delay to ensure DOM paint
+                    console.log("[Auth] Apps Menu Component Loaded - Applying Class");
+                    applyVisibility();
                 });
             };
 
