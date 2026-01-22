@@ -9403,3 +9403,53 @@ html[data-theme="light"] .app-item:hover {
   top: 70px !important;
   right: 20px !important;
 }
+
+/* ================= SEGMENTED APPS MENU (v3.84) ================= */
+.apps-modal {
+  padding: 0 !important; /* Reset padding for scroll container */
+  max-height: 480px;
+  display: none; /* JS toggles this */
+  flex-direction: column;
+}
+
+.apps-scroll-container {
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 460px;
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.apps-scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.apps-scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+html[data-theme="light"] .apps-scroll-container {
+  scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+}
+
+html[data-theme="light"] .apps-scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.apps-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.apps-divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 16px 4px; /* Maintain vertical rhythm */
+}
+
+html[data-theme="light"] .apps-divider {
+  background-color: rgba(0, 0, 0, 0.08);
+}

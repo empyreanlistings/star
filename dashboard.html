@@ -5,12 +5,12 @@
     <title>Admin Dashboard - Kai & Isla</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=3.83">
+    <link rel="stylesheet" href="assets/css/main.css?v=3.84">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <style>
-        /* Styles moved to assets/css/main.css?v=3.83 */
+        /* Styles moved to assets/css/main.css?v=3.84 */
     </style>
     <!-- Apply saved theme early to prevent flash -->
     <script>
@@ -35,7 +35,7 @@
             opacity: 1 !important;
         }
     </style>
-    <script type="module" src="assets/js/auth.js?v=3.83"></script>
+    <script type="module" src="assets/js/auth.js?v=3.84"></script>
 
     <header class="dashboard-header">
         <div class="dashboard-logo">
@@ -85,31 +85,48 @@
 
     <!-- Apps Menu Modal -->
     <div id="appsModal" class="apps-modal" style="display:none;">
-        <div class="apps-grid">
-            <a href="dashboard.html" class="app-item">
-                <i class="fas fa-th-large"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="profile.html" class="app-item">
-                <i class="fas fa-user-circle"></i>
-                <span>Profile</span>
-            </a>
-            <a href="index.html#listings" class="app-item">
-                <i class="fas fa-home"></i>
-                <span>Listings</span>
-            </a>
-            <a href="index.html#services" class="app-item">
-                <i class="fas fa-concierge-bell"></i>
-                <span>Services</span>
-            </a>
-            <a href="index.html#about" class="app-item">
-                <i class="fas fa-users"></i>
-                <span>About</span>
-            </a>
-            <a href="index.html#contact" class="app-item">
-                <i class="fas fa-envelope"></i>
-                <span>Contact</span>
-            </a>
+        <div class="apps-scroll-container">
+            <!-- Core Apps -->
+            <div class="apps-section">
+                <a href="dashboard.html" class="app-item">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="profile.html" class="app-item">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Profile</span>
+                </a>
+            </div>
+
+            <div class="apps-divider"></div>
+
+            <!-- Services -->
+            <div class="apps-section">
+                <a href="index.html#maintenance" class="app-item">
+                    <i class="fas fa-tools"></i>
+                    <span>Maintenance</span>
+                </a>
+                <a href="index.html#cleaning" class="app-item">
+                    <i class="fas fa-broom"></i>
+                    <span>Cleaning</span>
+                </a>
+                <a href="index.html#petcare" class="app-item">
+                    <i class="fas fa-paw"></i>
+                    <span>Pet Care</span>
+                </a>
+                <a href="index.html#laundry" class="app-item">
+                    <i class="fas fa-tshirt"></i>
+                    <span>Laundry</span>
+                </a>
+                <a href="index.html#handyman" class="app-item">
+                    <i class="fas fa-hammer"></i>
+                    <span>Handyman</span>
+                </a>
+                <a href="index.html#services" class="app-item">
+                    <i class="fas fa-concierge-bell"></i>
+                    <span>Services</span>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -1218,9 +1235,9 @@
     <!-- Property Modal == [DYNAMIC COMPONENT] -->
     <div id="propertymodal-placeholder"></div>
 
-    <script src="assets/js/nav.js?v=3.83" defer></script>
-    <script src="assets/js/snackbar.js?v=3.83"></script>
-    <script src="assets/js/main.js?v=3.83" defer></script>
+    <script src="assets/js/nav.js?v=3.84" defer></script>
+    <script src="assets/js/snackbar.js?v=3.84"></script>
+    <script src="assets/js/main.js?v=3.84" defer></script>
     <!-- Google Maps API -->
     <!-- Google Maps API -->
     <!-- Maps Callback Shim -->
@@ -1237,7 +1254,7 @@
     </script>
     <script async defer loading="async"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBskYGOCldwNxevKvAfJaVvy9_8Mjfv22Q&libraries=places&v=weekly&callback=initMapCallback"></script>
-    <script type="module" src="assets/js/admin-dashboard.js?v=3.83"></script>
+    <script type="module" src="assets/js/admin-dashboard.js?v=3.84"></script>
 
 </body>
 
