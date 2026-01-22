@@ -134,7 +134,7 @@ async function initResponsiveVideo() {
   };
 
   const updateVideoSource = () => {
-    const videoSrc = 'images/web-video.mp4?v=3.99';
+    const videoSrc = 'images/web-video.mp4?v=3.100';
     const posterSrc = 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
@@ -1040,6 +1040,10 @@ function initializeApp() {
   });
   loadComponent("#fabs-placeholder", "fabsRC.html");
   loadComponent("#gallery-modal-placeholder", "galleryModalRC.html");
+  loadComponent("#apps-menu-placeholder", "appsMenuRC.html", () => {
+    // Dispatch event for auth.js to know menu is ready, though MutationObserver handles it too
+    document.dispatchEvent(new Event('appsMenuLoaded'));
+  });
 }
 
 /**
@@ -1050,7 +1054,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=3.99`);
+    const response = await fetch(`${url}?v=3.100`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;

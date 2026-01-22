@@ -128,6 +128,12 @@ function initHeader() {
     updateBodyBackground(e.detail);
   });
 
+  // Watch for dynamic Apps Menu load (v3.100)
+  document.addEventListener('appsMenuLoaded', () => {
+    const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+    syncLogos(theme);
+  });
+
   // ================================================================
   // MOBILE MENU
   // ================================================================

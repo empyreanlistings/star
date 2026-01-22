@@ -304,6 +304,12 @@ function initAuth() {
                         applyVisibility();
                     }
                 });
+
+                // DYNAMIC COMPONENT LOAD LISTENER (v3.100)
+                document.addEventListener('appsMenuLoaded', () => {
+                    console.log("[Auth] Apps Menu Component Loaded - Applying Visibility");
+                    setTimeout(applyVisibility, 50); // Small delay to ensure DOM paint
+                });
             };
 
             // Helper: Loading State for Buttons
