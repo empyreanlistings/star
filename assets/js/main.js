@@ -134,7 +134,7 @@ async function initResponsiveVideo() {
   };
 
   const updateVideoSource = () => {
-    const videoSrc = 'images/web-video.mp4?v=3.105';
+    const videoSrc = 'images/web-video.mp4?v=3.106';
     const posterSrc = 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
