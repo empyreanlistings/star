@@ -241,14 +241,20 @@ function initAuth() {
     if (isDashboard || isClientDashboard || isProfile) {
         const cachedUser = localStorage.getItem(USER_CACHE_KEY);
         if (!cachedUser) {
-            document.body.style.opacity = '0';
+            console.warn("🔐 No cached session. Bouncing to login...");
+            window.location.replace("login.html");
+            return;
         } else {
+            // Fast role check
             try {
                 const { role } = JSON.parse(cachedUser);
                 if (isDashboard && role !== "admin") window.location.replace("profile.html");
                 if (isClientDashboard && role !== "owner" && role !== "admin") window.location.replace("profile.html");
-            } catch (e) {
+                // If it passes, stay hidden until confirmed by Firebase (or show if you trust cache)
                 document.body.style.opacity = '0';
+            } catch (e) {
+                window.location.replace("login.html");
+                return;
             }
         }
     }
@@ -382,8 +388,17 @@ function initAuth() {
 
         // Global manual apps toggle listener
         document.addEventListener('click', (e) => {
-            if (e.target.closest('#navAppsBtn')) {
+            const btn = e.target.closest('#navAppsBtn');
+            if (btn) {
+                console.log("[Auth] Apps Button Clicked - Syncing State");
                 applyAppsMenuVisibility(auth.currentUser !== null);
+            }
+
+            // Unified Logout Listener
+            const logoutBtn = e.target.closest('#appsLogoutBtn, #appsLogoutBtnDash, #logoutBtn, .btn-logout');
+            if (logoutBtn) {
+                console.log("[Auth] Logout requested via:", logoutBtn.id || logoutBtn.className);
+                window.handleLogout();
             }
         });
     });

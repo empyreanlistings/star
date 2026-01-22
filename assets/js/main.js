@@ -1054,7 +1054,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=3.105`);
+    const response = await fetch(`${url}?v=3.106`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
@@ -1766,7 +1766,7 @@ document.addEventListener('keydown', (e) => {
   const appsModal = document.getElementById('appsModal');
   const appsBtn = document.getElementById('navAppsBtn');
 
-  if (e.key === 'Escape' && appsModal && appsModal.style.display === 'block') {
+  if (e.key === 'Escape' && appsModal && appsModal.style.display === 'flex') {
     appsModal.style.display = 'none';
     if (appsBtn) {
       appsBtn.setAttribute('aria-expanded', 'false');
