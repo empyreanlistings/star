@@ -134,7 +134,7 @@ async function initResponsiveVideo() {
   };
 
   const updateVideoSource = () => {
-    const videoSrc = 'images/web-video.mp4?v=3.89';
+    const videoSrc = 'images/web-video.mp4?v=3.90';
     const posterSrc = 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
@@ -1050,7 +1050,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=3.89`);
+    const response = await fetch(`${url}?v=3.90`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
@@ -1142,6 +1142,10 @@ document.addEventListener("click", (e) => {
   const logoutBtn = e.target.closest("#appsLogoutBtn, #appsLogoutBtnDash");
   if (logoutBtn) {
     e.preventDefault();
+    // Close modal first
+    const appsModal = document.getElementById('appsModal');
+    if (appsModal) appsModal.style.display = 'none';
+
     if (window.logoutUser) window.logoutUser();
     else console.error("Logout function not found");
   }
