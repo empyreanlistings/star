@@ -9472,3 +9472,53 @@ html[data-theme="light"] .apps-divider {
   height: auto;
   display: block;
 }
+/* Apps Menu Footer & Logout (v3.87) */
+.apps-footer {
+  padding: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto; /* Push to bottom if flex column */
+}
+
+html[data-theme="light"] .apps-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.apps-logout-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(220, 53, 69, 0.1); /* Soft red background */
+  color: #ff6b6b;
+  border: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.apps-logout-btn:hover {
+  background: rgba(220, 53, 69, 0.2);
+  color: #ff4d4d;
+}
+
+html[data-theme="light"] .apps-logout-btn {
+  background: rgba(220, 53, 69, 0.08);
+  color: #dc3545;
+}
+
+html[data-theme="light"] .apps-logout-btn:hover {
+  background: rgba(220, 53, 69, 0.15);
+}
+
+/* Theme Toggle App Item */
+.theme-toggle-app {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  width: 100%; /* Match other app items */
+}

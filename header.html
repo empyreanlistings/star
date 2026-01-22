@@ -22,25 +22,9 @@
     <li><a href="dashboard.html" id="navSignInLink" role="menuitem">SIGN-IN</a></li>
   </ul>
   <div class="nav-right">
-    <!-- Apps Menu Button (Shown when logged in) -->
-    <button id="navAppsBtn" class="icon-button-default" aria-label="Apps Menu" style="display:none;">
+    <!-- Apps Button -->
+    <button id="navAppsBtn" class="icon-button-default" aria-label="Apps" aria-expanded="false">
       <i class="fas fa-grip"></i>
-    </button>
-
-    <!-- Dashboard Icon (Shown for admins or when logged out as login entry) -->
-    <a href="dashboard.html" id="navDashboardLink" class="icon-button-default" aria-label="Dashboard">
-      <i class="fas fa-th-large"></i>
-    </a>
-
-    <!-- User Avatar (Shown when signed in) -->
-    <a href="profile.html" id="navAvatarLink" class="icon-button-default" aria-label="My Profile" style="display:none;">
-      <i id="navDashboardIcon" class="fas fa-user-circle" style="display:none;"></i>
-      <img id="navAvatarImg" src="images/logo_dark.png" alt="User" style="display:none;">
-    </a>
-
-    <!-- Light / Dark Mode Toggle -->
-    <button class="theme-toggle" aria-label="Toggle dark/light theme">
-      <i class="theme-icon fas fa-moon"></i> <!-- Moon = dark mode -->
     </button>
 
     <!-- Mobile Menu Toggle (Hamburger) -->
@@ -69,7 +53,7 @@
   <div class="apps-scroll-container">
     <!-- Menu Logo -->
     <div class="apps-menu-logo-container">
-      <img src="images/logo_dark.png" alt="Empyrean" id="appsMenuLogo" class="apps-menu-logo">
+      <img src="images/start_plus_dark.png" alt="Empyrean" id="appsMenuLogo" class="apps-menu-logo">
     </div>
 
     <!-- Core Apps -->
@@ -82,6 +66,11 @@
         <i class="fas fa-user-circle"></i>
         <span>Profile</span>
       </a>
+      <!-- Theme Toggle -->
+      <button class="app-item theme-toggle-app" id="appsThemeToggle">
+        <i class="fas fa-adjust"></i>
+        <span>Theme</span>
+      </button>
     </div>
 
     <div class="apps-divider"></div>
@@ -113,5 +102,10 @@
         <span>Services</span>
       </a>
     </div>
+  </div>
+  <div class="apps-footer">
+    <button id="appsLogoutBtn" class="apps-logout-btn">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
   </div>
 </div>

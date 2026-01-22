@@ -134,7 +134,7 @@ async function initResponsiveVideo() {
   };
 
   const updateVideoSource = () => {
-    const videoSrc = 'images/web-video.mp4?v=3.86';
+    const videoSrc = 'images/web-video.mp4?v=3.87';
     const posterSrc = 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
@@ -1050,7 +1050,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=3.86`);
+    const response = await fetch(`${url}?v=3.87`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
@@ -1106,11 +1106,11 @@ window.syncThemeUI = function (theme) {
 
   // Apps Menu Link Logo (Header)
   const appsLogo = document.getElementById("appsMenuLogo");
-  if (appsLogo) appsLogo.src = theme === "dark" ? logos.dark : logos.light;
+  if (appsLogo) appsLogo.src = theme === "dark" ? "images/start_plus_dark.png" : "images/start_plus_light.png";
 
   // Apps Menu Link Logo (Dashboard)
   const appsLogoDash = document.getElementById("appsMenuLogoDash");
-  if (appsLogoDash) appsLogoDash.src = theme === "dark" ? logos.dark : logos.light;
+  if (appsLogoDash) appsLogoDash.src = theme === "dark" ? "images/start_plus_dark.png" : "images/start_plus_light.png";
 };
 
 function bindThemeToggles() {
@@ -1123,7 +1123,7 @@ function bindThemeToggles() {
 
   // Use event delegation for dynamic theme toggles
   document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".theme-toggle");
+    const btn = e.target.closest(".theme-toggle, .theme-toggle-app"); // Updated selector
     if (!btn) return;
 
     const current = document.documentElement.getAttribute("data-theme") || "dark";
@@ -1136,6 +1136,18 @@ function bindThemeToggles() {
     document.dispatchEvent(new CustomEvent("themechange", { detail: next }));
   });
 }
+
+// BIND LOGOUT BUTTONS (Delegation for dynamic elements)
+document.addEventListener("click", (e) => {
+  const logoutBtn = e.target.closest("#appsLogoutBtn, #appsLogoutBtnDash");
+  if (logoutBtn) {
+    e.preventDefault();
+    import('./auth.js').then(module => {
+      if (module.logoutUser) module.logoutUser();
+      else console.error("Logout function not found");
+    }).catch(err => console.error("Failed to load auth module", err));
+  }
+});
 
 // Auto-init on script load
 if (document.readyState === "loading") {
