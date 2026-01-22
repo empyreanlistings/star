@@ -587,7 +587,13 @@ function initAuth() {
             localStorage.removeItem(USER_CACHE_KEY);
             updateFooterAuthUI(false);
 
-            // Show Core Apps & Logout in Apps Menu
+            // Reset Apps Menu Visibility (v3.104)
+            const appsModal = document.getElementById("appsModal");
+            if (appsModal) {
+                appsModal.classList.remove("user-authenticated");
+            }
+
+            // Legacy cleanup (can be removed later)
             const coreApps = document.querySelectorAll(".apps-core-section");
             const coreDividers = document.querySelectorAll(".apps-core-divider");
             const logoutBtns = document.querySelectorAll(".apps-footer");
