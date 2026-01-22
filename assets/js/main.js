@@ -134,7 +134,7 @@ async function initResponsiveVideo() {
   };
 
   const updateVideoSource = () => {
-    const videoSrc = 'images/web-video.mp4?v=3.108';
+    const videoSrc = 'images/web-video.mp4?v=3.109';
     const posterSrc = 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
@@ -1058,7 +1058,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=3.108`);
+    const response = await fetch(`${url}?v=3.109`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
@@ -1086,8 +1086,16 @@ function applySavedTheme() {
 
 window.syncThemeUI = function (theme) {
   // 1. Update Icons
-  document.querySelectorAll(".theme-toggle .theme-icon").forEach(icon => {
-    icon.className = theme === "dark" ? "theme-icon fas fa-sun" : "theme-icon fas fa-moon";
+  const themeIconClass = theme === "dark" ? "fas fa-sun" : "fas fa-moon";
+
+  // Standard nav theme icons
+  document.querySelectorAll(".theme-toggle .theme-icon, .theme-toggle i").forEach(icon => {
+    icon.className = themeIconClass;
+  });
+
+  // Apps menu theme icon (v3.100)
+  document.querySelectorAll(".app-icon-theme").forEach(icon => {
+    icon.className = `app-icon-theme ${themeIconClass}`;
   });
 
   // 2. Update Logos

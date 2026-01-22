@@ -9322,7 +9322,7 @@ html[data-theme="light"] #navAppsBtn:hover {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  border-radius: 50px;
   padding: 16px;
   z-index: 2000;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -9403,6 +9403,7 @@ html[data-theme="light"] .app-item:hover {
   position: fixed !important;
   top: 70px !important;
   right: 20px !important;
+  border-radius: 50px !important;
 }
 
 /* ================= SEGMENTED APPS MENU (v3.84) ================= */
