@@ -9543,3 +9543,10 @@ html[data-theme="light"] .apps-logout-btn:hover {
 .app-icon-theme { color: #7f8c8d !important; } /* Gray */
 
 html[data-theme="light"] .app-icon-services { color: #95a5a6 !important; }
+
+/* Secure Apps Menu: Hidden by default (v3.92) */
+.apps-core-section,
+.apps-core-divider,
+.apps-footer {
+  display: none !important;
+}

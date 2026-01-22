@@ -262,9 +262,9 @@ function initAuth() {
                 const coreDividers = document.querySelectorAll(".apps-core-divider");
                 const logoutBtns = document.querySelectorAll(".apps-footer");
 
-                coreApps.forEach(el => el.style.display = "grid");
-                coreDividers.forEach(el => el.style.display = "block");
-                logoutBtns.forEach(el => el.style.display = "block");
+                coreApps.forEach(el => el.style.setProperty("display", "grid", "important"));
+                coreDividers.forEach(el => el.style.setProperty("display", "block", "important"));
+                logoutBtns.forEach(el => el.style.setProperty("display", "flex", "important"));
             };
 
             // 3. Render from Cache Instantly
