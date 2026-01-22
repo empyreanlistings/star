@@ -9453,3 +9453,18 @@ html[data-theme="light"] .apps-scroll-container::-webkit-scrollbar-thumb {
 html[data-theme="light"] .apps-divider {
   background-color: rgba(0, 0, 0, 0.08);
 }
+
+/* Apps Menu Logo (v3.85) */
+.apps-menu-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 4px;
+}
+
+.apps-menu-logo {
+  max-width: 140px;
+  height: auto;
+  display: block;
+}

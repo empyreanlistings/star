@@ -134,7 +134,7 @@ async function initResponsiveVideo() {
   };
 
   const updateVideoSource = () => {
-    const videoSrc = 'images/web-video.mp4?v=3.84';
+    const videoSrc = 'images/web-video.mp4?v=3.85';
     const posterSrc = 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
@@ -1050,7 +1050,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=3.84`);
+    const response = await fetch(`${url}?v=3.85`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
@@ -1103,6 +1103,14 @@ window.syncThemeUI = function (theme) {
   // Mobile menu logo
   const mobileLogo = document.querySelector(".mobile-menu img");
   if (mobileLogo) mobileLogo.src = theme === "dark" ? logos.dark : logos.light;
+
+  // Apps Menu Link Logo (Header)
+  const appsLogo = document.getElementById("appsMenuLogo");
+  if (appsLogo) appsLogo.src = theme === "dark" ? logos.dark : logos.light;
+
+  // Apps Menu Link Logo (Dashboard)
+  const appsLogoDash = document.getElementById("appsMenuLogoDash");
+  if (appsLogoDash) appsLogoDash.src = theme === "dark" ? logos.dark : logos.light;
 };
 
 function bindThemeToggles() {
