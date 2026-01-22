@@ -9531,3 +9531,15 @@ html[data-theme="light"] .apps-logout-btn:hover {
   width: 100%;
   /* Match other app items */
 }
+/* Apps Icon Colors (v3.89) */
+.app-icon-dashboard { color: #4a90e2 !important; } /* Blue */
+.app-icon-profile { color: #9013fe !important; } /* Purple */
+.app-icon-maintenance { color: #f5a623 !important; } /* Orange */
+.app-icon-cleaning { color: #50e3c2 !important; } /* Cyan */
+.app-icon-petcare { color: #8b572a !important; } /* Brown */
+.app-icon-laundry { color: #bd10e0 !important; } /* Pink */
+.app-icon-handyman { color: #f8e71c !important; } /* Yellow */
+.app-icon-services { color: #3b3b3b !important; } /* Dark Gray */
+.app-icon-theme { color: #7f8c8d !important; } /* Gray */
+
+html[data-theme="light"] .app-icon-services { color: #95a5a6 !important; }

@@ -134,7 +134,7 @@ async function initResponsiveVideo() {
   };
 
   const updateVideoSource = () => {
-    const videoSrc = 'images/web-video.mp4?v=3.88';
+    const videoSrc = 'images/web-video.mp4?v=3.89';
     const posterSrc = 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
@@ -1050,7 +1050,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=3.88`);
+    const response = await fetch(`${url}?v=3.89`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
@@ -1142,10 +1142,8 @@ document.addEventListener("click", (e) => {
   const logoutBtn = e.target.closest("#appsLogoutBtn, #appsLogoutBtnDash");
   if (logoutBtn) {
     e.preventDefault();
-    import('./auth.js').then(module => {
-      if (module.logoutUser) module.logoutUser();
-      else console.error("Logout function not found");
-    }).catch(err => console.error("Failed to load auth module", err));
+    if (window.logoutUser) window.logoutUser();
+    else console.error("Logout function not found");
   }
 });
 

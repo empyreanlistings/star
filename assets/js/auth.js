@@ -254,8 +254,17 @@ function initAuth() {
                 // Show/Hide Apps Button
                 const appsBtn = document.getElementById("navAppsBtn");
                 if (appsBtn) {
-                    appsBtn.style.display = "flex"; // Changed from inline-flex to flex to match CSS
+                    appsBtn.style.display = "flex";
                 }
+
+                // Show Core Apps & Logout in Apps Menu
+                const coreApps = document.querySelectorAll(".apps-core-section");
+                const coreDividers = document.querySelectorAll(".apps-core-divider");
+                const logoutBtns = document.querySelectorAll(".apps-footer");
+
+                coreApps.forEach(el => el.style.display = "grid");
+                coreDividers.forEach(el => el.style.display = "block");
+                logoutBtns.forEach(el => el.style.display = "block");
             };
 
             // 3. Render from Cache Instantly
@@ -390,6 +399,15 @@ function initAuth() {
             localStorage.removeItem(USER_CACHE_KEY);
             updateFooterAuthUI(false);
 
+            // HIDE Core Apps & Logout in Apps Menu
+            const coreApps = document.querySelectorAll(".apps-core-section");
+            const coreDividers = document.querySelectorAll(".apps-core-divider");
+            const logoutBtns = document.querySelectorAll(".apps-footer");
+
+            coreApps.forEach(el => el.style.display = "none");
+            coreDividers.forEach(el => el.style.display = "none");
+            logoutBtns.forEach(el => el.style.display = "none");
+
             if (isLoggingOut) {
                 window.location.replace("index.html");
                 isLoggingOut = false;
@@ -413,15 +431,16 @@ function initAuth() {
             if (dashLink) {
                 dashLink.style.display = "none";
             }
-            if (dashLink) {
-                dashLink.style.display = "none";
-            }
             if (avatarLink) avatarLink.style.display = "none";
 
+            // Keep Apps button visible (so they can access Theme/Services)
             const appsBtn = document.getElementById("navAppsBtn");
-            if (appsBtn) appsBtn.style.display = "none";
+            if (appsBtn) appsBtn.style.display = "flex";
         }
     });
+
+    // Globals for external access
+    window.logoutUser = handleLogout;
 
     const loginForm = document.getElementById("loginForm");
     if (loginForm) {
