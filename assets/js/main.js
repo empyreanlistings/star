@@ -134,7 +134,7 @@ async function initResponsiveVideo() {
   };
 
   const updateVideoSource = () => {
-    const videoSrc = 'images/web-video.mp4?v=3.82';
+    const videoSrc = 'images/web-video.mp4?v=3.83';
     const posterSrc = 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
@@ -1050,7 +1050,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=3.82`);
+    const response = await fetch(`${url}?v=3.83`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
@@ -1724,9 +1724,9 @@ document.addEventListener('click', (e) => {
     return;
   }
 
-  // Close when clicking outside
+  // Close when clicking outside OR clicking a link inside
   if (appsModal && appsModal.style.display === 'block') {
-    if (!appsModal.contains(e.target)) {
+    if (!appsModal.contains(e.target) || e.target.closest('.app-item')) {
       appsModal.style.display = 'none';
       const btn = document.getElementById('navAppsBtn');
       if (btn) btn.setAttribute('aria-expanded', 'false');

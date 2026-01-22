@@ -9397,3 +9397,9 @@ html[data-theme="light"] .app-item:hover {
   font-weight: 500;
   text-align: center;
 }
+/* HOTFIX: Ensure Apps Modal stays fixed in view */
+.apps-modal {
+  position: fixed !important;
+  top: 70px !important;
+  right: 20px !important;
+}
