@@ -9282,3 +9282,118 @@ html[data-theme="light"] .pagination-btn {
     width: 95% !important;
   }
 }
+
+/* ================= APPS MENU (GOOGLE STYLE) ================= */
+
+/* Button Style */
+#navAppsBtn {
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  /* Match other nav buttons */
+  display: flex;
+  /* Initially hidden by JS, but flex when shown */
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  /* Circular hover effect like Google */
+  transition: background 0.2s ease;
+  margin-right: 8px;
+  /* Spacing from dashboard/avatar */
+}
+
+#navAppsBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="light"] #navAppsBtn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Modal Container */
+.apps-modal {
+  position: absolute;
+  top: 60px;
+  /* Below header */
+  right: 80px;
+  /* Align roughly with button */
+  width: 320px;
+  background: rgba(30, 30, 35, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 16px;
+  z-index: 2000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  transform-origin: top right;
+  animation: appsScaleIn 0.2s cubic-bezier(0.2, 0, 0, 1) forwards;
+  display: none;
+  /* Toggled by JS */
+}
+
+@keyframes appsScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Light Theme Override */
+html[data-theme="light"] .apps-modal {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Apps Grid */
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+/* App Item */
+.app-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--white);
+  padding: 12px 4px;
+  border-radius: 12px;
+  transition: background 0.2s ease;
+}
+
+.app-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="light"] .app-item {
+  color: var(--black);
+}
+
+html[data-theme="light"] .app-item:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+  /* Darker hover for contrast */
+}
+
+/* Icon */
+.app-item i {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: inherit;
+}
+
+/* Label */
+.app-item span {
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+}

@@ -1708,3 +1708,40 @@ function initLb() {
 
 // Init Lightbox
 initLb();
+
+/* ================= APPS MENU LOGIC ================= */
+document.addEventListener('DOMContentLoaded', () => {
+  const appsBtn = document.getElementById('navAppsBtn');
+  const appsModal = document.getElementById('appsModal');
+
+  if (appsBtn && appsModal) {
+    // Toggle Menu
+    appsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isVisible = appsModal.style.display === 'block';
+      appsModal.style.display = isVisible ? 'none' : 'block';
+      
+      // Accessibility update
+      appsBtn.setAttribute('aria-expanded', !isVisible);
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+      if (appsModal.style.display === 'block' && 
+          !appsModal.contains(e.target) && 
+          !appsBtn.contains(e.target)) {
+        appsModal.style.display = 'none';
+        appsBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Close when pressing Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && appsModal.style.display === 'block') {
+        appsModal.style.display = 'none';
+        appsBtn.setAttribute('aria-expanded', 'false');
+        appsBtn.focus();
+      }
+    });
+  }
+});

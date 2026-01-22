@@ -57,6 +57,11 @@
         </div>
 
         <div class="nav-right">
+            <!-- Apps Menu Button -->
+            <button id="navAppsBtn" class="icon-button-default" aria-label="Apps Menu">
+                <i class="fas fa-grip-vertical"></i>
+            </button>
+
             <!-- Quick Actions -->
             <a href="profile.html" id="navAvatarLink" class="icon-button-default" title="My Profile"
                 style="display:none;">
@@ -69,7 +74,7 @@
                 <span id="userRole"
                     style="color:var(--dash-text); font-size:0.75rem; opacity:0.7; text-transform:uppercase; letter-spacing:0.5px;"></span>
             </div>
-             <button id="themeToggleDash" class="theme-toggle" aria-label="Toggle Theme">
+            <button id="themeToggleDash" class="theme-toggle" aria-label="Toggle Theme">
                 <i class="theme-icon fas fa-moon"></i>
             </button>
             <button id="logoutBtn" class="icon-button-default" title="Logout">
@@ -77,6 +82,36 @@
             </button>
         </div>
     </header>
+
+    <!-- Apps Menu Modal -->
+    <div id="appsModal" class="apps-modal" style="display:none;">
+        <div class="apps-grid">
+            <a href="dashboard.html" class="app-item">
+                <i class="fas fa-th-large"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="profile.html" class="app-item">
+                <i class="fas fa-user-circle"></i>
+                <span>Profile</span>
+            </a>
+            <a href="index.html#listings" class="app-item">
+                <i class="fas fa-home"></i>
+                <span>Listings</span>
+            </a>
+            <a href="index.html#services" class="app-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Services</span>
+            </a>
+            <a href="index.html#about" class="app-item">
+                <i class="fas fa-users"></i>
+                <span>About</span>
+            </a>
+            <a href="index.html#contact" class="app-item">
+                <i class="fas fa-envelope"></i>
+                <span>Contact</span>
+            </a>
+        </div>
+    </div>
 
     <div id="listingsTableContainer" class="dashboard-tab-content listings-table-container active">
         <!-- Header with Add Button -->

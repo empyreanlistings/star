@@ -250,6 +250,12 @@ function initAuth() {
                         profileIcon.style.display = "block";
                     }
                 }
+
+                // Show/Hide Apps Button
+                const appsBtn = document.getElementById("navAppsBtn");
+                if (appsBtn) {
+                    appsBtn.style.display = "flex"; // Changed from inline-flex to flex to match CSS
+                }
             };
 
             // 3. Render from Cache Instantly
@@ -407,7 +413,13 @@ function initAuth() {
             if (dashLink) {
                 dashLink.style.display = "none";
             }
+            if (dashLink) {
+                dashLink.style.display = "none";
+            }
             if (avatarLink) avatarLink.style.display = "none";
+
+            const appsBtn = document.getElementById("navAppsBtn");
+            if (appsBtn) appsBtn.style.display = "none";
         }
     });
 

@@ -22,6 +22,11 @@
     <li><a href="dashboard.html" id="navSignInLink" role="menuitem">SIGN-IN</a></li>
   </ul>
   <div class="nav-right">
+    <!-- Apps Menu Button (Shown when logged in) -->
+    <button id="navAppsBtn" class="icon-button-default" aria-label="Apps Menu" style="display:none;">
+      <i class="fas fa-grip"></i>
+    </button>
+
     <!-- Dashboard Icon (Shown for admins or when logged out as login entry) -->
     <a href="dashboard.html" id="navDashboardLink" class="icon-button-default" aria-label="Dashboard">
       <i class="fas fa-th-large"></i>
@@ -57,7 +62,34 @@
   <a href="index.html#about"> ABOUT</a>
   <a href="index.html#contact"> CONTACT</a>
   <a href="dashboard.html" id="navSignInLink" class="navSignInLinkMobile"> SIGN-IN</a>
+</div>
 
-
-
+<!-- Apps Menu Modal -->
+<div id="appsModal" class="apps-modal" style="display:none;">
+  <div class="apps-grid">
+    <a href="dashboard.html" class="app-item">
+      <i class="fas fa-th-large"></i>
+      <span>Dashboard</span>
+    </a>
+    <a href="profile.html" class="app-item">
+      <i class="fas fa-user-circle"></i>
+      <span>Profile</span>
+    </a>
+    <a href="index.html#listings" class="app-item">
+      <i class="fas fa-home"></i>
+      <span>Listings</span>
+    </a>
+    <a href="index.html#services" class="app-item">
+      <i class="fas fa-concierge-bell"></i>
+      <span>Services</span>
+    </a>
+    <a href="index.html#about" class="app-item">
+      <i class="fas fa-users"></i>
+      <span>About</span>
+    </a>
+    <a href="index.html#contact" class="app-item">
+      <i class="fas fa-envelope"></i>
+      <span>Contact</span>
+    </a>
+  </div>
 </div>
