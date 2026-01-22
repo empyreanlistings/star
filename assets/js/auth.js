@@ -232,10 +232,10 @@ async function handleResetPassword(e) {
 // --- INITIALIZATION & STATE ---
 function initAuth() {
     const path = window.location.pathname.toLowerCase();
-    const isDashboard = path.includes("dashboard.html") && !path.includes("clientdashboard");
+    const isDashboard = path.includes("dashboard") && !path.includes("clientdashboard");
     const isClientDashboard = path.includes("clientdashboard");
-    const isLogin = path.includes("login.html");
-    const isProfile = path.includes("profile.html");
+    const isLogin = path.includes("login");
+    const isProfile = path.includes("profile");
 
     // Pre-flight protection
     if (isDashboard || isClientDashboard || isProfile) {
@@ -248,8 +248,8 @@ function initAuth() {
             // Fast role check
             try {
                 const { role } = JSON.parse(cachedUser);
-                if (isDashboard && role !== "admin") window.location.replace("profile.html");
-                if (isClientDashboard && role !== "owner" && role !== "admin") window.location.replace("profile.html");
+                if (isDashboard && role !== "admin") { window.location.replace("profile.html"); return; }
+                if (isClientDashboard && role !== "owner" && role !== "admin") { window.location.replace("profile.html"); return; }
                 // If it passes, stay hidden until confirmed by Firebase (or show if you trust cache)
                 document.body.style.opacity = '0';
             } catch (e) {
@@ -316,12 +316,12 @@ function initAuth() {
                     }
 
                     // Protect pages
-                    if (isDashboard && newRole !== "admin") window.location.replace("profile.html");
-                    if (isClientDashboard && newRole !== "owner" && newRole !== "admin") window.location.replace("profile.html");
+                    if (isDashboard && newRole !== "admin") { window.location.replace("profile.html"); return; }
+                    if (isClientDashboard && newRole !== "owner" && newRole !== "admin") { window.location.replace("profile.html"); return; }
                     if (isLogin) {
-                        if (newRole === "admin") window.location.replace("dashboard.html");
-                        else if (newRole === "owner") window.location.replace("clientdashboard.html");
-                        else window.location.replace("profile.html");
+                        if (newRole === "admin") { window.location.replace("dashboard.html"); return; }
+                        else if (newRole === "owner") { window.location.replace("clientdashboard.html"); return; }
+                        else { window.location.replace("profile.html"); return; }
                     }
                 }
             } catch (err) {
