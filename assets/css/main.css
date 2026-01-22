@@ -9318,7 +9318,7 @@ html[data-theme="light"] #navAppsBtn:hover {
   right: 80px;
   /* Align roughly with button */
   width: 320px;
-  background: rgba(30, 30, 35, 0.95);
+  background: rgba(50, 54, 58, 0.98);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -9397,6 +9397,7 @@ html[data-theme="light"] .app-item:hover {
   font-weight: 500;
   text-align: center;
 }
+
 /* HOTFIX: Ensure Apps Modal stays fixed in view */
 .apps-modal {
   position: fixed !important;
@@ -9406,9 +9407,11 @@ html[data-theme="light"] .app-item:hover {
 
 /* ================= SEGMENTED APPS MENU (v3.84) ================= */
 .apps-modal {
-  padding: 0 !important; /* Reset padding for scroll container */
+  padding: 0 !important;
+  /* Reset padding for scroll container */
   max-height: 480px;
-  display: none; /* JS toggles this */
+  display: none;
+  /* JS toggles this */
   flex-direction: column;
 }
 
@@ -9447,7 +9450,8 @@ html[data-theme="light"] .apps-scroll-container::-webkit-scrollbar-thumb {
 .apps-divider {
   height: 1px;
   background-color: rgba(255, 255, 255, 0.1);
-  margin: 16px 4px; /* Maintain vertical rhythm */
+  margin: 16px 4px;
+  /* Maintain vertical rhythm */
 }
 
 html[data-theme="light"] .apps-divider {
