@@ -47,6 +47,21 @@ async function handleLogin(e) {
         }
     }
 }
+}
+
+// Logout Function
+window.handleLogout = async () => {
+    isLoggingOut = true;
+    try {
+        await signOut(auth);
+        console.log("Logged out successfully.");
+        // Redirect handled by onAuthStateChanged
+    } catch (error) {
+        console.error("Logout Error:", error);
+    }
+};
+
+window.logoutUser = window.handleLogout; // Alias for backward compatibility
 
 // Signup Function
 async function handleSignup(e) {
@@ -193,7 +208,7 @@ function initAuth() {
                 footerBtn.href = "#"; // Handled by listener
                 footerBtn.onclick = (e) => {
                     e.preventDefault();
-                    handleLogout();
+                    window.handleLogout();
                 };
             } else {
                 footerBtn.textContent = "SIGN-IN";
