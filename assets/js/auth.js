@@ -47,7 +47,6 @@ async function handleLogin(e) {
         }
     }
 }
-}
 
 // Logout Function
 window.handleLogout = async () => {
