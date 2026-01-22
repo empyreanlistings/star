@@ -134,7 +134,7 @@ async function initResponsiveVideo() {
   };
 
   const updateVideoSource = () => {
-    const videoSrc = 'images/web-video.mp4?v=3.87';
+    const videoSrc = 'images/web-video.mp4?v=3.88';
     const posterSrc = 'images/web-video.webp';
     const currentSrc = video.getAttribute('data-last-src');
 
@@ -1050,7 +1050,7 @@ async function loadComponent(selector, url, callback) {
   if (!container) return;
 
   try {
-    const response = await fetch(`${url}?v=3.87`);
+    const response = await fetch(`${url}?v=3.88`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const html = await response.text();
     container.innerHTML = html;
@@ -1106,11 +1106,11 @@ window.syncThemeUI = function (theme) {
 
   // Apps Menu Link Logo (Header)
   const appsLogo = document.getElementById("appsMenuLogo");
-  if (appsLogo) appsLogo.src = theme === "dark" ? "images/start_plus_dark.png" : "images/start_plus_light.png";
+  if (appsLogo) appsLogo.src = theme === "dark" ? logos.dark : logos.light;
 
   // Apps Menu Link Logo (Dashboard)
   const appsLogoDash = document.getElementById("appsMenuLogoDash");
-  if (appsLogoDash) appsLogoDash.src = theme === "dark" ? "images/start_plus_dark.png" : "images/start_plus_light.png";
+  if (appsLogoDash) appsLogoDash.src = theme === "dark" ? logos.dark : logos.light;
 };
 
 function bindThemeToggles() {
@@ -1738,14 +1738,15 @@ document.addEventListener('click', (e) => {
   // Toggle Menu
   if (appsBtn && appsModal) {
     e.stopPropagation();
-    const isVisible = appsModal.style.display === 'block';
-    appsModal.style.display = isVisible ? 'none' : 'block';
+    const isVisible = appsModal.style.display === 'flex';
+    appsModal.style.display = isVisible ? 'none' : 'flex';
     appsBtn.setAttribute('aria-expanded', !isVisible);
     return;
   }
 
   // Close when clicking outside OR clicking a link inside
-  if (appsModal && appsModal.style.display === 'block') {
+  // Close when clicking outside OR clicking a link inside
+  if (appsModal && appsModal.style.display === 'flex') {
     if (!appsModal.contains(e.target) || e.target.closest('.app-item')) {
       appsModal.style.display = 'none';
       const btn = document.getElementById('navAppsBtn');

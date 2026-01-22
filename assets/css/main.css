@@ -9411,14 +9411,19 @@ html[data-theme="light"] .app-item:hover {
   /* Reset padding for scroll container */
   max-height: 480px;
   display: none;
-  /* JS toggles this */
+  overflow: hidden;
+  /* Contain children */
   flex-direction: column;
 }
 
 .apps-scroll-container {
   padding: 16px;
   overflow-y: auto;
-  max-height: 460px;
+  flex: 1;
+  /* Take remaining space */
+  min-height: 0;
+  /* Allow shrinking */
+  /* Custom scrollbar */
   /* Custom scrollbar */
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
@@ -9472,11 +9477,13 @@ html[data-theme="light"] .apps-divider {
   height: auto;
   display: block;
 }
+
 /* Apps Menu Footer & Logout (v3.87) */
 .apps-footer {
   padding: 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: auto; /* Push to bottom if flex column */
+  margin-top: auto;
+  /* Push to bottom if flex column */
 }
 
 html[data-theme="light"] .apps-footer {
@@ -9487,7 +9494,8 @@ html[data-theme="light"] .apps-footer {
   width: 100%;
   padding: 12px;
   border-radius: 12px;
-  background: rgba(220, 53, 69, 0.1); /* Soft red background */
+  background: rgba(220, 53, 69, 0.1);
+  /* Soft red background */
   color: #ff6b6b;
   border: none;
   font-weight: 600;
@@ -9520,5 +9528,6 @@ html[data-theme="light"] .apps-logout-btn:hover {
   cursor: pointer;
   font-family: inherit;
   font-size: inherit;
-  width: 100%; /* Match other app items */
+  width: 100%;
+  /* Match other app items */
 }
