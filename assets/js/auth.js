@@ -21,48 +21,128 @@ let isLoggingOut = false;
 const USER_CACHE_KEY = "star_user_profile";
 const REMEMBER_KEY = "star_remember_me";
 
-// Login Function
+// --- HELPERS ---
+const setLoading = (btn, isLoading) => {
+    if (!btn) return;
+    if (isLoading) {
+        btn.dataset.originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    } else {
+        btn.disabled = false;
+        btn.innerHTML = btn.dataset.originalText || btn.innerHTML;
+    }
+};
+
+const applyAppsMenuVisibility = (isLoggedIn) => {
+    const modal = document.getElementById("appsModal");
+    if (modal) {
+        if (isLoggedIn) {
+            modal.classList.add("user-authenticated");
+        } else {
+            modal.classList.remove("user-authenticated");
+        }
+    }
+};
+
+const updateAvatarUI = (url, isProfilePage) => {
+    const avatarLink = document.getElementById("navAvatarLink");
+    const avatarImg = document.getElementById("navAvatarImg");
+    const profileIcon = document.getElementById("navDashboardIcon");
+
+    if (!avatarLink) return;
+
+    if (isProfilePage) {
+        avatarLink.style.display = "none";
+        return;
+    }
+
+    avatarLink.style.display = "inline-flex";
+    avatarLink.href = "profile.html";
+
+    if (url) {
+        if (avatarImg) {
+            avatarImg.src = url;
+            avatarImg.style.display = "block";
+        }
+        if (profileIcon) profileIcon.style.display = "none";
+    } else {
+        if (avatarImg) avatarImg.style.display = "none";
+        if (profileIcon) {
+            profileIcon.className = "fas fa-user-circle";
+            profileIcon.style.display = "block";
+        }
+    }
+};
+
+const updateFooterAuthUI = (isLoggedIn) => {
+    const footerBtn = document.getElementById("footerSignInBtn");
+    if (footerBtn) {
+        if (isLoggedIn) {
+            footerBtn.textContent = "SIGN-OUT";
+            footerBtn.href = "#";
+            footerBtn.onclick = (e) => {
+                e.preventDefault();
+                window.handleLogout();
+            };
+        } else {
+            footerBtn.textContent = "SIGN-IN";
+            footerBtn.href = "login.html";
+            footerBtn.onclick = null;
+        }
+    }
+};
+
+// --- AUTH ACTIONS ---
+window.handleLogout = async () => {
+    isLoggingOut = true;
+    try {
+        localStorage.removeItem(USER_CACHE_KEY);
+        // Clear admin caches too
+        localStorage.removeItem("star_listings");
+        localStorage.removeItem("star_gallery");
+        localStorage.removeItem("star_palawan_gallery");
+
+        await signOut(auth);
+        console.log("Logged out successfully.");
+    } catch (error) {
+        console.error("Logout Error:", error);
+        isLoggingOut = false;
+    }
+};
+window.logoutUser = window.handleLogout;
+
 async function handleLogin(e) {
     e.preventDefault();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const rememberMe = document.getElementById("rememberMe")?.checked;
     const errorDiv = document.getElementById("loginError");
+    const submitBtn = e.target.querySelector("button[type='submit']");
 
-    // Handle Remember Me (Email only for security)
-    if (rememberMe) {
-        localStorage.setItem(REMEMBER_KEY, JSON.stringify({ email }));
-    } else {
-        localStorage.removeItem(REMEMBER_KEY);
-    }
+    if (errorDiv) errorDiv.style.display = "none";
+    setLoading(submitBtn, true);
 
     try {
+        if (rememberMe) {
+            await setPersistence(auth, browserLocalPersistence);
+            localStorage.setItem(REMEMBER_KEY, JSON.stringify({ email }));
+        } else {
+            await setPersistence(auth, browserSessionPersistence);
+            localStorage.removeItem(REMEMBER_KEY);
+        }
+
         await signInWithEmailAndPassword(auth, email, password);
-        // Auth state listener handles redirect
     } catch (error) {
         console.error("Login Failed", error);
+        setLoading(submitBtn, false);
         if (errorDiv) {
-            errorDiv.textContent = error.message.includes("auth/") ? "Invalid email or password." : error.message;
+            errorDiv.textContent = "Invalid email or password.";
             errorDiv.style.display = "block";
         }
     }
 }
 
-// Logout Function
-window.handleLogout = async () => {
-    isLoggingOut = true;
-    try {
-        await signOut(auth);
-        console.log("Logged out successfully.");
-        // Redirect handled by onAuthStateChanged
-    } catch (error) {
-        console.error("Logout Error:", error);
-    }
-};
-
-window.logoutUser = window.handleLogout; // Alias for backward compatibility
-
-// Signup Function
 async function handleSignup(e) {
     e.preventDefault();
     const fullName = document.getElementById("fullName").value;
@@ -72,51 +152,49 @@ async function handleSignup(e) {
     const avatarFile = document.getElementById("avatarUpload")?.files[0];
     const errorDiv = document.getElementById("signupError");
     const successDiv = document.getElementById("signupSuccess");
+    const submitBtn = e.target.querySelector("button[type='submit']");
 
     if (password !== confirmPassword) {
-        errorDiv.textContent = "Passwords do not match.";
-        errorDiv.style.display = "block";
+        if (errorDiv) {
+            errorDiv.textContent = "Passwords do not match.";
+            errorDiv.style.display = "block";
+        }
         return;
     }
 
+    if (errorDiv) errorDiv.style.display = "none";
+    setLoading(submitBtn, true);
+
     try {
-        errorDiv.style.display = "none";
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
         let photoURL = "";
         if (avatarFile) {
-            const storageRef = ref(storage, `avatars/${user.uid}/${Date.now()}_${avatarFile.name}`);
+            const storageRef = ref(storage, `avatars/${user.uid}/${avatarFile.name}`);
             const snapshot = await uploadBytes(storageRef, avatarFile);
             photoURL = await getDownloadURL(snapshot.ref);
         }
 
-        // Update Auth Profile
-        await updateProfile(user, {
-            displayName: fullName,
-            photoURL: photoURL
-        });
+        await updateProfile(user, { displayName: fullName, photoURL: photoURL });
 
-        // Create Firestore User Doc
         await setDoc(doc(db, "Users", user.uid), {
             uid: user.uid,
             email: email,
             display_name: fullName,
             photo_url: photoURL,
-            role: "user", // Default role
-            created_at: new Date().toISOString(),
-            last_login: new Date().toISOString()
+            role: "user",
+            created_at: new Date().toISOString()
         });
 
         if (successDiv) {
             successDiv.textContent = "Account created successfully! Redirecting...";
             successDiv.style.display = "block";
         }
-
-        setTimeout(() => window.location.replace("profile.html"), 1500);
-
+        // Redirect handled by onAuthStateChanged
     } catch (error) {
         console.error("Signup Failed", error);
+        setLoading(submitBtn, false);
         if (errorDiv) {
             errorDiv.textContent = error.message;
             errorDiv.style.display = "block";
@@ -124,22 +202,26 @@ async function handleSignup(e) {
     }
 }
 
-// Reset Password Function
 async function handleResetPassword(e) {
     e.preventDefault();
     const email = document.getElementById("email").value;
     const errorDiv = document.getElementById("resetError");
     const successDiv = document.getElementById("resetSuccess");
+    const submitBtn = e.target.querySelector("button[type='submit']");
+
+    if (errorDiv) errorDiv.style.display = "none";
+    setLoading(submitBtn, true);
 
     try {
-        errorDiv.style.display = "none";
         await sendPasswordResetEmail(auth, email);
         if (successDiv) {
             successDiv.textContent = "Reset link sent! Please check your email.";
             successDiv.style.display = "block";
         }
+        setLoading(submitBtn, false);
     } catch (error) {
         console.error("Reset Failed", error);
+        setLoading(submitBtn, false);
         if (errorDiv) {
             errorDiv.textContent = error.message;
             errorDiv.style.display = "block";
@@ -147,463 +229,110 @@ async function handleResetPassword(e) {
     }
 }
 
-// Logout Function
-async function handleLogout() {
-    try {
-        isLoggingOut = true;
-
-        // Clear sensitive admin caches
-        localStorage.removeItem("star_listings");
-        localStorage.removeItem("star_gallery");
-        localStorage.removeItem("star_palawan_gallery");
-        localStorage.removeItem(USER_CACHE_KEY);
-        // Let's keep theme but definitely clear the data.
-
-        await signOut(auth);
-        // Redirect handled in onAuthStateChanged
-    } catch (error) {
-        console.error("Logout Failed", error);
-        isLoggingOut = false;
-    }
-}
-
-// Monitor Auth State
+// --- INITIALIZATION & STATE ---
 function initAuth() {
     const path = window.location.pathname.toLowerCase();
-    const isDashboard = document.body.classList.contains('dashboard-page') || path.includes("dashboard.html") && !path.includes("clientdashboard");
-    const isClientDashboard = document.body.classList.contains('client-dashboard-page') || path.includes("clientdashboard");
-    const isLogin = document.body.classList.contains('login-page') || path.includes("login");
-    const isProfile = document.body.classList.contains('profile-page') || path.includes("profile");
+    const isDashboard = path.includes("dashboard.html") && !path.includes("clientdashboard");
+    const isClientDashboard = path.includes("clientdashboard");
+    const isLogin = path.includes("login.html");
+    const isProfile = path.includes("profile.html");
 
-    // --- IMMEDIATE PRE-FLIGHT PROTECTION ---
-    // If we're on a protected page, hide the body instantly before Firebase even initializes
+    // Pre-flight protection
     if (isDashboard || isClientDashboard || isProfile) {
-        document.body.style.opacity = '0';
-        document.body.style.transition = 'none';
-
-        // Fast redirection check using cached role
         const cachedUser = localStorage.getItem(USER_CACHE_KEY);
-        if (cachedUser) {
+        if (!cachedUser) {
+            document.body.style.opacity = '0';
+        } else {
             try {
                 const { role } = JSON.parse(cachedUser);
-                if (isDashboard && role !== "admin") {
-                    window.location.replace(role === "owner" ? "clientdashboard.html" : "profile.html");
-                } else if (isClientDashboard && role !== "owner" && role !== "admin") {
-                    window.location.replace("profile.html");
-                }
-            } catch (e) { }
-        } else {
-            // No cached user but on a protected page? This is likely a direct link access.
-            // We keep body hidden and wait for onAuthStateChanged to bounce if not logged in.
-        }
-    }
-
-    // --- FOOTER & NAV AUTH UI SYNC ---
-    const updateFooterAuthUI = (isLoggedIn) => {
-        const footerBtn = document.getElementById("footerSignInBtn");
-        if (footerBtn) {
-            if (isLoggedIn) {
-                footerBtn.textContent = "SIGN-OUT";
-                footerBtn.href = "#"; // Handled by listener
-                footerBtn.onclick = (e) => {
-                    e.preventDefault();
-                    window.handleLogout();
-                };
-            } else {
-                footerBtn.textContent = "SIGN-IN";
-                footerBtn.href = "dashboard.html";
-                footerBtn.onclick = null;
+                if (isDashboard && role !== "admin") window.location.replace("profile.html");
+                if (isClientDashboard && role !== "owner" && role !== "admin") window.location.replace("profile.html");
+            } catch (e) {
+                document.body.style.opacity = '0';
             }
         }
-    };
+    }
 
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            console.log("User logged in:", user.email);
+            console.log("Logged in:", user.email);
             updateFooterAuthUI(true);
+            applyAppsMenuVisibility(true);
 
-            // 1. Static UI immediately
+            // Display basic info immediately
             const userEmailEl = document.getElementById("userEmail");
             if (userEmailEl) userEmailEl.textContent = user.email;
 
-            // 2. Avatar UI Logic
-            const updateAvatarUI = (url) => {
-                const avatarLink = document.getElementById("navAvatarLink");
-                const avatarImg = document.getElementById("navAvatarImg");
-                const profileIcon = document.getElementById("navDashboardIcon");
-
-                if (!avatarLink) return;
-
-                // Rule: On profile page, do not show avatar in header
-                if (isProfile) {
-                    avatarLink.style.display = "none";
-                    return;
-                }
-
-                avatarLink.style.display = "inline-flex";
-                avatarLink.href = "profile.html";
-
-                if (url) {
-                    if (avatarImg) {
-                        avatarImg.src = url;
-                        avatarImg.style.display = "block";
-                        // Removed delayed fade-in logic for instant cache rendering
-                        avatarImg.onerror = () => {
-                            avatarImg.style.display = "none";
-                            if (profileIcon) {
-                                profileIcon.className = "fas fa-user-circle";
-                                profileIcon.style.display = "block";
-                            }
-                        };
-                    }
-                    if (profileIcon) profileIcon.style.display = "none";
-                } else {
-                    if (avatarImg) avatarImg.style.display = "none";
-                    if (profileIcon) {
-                        profileIcon.className = "fas fa-user-circle";
-                        profileIcon.style.display = "block";
-                    }
-                }
-
-                // Show/Hide Apps Button
-                const appsBtn = document.getElementById("navAppsBtn");
-                if (appsBtn) {
-                    appsBtn.style.display = "flex";
-                }
-
-                // FOOTER BUTTON TOGGLE (v3.101)
-                const footerBtn = document.getElementById("footerSignInBtn");
-                if (footerBtn) {
-                    footerBtn.innerHTML = "SIGN-OUT";
-                    footerBtn.href = "#";
-                    // Remove old listeners to prevent duplicates (simple clone replacement or direct override)
-                    // Since this runs on state change, we'll just set onclick handler directly for simplicity here
-                    footerBtn.onclick = (e) => {
-                        e.preventDefault();
-                        logoutUser();
-                    };
-                }
-
-                // Show Core Apps & Logout (PArent-Based Toggle v3.101)
-                const applyVisibility = () => {
-                    const modal = document.getElementById("appsModal");
-                    if (modal) {
-                        modal.classList.add("user-authenticated");
-                        return true;
-                    }
-                    return false;
-                };
-
-                // Try immediately
-                applyVisibility();
-
-                // JUST-IN-TIME FIX (v3.99): Enforce on click
-                document.addEventListener('click', (e) => {
-                    const btn = e.target.closest('#navAppsBtn');
-                    if (btn) {
-                        applyVisibility();
-                    }
-                });
-
-                // DYNAMIC COMPONENT LOAD LISTENER (v3.100)
-                document.addEventListener('appsMenuLoaded', () => {
-                    console.log("[Auth] Apps Menu Component Loaded - Applying Class");
-                    applyVisibility();
-                });
-            };
-
-            // Helper: Loading State for Buttons
-            const setLoading = (btn, isLoading) => {
-                if (!btn) return;
-                if (isLoading) {
-                    btn.dataset.originalText = btn.innerHTML;
-                    btn.disabled = true;
-                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                } else {
-                    btn.disabled = false;
-                    btn.innerHTML = btn.dataset.originalText || btn.innerHTML;
-                }
-            };
-
-            // Login Logic
-            const loginForm = document.getElementById("loginForm");
-            const REMEMBER_KEY = "star_remember_me";
-
-            // Pre-fill Email if Remember Me was used
-            if (loginForm) {
-                const savedUser = JSON.parse(localStorage.getItem(REMEMBER_KEY));
-                if (savedUser && savedUser.email) {
-                    const emailInput = document.getElementById("email");
-                    const rememberBox = document.getElementById("rememberMe");
-                    if (emailInput) emailInput.value = savedUser.email;
-                    if (rememberBox) rememberBox.checked = true;
-                }
-
-                loginForm.addEventListener("submit", async (e) => {
-                    e.preventDefault();
-                    const email = document.getElementById("email").value;
-                    const password = document.getElementById("password").value;
-                    const rememberMe = document.getElementById("rememberMe")?.checked;
-                    const errorEl = document.getElementById("loginError");
-                    const submitBtn = loginForm.querySelector("button[type='submit']");
-
-                    if (errorEl) errorEl.style.display = "none";
-                    setLoading(submitBtn, true);
-
-                    try {
-                        // 1. Handle Persistence (Remember Me)
-                        if (rememberMe) {
-                            await setPersistence(auth, browserLocalPersistence);
-                            localStorage.setItem(REMEMBER_KEY, JSON.stringify({ email }));
-                        } else {
-                            await setPersistence(auth, browserSessionPersistence);
-                            localStorage.removeItem(REMEMBER_KEY);
-                        }
-
-                        // 2. Sign In
-                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                        console.log("Logged in:", userCredential.user);
-                        // Redirect handled by onAuthStateChanged
-                    } catch (error) {
-                        console.error("Login error:", error);
-                        setLoading(submitBtn, false);
-                        if (errorEl) {
-                            errorEl.textContent = "Invalid email or password.";
-                            errorEl.style.display = "block";
-                        }
-                    }
-                });
-            }
-
-            // Signup Logic
-            const signupForm = document.getElementById("signupForm");
-            if (signupForm) {
-                signupForm.addEventListener("submit", async (e) => {
-                    e.preventDefault();
-                    const email = document.getElementById("email").value;
-                    const password = document.getElementById("password").value;
-                    const confirmPassword = document.getElementById("confirmPassword").value;
-                    const fullName = document.getElementById("fullName").value;
-                    const errorEl = document.getElementById("signupError");
-                    const successEl = document.getElementById("signupSuccess");
-                    const submitBtn = signupForm.querySelector("button[type='submit']");
-
-                    if (errorEl) errorEl.style.display = "none";
-                    if (successEl) {
-                        successEl.style.display = "none";
-                        successEl.textContent = "";
-                    }
-
-                    if (password !== confirmPassword) {
-                        if (errorEl) {
-                            errorEl.textContent = "Passwords do not match.";
-                            errorEl.style.display = "block";
-                        }
-                        return;
-                    }
-
-                    setLoading(submitBtn, true);
-
-                    try {
-                        // 1. Create Auth User
-                        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                        const user = userCredential.user;
-
-                        // 2. Upload Avatar (if selected)
-                        let photoURL = "";
-                        const avatarInput = document.getElementById("avatarUpload");
-                        if (avatarInput && avatarInput.files[0]) {
-                            const file = avatarInput.files[0];
-                            const storageRef = ref(storage, `avatars/${user.uid}/${file.name}`);
-                            await uploadBytes(storageRef, file);
-                            photoURL = await getDownloadURL(storageRef);
-                        }
-
-                        // 3. Update Profile
-                        await updateProfile(user, {
-                            displayName: fullName,
-                            photoURL: photoURL
-                        });
-
-                        // 4. Create Firestore Doc
-                        await setDoc(doc(db, "Users", user.uid), {
-                            uid: user.uid,
-                            email: email,
-                            display_name: fullName,
-                            photo_url: photoURL,
-                            role: "user",
-                            created_at: new Date()
-                        });
-
-                        setLoading(submitBtn, false);
-
-                        if (successEl) {
-                            successEl.textContent = "Account created! Redirecting...";
-                            successEl.style.display = "block";
-                        }
-
-                        // Redirect handled by onAuthStateChanged
-                    } catch (error) {
-                        console.error("Signup error:", error);
-                        setLoading(submitBtn, false);
-                        if (errorEl) {
-                            errorEl.textContent = error.message;
-                            errorEl.style.display = "block";
-                        }
-                    }
-                });
-            }
-
-            // 3. Render from Cache Instantly
-            let currentProfileUrl = user.photoURL;
-            let currentRole = 'user';
-            const cachedUser = localStorage.getItem(USER_CACHE_KEY);
-            if (cachedUser) {
+            // Cache-first UI
+            let role = 'user';
+            let photoUrl = user.photoURL;
+            const cached = localStorage.getItem(USER_CACHE_KEY);
+            if (cached) {
                 try {
-                    const { photo_url, uid, role } = JSON.parse(cachedUser);
-                    if (uid === user.uid) {
-                        if (photo_url) currentProfileUrl = photo_url;
-                        if (role) currentRole = role;
+                    const c = JSON.parse(cached);
+                    if (c.uid === user.uid) {
+                        role = c.role || 'user';
+                        photoUrl = c.photo_url || user.photoURL;
                     }
                 } catch (e) { }
             }
-            // Render Cache Role immediately
+
+            updateAvatarUI(photoUrl, isProfile);
             const userRoleEl = document.getElementById("userRole");
-            if (userRoleEl) userRoleEl.textContent = currentRole;
+            if (userRoleEl) userRoleEl.textContent = role;
 
-            updateAvatarUI(currentProfileUrl);
-
-            // Initial Dashboard visibility from cache or default
+            // Nav link updates
             const dashLink = document.getElementById("navDashboardLink");
+            if (dashLink) {
+                dashLink.style.display = isProfile ? "none" : "inline-flex";
+                dashLink.href = role === "owner" ? "clientdashboard.html" : "dashboard.html";
+            }
             const navSignInLink = document.getElementById("navSignInLink");
             const navSignInMobile = document.querySelector(".navSignInLinkMobile");
-
             if (navSignInLink) navSignInLink.style.display = "none";
             if (navSignInMobile) navSignInMobile.style.display = "none";
 
-            if (dashLink) {
-                if (isProfile) {
-                    dashLink.style.display = "none";
-                } else {
-                    dashLink.style.display = "inline-flex";
-                    if (cachedUser) {
-                        try {
-                            const { role } = JSON.parse(cachedUser);
-                            dashLink.href = role === "owner" ? "clientdashboard.html" : "dashboard.html";
-                        } catch (e) { }
+            // Background Refetch Profile
+            try {
+                const userDoc = await getDoc(doc(db, "Users", user.uid));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    const newRole = data.role || 'user';
+                    const newPhoto = data.photo_url || user.photoURL;
+
+                    if (newRole !== role || newPhoto !== photoUrl) {
+                        localStorage.setItem(USER_CACHE_KEY, JSON.stringify({
+                            uid: user.uid, role: newRole, photo_url: newPhoto, email: user.email
+                        }));
+                        updateAvatarUI(newPhoto, isProfile);
+                        if (userRoleEl) userRoleEl.textContent = newRole;
+                        if (dashLink) dashLink.href = newRole === "owner" ? "clientdashboard.html" : "dashboard.html";
+                    }
+
+                    // Protect pages
+                    if (isDashboard && newRole !== "admin") window.location.replace("profile.html");
+                    if (isClientDashboard && newRole !== "owner" && newRole !== "admin") window.location.replace("profile.html");
+                    if (isLogin) {
+                        if (newRole === "admin") window.location.replace("dashboard.html");
+                        else if (newRole === "owner") window.location.replace("clientdashboard.html");
+                        else window.location.replace("profile.html");
                     }
                 }
+            } catch (err) {
+                console.error("Profile sync error", err);
             }
 
-            // 4. Background Sync with Firestore (Non-blocking)
-            (async () => {
-                try {
-                    const userDoc = await getDoc(doc(db, "Users", user.uid));
-                    if (userDoc.exists()) {
-                        const userData = userDoc.data();
-                        const remoteUrl = userData.photo_url || user.photoURL;
-                        const role = userData.role || 'user';
-                        const displayName = userData.display_name || user.displayName || '';
-                        const phoneNumber = userData.phone_number || '';
-
-                        if (remoteUrl && remoteUrl !== currentProfileUrl) {
-                            updateAvatarUI(remoteUrl);
-                        }
-
-                        // Update Role in Header
-                        const userRoleEl = document.getElementById("userRole");
-                        if (userRoleEl) userRoleEl.textContent = role;
-
-                        // Always ensure cache is up to date with full profile
-                        localStorage.setItem(USER_CACHE_KEY, JSON.stringify({
-                            photo_url: remoteUrl,
-                            uid: user.uid,
-                            role: role,
-                            display_name: displayName,
-                            phone_number: phoneNumber,
-                            timestamp: Date.now()
-                        }));
-
-                        // 5. Intelligent Redirection & Protection
-                        if (isLogin) {
-                            if (role === "admin") window.location.replace("dashboard.html");
-                            else if (role === "owner") window.location.replace("clientdashboard.html");
-                            else window.location.replace("profile.html");
-                            return;
-                        }
-
-                        if (isDashboard) {
-                            if (role === "admin") {
-                                document.body.classList.add('auth-verified');
-                                document.body.style.opacity = '1';
-                                document.body.style.pointerEvents = 'auto';
-                            } else {
-                                window.location.replace(role === "owner" ? "clientdashboard.html" : "profile.html");
-                                return;
-                            }
-                        }
-
-                        if (isClientDashboard) {
-                            if (role === "owner" || role === "admin") {
-                                document.body.classList.add('auth-verified');
-                                document.body.style.opacity = '1';
-                                document.body.style.pointerEvents = 'auto';
-                            } else {
-                                window.location.replace("profile.html");
-                                return;
-                            }
-                        }
-
-                        if (isProfile) {
-                            document.body.classList.add('auth-verified');
-                            document.body.style.opacity = '1';
-                            document.body.style.pointerEvents = 'auto';
-                        }
-
-                        // Update dashLink again if profile synced
-                        const dashLink = document.getElementById("navDashboardLink");
-                        if (dashLink && !isProfile) {
-                            dashLink.href = role === "owner" ? "clientdashboard.html" : "dashboard.html";
-                        }
-                    } else {
-                        // User exists in Auth but not in Firestore
-                        if (isDashboard || isClientDashboard) {
-                            window.location.replace("profile.html");
-                        } else {
-                            // On profile page, show it so they can set up
-                            document.body.classList.add('auth-verified');
-                            document.body.style.opacity = '1';
-                            document.body.style.pointerEvents = 'auto';
-                        }
-                    }
-                } catch (err) {
-                    console.error("Auth sync error:", err);
-                }
-            })();
+            document.body.classList.add('auth-verified');
+            document.body.style.opacity = '1';
 
         } else {
-            console.log("User logged out");
-            localStorage.removeItem(USER_CACHE_KEY);
+            console.log("Logged out");
             updateFooterAuthUI(false);
-
-            // Reset Apps Menu Visibility (v3.104)
-            const appsModal = document.getElementById("appsModal");
-            if (appsModal) {
-                appsModal.classList.remove("user-authenticated");
-            }
-
-            // Legacy cleanup (can be removed later)
-            const coreApps = document.querySelectorAll(".apps-core-section");
-            const coreDividers = document.querySelectorAll(".apps-core-divider");
-            const logoutBtns = document.querySelectorAll(".apps-footer");
-
-            coreApps.forEach(el => el.classList.remove("show-auth"));
-            coreDividers.forEach(el => el.classList.remove("show-auth"));
-            logoutBtns.forEach(el => el.classList.remove("show-auth"));
+            applyAppsMenuVisibility(false);
+            localStorage.removeItem(USER_CACHE_KEY);
 
             if (isLoggingOut) {
                 window.location.replace("index.html");
-                isLoggingOut = false;
                 return;
             }
 
@@ -612,192 +341,51 @@ function initAuth() {
                 return;
             }
 
-            // Reset Nav on Logout 
+            // Public Nav Resets
             const dashLink = document.getElementById("navDashboardLink");
+            if (dashLink) dashLink.style.display = "none";
             const avatarLink = document.getElementById("navAvatarLink");
+            if (avatarLink) avatarLink.style.display = "none";
             const navSignInLink = document.getElementById("navSignInLink");
             const navSignInMobile = document.querySelector(".navSignInLinkMobile");
-
             if (navSignInLink) navSignInLink.style.display = "inline-flex";
             if (navSignInMobile) navSignInMobile.style.display = "block";
-
-            if (dashLink) {
-                dashLink.style.display = "none";
-            }
-            if (avatarLink) avatarLink.style.display = "none";
-
-            // Keep Apps button visible (so they can access Theme/Services)
-            const appsBtn = document.getElementById("navAppsBtn");
-            if (appsBtn) appsBtn.style.display = "flex";
         }
     });
 
-    // Globals for external access
-    window.logoutUser = handleLogout;
-
-    // Helper: Loading State for Buttons
-    const setLoading = (btn, isLoading) => {
-        if (!btn) return;
-        if (isLoading) {
-            btn.dataset.originalText = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-        } else {
-            btn.disabled = false;
-            btn.innerHTML = btn.dataset.originalText || btn.innerHTML;
-        }
-    };
-
-    // Initialize Form Listeners when DOM is ready
+    // DOM Interaction Listeners
     document.addEventListener('DOMContentLoaded', () => {
-        // Login Logic
+        // Form submissions
         const loginForm = document.getElementById("loginForm");
         if (loginForm) {
-            // Remove old listeners if any (by cloning) or just add new one
-            // Cloning prevents duplicate listeners
-            const newLoginForm = loginForm.cloneNode(true);
-            loginForm.parentNode.replaceChild(newLoginForm, loginForm);
-
-            // Re-attach visual toggles if needed (password toggle is separate)
-            // But cloning removes ALL listeners. The specific feature password toggle is attached to #togglePassword, which is outside the form or inside?
-            // Inside. Cloning might break password toggle if attached to element inside form.
-            // Better: Just don't attach handleLogin.
-
-            newLoginForm.addEventListener("submit", async (e) => {
-                e.preventDefault();
-                const email = document.getElementById("email").value;
-                const password = document.getElementById("password").value;
-                const errorEl = document.getElementById("loginError");
-                const submitBtn = newLoginForm.querySelector("button[type='submit']");
-
-                if (errorEl) errorEl.style.display = "none";
-                setLoading(submitBtn, true);
-
-                try {
-                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                    console.log("Logged in:", userCredential.user);
-                } catch (error) {
-                    console.error("Login error:", error);
-                    setLoading(submitBtn, false);
-                    if (errorEl) {
-                        errorEl.textContent = "Invalid email or password.";
-                        errorEl.style.display = "block";
-                    }
-                }
-            });
-
-            // Re-init password toggle because we cloned
-            const togglePassword = newLoginForm.querySelector('#togglePassword');
-            const passwordInput = newLoginForm.querySelector('#password');
-            if (togglePassword && passwordInput) {
-                togglePassword.addEventListener('click', function () {
-                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                    passwordInput.setAttribute('type', type);
-                    this.classList.toggle('fa-eye');
-                    this.classList.toggle('fa-eye-slash');
-                });
+            loginForm.addEventListener("submit", handleLogin);
+            // Prefill Remember Me
+            const saved = JSON.parse(localStorage.getItem(REMEMBER_KEY));
+            if (saved && saved.email) {
+                const emailInput = document.getElementById("email");
+                if (emailInput) emailInput.value = saved.email;
+                const remBox = document.getElementById("rememberMe");
+                if (remBox) remBox.checked = true;
             }
         }
 
-        // Signup Logic
         const signupForm = document.getElementById("signupForm");
-        if (signupForm) {
-            const newSignupForm = signupForm.cloneNode(true);
-            signupForm.parentNode.replaceChild(newSignupForm, signupForm);
+        if (signupForm) signupForm.addEventListener("submit", handleSignup);
 
-            newSignupForm.addEventListener("submit", async (e) => {
-                e.preventDefault();
-                const email = document.getElementById("email").value;
-                const password = document.getElementById("password").value;
-                const confirmPassword = document.getElementById("confirmPassword").value;
-                const fullName = document.getElementById("fullName").value;
-                const errorEl = document.getElementById("signupError");
-                const successEl = document.getElementById("signupSuccess");
-                const submitBtn = newSignupForm.querySelector("button[type='submit']");
+        const resetForm = document.getElementById("resetForm");
+        if (resetForm) resetForm.addEventListener("submit", handleResetPassword);
 
-                if (errorEl) errorEl.style.display = "none";
-                if (successEl) successEl.style.display = "none";
+        // Apps Menu Load Sync
+        document.addEventListener('appsMenuLoaded', () => {
+            applyAppsMenuVisibility(auth.currentUser !== null);
+        });
 
-                if (password !== confirmPassword) {
-                    if (errorEl) {
-                        errorEl.textContent = "Passwords do not match.";
-                        errorEl.style.display = "block";
-                    }
-                    return;
-                }
-
-                setLoading(submitBtn, true);
-
-                try {
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    const user = userCredential.user;
-
-                    let photoURL = "";
-                    const avatarInput = document.getElementById("avatarUpload"); // ID might be inside new form?
-                    // IDs are unique, so document.getElementById still works if it's the same ID.
-                    // But if we cloned, the old one is gone.
-
-                    // ... (rest of logic) ...
-                    // Just simplifying for brevity in replacement, but must include full logic
-                    // 2. Upload Avatar
-                    if (avatarInput && avatarInput.files[0]) {
-                        const file = avatarInput.files[0];
-                        const storageRef = ref(storage, `avatars/${user.uid}/${file.name}`);
-                        await uploadBytes(storageRef, file);
-                        photoURL = await getDownloadURL(storageRef);
-                    }
-
-                    await updateProfile(user, { displayName: fullName, photoURL: photoURL });
-                    await setDoc(doc(db, "Users", user.uid), {
-                        uid: user.uid, email: email, display_name: fullName, photo_url: photoURL,
-                        role: "user", created_at: new Date()
-                    });
-
-                    setLoading(submitBtn, false);
-                    if (successEl) {
-                        successEl.textContent = "Account created! Redirecting...";
-                        successEl.style.display = "block";
-                    }
-                } catch (error) {
-                    console.error("Signup error:", error);
-                    setLoading(submitBtn, false);
-                    if (errorEl) {
-                        errorEl.textContent = error.message;
-                        errorEl.style.display = "block";
-                    }
-                }
-            });
-
-            // Re-init avatar preview
-            const avatarUpload = newSignupForm.querySelector('#avatarUpload');
-            const avatarPreview = newSignupForm.querySelector('#avatarPreview');
-            const avatarIcon = newSignupForm.querySelector('#avatarIcon');
-            if (avatarUpload) {
-                avatarUpload.addEventListener('change', function (e) {
-                    if (this.files && this.files[0]) {
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
-                            avatarPreview.src = e.target.result;
-                            avatarPreview.style.display = 'block';
-                            avatarIcon.style.display = 'none';
-                        }
-                        reader.readAsDataURL(this.files[0]);
-                    }
-                });
+        // Global manual apps toggle listener
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#navAppsBtn')) {
+                applyAppsMenuVisibility(auth.currentUser !== null);
             }
-        }
-    });
-
-    const resetForm = document.getElementById("resetForm");
-    if (resetForm) {
-        resetForm.addEventListener("submit", handleResetPassword);
-    }
-
-    // Use delegation or specific IDs for multiple logout buttons if they exist
-    document.addEventListener('click', e => {
-        if (e.target.closest('#logoutBtn') || e.target.closest('.icon-button-default .fa-sign-out-alt') || e.target.closest('.icon-button-default i.fa-sign-out-alt')) {
-            handleLogout();
-        }
+        });
     });
 }
 
