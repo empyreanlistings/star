@@ -262,9 +262,9 @@ function initAuth() {
                 const coreDividers = document.querySelectorAll(".apps-core-divider");
                 const logoutBtns = document.querySelectorAll(".apps-footer");
 
-                coreApps.forEach(el => el.style.setProperty("display", "grid", "important"));
-                coreDividers.forEach(el => el.style.setProperty("display", "block", "important"));
-                logoutBtns.forEach(el => el.style.setProperty("display", "flex", "important"));
+                coreApps.forEach(el => el.classList.add("show-auth"));
+                coreDividers.forEach(el => el.classList.add("show-auth"));
+                logoutBtns.forEach(el => el.classList.add("show-auth"));
             };
 
             // 3. Render from Cache Instantly
@@ -399,14 +399,14 @@ function initAuth() {
             localStorage.removeItem(USER_CACHE_KEY);
             updateFooterAuthUI(false);
 
-            // HIDE Core Apps & Logout in Apps Menu
+            // Show Core Apps & Logout in Apps Menu
             const coreApps = document.querySelectorAll(".apps-core-section");
             const coreDividers = document.querySelectorAll(".apps-core-divider");
             const logoutBtns = document.querySelectorAll(".apps-footer");
 
-            coreApps.forEach(el => el.style.display = "none");
-            coreDividers.forEach(el => el.style.display = "none");
-            logoutBtns.forEach(el => el.style.display = "none");
+            coreApps.forEach(el => el.classList.remove("show-auth"));
+            coreDividers.forEach(el => el.classList.remove("show-auth"));
+            logoutBtns.forEach(el => el.classList.remove("show-auth"));
 
             if (isLoggingOut) {
                 window.location.replace("index.html");
