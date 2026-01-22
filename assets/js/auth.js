@@ -296,6 +296,14 @@ function initAuth() {
                 } else {
                     console.log("[Auth] Apps Menu found immediately.");
                 }
+
+                // JUST-IN-TIME FIX (v3.99): Enforce on click
+                document.addEventListener('click', (e) => {
+                    const btn = e.target.closest('#navAppsBtn');
+                    if (btn) {
+                        applyVisibility();
+                    }
+                });
             };
 
             // Helper: Loading State for Buttons
